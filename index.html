@@ -375,13 +375,20 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .tok .lab{font-size:10px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);
   max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:640px){.tok .disc{width:34px;height:34px;font-size:12px}}
-.formcard{border-radius:15px;padding:13px;background:var(--card);box-shadow:var(--shadow);cursor:pointer;
-  border:2px solid transparent;transition:.15s}
+.formcard{border-radius:16px;padding:12px;background:var(--card);box-shadow:var(--shadow);cursor:pointer;
+  border:2px solid transparent;transition:.15s;display:flex;flex-direction:column}
 .formcard.on{border-color:var(--tint);background:var(--tint-soft)}
-.formcard .fmini{width:100%;aspect-ratio:1/1.15;border-radius:10px;background:linear-gradient(170deg,#2E9E5B,#1F7A44);position:relative;margin-bottom:9px}
-.formcard .fdot{position:absolute;width:9px;height:9px;border-radius:50%;background:#fff;transform:translate(-50%,-50%);box-shadow:0 1px 2px rgba(0,0,0,.3)}
-.formcard .fn{font-size:15px;font-weight:700}
-.formcard .fd{font-size:12px;color:var(--label2);margin-top:2px;line-height:1.35}
+.formcard .fmini{width:100%;aspect-ratio:1/1.25;border-radius:11px;background:linear-gradient(170deg,#2E9E5B,#1F7A44);position:relative;margin-bottom:10px;overflow:hidden}
+.formcard .fmini::before{content:"";position:absolute;left:8%;right:8%;top:50%;height:1px;background:rgba(255,255,255,.25)}
+.formcard .fmini::after{content:"";position:absolute;left:50%;top:50%;width:26%;aspect-ratio:1;border:1px solid rgba(255,255,255,.25);border-radius:50%;transform:translate(-50%,-50%)}
+.formcard .fdot{position:absolute;width:15%;aspect-ratio:1;border-radius:50%;background:#fff;transform:translate(-50%,-50%);
+  box-shadow:0 1px 3px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;
+  font-size:7px;font-weight:800;color:#1F7A44}
+.formcard .ftop{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+.formcard .fn{font-size:17px;font-weight:800;letter-spacing:-.02em}
+.formcard .ftag{font-size:11px;font-weight:700;color:var(--tint);white-space:nowrap;
+  background:var(--tint-soft);padding:2px 7px;border-radius:20px}
+.formcard .fd{font-size:12px;color:var(--label2);margin-top:5px;line-height:1.4}
 .tacgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
 @media(max-width:640px){.tacgrid{grid-template-columns:1fr 1fr;gap:10px}}
 .benchrow{display:flex;gap:8px;overflow-x:auto;padding:4px 0 8px;scrollbar-width:none}
@@ -415,6 +422,32 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .lockwrap .lockicon{font-size:52px;margin-bottom:10px}
 .pinrow{display:flex;gap:9px;justify-content:center;margin:16px 0}
 .pinrow input{width:100%;text-align:center;font-size:19px;font-weight:700;letter-spacing:.35em;padding:15px}
+
+/* ================= PLAYSTYLES ================= */
+.psgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+@media(min-width:641px){.psgrid{grid-template-columns:1fr 1fr 1fr}}
+.psopt{display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:12px;background:var(--card);
+  box-shadow:var(--shadow);border:2px solid transparent;text-align:left;font-size:13px;font-weight:600;color:var(--label)}
+.psopt.on{border-color:var(--pc);background:color-mix(in srgb,var(--pc) 12%,var(--card))}
+.psopt svg{flex:0 0 auto}
+.psopt span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.psbig{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  flex:0 0 44px;background:color-mix(in srgb,var(--pc) 15%,transparent)}
+.psplus{color:var(--tint);font-weight:800;margin-left:1px}
+.psbadge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:700;
+  background:color-mix(in srgb,var(--pc) 14%,transparent);color:var(--pc)}
+.psbadge span{color:var(--label)}
+
+/* ================= COMPACT FILTER BAR ================= */
+.filterbar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.fsel{flex:1 1 calc(50% - 4px);min-width:0;background:var(--card);border:none;box-shadow:var(--shadow);
+  border-radius:11px;padding:11px 30px 11px 13px;font-size:14px;font-weight:600;color:var(--label);
+  -webkit-appearance:none;appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 11px center}
+.fclear{flex:1 1 100%;background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red);
+  border:none;border-radius:11px;padding:10px;font-size:13px;font-weight:700;cursor:pointer}
+@media(min-width:641px){.fsel{flex:1 1 calc(25% - 6px)}.fclear{flex:0 0 auto;padding:10px 18px}}
 </style>
 </head>
 <body>
@@ -527,6 +560,119 @@ function crest(club,size){
    (personal, local-only — nothing below changes that behaviour).
    ============================================================ */
 /* ============================================================
+   PLAYSTYLES — EA FC 26 set (35), original stylized icons.
+   Icons are our own simple SVG glyphs (not EA's artwork),
+   colour-coded by category.
+   ============================================================ */
+const PS_CAT={
+  SCO:{name:'Scoring',   col:'#FF453A'},
+  PAS:{name:'Passing',   col:'#0A84FF'},
+  BAL:{name:'Ball Control',col:'#FFD60A'},
+  DEF:{name:'Defending', col:'#30D158'},
+  PHY:{name:'Physical',  col:'#FF9F0A'},
+  GK :{name:'Goalkeeping',col:'#BF5AF2'}
+};
+const PLAYSTYLES=[
+ // Scoring
+ {id:'acrobatic',   name:'Acrobatic',    cat:'SCO', g:'acrobatic'},
+ {id:'chipshot',    name:'Chip Shot',    cat:'SCO', g:'chip'},
+ {id:'deadball',    name:'Dead Ball',    cat:'SCO', g:'deadball'},
+ {id:'finesse',     name:'Finesse Shot', cat:'SCO', g:'finesse'},
+ {id:'gamechanger', name:'Game Changer', cat:'SCO', g:'trivela'},
+ {id:'lowdriven',   name:'Low Driven Shot',cat:'SCO', g:'lowdriven'},
+ {id:'powershot',   name:'Power Shot',   cat:'SCO', g:'power'},
+ {id:'precheader',  name:'Precision Header',cat:'SCO', g:'header'},
+ // Passing
+ {id:'incisive',    name:'Incisive Pass',cat:'PAS', g:'incisive'},
+ {id:'inventive',   name:'Inventive',    cat:'PAS', g:'inventive'},
+ {id:'longball',    name:'Long Ball Pass',cat:'PAS', g:'longball'},
+ {id:'pinged',      name:'Pinged Pass',  cat:'PAS', g:'pinged'},
+ {id:'tikitaka',    name:'Tiki Taka',    cat:'PAS', g:'tiki'},
+ {id:'whipped',     name:'Whipped Pass', cat:'PAS', g:'whipped'},
+ // Ball Control
+ {id:'firsttouch',  name:'First Touch',  cat:'BAL', g:'firsttouch'},
+ {id:'pressproven', name:'Press Proven', cat:'BAL', g:'press'},
+ {id:'rapid',       name:'Rapid',        cat:'BAL', g:'rapid'},
+ {id:'technical',   name:'Technical',    cat:'BAL', g:'technical'},
+ {id:'trickster',   name:'Trickster',    cat:'BAL', g:'trickster'},
+ // Defending
+ {id:'aerialfort',  name:'Aerial Fortress',cat:'DEF', g:'aerial'},
+ {id:'anticipate',  name:'Anticipate',   cat:'DEF', g:'anticipate'},
+ {id:'block',       name:'Block',        cat:'DEF', g:'block'},
+ {id:'intercept',   name:'Intercept',    cat:'DEF', g:'intercept'},
+ {id:'jockey',      name:'Jockey',       cat:'DEF', g:'jockey'},
+ {id:'slidetackle', name:'Slide Tackle', cat:'DEF', g:'slide'},
+ // Physical
+ {id:'bruiser',     name:'Bruiser',      cat:'PHY', g:'bruiser'},
+ {id:'enforcer',    name:'Enforcer',     cat:'PHY', g:'enforcer'},
+ {id:'longthrow',   name:'Long Throw',   cat:'PHY', g:'longthrow'},
+ {id:'quickstep',   name:'Quick Step',   cat:'PHY', g:'quickstep'},
+ {id:'relentless',  name:'Relentless',   cat:'PHY', g:'relentless'},
+ // Goalkeeping
+ {id:'crossclaim',  name:'Cross Claimer',cat:'GK', g:'cross'},
+ {id:'deflector',   name:'Deflector',    cat:'GK', g:'deflector'},
+ {id:'farreach',    name:'Far Reach',    cat:'GK', g:'farreach'},
+ {id:'farthrow',    name:'Far Throw',    cat:'GK', g:'farthrow'},
+ {id:'footwork',    name:'Footwork',     cat:'GK', g:'footwork'},
+ {id:'rushout',     name:'Rush Out',     cat:'GK', g:'rushout'}
+];
+const PS_BY=Object.fromEntries(PLAYSTYLES.map(p=>[p.id,p]));
+
+/* original glyphs — 24x24 stroke icons, coloured by category at render time */
+function psGlyph(g){
+  const P={
+    acrobatic:'<path d="M12 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4M8 20l3-6 3 3 3-5M6 12l4-2"/>',
+    chip:'<path d="M4 18q6-12 16-6"/><path d="M17 9l3 2-1 3"/>',
+    deadball:'<circle cx="12" cy="16" r="4"/><path d="M12 12V4M9 6l3-2 3 2"/>',
+    finesse:'<path d="M5 17q5-10 14-4"/><circle cx="6" cy="17" r="1.6"/>',
+    trivela:'<path d="M6 16q4 4 8 0t4-8"/><path d="M15 4h4v4"/>',
+    lowdriven:'<path d="M4 16h13l-3-3M4 16l14 2"/>',
+    power:'<path d="M13 3L5 13h5l-1 8 8-11h-5z"/>',
+    header:'<circle cx="12" cy="7" r="3"/><path d="M6 20l6-5 6 5M12 15v-3"/>',
+    incisive:'<path d="M4 12h13M11 7l6 5-6 5"/><path d="M4 12l3-4M4 12l3 4"/>',
+    inventive:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2 2M16 16l2 2M6 18l2-2M16 8l2-2"/><circle cx="12" cy="12" r="2.4"/>',
+    longball:'<path d="M4 19q8-16 16-2"/><path d="M18 5l2 3-3 1"/>',
+    pinged:'<path d="M4 12h16M15 8l5 4-5 4"/>',
+    tiki:'<circle cx="6" cy="12" r="2"/><circle cx="18" cy="12" r="2"/><path d="M8 11l8-2M8 13l8 2"/>',
+    whipped:'<path d="M4 16q6 4 10-2t6-6"/><path d="M18 4l2 2-1 3"/>',
+    firsttouch:'<circle cx="12" cy="14" r="4"/><path d="M12 10V4M9 6l3-2 3 2"/><path d="M17 14h1"/>',
+    press:'<path d="M12 3v6M12 3l-2 3M12 3l2 3"/><circle cx="12" cy="15" r="5"/><path d="M12 12v3l2 2"/>',
+    rapid:'<path d="M4 8h12M4 12h9M4 16h13"/><path d="M15 6l4 6-4 6"/>',
+    technical:'<path d="M12 4l2 5 5 .5-4 3.5 1.5 5-4.5-3-4.5 3 1.5-5-4-3.5 5-.5z"/>',
+    trickster:'<path d="M6 18q3-8 6-4t6-6"/><circle cx="6" cy="18" r="1.5"/><circle cx="18" cy="8" r="1.5"/>',
+    aerial:'<path d="M4 20V10l8-6 8 6v10M9 20v-6h6v6"/>',
+    anticipate:'<path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"/><circle cx="12" cy="12" r="2.5"/>',
+    block:'<path d="M12 3l7 3v5c0 4-3 7-7 9-4-2-7-5-7-9V6z"/>',
+    intercept:'<path d="M4 8l16 8M20 8L4 16"/><circle cx="12" cy="12" r="2"/>',
+    jockey:'<path d="M6 4v16M6 8h10l-2-2M6 12h12l-2-2M6 16h9l-2-2"/>',
+    slide:'<path d="M3 18l7-3M10 15l4 5M14 8a2 2 0 1 0 0-.1M13 11l4 2 4-1"/>',
+    bruiser:'<path d="M7 8a3 3 0 0 1 6 0v3M13 8a3 3 0 0 1 6 0v6a5 5 0 0 1-5 5h-3a5 5 0 0 1-5-5v-2"/>',
+    enforcer:'<path d="M12 3l6 3v6c0 4-3 6-6 9-3-3-6-5-6-9V6z"/><path d="M9 12l2 2 4-4"/>',
+    longthrow:'<circle cx="12" cy="12" r="3"/><path d="M4 20q4-10 8-6M20 20q-4-10-8-6"/>',
+    quickstep:'<path d="M8 4l-3 8h4l-2 8 8-11h-4l3-5z"/><path d="M18 10h3M17 14h3"/>',
+    relentless:'<path d="M12 3a9 9 0 1 0 9 9"/><path d="M12 7v5l3 2"/><path d="M21 6l-1 3-3-1"/>',
+    cross:'<path d="M5 18h14M7 18v-4l5-3 5 3v4"/><circle cx="12" cy="7" r="2"/>',
+    deflector:'<path d="M12 3l7 3v6c0 4-3 6-7 9-4-3-7-5-7-9V6z"/><path d="M8 11l3 3 5-5"/>',
+    farreach:'<path d="M4 16l6-2 4 3 6-5"/><circle cx="4" cy="16" r="1.5"/><path d="M18 10l2 2-3 1"/>',
+    farthrow:'<circle cx="7" cy="8" r="2"/><path d="M7 10v6M4 20h6M9 12q8-4 11 6"/>',
+    footwork:'<path d="M9 4v9a3 3 0 0 0 6 0V4"/><path d="M7 20h10"/>',
+    rushout:'<circle cx="12" cy="6" r="2.5"/><path d="M12 9v6M8 20l4-5 4 5M6 12h12"/>'
+  };
+  return P[g]||'<circle cx="12" cy="12" r="7"/>';
+}
+function psIcon(id,size){
+  const ps=PS_BY[id]; if(!ps)return '';
+  const s=size||22,col=PS_CAT[ps.cat].col;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none"
+    stroke="${col}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${psGlyph(ps.g)}</svg>`;
+}
+function psBadge(id){
+  const ps=PS_BY[id]; if(!ps)return '';
+  const col=PS_CAT[ps.cat].col;
+  return `<span class="psbadge" style="--pc:${col}">${psIcon(id,15)}<span>${esc(ps.name)}</span></span>`;
+}
+
+/* ============================================================
    SHARED CLOUD SYNC (optional) — fill these two in to host the
    tracker so friends can view it live. Leave them as-is to keep
    using it privately on this device (nothing changes locally).
@@ -561,6 +707,8 @@ function adminSignOut(){ pinLock(); }
 async function initSupa(){
   if(!supa)return;
   applyAdminClass();
+  // keep-alive: any page load pings the DB, resetting the 7-day pause timer.
+  try{ supa.from('tracker_kv').select('key').limit(1).then(()=>{}); }catch(e){}
   supa.channel('kv-sync').on('postgres_changes',{event:'*',schema:'public',table:'tracker_kv',filter:`key=eq.${MAIN_KEY}`},
     payload=>{ if(payload.new&&payload.new.value){
       const sheetOpen=$('#sbg')&&$('#sbg').classList.contains('open');
@@ -1141,27 +1289,29 @@ function vFixtures(){
     <div class="wrap">
       <button class="btn pri full" data-admin style="margin-bottom:14px" onclick="newGame()">Log a game</button>
       <input class="search" placeholder="Search a player or round…" value="${esc(FSEARCH)}" id="fxq"
-        oninput="FSEARCH=this.value;render()" style="margin-bottom:12px">
-      <div class="chips" style="margin-bottom:10px">
-        <button class="${FF==='all'?'on':''}" onclick="FF='all';render()">All comps</button>
-        ${comps().map(c=>`<button class="${FF===c.id?'on':''}" onclick="FF='${c.id}';render()">${c.icon} ${esc(c.name)}</button>`).join('')}
+        oninput="FSEARCH=this.value;render()" style="margin-bottom:10px">
+      <div class="filterbar">
+        <select class="fsel" onchange="FF=this.value;render()">
+          <option value="all" ${FF==='all'?'selected':''}>All comps</option>
+          ${comps().map(c=>`<option value="${c.id}" ${FF===c.id?'selected':''}>${c.icon} ${esc(c.name)}</option>`).join('')}
+        </select>
+        <select class="fsel" onchange="FPLAYER=this.value;render()">
+          <option value="all" ${FPLAYER==='all'?'selected':''}>👥 Everyone</option>
+          ${roster.map(p=>`<option value="${p.id}" ${FPLAYER===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}
+        </select>
+        <select class="fsel" onchange="FRESULT=this.value;render()">
+          <option value="all" ${FRESULT==='all'?'selected':''}>Any result</option>
+          ${FPLAYER!=='all'?`<option value="win" ${FRESULT==='win'?'selected':''}>✅ Wins</option>
+            <option value="loss" ${FRESULT==='loss'?'selected':''}>❌ Losses</option>`:''}
+          <option value="draw" ${FRESULT==='draw'?'selected':''}>🤝 Draws</option>
+          ${FPLAYER==='all'?`<option value="big" ${FRESULT==='big'?'selected':''}>💥 Big wins</option>`:''}
+        </select>
+        <select class="fsel" onchange="FSORT=this.value;render()">
+          ${[['new','⏱ Newest'],['old','📜 Oldest'],['goals','⚽ Most goals'],['margin','📊 Biggest margin']]
+            .map(([k,l])=>`<option value="${k}" ${FSORT===k?'selected':''}>${l}</option>`).join('')}
+        </select>
+        ${active?`<button class="fclear" onclick="clearFilters()">✕ Clear ${active}</button>`:''}
       </div>
-      <div class="chips" style="margin-bottom:10px">
-        <button class="${FPLAYER==='all'?'on':''}" onclick="FPLAYER='all';render()">👥 Everyone</button>
-        ${roster.map(p=>`<button class="${FPLAYER===p.id?'on':''}" onclick="FPLAYER='${p.id}';render()">${esc(p.name)}</button>`).join('')}
-      </div>
-      <div class="chips" style="margin-bottom:10px">
-        <button class="${FRESULT==='all'?'on':''}" onclick="FRESULT='all';render()">Any result</button>
-        ${FPLAYER!=='all'?`<button class="${FRESULT==='win'?'on':''}" onclick="FRESULT='win';render()">✅ Wins</button>
-          <button class="${FRESULT==='loss'?'on':''}" onclick="FRESULT='loss';render()">❌ Losses</button>`:''}
-        <button class="${FRESULT==='draw'?'on':''}" onclick="FRESULT='draw';render()">🤝 Draws</button>
-        ${FPLAYER==='all'?`<button class="${FRESULT==='big'?'on':''}" onclick="FRESULT='big';render()">💥 Big wins</button>`:''}
-      </div>
-      <div class="chips" style="margin-bottom:6px">
-        ${[['new','⏱ Newest'],['old','📜 Oldest'],['goals','⚽ Most goals'],['margin','📊 Biggest margin']]
-          .map(([k,l])=>`<button class="${FSORT===k?'on':''}" onclick="FSORT='${k}';render()">${l}</button>`).join('')}
-      </div>
-      ${active?`<button class="btn plain sm" style="margin-bottom:10px" onclick="clearFilters()">Clear ${active} filter${active>1?'s':''}</button>`:'<div style="height:8px"></div>'}
       ${sorted.length?(grouped
         ? Object.keys(by).map(d=>`<div class="sechead">${d==='—'?'Undated':fdate(d)}</div>
             <div class="card">${by[d].map(gameRow).join('')}</div>`).join('')
@@ -1185,7 +1335,7 @@ function vSquad(){
       ${list.length?`<div class="card">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);
         return `<div class="row tap" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
         ${avatar(p,40)}<div class="rt"><div class="r1">${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}</div>
-        <div class="r2">${r?`⭐ ${esc(r)} · `:''}${m.P} games · ${m.pts} pts</div></div>${chev}</div>`}).join('')}</div>`
+        <div class="r2">${p.ps?psIcon(p.ps,13)+' ':''}${r?`⭐ ${esc(r)} · `:''}${m.P} games · ${m.pts} pts</div></div>${chev}</div>`}).join('')}</div>`
       :`<div class="empty"><div class="ee">👥</div><h3>No players yet</h3><p>Add your regulars — more can be added at the venue.</p></div>`}
     </div></div>`}
 
@@ -1204,6 +1354,7 @@ function vPlayer(pid){
       <div style="font-size:15px;color:var(--label2);margin-top:4px">
         ${p.pos?`<span class="pill ${p.pos}">${p.pos}</span> `:''}${rk?`#${rk.rank} in the league`:'Not ranked yet'}</div>
       ${c?`<div style="font-size:14px;color:var(--tint);margin-top:7px;font-weight:600">${crest(c,16)} ${esc(c.name)}${r?` · plays like ${esc(r)}`:''}</div>`:''}
+      ${p.ps?`<div style="margin-top:10px;display:flex;justify-content:center">${psBadge(p.ps)}</div>`:''}
     </div>
     ${car?`<div class="card tap" style="padding:15px" onclick="openCareer('${pid}')">
       <div style="display:flex;align-items:center;gap:13px">
@@ -1582,6 +1733,8 @@ function vAdmin(){
         <div class="row tap" onclick="newSeason()"><div class="rt"><div class="r1">New season</div></div>${chev}</div>
         <div class="row tap" onclick="renameSeason()"><div class="rt"><div class="r1">Rename season</div></div>${chev}</div>
         <div class="row tap" onclick="wipeSeason()"><div class="rt"><div class="r1" style="color:var(--red)">Clear all games</div></div></div>
+        ${DB.seasons.length>1?`<div class="row tap" onclick="deleteSeason(CUR)"><div class="rt"><div class="r1" style="color:var(--red)">Delete this season</div>
+          <div class="r2">Removes the whole season — asks you to confirm</div></div></div>`:''}
       </div>
 
       <div class="sechead">Export &amp; share</div>
@@ -1668,14 +1821,15 @@ function board(){const S=season();
   if(!S.board.A)S.board.A={}; if(!S.board.B)S.board.B={};
   return S.board}
 
-let TAC='formations', TSEL=null;
+let TAC='formations', TSEL=null, SPX='';
 function vTactics(){
   $('#navMount').innerHTML=navbar();
-  const tabs=[['formations','Formations'],['board','Whiteboard'],['balance','Team builder'],['tips','Tips']];
+  const tabs=[['formations','Formations'],['board','Whiteboard'],['balance','Team builder'],['setpiece','Set pieces'],['tips','Tips']];
   let body='';
   if(TAC==='formations')body=tacFormations();
   else if(TAC==='board')body=tacBoard();
   else if(TAC==='balance')body=tacBalance();
+  else if(TAC==='setpiece')body=tacSetpiece();
   else body=tacTips();
   app().innerHTML=`<div class="view active">
     <div class="largetitle">Tactics</div><div class="subtitle">Built for 7-a-side</div>
@@ -1688,13 +1842,16 @@ function vTactics(){
 
 /* ---------- FORMATIONS ---------- */
 function miniPitch(f){
-  return `<div class="fmini">${f.slots.map(([x,y])=>`<div class="fdot" style="left:${x}%;top:${y}%"></div>`).join('')}</div>`;
+  const col={GK:'#0AB',DEF:'#2C8',MID:'#95F',ATT:'#F73'};
+  return `<div class="fmini">${f.slots.map(([x,y,pos])=>`<div class="fdot" style="left:${x}%;top:${y}%;color:${col[pos]||'#1F7A44'}">${pos==='GK'?'G':''}</div>`).join('')}</div>`;
 }
 function tacFormations(){
   const cur=board().fid;
   const f=fmById(cur);
   return `<div class="tacgrid">${FORMATIONS.map(x=>`<div class="formcard ${x.id===cur?'on':''}" onclick="setFormation('${x.id}')">
-      ${miniPitch(x)}<div class="fn">${x.name}</div><div class="fd">${esc(x.tag)}</div></div>`).join('')}</div>
+      ${miniPitch(x)}
+      <div class="ftop"><span class="fn">${x.name}</span></div>
+      <div class="fd">${esc(x.tag)}</div></div>`).join('')}</div>
     <div class="sechead">${f.name} · ${esc(f.tag)}</div>
     <div class="card pad">
       <div style="font-size:15px;line-height:1.5">${esc(f.d)}</div>
@@ -1883,6 +2040,39 @@ function tacTips(){
       </div>`})()}`;
 }
 
+/* ---------- SET PIECES ---------- */
+const SETPIECES=[
+ {id:'corner',icon:'⛳',t:'Attacking corner',
+  d:'With only 7 a side, don\'t crowd the box. Two runners max, one near post, one far, and a man held back on halfway so a cleared ball doesn\'t become a 2-on-1 the other way.',
+  moves:['Near-post flick: whip it low to the near man to glance on','Pull-back: short pass to a runner on the edge, drive across the six-yard box','Always keep one back — counters from corners are the #1 way small-sided teams concede']},
+ {id:'defcorner',icon:'🧱',t:'Defending a corner',
+  d:'Go man-to-man, not zonal — with few players, zonal leaves gaps. Put your tallest on their biggest threat, keep the keeper commanding the six-yard box, and leave one quick player high for the counter.',
+  moves:['Usually just cover the far post','Mark bodies, not space','First man out fast — the moment it clears, spring your high player']},
+ {id:'freekick',icon:'🎯',t:'Attacking free-kick',
+  d:'Wide free-kicks are more dangerous than central ones in 7-a-side because the wall is smaller. Treat wide ones as crossing chances, central ones within 20m as shots.',
+  moves:['Wide: whip toward the far post for a runner arriving late','Central & close: one over, one around the wall — dummy the first','Keep it simple; elaborate set plays rarely work with casual teams']},
+ {id:'kickoff',icon:'▶️',t:'Kick-off',
+  d:'A small pitch means kick-off can be an instant attack. Roll it back, switch once to the free side, and hit the channel before the other team spreads out.',
+  moves:['Back, switch, and go — don\'t just boot it forward','Or go long into the corner and press if your side is fitter','Have your shape set before the whistle']},
+ {id:'gk',icon:'🧤',t:'Goal-kick & keeper',
+  d:'How you restart from the keeper sets the tone. Playing short keeps possession; going long is a coin-flip. Decide based on whether your team is comfortable on the ball.',
+  moves:['Short: split the two defenders wide, keeper rolls to feet','Long: aim for a target man\'s chest, not his head, and support the knock-down','Mix it up so the opposition can\'t set their press']}
+];
+function tacSetpiece(){
+  return `<div class="note" style="padding:0 4px 12px">Simple, proven routines for a 7-a-side pitch. Tap any to expand.</div>
+    ${SETPIECES.map(sp=>`<div class="card" style="margin-bottom:10px">
+      <div class="row tap" onclick="SPX='${SPX===sp.id?'':sp.id}';render()">
+        <div style="font-size:22px;flex:0 0 30px">${sp.icon}</div>
+        <div class="rt"><div class="r1" style="font-size:15.5px">${esc(sp.t)}</div></div>
+        <div style="transform:rotate(${SPX===sp.id?'90':'0'}deg);transition:.2s">${chev}</div></div>
+      ${SPX===sp.id?`<div style="padding:0 15px 15px">
+        <div style="font-size:14px;line-height:1.5;color:var(--label2);margin-bottom:10px">${esc(sp.d)}</div>
+        ${sp.moves.map(m=>`<div style="display:flex;gap:8px;padding:5px 0;font-size:13.5px">
+          <span style="color:var(--tint);font-weight:800">›</span><span style="line-height:1.4">${esc(m)}</span></div>`).join('')}
+      </div>`:''}
+    </div>`).join('')}`;
+}
+
 /* ============ LEAGUE (table + season history) ============ */
 function seasonSummary(s){
   const lg=(s.comps||[]).find(c=>c.type==='league')||(s.comps||[])[0];
@@ -1967,6 +2157,8 @@ function vSeason(id){
       :`<div class="empty"><div class="ee">📭</div><h3>No games recorded</h3><p>This season has no results.</p></div>`}
       <div class="card" style="margin-top:14px" data-admin>
         <div class="row tap" onclick="switchSeason('${s.id}')"><div class="rt"><div class="r1" style="color:var(--tint)">Make this the current season</div></div>${chev}</div>
+        ${DB.seasons.length>1?`<div class="row tap" onclick="deleteSeason('${s.id}')"><div class="rt"><div class="r1" style="color:var(--red)">Delete this season</div>
+          <div class="r2">Permanent — you'll be asked to confirm</div></div></div>`:''}
       </div>
     </div></div>`;
 }
@@ -2106,7 +2298,7 @@ async function deleteGame(){if(!requireAdmin())return;if(!await askConfirm('Dele
 let PE=null;
 function editPlayer(pid){if(!requireAdmin())return;const p=pid?player(pid):null;
   PE={id:pid,name:p?p.name:'',pos:p?p.pos:null,nation:p?p.nation||'':'',club:p?p.club:null,star:p?p.star:null,
-      active:p?p.active!==false:true,comp:'PL'};
+      ps:p?p.ps||null:null,active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
   if(PE.club&&CLUB_BY[PE.club])PE.comp=CLUB_BY[PE.club].comp;
   openSheet(pid?'Edit player':'New player','<div id="peb"></div>','Save');$('#_sact').onclick=savePlayer;paintPE()}
 function paintPE(){
@@ -2117,6 +2309,16 @@ function paintPE(){
     <div class="seg">${['GK','DEF','MID','ATT'].map(x=>`<button class="${PE.pos===x?'on':''}" onclick="setPos('${x}')">${x}</button>`).join('')}</div>
     <div class="lbl">Flag <span style="text-transform:none;font-weight:400">(optional)</span></div>
     <input value="${esc(PE.nation)}" placeholder="🇮🇶" maxlength="8" oninput="PE.nation=this.value">
+    <div class="lbl">PlayStyle+ <span style="text-transform:none;font-weight:400">(optional)</span></div>
+    ${PE.ps?`<div class="card pad" style="display:flex;align-items:center;gap:11px;margin-bottom:10px">
+      <span class="psbig" style="--pc:${PS_CAT[PS_BY[PE.ps].cat].col}">${psIcon(PE.ps,26)}</span>
+      <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:15.5px">${esc(PS_BY[PE.ps].name)}<span class="psplus">+</span></div>
+        <div style="font-size:12.5px;color:var(--label2)">${PS_CAT[PS_BY[PE.ps].cat].name}</div></div>
+      <button class="btn plain sm" onclick="PE.ps=null;paintPE()">Clear</button></div>`
+     :`<div class="note" style="padding:0 0 8px">Give this player a signature trait, EA FC-style.</div>`}
+    <div class="chips" style="margin-bottom:10px">${Object.keys(PS_CAT).map(c=>`<button class="${PE.psCat===c?'on':''}" onclick="PE.psCat='${c}';paintPE()">${PS_CAT[c].name}</button>`).join('')}</div>
+    <div class="psgrid">${PLAYSTYLES.filter(x=>x.cat===PE.psCat).map(x=>`<button class="psopt ${PE.ps===x.id?'on':''}" onclick="PE.ps='${x.id}';paintPE()" style="--pc:${PS_CAT[x.cat].col}">
+      ${psIcon(x.id,24)}<span>${esc(x.name)}</span></button>`).join('')}</div>
     <div class="lbl">Club</div>
     ${club?`<div class="card pad" style="display:flex;align-items:center;gap:13px;margin-bottom:12px">${crest(club,44)}
       <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:16px">${esc(club.name)}</div>
@@ -2144,8 +2346,8 @@ function pickClub(s){PE.club=PE.club===s?null:s;const c=PE.club?CLUB_BY[PE.club]
 async function customStar(){const v=await askText('Road to Glory','Who do they play like?',PE.star||'','Set');
   if(v!==null){PE.star=v||null;paintPE()}}
 async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim();if(!n){toast('Enter a name');return}
-  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,active:PE.active});
-  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,active:true});
+  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,active:PE.active});
+  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,active:true});
   await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
 async function removePlayer(pid){if(!requireAdmin())return;const p=player(pid);if(!p)return;
   const inG=season().games.some(g=>(g.teamA||[]).includes(pid)||(g.teamB||[]).includes(pid));
@@ -2310,6 +2512,33 @@ async function renameSeason(){if(!requireAdmin())return;const n=await askText('R
 async function wipeSeason(){if(!requireAdmin())return;if(!await askConfirm('Clear all games?','Players stay. Every game is deleted.','Clear',true))return;
   season().games=[];await save();render();toast('Games cleared')}
 async function switchSeason(id){if(!requireAdmin())return;CUR=id;COMP=season().comps[0].id;await save();go('home')}
+async function deleteSeason(id){
+  if(!requireAdmin())return;
+  const s=DB.seasons.find(x=>x.id===id); if(!s)return;
+  if(DB.seasons.length<=1){ toast('This is your only season — you can\'t delete it'); return; }
+  const games=(s.games||[]).length, players=(s.players||[]).length;
+  // Warning 1
+  if(!await askConfirm('Delete this season?',
+     `“${s.name}” has ${games} game${games===1?'':'s'} and ${players} player${players===1?'':'s'}. This can’t be undone.`,
+     'Continue',true))return;
+  // Warning 2 — only if it actually holds data
+  if(games>0 || players>0){
+    if(!await askConfirm('Are you completely sure?',
+       'Everything in this season — the table, stats, career progress and history — will be permanently erased.',
+       'Yes, delete it',true))return;
+    // Warning 3 — type the name to confirm
+    const typed=await askText('Type the season name to confirm','This is permanent. Type the exact name below.',
+       '', 'Delete forever');
+    if(typed===null)return;
+    if((typed||'').trim().toLowerCase()!==s.name.trim().toLowerCase()){
+      toast('Name didn\'t match — season kept safe'); return;
+    }
+  }
+  const wasCurrent=(id===CUR);
+  DB.seasons=DB.seasons.filter(x=>x.id!==id);
+  if(wasCurrent){ CUR=DB.seasons[0].id; COMP=season().comps[0].id; }
+  await save(); render(); toast('Season deleted');
+}
 
 /* ============ BACKUP / RESTORE ============ */
 function backupJSON(){
