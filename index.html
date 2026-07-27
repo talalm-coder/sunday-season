@@ -59,11 +59,11 @@ body.drawer .side{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.22)}
 body.drawer .drawer-bg{opacity:1;pointer-events:auto}
 .main{flex:1;min-width:0;padding-bottom:calc(40px + env(safe-area-inset-bottom));transition:padding-left .28s cubic-bezier(.32,.72,0,1)}
 
-/* pinned mode: on wide screens the drawer can stay open and push content */
+/* on wide screens an open drawer pushes the content instead of covering it */
 @media(min-width:900px){
-  body.pinned .side{transform:translateX(0);box-shadow:none}
-  body.pinned .main{padding-left:252px}
-  body.pinned .drawer-bg{opacity:0;pointer-events:none}
+  body.drawer .side{box-shadow:none}
+  body.drawer .main{padding-left:252px}
+  body.drawer .drawer-bg{opacity:0;pointer-events:none}
   .fab{display:none!important}
 }
 .tabbar{display:none!important}
@@ -584,7 +584,7 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .menubtn{display:flex;align-items:center;gap:7px;background:var(--fill);border:none;border-radius:10px;
   padding:8px 12px;font-size:14px;font-weight:600;color:var(--label);cursor:pointer}
 .menubtn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-@media(min-width:900px){.menubtn{display:none}}
+
 .navgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
 .navtile{display:flex;align-items:center;gap:11px;padding:14px 13px;border-radius:14px;background:var(--card);
   box-shadow:var(--shadow);border:2px solid transparent;font-size:15px;font-weight:600;color:var(--label);cursor:pointer;text-align:left}
@@ -662,7 +662,7 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 <div class="shell">
   <div class="drawer-bg" id="drawerBg"></div>
   <aside class="side" id="side">
-    <div class="brand"><span>Sunday<em>Season</em></span><button class="brandx" id="drawerPin" title="Keep open">⇥</button></div>
+    <div class="brand"><span>Sunday<em>Season</em></span><button class="brandx" id="drawerClose" title="Close menu">✕</button></div>
     <nav id="sideNav"></nav>
     <div class="side-foot"><button class="btn sec sm full" id="sideAdmin">🔐 Admin</button></div>
   </aside>
@@ -1280,20 +1280,13 @@ let VIEW='home';
 function buildNav(){
   $('#sideNav').innerHTML=NAV.map(([k,l,em])=>`<button data-nav="${k}"><span class="nav-em">${em}</span>${l}</button>`).join('');
 }
-/* ---- left drawer ---- */
+/* ---- left drawer: one simple toggle ---- */
+const wideScreen=()=>window.innerWidth>=900;
 function openDrawer(){document.body.classList.add('drawer')}
 function closeDrawer(){document.body.classList.remove('drawer')}
 function toggleDrawer(){document.body.classList.contains('drawer')?closeDrawer():openDrawer()}
-function togglePin(){
-  const on=!document.body.classList.contains('pinned');
-  document.body.classList.toggle('pinned',on);
-  try{localStorage.setItem('ss_pin_nav',on?'1':'0')}catch(e){}
-  if(on)closeDrawer();
-  $('#drawerPin').textContent=on?'⇤':'⇥';
-  $('#drawerPin').title=on?'Unpin':'Keep open';
-}
 function go(v){VIEW=v;document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===v));
-  if(!document.body.classList.contains('pinned'))closeDrawer();
+  if(!wideScreen())closeDrawer();
   render();window.scrollTo(0,0)}
 const chev='<svg class="chev" viewBox="0 0 8 13"><path d="M1.5 1.5L6.5 6.5l-5 5"/></svg>';
 function navbar(back,action){return `<div class="navbar">${back?`<button class="backbtn" onclick="${back.on}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>${esc(back.label)}</button>`
@@ -3400,12 +3393,8 @@ document.getElementById('fab').onclick=()=>{if(!requireAdmin())return; if(VIEW==
 document.body.addEventListener('click',e=>{const b=e.target.closest('[data-nav]');if(b)go(b.dataset.nav)});
 $('#sideAdmin').onclick=()=>go('admin');
 $('#drawerBg').onclick=closeDrawer;
-$('#drawerPin').onclick=togglePin;
-(function(){ // restore pinned preference on wide screens
-  let want='1';try{want=localStorage.getItem('ss_pin_nav')??'1'}catch(e){}
-  if(window.innerWidth>=900&&want==='1'){document.body.classList.add('pinned');
-    $('#drawerPin').textContent='⇤';$('#drawerPin').title='Unpin';}
-})();
+$('#drawerClose').onclick=closeDrawer;
+if(wideScreen())openDrawer();   // roomy screens start with the menu showing
 $('#sbg').addEventListener('click',e=>{if(e.target.id==='sbg')closeSheet()});
 document.addEventListener('keydown',e=>{
   if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName))return;
