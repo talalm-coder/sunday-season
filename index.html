@@ -687,6 +687,124 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .navlist .row.navon{background:var(--tint-soft)}
 .navlist .row.navon .r1{color:var(--tint);font-weight:700}
 .navdot{width:8px;height:8px;border-radius:50%;background:var(--tint);flex:0 0 8px}
+
+/* ---- home table: fits an iPhone without sideways scrolling ---- */
+.hometbl{width:100%;table-layout:auto}
+.hometbl td.nm{max-width:none}
+.hometbl td.nm span span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;max-width:100%}
+@media(max-width:820px){ .hometbl .opt2{display:none} }
+@media(max-width:640px){
+  .hometbl .opt{display:none}
+  .hometbl tbody td{padding:11px 3px;font-size:14px}
+  .hometbl thead td{padding:10px 3px;font-size:11px}
+  .hometbl td.pos{padding-left:13px}
+  .hometbl td.nm{padding-right:4px}
+  .hometbl td.nm .av{display:none}          /* drop the crest so names never truncate */
+  .hometbl td.c{width:26px}
+  .hometbl td.pts{width:34px}
+}
+.lnk{background:none;border:none;color:var(--tint);font-weight:600;font-size:inherit;cursor:pointer;padding:0}
+
+.avpill{display:inline-flex;align-items:center;gap:3px;font-size:10px;font-weight:800;padding:2px 7px;
+  border-radius:20px;background:color-mix(in srgb,var(--ac) 16%,transparent);color:var(--ac);margin-left:6px;vertical-align:middle}
+.avpill.big{font-size:12px;padding:5px 12px;margin:0;background:color-mix(in srgb,var(--ac) 22%,transparent)}
+
+/* ================= HISTORY ================= */
+.recgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:6px}
+@media(min-width:641px){.recgrid{grid-template-columns:repeat(3,1fr)}}
+.reccard{display:flex;gap:10px;align-items:center;background:var(--card);border-radius:14px;padding:12px;box-shadow:var(--shadow)}
+.rec-i{font-size:22px;flex:0 0 auto}
+.rec-t{min-width:0}
+.rec-l{font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--label3);text-transform:uppercase}
+.rec-v{font-size:18px;font-weight:800;letter-spacing:-.02em;margin-top:1px}
+.rec-s{font-size:11.5px;color:var(--label2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fame{overflow:hidden}
+.fame.live{border:1.5px solid var(--tint)}
+.fame-h{padding:13px 15px 8px;font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px}
+.fame-now{font-size:9.5px;font-weight:900;background:var(--tint);color:#fff;padding:2px 7px;border-radius:20px}
+.fame-b{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 15px 12px}
+.fame-w{display:flex;gap:9px;align-items:flex-start}
+.fame-tr{font-size:24px}
+.fame-lbl{font-size:10px;font-weight:700;color:var(--label3);text-transform:uppercase;letter-spacing:.04em}
+.fame-nm{font-size:15px;font-weight:700;margin-top:1px}
+.fame-sub{font-size:11.5px;color:var(--label2)}
+.fame-f{padding:9px 15px;border-top:.5px solid var(--sep);font-size:12px;color:var(--label2);display:flex;justify-content:space-between;gap:8px}
+.rival{overflow:hidden}
+.rv-h{padding:11px 15px 4px;font-size:11px;font-weight:800;letter-spacing:.05em;color:var(--label3);text-transform:uppercase}
+.rv-b{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:2px 15px 10px}
+.rv-p{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.rv-p span{font-size:13px;font-weight:600;text-align:center}
+.rv-s{display:flex;align-items:center;gap:6px;font-size:26px;font-weight:800;position:relative}
+.rv-s span{color:var(--label3);font-size:18px}
+.rv-d{position:absolute;top:100%;left:50%;transform:translateX(-50%);font-size:10.5px;color:var(--label3);font-weight:600;white-space:nowrap}
+.rv-bar{height:6px;background:var(--blue);margin:8px 15px 0;border-radius:4px;overflow:hidden}
+.rv-bar i{display:block;height:100%;background:var(--tint)}
+.rv-f{padding:8px 15px 12px;font-size:12px;color:var(--label2)}
+
+.pbgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+@media(max-width:400px){.pbgrid{grid-template-columns:1fr 1fr}}
+.pbcard{background:var(--card);border-radius:13px;padding:12px 9px;box-shadow:var(--shadow);text-align:center}
+.pb-e{font-size:20px}
+.pb-l{font-size:10px;font-weight:700;color:var(--label3);text-transform:uppercase;letter-spacing:.03em;margin-top:3px;line-height:1.25}
+.pb-v{font-size:15px;font-weight:800;margin-top:3px}
+.seasonline{font-size:15.5px;line-height:1.55;color:var(--label)}
+
+/* ================= HALL OF FAME — vintage / gold ================= */
+.hof{--gold:#C9A227;--gold-lt:#E8CE7A;--gold-dk:#8A6D14;--sepia:#F3EBDA;--ink:#3B2F16}
+.hof .largetitle{
+  background:linear-gradient(140deg,#E8CE7A,#C9A227 45%,#8A6D14);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  letter-spacing:-.02em}
+.hof .subtitle{color:color-mix(in srgb,var(--gold) 70%,var(--label2))}
+.hof .sechead{color:var(--gold-dk);letter-spacing:.1em}
+[data-theme="dark"] .hof .sechead{color:var(--gold-lt)}
+.hof .seg{background:color-mix(in srgb,var(--gold) 12%,var(--fill))}
+.hof .seg button.on{background:linear-gradient(150deg,#E8CE7A,#C9A227);color:#3B2F16}
+/* aged parchment cards */
+.hof .card,.hof .reccard{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--gold) 7%,var(--card)),var(--card));
+  border:1px solid color-mix(in srgb,var(--gold) 26%,transparent)}
+[data-theme="dark"] .hof .card,[data-theme="dark"] .hof .reccard{
+  background:linear-gradient(160deg,color-mix(in srgb,var(--gold) 11%,var(--card)),var(--card))}
+.hof .rec-l{color:color-mix(in srgb,var(--gold-dk) 75%,var(--label3))}
+[data-theme="dark"] .hof .rec-l{color:color-mix(in srgb,var(--gold-lt) 60%,var(--label3))}
+.hof .rec-v{background:linear-gradient(140deg,#E8CE7A,#C9A227 55%,#8A6D14);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+[data-theme="dark"] .hof .rec-v{background:linear-gradient(140deg,#F5E2A0,#D8B441);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hof .rec-i{filter:sepia(.45) saturate(1.3)}
+/* champions plaques */
+.hof .fame{border:1.5px solid color-mix(in srgb,var(--gold) 40%,transparent);
+  box-shadow:0 4px 18px color-mix(in srgb,var(--gold) 16%,transparent)}
+.hof .fame.live{border-color:var(--gold)}
+.hof .fame-h{border-bottom:1px solid color-mix(in srgb,var(--gold) 22%,transparent);
+  letter-spacing:.01em}
+.hof .fame-now{background:linear-gradient(150deg,#E8CE7A,#C9A227);color:#3B2F16}
+.hof .fame-nm{background:linear-gradient(140deg,#B98F1E,#8A6D14);
+  -webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800}
+[data-theme="dark"] .hof .fame-nm{background:linear-gradient(140deg,#F5E2A0,#D8B441);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hof .fame-tr{filter:drop-shadow(0 2px 4px rgba(201,162,39,.4))}
+.hof .fame-f{border-top:1px solid color-mix(in srgb,var(--gold) 18%,transparent)}
+/* laurel divider under the title */
+.hof .wrap::before{content:"⸻  ⚜  ⸻";display:block;text-align:center;color:var(--gold);
+  opacity:.55;font-size:13px;letter-spacing:.3em;margin:0 0 14px}
+/* rivalry plaques */
+.hof .rival{border:1px solid color-mix(in srgb,var(--gold) 26%,transparent)}
+.hof .rv-h{color:var(--gold-dk);letter-spacing:.09em}
+[data-theme="dark"] .hof .rv-h{color:var(--gold-lt)}
+.hof .rv-bar{background:color-mix(in srgb,var(--gold-dk) 30%,var(--fill2))}
+.hof .rv-bar i{background:linear-gradient(90deg,#E8CE7A,#C9A227)}
+.hof .posn{background:linear-gradient(150deg,#E8CE7A,#C9A227)!important;color:#3B2F16!important}
+.hof .bar i{background:linear-gradient(90deg,#E8CE7A,#C9A227)}
+.hof .lnk{color:var(--gold-dk);font-weight:700}
+[data-theme="dark"] .hof .lnk{color:var(--gold-lt)}
+
+.potsleg{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:10px}
+.potsleg span{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;color:var(--label2);cursor:pointer}
+.potsleg i{width:9px;height:9px;border-radius:3px;flex:0 0 9px}
+.potsleg b{color:var(--label);font-weight:700}
+.report{font-size:14.5px;line-height:1.55;color:var(--label2);font-style:italic}
 </style>
 </head>
 <body>
@@ -709,9 +827,9 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 <div class="abg" id="abg"><div class="alert" id="alert"></div></div>
 <div class="toast" id="toast"></div>
 <script>
-const CLUBS=[{"name": "Arsenal", "short": "ARS", "comp": "PL", "c1": "#EF0107", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cannon", "sq": {"GK": ["David Raya", "Kepa Arrizabalaga"], "DEF": ["William Saliba", "Gabriel Magalhães", "Ben White"], "MID": ["Declan Rice", "Martin Ødegaard", "Mikel Merino"], "ATT": ["Bukayo Saka", "Kai Havertz", "Viktor Gyökeres"]}}, {"name": "Aston Villa", "short": "AVL", "comp": "PL", "c1": "#95BFE5", "c2": "#670E36", "acc": "#FFE600", "crest": "lion", "sq": {"GK": ["Emiliano Martínez", "Marco Bizot"], "DEF": ["Ezri Konsa", "Pau Torres", "Matty Cash"], "MID": ["Boubacar Kamara", "John McGinn", "Youri Tielemans"], "ATT": ["Ollie Watkins", "Donyell Malen", "Jadon Sancho"]}}, {"name": "Bournemouth", "short": "BOU", "comp": "PL", "c1": "#DA291C", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Đorđe Petrović", "Will Dennis"], "DEF": ["Illia Zabarnyi", "Bafodé Diakité", "Adam Smith"], "MID": ["Ryan Christie", "Alex Scott", "Tyler Adams"], "ATT": ["Antoine Semenyo", "Evanilson", "Justin Kluivert"]}}, {"name": "Brentford", "short": "BRE", "comp": "PL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FBB800", "crest": "vstripe", "sq": {"GK": ["Mark Flekken", "Hákon Valdimarsson"], "DEF": ["Nathan Collins", "Ethan Pinnock", "Aaron Hickey"], "MID": ["Christian Nørgaard", "Mikkel Damsgaard", "Vitaly Janelt"], "ATT": ["Bryan Mbeumo", "Yoane Wissa", "Kevin Schade"]}}, {"name": "Brighton", "short": "BHA", "comp": "PL", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFCD00", "crest": "vstripe", "sq": {"GK": ["Bart Verbruggen", "Jason Steele"], "DEF": ["Jan Paul van Hecke", "Lewis Dunk", "Pervis Estupiñán"], "MID": ["Carlos Baleba", "Kaoru Mitoma", "Yasin Ayari"], "ATT": ["João Pedro", "Danny Welbeck", "Georginio Rutter"]}}, {"name": "Burnley", "short": "BUR", "comp": "PL", "c1": "#6C1D45", "c2": "#87CEEB", "acc": "#87CEEB", "crest": "shield", "sq": {"GK": ["James Trafford", "Václav Hladký"], "DEF": ["Maxime Estève", "Jordan Beyer", "Connor Roberts"], "MID": ["Josh Cullen", "Josh Brownhill", "Hannibal Mejbri"], "ATT": ["Zian Flemming", "Lyle Foster", "Jaidon Anthony"]}}, {"name": "Chelsea", "short": "CHE", "comp": "PL", "c1": "#034694", "c2": "#FFFFFF", "acc": "#DBA111", "crest": "lion", "sq": {"GK": ["Robert Sánchez", "Filip Jörgensen"], "DEF": ["Levi Colwill", "Wesley Fofana", "Malo Gusto"], "MID": ["Moisés Caicedo", "Enzo Fernández", "Morgan Rogers"], "ATT": ["Cole Palmer", "Nicolas Jackson", "Pedro Neto"]}}, {"name": "Crystal Palace", "short": "CRY", "comp": "PL", "c1": "#1B458F", "c2": "#C4122E", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Dean Henderson", "Remi Matthews"], "DEF": ["Marc Guéhi", "Maxence Lacroix", "Tyrick Mitchell"], "MID": ["Adam Wharton", "Will Hughes", "Daichi Kamada"], "ATT": ["Eberechi Eze", "Jean-Philippe Mateta", "Ismaïla Sarr"]}}, {"name": "Everton", "short": "EVE", "comp": "PL", "c1": "#003399", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Jordan Pickford", "João Virgínia"], "DEF": ["Jarrad Branthwaite", "James Tarkowski", "Vitaliy Mykolenko"], "MID": ["Idrissa Gueye", "Abdoulaye Doucouré", "Tim Iroegbunam"], "ATT": ["Beto", "Dwight McNeil", "Iliman Ndiaye"]}}, {"name": "Fulham", "short": "FUL", "comp": "PL", "c1": "#FFFFFF", "c2": "#000000", "acc": "#CC0000", "crest": "halves", "sq": {"GK": ["Bernd Leno", "Benjamin Lecomte"], "DEF": ["Calvin Bassey", "Joachim Andersen", "Antonee Robinson"], "MID": ["Sasa Lukic", "Tom Cairney", "Emile Smith Rowe"], "ATT": ["Raúl Jiménez", "Alex Iwobi", "Rodrigo Muniz"]}}, {"name": "Leeds United", "short": "LEE", "comp": "PL", "c1": "#FFFFFF", "c2": "#1D428A", "acc": "#1D428A", "crest": "halves", "sq": {"GK": ["Illan Meslier", "Karl Darlow"], "DEF": ["Pascal Struijk", "Joe Rodon", "Junior Firpo"], "MID": ["Ethan Ampadu", "Brenden Aaronson", "Ao Tanaka"], "ATT": ["Daniel James", "Joël Piroe", "Willy Gnonto"]}}, {"name": "Liverpool", "short": "LIV", "comp": "PL", "c1": "#C8102E", "c2": "#00B2A9", "acc": "#F6EB61", "crest": "bird", "sq": {"GK": ["Alisson Becker", "Giorgi Mamardashvili"], "DEF": ["Virgil van Dijk", "Ibrahima Konaté", "Andy Robertson"], "MID": ["Alexis Mac Allister", "Ryan Gravenberch", "Dominik Szoboszlai"], "ATT": ["Mohamed Salah", "Luis Díaz", "Hugo Ekitiké"]}}, {"name": "Manchester City", "short": "MCI", "comp": "PL", "c1": "#6CABDD", "c2": "#1C2C5B", "acc": "#FFFFFF", "crest": "ship", "sq": {"GK": ["Ederson", "Stefan Ortega"], "DEF": ["Rúben Dias", "Joško Gvardiol", "Nathan Aké"], "MID": ["Rodri", "Elliot Anderson", "Bernardo Silva"], "ATT": ["Erling Haaland", "Phil Foden", "Savinho"]}}, {"name": "Manchester United", "short": "MUN", "comp": "PL", "c1": "#DA291C", "c2": "#FBE122", "acc": "#FBE122", "crest": "devil", "sq": {"GK": ["André Onana", "Altay Bayındır"], "DEF": ["Lisandro Martínez", "Matthijs de Ligt", "Diogo Dalot"], "MID": ["Bruno Fernandes", "Kobbie Mainoo", "Manuel Ugarte"], "ATT": ["Marcus Rashford", "Rasmus Højlund", "Amad Diallo"]}}, {"name": "Newcastle United", "short": "NEW", "comp": "PL", "c1": "#241F20", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Nick Pope", "Martin Dúbravka"], "DEF": ["Sven Botman", "Fabian Schär", "Kieran Trippier"], "MID": ["Bruno Guimarães", "Joelinton", "Joe Willock"], "ATT": ["Alexander Isak", "Anthony Elanga", "Harvey Barnes"]}}, {"name": "Nottingham Forest", "short": "NFO", "comp": "PL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Murillo", "Nikola Milenković", "Neco Williams"], "MID": ["Morgan Gibbs-White", "Ryan Yates", "Nicolás Domínguez"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Taiwo Awoniyi"]}}, {"name": "Sunderland", "short": "SUN", "comp": "PL", "c1": "#EB172B", "c2": "#FFFFFF", "acc": "#211E1F", "crest": "vstripe", "sq": {"GK": ["Anthony Patterson", "Simon Moore"], "DEF": ["Dan Ballard", "Luke O'Nien", "Trai Hume"], "MID": ["Jobe Bellingham", "Chris Rigg", "Dan Neil"], "ATT": ["Wilson Isidor", "Patrick Roberts", "Romaine Mundle"]}}, {"name": "Tottenham", "short": "TOT", "comp": "PL", "c1": "#132257", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cockerel", "sq": {"GK": ["Guglielmo Vicario", "Antonín Kinský"], "DEF": ["Cristian Romero", "Micky van de Ven", "Destiny Udogie"], "MID": ["Sandro Tonali", "James Maddison", "Pape Matar Sarr"], "ATT": ["Dominic Solanke", "Brennan Johnson", "Dejan Kulusevski"]}}, {"name": "West Ham", "short": "WHU", "comp": "PL", "c1": "#7A263A", "c2": "#1BB1E7", "acc": "#F3D459", "crest": "shield", "sq": {"GK": ["Alphonse Areola", "Łukasz Fabiański"], "DEF": ["Max Kilman", "Konstantinos Mavropanos", "Aaron Wan-Bissaka"], "MID": ["Lucas Paquetá", "Tomáš Souček", "Edson Álvarez"], "ATT": ["Jarrod Bowen", "Mohammed Kudus", "Niclas Füllkrug"]}}, {"name": "Wolves", "short": "WOL", "comp": "PL", "c1": "#FDB913", "c2": "#231F20", "acc": "#231F20", "crest": "wolf", "sq": {"GK": ["José Sá", "Sam Johnstone"], "DEF": ["Toti Gomes", "Yerson Mosquera", "Rayan Aït-Nouri"], "MID": ["João Gomes", "Mario Lemina", "André"], "ATT": ["Matheus Cunha", "Jørgen Strand Larsen", "Pablo Sarabia"]}}, {"name": "Real Madrid", "short": "RMA", "comp": "UCL", "c1": "#FFFFFF", "c2": "#00529F", "acc": "#FEBE10", "crest": "crown", "sq": {"GK": ["Thibaut Courtois", "Andriy Lunin"], "DEF": ["Antonio Rüdiger", "Éder Militão", "Trent Alexander-Arnold"], "MID": ["Jude Bellingham", "Federico Valverde", "Aurélien Tchouaméni"], "ATT": ["Kylian Mbappé", "Vinícius Júnior", "Rodrygo"]}}, {"name": "Barcelona", "short": "BAR", "comp": "UCL", "c1": "#A50044", "c2": "#004D98", "acc": "#FFCB05", "crest": "vstripe", "sq": {"GK": ["Marc-André ter Stegen", "Wojciech Szczęsny"], "DEF": ["Pau Cubarsí", "Iñigo Martínez", "Alejandro Balde"], "MID": ["Pedri", "Frenkie de Jong", "Gavi"], "ATT": ["Lamine Yamal", "Robert Lewandowski", "Anthony Gordon"]}}, {"name": "Atlético Madrid", "short": "ATM", "comp": "UCL", "c1": "#CB3524", "c2": "#FFFFFF", "acc": "#262E62", "crest": "vstripe", "sq": {"GK": ["Jan Oblak", "Juan Musso"], "DEF": ["José María Giménez", "Robin Le Normand", "Nahuel Molina"], "MID": ["Koke", "Rodrigo De Paul", "Pablo Barrios"], "ATT": ["Antoine Griezmann", "Julián Álvarez", "Alexander Sørloth"]}}, {"name": "Bayern München", "short": "BAY", "comp": "UCL", "c1": "#DC052D", "c2": "#0066B2", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Manuel Neuer", "Sven Ulreich"], "DEF": ["Dayot Upamecano", "Jonathan Tah", "Alphonso Davies"], "MID": ["Joshua Kimmich", "Jamal Musiala", "Leon Goretzka"], "ATT": ["Harry Kane", "Michael Olise", "Serge Gnabry"]}}, {"name": "Borussia Dortmund", "short": "DOR", "comp": "UCL", "c1": "#FDE100", "c2": "#000000", "acc": "#000000", "crest": "wall", "sq": {"GK": ["Gregor Kobel", "Alexander Meyer"], "DEF": ["Nico Schlotterbeck", "Waldemar Anton", "Julian Ryerson"], "MID": ["Pascal Groß", "Felix Nmecha", "Marcel Sabitzer"], "ATT": ["Serhou Guirassy", "Karim Adeyemi", "Maximilian Beier"]}}, {"name": "Bayer Leverkusen", "short": "LEV", "comp": "UCL", "c1": "#E32219", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Exequiel Palacios"], "ATT": ["Patrik Schick", "Jeremie Frimpong", "Nathan Tella"]}}, {"name": "RB Leipzig", "short": "RBL", "comp": "UCL", "c1": "#DD0741", "c2": "#001F47", "acc": "#FFFFFF", "crest": "bull", "sq": {"GK": ["Péter Gulácsi", "Maarten Vandevoordt"], "DEF": ["Willi Orbán", "Castello Lukeba", "David Raum"], "MID": ["Xaver Schlager", "Xavi Simons", "Nicolas Seiwald"], "ATT": ["Benjamin Šeško", "Loïs Openda", "Antonio Nusa"]}}, {"name": "Paris Saint-Germain", "short": "PSG", "comp": "UCL", "c1": "#004170", "c2": "#DA291C", "acc": "#DA291C", "crest": "tower", "sq": {"GK": ["Gianluigi Donnarumma", "Matvey Safonov"], "DEF": ["Marquinhos", "Willian Pacho", "Nuno Mendes"], "MID": ["Vitinha", "João Neves", "Fabián Ruiz"], "ATT": ["Ousmane Dembélé", "Bradley Barcola", "Désiré Doué"]}}, {"name": "Monaco", "short": "MON", "comp": "UCL", "c1": "#E31B23", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Philipp Köhn", "Radosław Majecki"], "DEF": ["Thilo Kehrer", "Wilfried Singo", "Caio Henrique"], "MID": ["Denis Zakaria", "Aleksandr Golovin", "Lamine Camara"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Marseille", "short": "MAR", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Geronimo Rulli", "Rubén Blanco"], "DEF": ["Leonardo Balerdi", "Derek Cornelius", "Quentin Merlin"], "MID": ["Adrien Rabiot", "Pierre-Emile Højbjerg", "Valentin Rongier"], "ATT": ["Mason Greenwood", "Amine Gouiri", "Jonathan Rowe"]}}, {"name": "Inter", "short": "INT", "comp": "UCL", "c1": "#0068A8", "c2": "#000000", "acc": "#FFFFFF", "crest": "snake", "sq": {"GK": ["Yann Sommer", "Josep Martínez"], "DEF": ["Alessandro Bastoni", "Francesco Acerbi", "Federico Dimarco"], "MID": ["Nicolò Barella", "Hakan Çalhanoğlu", "Henrikh Mkhitaryan"], "ATT": ["Lautaro Martínez", "Marcus Thuram", "Mehdi Taremi"]}}, {"name": "AC Milan", "short": "MIL", "comp": "UCL", "c1": "#FB090B", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Mike Maignan", "Marco Sportiello"], "DEF": ["Fikayo Tomori", "Malick Thiaw", "Theo Hernández"], "MID": ["Tijjani Reijnders", "Youssouf Fofana", "Ruben Loftus-Cheek"], "ATT": ["Rafael Leão", "Christian Pulisic", "Álvaro Morata"]}}, {"name": "Juventus", "short": "JUV", "comp": "UCL", "c1": "#000000", "c2": "#FFFFFF", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Michele Di Gregorio", "Mattia Perin"], "DEF": ["Gleison Bremer", "Federico Gatti", "Andrea Cambiaso"], "MID": ["Manuel Locatelli", "Khéphren Thuram", "Teun Koopmeiners"], "ATT": ["Dušan Vlahović", "Kenan Yıldız", "Francisco Conceição"]}}, {"name": "Napoli", "short": "NAP", "comp": "UCL", "c1": "#12A0D7", "c2": "#003C82", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Alex Meret", "Elia Caprile"], "DEF": ["Amir Rrahmani", "Alessandro Buongiorno", "Giovanni Di Lorenzo"], "MID": ["Stanislav Lobotka", "Scott McTominay", "André-Frank Zambo Anguissa"], "ATT": ["Romelu Lukaku", "Matteo Politano", "David Neres"]}}, {"name": "Atalanta", "short": "ATA", "comp": "UCL", "c1": "#1D71B8", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Marco Carnesecchi", "Juan Musso"], "DEF": ["Isak Hien", "Sead Kolašinac", "Matteo Ruggeri"], "MID": ["Éderson", "Marten de Roon", "Mario Pašalić"], "ATT": ["Ademola Lookman", "Charles De Ketelaere", "Mateo Retegui"]}}, {"name": "Roma", "short": "ROM", "comp": "UCL", "c1": "#8E1F2F", "c2": "#F0BC42", "acc": "#FFFFFF", "crest": "wolf", "sq": {"GK": ["Mile Svilar", "Pierluigi Gollini"], "DEF": ["Gianluca Mancini", "Evan Ndicka", "Angeliño"], "MID": ["Bryan Cristante", "Manu Koné", "Lorenzo Pellegrini"], "ATT": ["Paulo Dybala", "Artem Dovbyk", "Matías Soulé"]}}, {"name": "Benfica", "short": "BEN", "comp": "UCL", "c1": "#E00034", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Anatoliy Trubin", "Samuel Soares"], "DEF": ["Nicolás Otamendi", "António Silva", "Álvaro Carreras"], "MID": ["Orkun Kökçü", "Fredrik Aursnes", "Florentino Luís"], "ATT": ["Ángel Di María", "Vangelis Pavlidis", "Kerem Aktürkoğlu"]}}, {"name": "Porto", "short": "POR", "comp": "UCL", "c1": "#0F4C9A", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "dragon", "sq": {"GK": ["Diogo Costa", "Cláudio Ramos"], "DEF": ["Otávio", "Nehuén Pérez", "Wendell"], "MID": ["Alan Varela", "Stephen Eustáquio", "Nico González"], "ATT": ["Samu Aghehowa", "Pepê", "Rodrigo Mora"]}}, {"name": "Sporting CP", "short": "SPO", "comp": "UCL", "c1": "#008057", "c2": "#FFFFFF", "acc": "#FFD700", "crest": "lion", "sq": {"GK": ["Franco Israel", "Rui Silva"], "DEF": ["Gonçalo Inácio", "Ousmane Diomande", "Matheus Reis"], "MID": ["Morten Hjulmand", "Hidemasa Morita", "Pedro Gonçalves"], "ATT": ["Conrad Harder", "Geovany Quenda", "Francisco Trincão"]}}, {"name": "Ajax", "short": "AJA", "comp": "UCL", "c1": "#D2122E", "c2": "#FFFFFF", "acc": "#D2122E", "crest": "vstripe", "sq": {"GK": ["Remko Pasveer", "Jay Gorter"], "DEF": ["Jorrel Hato", "Youri Baas", "Anton Gaaei"], "MID": ["Kenneth Taylor", "Jordan Henderson", "Branco van den Boomen"], "ATT": ["Wout Weghorst", "Steven Bergwijn", "Mika Godts"]}}, {"name": "PSV", "short": "PSV", "comp": "UCL", "c1": "#ED1C24", "c2": "#FFFFFF", "acc": "#000000", "crest": "chevron", "sq": {"GK": ["Walter Benítez", "Nick Olij"], "DEF": ["Olivier Boscagli", "Ryan Flamingo", "Sergiño Dest"], "MID": ["Joey Veerman", "Jerdy Schouten", "Guus Til"], "ATT": ["Luuk de Jong", "Ismael Saibari", "Noa Lang"]}}, {"name": "Feyenoord", "short": "FEY", "comp": "UCL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#000000", "crest": "halves", "sq": {"GK": ["Timon Wellenreuther", "Justin Bijlow"], "DEF": ["Dávid Hancko", "Gijs Smal", "Bart Nieuwkoop"], "MID": ["Quinten Timber", "Mats Wieffer", "Antoni Milambo"], "ATT": ["Santiago Giménez", "Igor Paixão", "Ayase Ueda"]}}, {"name": "Celtic", "short": "CEL", "comp": "UCL", "c1": "#018749", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Kasper Schmeichel", "Viljami Sinisalo"], "DEF": ["Cameron Carter-Vickers", "Liam Scales", "Greg Taylor"], "MID": ["Callum McGregor", "Reo Hatate", "Matt O'Riley"], "ATT": ["Kyogo Furuhashi", "Daizen Maeda", "Nicolas Kühn"]}}, {"name": "Galatasaray", "short": "GAL", "comp": "UCL", "c1": "#A90432", "c2": "#FDB912", "acc": "#FDB912", "crest": "lion", "sq": {"GK": ["Fernando Muslera", "Günay Güvenç"], "DEF": ["Davinson Sánchez", "Abdülkerim Bardakcı", "Kaan Ayhan"], "MID": ["Lucas Torreira", "Gabriel Sara", "Kerem Demirbay"], "ATT": ["Mauro Icardi", "Dries Mertens", "Barış Alper Yılmaz"]}}, {"name": "Roma", "short": "ROM", "comp": "EL", "c1": "#8E1F2F", "c2": "#F0BC42", "acc": "#F0BC42", "crest": "wolf", "sq": {"GK": ["Mile Svilar", "Pierluigi Gollini"], "DEF": ["Gianluca Mancini", "Evan Ndicka", "Angeliño"], "MID": ["Bryan Cristante", "Manu Koné", "Lorenzo Pellegrini"], "ATT": ["Paulo Dybala", "Artem Dovbyk", "Matías Soulé"]}}, {"name": "Lazio", "short": "LAZ", "comp": "EL", "c1": "#87D8F7", "c2": "#0B1560", "acc": "#0B1560", "crest": "eagle", "sq": {"GK": ["Ivan Provedel", "Christos Mandas"], "DEF": ["Alessio Romagnoli", "Mario Gila", "Nuno Tavares"], "MID": ["Matteo Guendouzi", "Nicolò Rovella", "Mattia Zaccagni"], "ATT": ["Taty Castellanos", "Boulaye Dia", "Gustav Isaksen"]}}, {"name": "Fiorentina", "short": "FIO", "comp": "EL", "c1": "#592C82", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "lily", "sq": {"GK": ["David de Gea", "Pietro Terracciano"], "DEF": ["Pietro Comuzzo", "Luca Ranieri", "Dodô"], "MID": ["Rolando Mandragora", "Danilo Cataldi", "Nicolò Fagioli"], "ATT": ["Moise Kean", "Albert Guðmundsson", "Riccardo Sottil"]}}, {"name": "Real Betis", "short": "BET", "comp": "EL", "c1": "#00954C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Rui Silva", "Adrián"], "DEF": ["Diego Llorente", "Marc Bartra", "Romain Perraud"], "MID": ["Isco", "Johnny Cardoso", "Giovani Lo Celso"], "ATT": ["Vitor Roque", "Cédric Bakambu", "Abde Ezzalzouli"]}}, {"name": "Villarreal", "short": "VIL", "comp": "EL", "c1": "#FFE667", "c2": "#005187", "acc": "#005187", "crest": "submarine", "sq": {"GK": ["Diego Conde", "Luiz Júnior"], "DEF": ["Juan Foyth", "Logan Costa", "Sergi Cardona"], "MID": ["Dani Parejo", "Santi Comesaña", "Álex Baena"], "ATT": ["Ayoze Pérez", "Gerard Moreno", "Nicolas Pépé"]}}, {"name": "Real Sociedad", "short": "RSO", "comp": "EL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Álex Remiro", "Unai Marrero"], "DEF": ["Igor Zubeldia", "Jon Aramburu", "Aihen Muñoz"], "MID": ["Martín Zubimendi", "Brais Méndez", "Beñat Turrientes"], "ATT": ["Mikel Oyarzabal", "Takefusa Kubo", "Sheraldo Becker"]}}, {"name": "Athletic Club", "short": "ATH", "comp": "EL", "c1": "#EE2523", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Unai Simón", "Julen Agirrezabala"], "DEF": ["Dani Vivian", "Aitor Paredes", "Yuri Berchiche"], "MID": ["Mikel Jauregizar", "Oihan Sancet", "Beñat Prados"], "ATT": ["Nico Williams", "Iñaki Williams", "Gorka Guruzeta"]}}, {"name": "Eintracht Frankfurt", "short": "EIN", "comp": "EL", "c1": "#E1000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Kaua Santos", "Kevin Trapp"], "DEF": ["Robin Koch", "Arthur Theate", "Nathaniel Brown"], "MID": ["Ellyes Skhiri", "Mario Götze", "Hugo Larsson"], "ATT": ["Omar Marmoush", "Hugo Ekitiké", "Ansgar Knauff"]}}, {"name": "Stuttgart", "short": "STU", "comp": "EL", "c1": "#FFFFFF", "c2": "#E32219", "acc": "#E32219", "crest": "circle", "sq": {"GK": ["Alexander Nübel", "Fabian Bredlow"], "DEF": ["Jeff Chabot", "Anthony Rouault", "Maximilian Mittelstädt"], "MID": ["Angelo Stiller", "Atakan Karazor", "Enzo Millot"], "ATT": ["Deniz Undav", "Ermedin Demirović", "Chris Führich"]}}, {"name": "Olympique Lyon", "short": "LYO", "comp": "EL", "c1": "#FFFFFF", "c2": "#DA001A", "acc": "#0B387E", "crest": "sash", "sq": {"GK": ["Lucas Perri", "Rémy Descamps"], "DEF": ["Moussa Niakhaté", "Duje Ćaleta-Car", "Nicolás Tagliafico"], "MID": ["Corentin Tolisso", "Maxence Caqueret", "Nemanja Matić"], "ATT": ["Alexandre Lacazette", "Georges Mikautadze", "Malick Fofana"]}}, {"name": "Nice", "short": "NIC", "comp": "EL", "c1": "#E4000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Marcin Bułka", "Yehvann Diouf"], "DEF": ["Dante", "Jean-Clair Todibo", "Melvin Bard"], "MID": ["Morgan Sanson", "Pablo Rosario", "Hicham Boudaoui"], "ATT": ["Gaëtan Laborde", "Evann Guessand", "Jérémie Boga"]}}, {"name": "Fenerbahçe", "short": "FEN", "comp": "EL", "c1": "#FFED00", "c2": "#003DA5", "acc": "#003DA5", "crest": "hoops", "sq": {"GK": ["Dominik Livaković", "İrfan Can Eğribayat"], "DEF": ["Alexander Djiku", "Çağlar Söyüncü", "Jayden Oosterwolde"], "MID": ["Fred", "İsmail Yüksek", "Sebastian Szymański"], "ATT": ["Edin Džeko", "Youssef En-Nesyri", "Dušan Tadić"]}}, {"name": "Rangers", "short": "RAN", "comp": "EL", "c1": "#1B458F", "c2": "#FFFFFF", "acc": "#E4022D", "crest": "lion", "sq": {"GK": ["Jack Butland", "Liam Kelly"], "DEF": ["John Souttar", "Leon Balogun", "Ridvan Yilmaz"], "MID": ["Nicolas Raskin", "Connor Barron", "Tom Lawrence"], "ATT": ["Cyriel Dessers", "Vaclav Cerny", "Hamza Igamane"]}}, {"name": "Braga", "short": "BRA", "comp": "EL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Matheus", "Tiago Sá"], "DEF": ["Sikou Niakaté", "Paulo Oliveira", "Adrián Marín"], "MID": ["João Moutinho", "Rodrigo Zalazar", "Gabri Martínez"], "ATT": ["Simon Banza", "Ricardo Horta", "Bruma"]}}, {"name": "Panathinaikos", "short": "PAO", "comp": "UECL", "c1": "#00693E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Alberto Brignoli", "Bartłomiej Drągowski"], "DEF": ["Georgios Vagiannidis", "Ahmed Touba", "Filip Mladenović"], "MID": ["Adam Gnezda Čerin", "Rúben Pérez", "Tin Jedvaj"], "ATT": ["Fotis Ioannidis", "Tetê", "Andraž Šporar"]}}, {"name": "Anderlecht", "short": "AND", "comp": "UECL", "c1": "#4B2E83", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Colin Coosemans", "Maxime Dupé"], "DEF": ["Jan Vertonghen", "Zeno Debast", "Killian Sardella"], "MID": ["Yari Verschaeren", "Théo Leoni", "Mario Stroeykens"], "ATT": ["Kasper Dolberg", "Luis Vázquez", "Francis Amuzu"]}}, {"name": "Copenhagen", "short": "FCK", "comp": "UECL", "c1": "#12326D", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kamil Grabara", "Dominik Kotarski"], "DEF": ["Denis Vavro", "Gabriel Pereira", "Birger Meling"], "MID": ["Rasmus Falk", "Lukas Lerager", "Elias Achouri"], "ATT": ["Mohamed Elyounoussi", "Orri Óskarsson", "Viktor Dadason"]}}, {"name": "Rapid Vienna", "short": "RAP", "comp": "UECL", "c1": "#0C5C2E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Niklas Hedl", "Paul Gartler"], "DEF": ["Michael Sollbauer", "Leopold Querfeld", "Jonas Auer"], "MID": ["Matthias Seidl", "Nicolas Kühn", "Marco Grüll"], "ATT": ["Guido Burgstaller", "Ercan Kara", "Roman Kerschbaum"]}}, {"name": "Legia Warsaw", "short": "LEG", "comp": "UECL", "c1": "#046A38", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Kacper Tobiasz", "Gabriel Kobylak"], "DEF": ["Steve Kapuadi", "Radovan Pankov", "Patryk Kun"], "MID": ["Bartosz Kapustka", "Rafał Augustyniak", "Claude Gonçalves"], "ATT": ["Marc Gual", "Tomás Pekhart", "Ernest Muçi"]}}, {"name": "Crvena Zvezda", "short": "CZV", "comp": "UECL", "c1": "#E1001A", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "star", "sq": {"GK": ["Omri Glazer", "Ivan Guteša"], "DEF": ["Uroš Spajić", "Milan Rodić", "Nasser Djiga"], "MID": ["Timi Elšnik", "Hwang In-beom", "Mirko Ivanić"], "ATT": ["Cherif Ndiaye", "Silas", "Aleksandar Katai"]}}, {"name": "Slavia Prague", "short": "SLA", "comp": "UECL", "c1": "#D01317", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Jindřich Staněk", "Antonín Kinský"], "DEF": ["David Zima", "Igoh Ogbu", "David Douděra"], "MID": ["Oscar Dorley", "Christos Zafeiris", "Lukáš Provod"], "ATT": ["Mojmír Chytil", "Václav Jurečka", "Ivan Schranz"]}}, {"name": "Molde", "short": "MOL", "comp": "UECL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Jacob Karlstrøm", "Oliver Petersen"], "DEF": ["Martin Bjørnbak", "Valon Zumberi", "Eirik Haugan"], "MID": ["Fredrik Gulbrandsen", "Magnus Wolff Eikrem", "Mathias Løvik"], "ATT": ["Ola Brynhildsen", "Markus Kaasa", "Eirik Hestad"]}}, {"name": "Gent", "short": "GNT", "comp": "UECL", "c1": "#0B4EA2", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Davy Roef", "Paul Nardi"], "DEF": ["Ibrahim Kanaté", "Joseph Okumu", "Archie Brown"], "MID": ["Sven Kums", "Andrew Hjulsager", "Matisse Samoise"], "ATT": ["Hugo Cuypers", "Gift Orban", "Max Dean"]}}, {"name": "Heidenheim", "short": "HDH", "comp": "UECL", "c1": "#E30613", "c2": "#003DA5", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kevin Müller", "Diant Ramaj"], "DEF": ["Patrick Mainka", "Benedikt Gimber", "Omar Traoré"], "MID": ["Niklas Dorsch", "Jan Schöppner", "Lennard Maloney"], "ATT": ["Tim Kleindienst", "Marvin Pieringer", "Eren Dinkçi"]}}, {"name": "Nottingham Forest", "short": "NOT", "comp": "EL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Nikola Milenković", "Murillo", "Neco Williams"], "MID": ["Elliot Anderson", "Ryan Yates", "Morgan Gibbs-White"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Anthony Elanga"]}}, {"name": "Bayer Leverkusen", "short": "B04", "comp": "UCL", "c1": "#E32221", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Robert Andrich"], "ATT": ["Victor Boniface", "Patrik Schick", "Jeremie Frimpong"]}}, {"name": "Shakhtar Donetsk", "short": "SHK", "comp": "EL", "c1": "#FF5C00", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Dmytro Riznyk"], "DEF": ["Yukhym Konoplia", "Mykola Matviyenko", "Irakli Azarovi"], "MID": ["Heorhiy Sudakov", "Taras Stepanenko", "Dmytro Kryskiv"], "ATT": ["Danylo Sikan", "Kevin", "Eguinaldo"]}}, {"name": "Club Brugge", "short": "CLB", "comp": "UCL", "c1": "#0A50A1", "c2": "#000000", "acc": "#E30613", "crest": "halves", "sq": {"GK": ["Simon Mignolet"], "DEF": ["Brandon Mechele", "Joel Ordóñez", "Bjorn Meijer"], "MID": ["Hans Vanaken", "Raphael Onyedika", "Hugo Vetlesen"], "ATT": ["Ferran Jutglà", "Gustaf Nilsson", "Chemsdine Talbi"]}}, {"name": "Sevilla", "short": "SEV", "comp": "EL", "c1": "#D9143C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Ørjan Nyland"], "DEF": ["Loïc Badé", "Kike Salas", "Adrià Pedrosa"], "MID": ["Djibril Sow", "Saúl Ñíguez", "Lucas Ocampos"], "ATT": ["Dodi Lukébakio", "Isaac Romero", "Chidera Ejuke"]}}, {"name": "Marseille", "short": "OM", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Gerónimo Rulli"], "DEF": ["Leonardo Balerdi", "Chancel Mbemba", "Quentin Merlin"], "MID": ["Geoffrey Kondogbia", "Pierre-Emile Højbjerg", "Adrien Rabiot"], "ATT": ["Pierre-Emerick Aubameyang", "Mason Greenwood", "Luis Henrique"]}}];
+const CLUBS=[{"name": "Arsenal", "short": "ARS", "comp": "PL", "c1": "#EF0107", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cannon", "sq": {"GK": ["David Raya", "Kepa Arrizabalaga"], "DEF": ["William Saliba", "Gabriel Magalhães", "Ben White"], "MID": ["Declan Rice", "Martin Ødegaard", "Mikel Merino"], "ATT": ["Bukayo Saka", "Kai Havertz", "Viktor Gyökeres"]}}, {"name": "Aston Villa", "short": "AVL", "comp": "PL", "c1": "#95BFE5", "c2": "#670E36", "acc": "#FFE600", "crest": "lion", "sq": {"GK": ["Emiliano Martínez", "Marco Bizot"], "DEF": ["Ezri Konsa", "Pau Torres", "Matty Cash"], "MID": ["Boubacar Kamara", "John McGinn", "Youri Tielemans"], "ATT": ["Ollie Watkins", "Donyell Malen", "Jadon Sancho"]}}, {"name": "Bournemouth", "short": "BOU", "comp": "PL", "c1": "#DA291C", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Đorđe Petrović", "Will Dennis"], "DEF": ["Illia Zabarnyi", "Bafodé Diakité", "Adam Smith"], "MID": ["Ryan Christie", "Alex Scott", "Tyler Adams"], "ATT": ["Antoine Semenyo", "Evanilson", "Justin Kluivert"]}}, {"name": "Brentford", "short": "BRE", "comp": "PL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FBB800", "crest": "vstripe", "sq": {"GK": ["Mark Flekken", "Hákon Valdimarsson"], "DEF": ["Nathan Collins", "Ethan Pinnock", "Aaron Hickey"], "MID": ["Christian Nørgaard", "Mikkel Damsgaard", "Vitaly Janelt"], "ATT": ["Bryan Mbeumo", "Yoane Wissa", "Kevin Schade"]}}, {"name": "Brighton", "short": "BHA", "comp": "PL", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFCD00", "crest": "vstripe", "sq": {"GK": ["Bart Verbruggen", "Jason Steele"], "DEF": ["Jan Paul van Hecke", "Lewis Dunk", "Pervis Estupiñán"], "MID": ["Carlos Baleba", "Kaoru Mitoma", "Yasin Ayari"], "ATT": ["João Pedro", "Danny Welbeck", "Georginio Rutter"]}}, {"name": "Burnley", "short": "BUR", "comp": "PL", "c1": "#6C1D45", "c2": "#87CEEB", "acc": "#87CEEB", "crest": "shield", "sq": {"GK": ["James Trafford", "Václav Hladký"], "DEF": ["Maxime Estève", "Jordan Beyer", "Connor Roberts"], "MID": ["Josh Cullen", "Josh Brownhill", "Hannibal Mejbri"], "ATT": ["Zian Flemming", "Lyle Foster", "Jaidon Anthony"]}}, {"name": "Chelsea", "short": "CHE", "comp": "PL", "c1": "#034694", "c2": "#FFFFFF", "acc": "#DBA111", "crest": "lion", "sq": {"GK": ["Robert Sánchez", "Filip Jörgensen"], "DEF": ["Levi Colwill", "Wesley Fofana", "Malo Gusto"], "MID": ["Moisés Caicedo", "Enzo Fernández", "Morgan Rogers"], "ATT": ["Cole Palmer", "Nicolas Jackson", "Pedro Neto"]}}, {"name": "Crystal Palace", "short": "CRY", "comp": "PL", "c1": "#1B458F", "c2": "#C4122E", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Dean Henderson", "Remi Matthews"], "DEF": ["Marc Guéhi", "Maxence Lacroix", "Tyrick Mitchell"], "MID": ["Adam Wharton", "Will Hughes", "Daichi Kamada"], "ATT": ["Eberechi Eze", "Jean-Philippe Mateta", "Ismaïla Sarr"]}}, {"name": "Everton", "short": "EVE", "comp": "PL", "c1": "#003399", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Jordan Pickford", "João Virgínia"], "DEF": ["Jarrad Branthwaite", "James Tarkowski", "Vitaliy Mykolenko"], "MID": ["Idrissa Gueye", "Abdoulaye Doucouré", "Tim Iroegbunam"], "ATT": ["Beto", "Dwight McNeil", "Iliman Ndiaye"]}}, {"name": "Fulham", "short": "FUL", "comp": "PL", "c1": "#FFFFFF", "c2": "#000000", "acc": "#CC0000", "crest": "halves", "sq": {"GK": ["Bernd Leno", "Benjamin Lecomte"], "DEF": ["Calvin Bassey", "Joachim Andersen", "Antonee Robinson"], "MID": ["Sasa Lukic", "Tom Cairney", "Emile Smith Rowe"], "ATT": ["Raúl Jiménez", "Alex Iwobi", "Rodrigo Muniz"]}}, {"name": "Leeds United", "short": "LEE", "comp": "PL", "c1": "#FFFFFF", "c2": "#1D428A", "acc": "#1D428A", "crest": "halves", "sq": {"GK": ["Illan Meslier", "Karl Darlow"], "DEF": ["Pascal Struijk", "Joe Rodon", "Junior Firpo"], "MID": ["Ethan Ampadu", "Brenden Aaronson", "Ao Tanaka"], "ATT": ["Daniel James", "Joël Piroe", "Willy Gnonto"]}}, {"name": "Liverpool", "short": "LIV", "comp": "PL", "c1": "#C8102E", "c2": "#00B2A9", "acc": "#F6EB61", "crest": "bird", "sq": {"GK": ["Alisson Becker", "Giorgi Mamardashvili"], "DEF": ["Virgil van Dijk", "Ibrahima Konaté", "Andy Robertson"], "MID": ["Alexis Mac Allister", "Ryan Gravenberch", "Dominik Szoboszlai"], "ATT": ["Mohamed Salah", "Luis Díaz", "Hugo Ekitiké"]}}, {"name": "Manchester City", "short": "MCI", "comp": "PL", "c1": "#6CABDD", "c2": "#1C2C5B", "acc": "#FFFFFF", "crest": "ship", "sq": {"GK": ["Ederson", "Stefan Ortega"], "DEF": ["Rúben Dias", "Joško Gvardiol", "Nathan Aké"], "MID": ["Rodri", "Elliot Anderson", "Bernardo Silva"], "ATT": ["Erling Haaland", "Phil Foden", "Savinho"]}}, {"name": "Manchester United", "short": "MUN", "comp": "PL", "c1": "#DA291C", "c2": "#FBE122", "acc": "#FBE122", "crest": "devil", "sq": {"GK": ["André Onana", "Altay Bayındır"], "DEF": ["Lisandro Martínez", "Matthijs de Ligt", "Diogo Dalot"], "MID": ["Bruno Fernandes", "Kobbie Mainoo", "Manuel Ugarte"], "ATT": ["Marcus Rashford", "Rasmus Højlund", "Amad Diallo"]}}, {"name": "Newcastle United", "short": "NEW", "comp": "PL", "c1": "#241F20", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Nick Pope", "Martin Dúbravka"], "DEF": ["Sven Botman", "Fabian Schär", "Kieran Trippier"], "MID": ["Bruno Guimarães", "Joelinton", "Joe Willock"], "ATT": ["Alexander Isak", "Anthony Elanga", "Harvey Barnes"]}}, {"name": "Nottingham Forest", "short": "NFO", "comp": "PL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Murillo", "Nikola Milenković", "Neco Williams"], "MID": ["Morgan Gibbs-White", "Ryan Yates", "Nicolás Domínguez"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Taiwo Awoniyi"]}}, {"name": "Sunderland", "short": "SUN", "comp": "PL", "c1": "#EB172B", "c2": "#FFFFFF", "acc": "#211E1F", "crest": "vstripe", "sq": {"GK": ["Anthony Patterson", "Simon Moore"], "DEF": ["Dan Ballard", "Luke O'Nien", "Trai Hume"], "MID": ["Jobe Bellingham", "Chris Rigg", "Dan Neil"], "ATT": ["Wilson Isidor", "Patrick Roberts", "Romaine Mundle"]}}, {"name": "Tottenham", "short": "TOT", "comp": "PL", "c1": "#132257", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cockerel", "sq": {"GK": ["Guglielmo Vicario", "Antonín Kinský"], "DEF": ["Cristian Romero", "Micky van de Ven", "Destiny Udogie"], "MID": ["Sandro Tonali", "James Maddison", "Pape Matar Sarr"], "ATT": ["Dominic Solanke", "Brennan Johnson", "Dejan Kulusevski"]}}, {"name": "West Ham", "short": "WHU", "comp": "PL", "c1": "#7A263A", "c2": "#1BB1E7", "acc": "#F3D459", "crest": "shield", "sq": {"GK": ["Alphonse Areola", "Łukasz Fabiański"], "DEF": ["Max Kilman", "Konstantinos Mavropanos", "Aaron Wan-Bissaka"], "MID": ["Lucas Paquetá", "Tomáš Souček", "Edson Álvarez"], "ATT": ["Jarrod Bowen", "Mohammed Kudus", "Niclas Füllkrug"]}}, {"name": "Wolves", "short": "WOL", "comp": "PL", "c1": "#FDB913", "c2": "#231F20", "acc": "#231F20", "crest": "wolf", "sq": {"GK": ["José Sá", "Sam Johnstone"], "DEF": ["Toti Gomes", "Yerson Mosquera", "Rayan Aït-Nouri"], "MID": ["João Gomes", "Mario Lemina", "André"], "ATT": ["Matheus Cunha", "Jørgen Strand Larsen", "Pablo Sarabia"]}}, {"name": "Real Madrid", "short": "RMA", "comp": "UCL", "c1": "#FFFFFF", "c2": "#00529F", "acc": "#FEBE10", "crest": "crown", "sq": {"GK": ["Thibaut Courtois", "Andriy Lunin"], "DEF": ["Antonio Rüdiger", "Éder Militão", "Trent Alexander-Arnold"], "MID": ["Jude Bellingham", "Federico Valverde", "Aurélien Tchouaméni"], "ATT": ["Kylian Mbappé", "Vinícius Júnior", "Rodrygo"]}}, {"name": "Barcelona", "short": "BAR", "comp": "UCL", "c1": "#A50044", "c2": "#004D98", "acc": "#FFCB05", "crest": "vstripe", "sq": {"GK": ["Marc-André ter Stegen", "Wojciech Szczęsny"], "DEF": ["Pau Cubarsí", "Iñigo Martínez", "Alejandro Balde"], "MID": ["Pedri", "Frenkie de Jong", "Gavi"], "ATT": ["Lamine Yamal", "Robert Lewandowski", "Anthony Gordon"]}}, {"name": "Atlético Madrid", "short": "ATM", "comp": "UCL", "c1": "#CB3524", "c2": "#FFFFFF", "acc": "#262E62", "crest": "vstripe", "sq": {"GK": ["Jan Oblak", "Juan Musso"], "DEF": ["José María Giménez", "Robin Le Normand", "Nahuel Molina"], "MID": ["Koke", "Rodrigo De Paul", "Pablo Barrios"], "ATT": ["Antoine Griezmann", "Julián Álvarez", "Alexander Sørloth"]}}, {"name": "Bayern München", "short": "BAY", "comp": "UCL", "c1": "#DC052D", "c2": "#0066B2", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Manuel Neuer", "Sven Ulreich"], "DEF": ["Dayot Upamecano", "Jonathan Tah", "Alphonso Davies"], "MID": ["Joshua Kimmich", "Jamal Musiala", "Leon Goretzka"], "ATT": ["Harry Kane", "Michael Olise", "Serge Gnabry"]}}, {"name": "Borussia Dortmund", "short": "DOR", "comp": "UCL", "c1": "#FDE100", "c2": "#000000", "acc": "#000000", "crest": "wall", "sq": {"GK": ["Gregor Kobel", "Alexander Meyer"], "DEF": ["Nico Schlotterbeck", "Waldemar Anton", "Julian Ryerson"], "MID": ["Pascal Groß", "Felix Nmecha", "Marcel Sabitzer"], "ATT": ["Serhou Guirassy", "Karim Adeyemi", "Maximilian Beier"]}}, {"name": "Bayer Leverkusen", "short": "LEV", "comp": "UCL", "c1": "#E32219", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Exequiel Palacios"], "ATT": ["Patrik Schick", "Jeremie Frimpong", "Nathan Tella"]}}, {"name": "RB Leipzig", "short": "RBL", "comp": "UCL", "c1": "#DD0741", "c2": "#001F47", "acc": "#FFFFFF", "crest": "bull", "sq": {"GK": ["Péter Gulácsi", "Maarten Vandevoordt"], "DEF": ["Willi Orbán", "Castello Lukeba", "David Raum"], "MID": ["Xaver Schlager", "Xavi Simons", "Nicolas Seiwald"], "ATT": ["Benjamin Šeško", "Loïs Openda", "Antonio Nusa"]}}, {"name": "Paris Saint-Germain", "short": "PSG", "comp": "UCL", "c1": "#004170", "c2": "#DA291C", "acc": "#DA291C", "crest": "tower", "sq": {"GK": ["Gianluigi Donnarumma", "Matvey Safonov"], "DEF": ["Marquinhos", "Willian Pacho", "Nuno Mendes"], "MID": ["Vitinha", "João Neves", "Fabián Ruiz"], "ATT": ["Ousmane Dembélé", "Bradley Barcola", "Désiré Doué"]}}, {"name": "Monaco", "short": "MON", "comp": "UCL", "c1": "#E31B23", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Philipp Köhn", "Radosław Majecki"], "DEF": ["Thilo Kehrer", "Wilfried Singo", "Caio Henrique"], "MID": ["Denis Zakaria", "Aleksandr Golovin", "Lamine Camara"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Marseille", "short": "MAR", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Geronimo Rulli", "Rubén Blanco"], "DEF": ["Leonardo Balerdi", "Derek Cornelius", "Quentin Merlin"], "MID": ["Adrien Rabiot", "Pierre-Emile Højbjerg", "Valentin Rongier"], "ATT": ["Mason Greenwood", "Amine Gouiri", "Jonathan Rowe"]}}, {"name": "Inter", "short": "INT", "comp": "UCL", "c1": "#0068A8", "c2": "#000000", "acc": "#FFFFFF", "crest": "snake", "sq": {"GK": ["Yann Sommer", "Josep Martínez"], "DEF": ["Alessandro Bastoni", "Francesco Acerbi", "Federico Dimarco"], "MID": ["Nicolò Barella", "Hakan Çalhanoğlu", "Henrikh Mkhitaryan"], "ATT": ["Lautaro Martínez", "Marcus Thuram", "Mehdi Taremi"]}}, {"name": "AC Milan", "short": "MIL", "comp": "UCL", "c1": "#FB090B", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Mike Maignan", "Marco Sportiello"], "DEF": ["Fikayo Tomori", "Malick Thiaw", "Theo Hernández"], "MID": ["Tijjani Reijnders", "Youssouf Fofana", "Ruben Loftus-Cheek"], "ATT": ["Rafael Leão", "Christian Pulisic", "Álvaro Morata"]}}, {"name": "Juventus", "short": "JUV", "comp": "UCL", "c1": "#000000", "c2": "#FFFFFF", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Michele Di Gregorio", "Mattia Perin"], "DEF": ["Gleison Bremer", "Federico Gatti", "Andrea Cambiaso"], "MID": ["Manuel Locatelli", "Khéphren Thuram", "Teun Koopmeiners"], "ATT": ["Dušan Vlahović", "Kenan Yıldız", "Francisco Conceição"]}}, {"name": "Napoli", "short": "NAP", "comp": "UCL", "c1": "#12A0D7", "c2": "#003C82", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Alex Meret", "Elia Caprile"], "DEF": ["Amir Rrahmani", "Alessandro Buongiorno", "Giovanni Di Lorenzo"], "MID": ["Stanislav Lobotka", "Scott McTominay", "André-Frank Zambo Anguissa"], "ATT": ["Romelu Lukaku", "Matteo Politano", "David Neres"]}}, {"name": "Atalanta", "short": "ATA", "comp": "UCL", "c1": "#1D71B8", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Marco Carnesecchi", "Juan Musso"], "DEF": ["Isak Hien", "Sead Kolašinac", "Matteo Ruggeri"], "MID": ["Éderson", "Marten de Roon", "Mario Pašalić"], "ATT": ["Ademola Lookman", "Charles De Ketelaere", "Mateo Retegui"]}}, {"name": "Benfica", "short": "BEN", "comp": "UCL", "c1": "#E00034", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Anatoliy Trubin", "Samuel Soares"], "DEF": ["Nicolás Otamendi", "António Silva", "Álvaro Carreras"], "MID": ["Orkun Kökçü", "Fredrik Aursnes", "Florentino Luís"], "ATT": ["Ángel Di María", "Vangelis Pavlidis", "Kerem Aktürkoğlu"]}}, {"name": "Porto", "short": "POR", "comp": "UCL", "c1": "#0F4C9A", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "dragon", "sq": {"GK": ["Diogo Costa", "Cláudio Ramos"], "DEF": ["Otávio", "Nehuén Pérez", "Wendell"], "MID": ["Alan Varela", "Stephen Eustáquio", "Nico González"], "ATT": ["Samu Aghehowa", "Pepê", "Rodrigo Mora"]}}, {"name": "Sporting CP", "short": "SPO", "comp": "UCL", "c1": "#008057", "c2": "#FFFFFF", "acc": "#FFD700", "crest": "lion", "sq": {"GK": ["Franco Israel", "Rui Silva"], "DEF": ["Gonçalo Inácio", "Ousmane Diomande", "Matheus Reis"], "MID": ["Morten Hjulmand", "Hidemasa Morita", "Pedro Gonçalves"], "ATT": ["Conrad Harder", "Geovany Quenda", "Francisco Trincão"]}}, {"name": "Ajax", "short": "AJA", "comp": "UCL", "c1": "#D2122E", "c2": "#FFFFFF", "acc": "#D2122E", "crest": "vstripe", "sq": {"GK": ["Remko Pasveer", "Jay Gorter"], "DEF": ["Jorrel Hato", "Youri Baas", "Anton Gaaei"], "MID": ["Kenneth Taylor", "Jordan Henderson", "Branco van den Boomen"], "ATT": ["Wout Weghorst", "Steven Bergwijn", "Mika Godts"]}}, {"name": "PSV", "short": "PSV", "comp": "UCL", "c1": "#ED1C24", "c2": "#FFFFFF", "acc": "#000000", "crest": "chevron", "sq": {"GK": ["Walter Benítez", "Nick Olij"], "DEF": ["Olivier Boscagli", "Ryan Flamingo", "Sergiño Dest"], "MID": ["Joey Veerman", "Jerdy Schouten", "Guus Til"], "ATT": ["Luuk de Jong", "Ismael Saibari", "Noa Lang"]}}, {"name": "Feyenoord", "short": "FEY", "comp": "UCL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#000000", "crest": "halves", "sq": {"GK": ["Timon Wellenreuther", "Justin Bijlow"], "DEF": ["Dávid Hancko", "Gijs Smal", "Bart Nieuwkoop"], "MID": ["Quinten Timber", "Mats Wieffer", "Antoni Milambo"], "ATT": ["Santiago Giménez", "Igor Paixão", "Ayase Ueda"]}}, {"name": "Celtic", "short": "CEL", "comp": "UCL", "c1": "#018749", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Kasper Schmeichel", "Viljami Sinisalo"], "DEF": ["Cameron Carter-Vickers", "Liam Scales", "Greg Taylor"], "MID": ["Callum McGregor", "Reo Hatate", "Matt O'Riley"], "ATT": ["Kyogo Furuhashi", "Daizen Maeda", "Nicolas Kühn"]}}, {"name": "Galatasaray", "short": "GAL", "comp": "UCL", "c1": "#A90432", "c2": "#FDB912", "acc": "#FDB912", "crest": "lion", "sq": {"GK": ["Fernando Muslera", "Günay Güvenç"], "DEF": ["Davinson Sánchez", "Abdülkerim Bardakcı", "Kaan Ayhan"], "MID": ["Lucas Torreira", "Gabriel Sara", "Kerem Demirbay"], "ATT": ["Mauro Icardi", "Dries Mertens", "Barış Alper Yılmaz"]}}, {"name": "Roma", "short": "ROM", "comp": "EL", "c1": "#8E1F2F", "c2": "#F0BC42", "acc": "#F0BC42", "crest": "wolf", "sq": {"GK": ["Mile Svilar", "Pierluigi Gollini"], "DEF": ["Gianluca Mancini", "Evan Ndicka", "Angeliño"], "MID": ["Bryan Cristante", "Manu Koné", "Lorenzo Pellegrini"], "ATT": ["Paulo Dybala", "Artem Dovbyk", "Matías Soulé"]}}, {"name": "Lazio", "short": "LAZ", "comp": "EL", "c1": "#87D8F7", "c2": "#0B1560", "acc": "#0B1560", "crest": "eagle", "sq": {"GK": ["Ivan Provedel", "Christos Mandas"], "DEF": ["Alessio Romagnoli", "Mario Gila", "Nuno Tavares"], "MID": ["Matteo Guendouzi", "Nicolò Rovella", "Mattia Zaccagni"], "ATT": ["Taty Castellanos", "Boulaye Dia", "Gustav Isaksen"]}}, {"name": "Fiorentina", "short": "FIO", "comp": "EL", "c1": "#592C82", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "lily", "sq": {"GK": ["David de Gea", "Pietro Terracciano"], "DEF": ["Pietro Comuzzo", "Luca Ranieri", "Dodô"], "MID": ["Rolando Mandragora", "Danilo Cataldi", "Nicolò Fagioli"], "ATT": ["Moise Kean", "Albert Guðmundsson", "Riccardo Sottil"]}}, {"name": "Real Betis", "short": "BET", "comp": "EL", "c1": "#00954C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Rui Silva", "Adrián"], "DEF": ["Diego Llorente", "Marc Bartra", "Romain Perraud"], "MID": ["Isco", "Johnny Cardoso", "Giovani Lo Celso"], "ATT": ["Vitor Roque", "Cédric Bakambu", "Abde Ezzalzouli"]}}, {"name": "Villarreal", "short": "VIL", "comp": "EL", "c1": "#FFE667", "c2": "#005187", "acc": "#005187", "crest": "submarine", "sq": {"GK": ["Diego Conde", "Luiz Júnior"], "DEF": ["Juan Foyth", "Logan Costa", "Sergi Cardona"], "MID": ["Dani Parejo", "Santi Comesaña", "Álex Baena"], "ATT": ["Ayoze Pérez", "Gerard Moreno", "Nicolas Pépé"]}}, {"name": "Real Sociedad", "short": "RSO", "comp": "EL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Álex Remiro", "Unai Marrero"], "DEF": ["Igor Zubeldia", "Jon Aramburu", "Aihen Muñoz"], "MID": ["Martín Zubimendi", "Brais Méndez", "Beñat Turrientes"], "ATT": ["Mikel Oyarzabal", "Takefusa Kubo", "Sheraldo Becker"]}}, {"name": "Athletic Club", "short": "ATH", "comp": "EL", "c1": "#EE2523", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Unai Simón", "Julen Agirrezabala"], "DEF": ["Dani Vivian", "Aitor Paredes", "Yuri Berchiche"], "MID": ["Mikel Jauregizar", "Oihan Sancet", "Beñat Prados"], "ATT": ["Nico Williams", "Iñaki Williams", "Gorka Guruzeta"]}}, {"name": "Eintracht Frankfurt", "short": "EIN", "comp": "EL", "c1": "#E1000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Kaua Santos", "Kevin Trapp"], "DEF": ["Robin Koch", "Arthur Theate", "Nathaniel Brown"], "MID": ["Ellyes Skhiri", "Mario Götze", "Hugo Larsson"], "ATT": ["Omar Marmoush", "Hugo Ekitiké", "Ansgar Knauff"]}}, {"name": "Stuttgart", "short": "STU", "comp": "EL", "c1": "#FFFFFF", "c2": "#E32219", "acc": "#E32219", "crest": "circle", "sq": {"GK": ["Alexander Nübel", "Fabian Bredlow"], "DEF": ["Jeff Chabot", "Anthony Rouault", "Maximilian Mittelstädt"], "MID": ["Angelo Stiller", "Atakan Karazor", "Enzo Millot"], "ATT": ["Deniz Undav", "Ermedin Demirović", "Chris Führich"]}}, {"name": "Olympique Lyon", "short": "LYO", "comp": "EL", "c1": "#FFFFFF", "c2": "#DA001A", "acc": "#0B387E", "crest": "sash", "sq": {"GK": ["Lucas Perri", "Rémy Descamps"], "DEF": ["Moussa Niakhaté", "Duje Ćaleta-Car", "Nicolás Tagliafico"], "MID": ["Corentin Tolisso", "Maxence Caqueret", "Nemanja Matić"], "ATT": ["Alexandre Lacazette", "Georges Mikautadze", "Malick Fofana"]}}, {"name": "Nice", "short": "NIC", "comp": "EL", "c1": "#E4000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Marcin Bułka", "Yehvann Diouf"], "DEF": ["Dante", "Jean-Clair Todibo", "Melvin Bard"], "MID": ["Morgan Sanson", "Pablo Rosario", "Hicham Boudaoui"], "ATT": ["Gaëtan Laborde", "Evann Guessand", "Jérémie Boga"]}}, {"name": "Fenerbahçe", "short": "FEN", "comp": "EL", "c1": "#FFED00", "c2": "#003DA5", "acc": "#003DA5", "crest": "hoops", "sq": {"GK": ["Dominik Livaković", "İrfan Can Eğribayat"], "DEF": ["Alexander Djiku", "Çağlar Söyüncü", "Jayden Oosterwolde"], "MID": ["Fred", "İsmail Yüksek", "Sebastian Szymański"], "ATT": ["Edin Džeko", "Youssef En-Nesyri", "Dušan Tadić"]}}, {"name": "Rangers", "short": "RAN", "comp": "EL", "c1": "#1B458F", "c2": "#FFFFFF", "acc": "#E4022D", "crest": "lion", "sq": {"GK": ["Jack Butland", "Liam Kelly"], "DEF": ["John Souttar", "Leon Balogun", "Ridvan Yilmaz"], "MID": ["Nicolas Raskin", "Connor Barron", "Tom Lawrence"], "ATT": ["Cyriel Dessers", "Vaclav Cerny", "Hamza Igamane"]}}, {"name": "Braga", "short": "BRA", "comp": "EL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Matheus", "Tiago Sá"], "DEF": ["Sikou Niakaté", "Paulo Oliveira", "Adrián Marín"], "MID": ["João Moutinho", "Rodrigo Zalazar", "Gabri Martínez"], "ATT": ["Simon Banza", "Ricardo Horta", "Bruma"]}}, {"name": "Panathinaikos", "short": "PAO", "comp": "UECL", "c1": "#00693E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Alberto Brignoli", "Bartłomiej Drągowski"], "DEF": ["Georgios Vagiannidis", "Ahmed Touba", "Filip Mladenović"], "MID": ["Adam Gnezda Čerin", "Rúben Pérez", "Tin Jedvaj"], "ATT": ["Fotis Ioannidis", "Tetê", "Andraž Šporar"]}}, {"name": "Anderlecht", "short": "AND", "comp": "UECL", "c1": "#4B2E83", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Colin Coosemans", "Maxime Dupé"], "DEF": ["Jan Vertonghen", "Zeno Debast", "Killian Sardella"], "MID": ["Yari Verschaeren", "Théo Leoni", "Mario Stroeykens"], "ATT": ["Kasper Dolberg", "Luis Vázquez", "Francis Amuzu"]}}, {"name": "Copenhagen", "short": "FCK", "comp": "UECL", "c1": "#12326D", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kamil Grabara", "Dominik Kotarski"], "DEF": ["Denis Vavro", "Gabriel Pereira", "Birger Meling"], "MID": ["Rasmus Falk", "Lukas Lerager", "Elias Achouri"], "ATT": ["Mohamed Elyounoussi", "Orri Óskarsson", "Viktor Dadason"]}}, {"name": "Rapid Vienna", "short": "RAP", "comp": "UECL", "c1": "#0C5C2E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Niklas Hedl", "Paul Gartler"], "DEF": ["Michael Sollbauer", "Leopold Querfeld", "Jonas Auer"], "MID": ["Matthias Seidl", "Nicolas Kühn", "Marco Grüll"], "ATT": ["Guido Burgstaller", "Ercan Kara", "Roman Kerschbaum"]}}, {"name": "Legia Warsaw", "short": "LEG", "comp": "UECL", "c1": "#046A38", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Kacper Tobiasz", "Gabriel Kobylak"], "DEF": ["Steve Kapuadi", "Radovan Pankov", "Patryk Kun"], "MID": ["Bartosz Kapustka", "Rafał Augustyniak", "Claude Gonçalves"], "ATT": ["Marc Gual", "Tomás Pekhart", "Ernest Muçi"]}}, {"name": "Crvena Zvezda", "short": "CZV", "comp": "UECL", "c1": "#E1001A", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "star", "sq": {"GK": ["Omri Glazer", "Ivan Guteša"], "DEF": ["Uroš Spajić", "Milan Rodić", "Nasser Djiga"], "MID": ["Timi Elšnik", "Hwang In-beom", "Mirko Ivanić"], "ATT": ["Cherif Ndiaye", "Silas", "Aleksandar Katai"]}}, {"name": "Slavia Prague", "short": "SLA", "comp": "UECL", "c1": "#D01317", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Jindřich Staněk", "Antonín Kinský"], "DEF": ["David Zima", "Igoh Ogbu", "David Douděra"], "MID": ["Oscar Dorley", "Christos Zafeiris", "Lukáš Provod"], "ATT": ["Mojmír Chytil", "Václav Jurečka", "Ivan Schranz"]}}, {"name": "Molde", "short": "MOL", "comp": "UECL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Jacob Karlstrøm", "Oliver Petersen"], "DEF": ["Martin Bjørnbak", "Valon Zumberi", "Eirik Haugan"], "MID": ["Fredrik Gulbrandsen", "Magnus Wolff Eikrem", "Mathias Løvik"], "ATT": ["Ola Brynhildsen", "Markus Kaasa", "Eirik Hestad"]}}, {"name": "Gent", "short": "GNT", "comp": "UECL", "c1": "#0B4EA2", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Davy Roef", "Paul Nardi"], "DEF": ["Ibrahim Kanaté", "Joseph Okumu", "Archie Brown"], "MID": ["Sven Kums", "Andrew Hjulsager", "Matisse Samoise"], "ATT": ["Hugo Cuypers", "Gift Orban", "Max Dean"]}}, {"name": "Heidenheim", "short": "HDH", "comp": "UECL", "c1": "#E30613", "c2": "#003DA5", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kevin Müller", "Diant Ramaj"], "DEF": ["Patrick Mainka", "Benedikt Gimber", "Omar Traoré"], "MID": ["Niklas Dorsch", "Jan Schöppner", "Lennard Maloney"], "ATT": ["Tim Kleindienst", "Marvin Pieringer", "Eren Dinkçi"]}}, {"name": "Nottingham Forest", "short": "NOT", "comp": "EL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Nikola Milenković", "Murillo", "Neco Williams"], "MID": ["Elliot Anderson", "Ryan Yates", "Morgan Gibbs-White"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Anthony Elanga"]}}, {"name": "Bayer Leverkusen", "short": "B04", "comp": "UCL", "c1": "#E32221", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Robert Andrich"], "ATT": ["Victor Boniface", "Patrik Schick", "Jeremie Frimpong"]}}, {"name": "Shakhtar Donetsk", "short": "SHK", "comp": "EL", "c1": "#FF5C00", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Dmytro Riznyk"], "DEF": ["Yukhym Konoplia", "Mykola Matviyenko", "Irakli Azarovi"], "MID": ["Heorhiy Sudakov", "Taras Stepanenko", "Dmytro Kryskiv"], "ATT": ["Danylo Sikan", "Kevin", "Eguinaldo"]}}, {"name": "Club Brugge", "short": "CLB", "comp": "UCL", "c1": "#0A50A1", "c2": "#000000", "acc": "#E30613", "crest": "halves", "sq": {"GK": ["Simon Mignolet"], "DEF": ["Brandon Mechele", "Joel Ordóñez", "Bjorn Meijer"], "MID": ["Hans Vanaken", "Raphael Onyedika", "Hugo Vetlesen"], "ATT": ["Ferran Jutglà", "Gustaf Nilsson", "Chemsdine Talbi"]}}, {"name": "Sevilla", "short": "SEV", "comp": "EL", "c1": "#D9143C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Ørjan Nyland"], "DEF": ["Loïc Badé", "Kike Salas", "Adrià Pedrosa"], "MID": ["Djibril Sow", "Saúl Ñíguez", "Lucas Ocampos"], "ATT": ["Dodi Lukébakio", "Isaac Romero", "Chidera Ejuke"]}}, {"name": "Marseille", "short": "OM", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Gerónimo Rulli"], "DEF": ["Leonardo Balerdi", "Chancel Mbemba", "Quentin Merlin"], "MID": ["Geoffrey Kondogbia", "Pierre-Emile Højbjerg", "Adrien Rabiot"], "ATT": ["Pierre-Emerick Aubameyang", "Mason Greenwood", "Luis Henrique"]}}, {"name": "Borussia M'gladbach", "short": "BMG", "comp": "WORLD", "c1": "#000000", "c2": "#FFFFFF", "acc": "#00A34A", "crest": "vstripe", "sq": {"GK": ["Jonas Omlin", "Moritz Nicolas"], "DEF": ["Ko Itakura", "Nico Elvedi", "Luca Netz"], "MID": ["Julian Weigl", "Rocco Reitz", "Florian Neuhaus"], "ATT": ["Tim Kleindienst", "Alassane Plea", "Franck Honorat"]}}, {"name": "Wolfsburg", "short": "WOB", "comp": "WORLD", "c1": "#65B32E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Kamil Grabara", "Niklas Klinger"], "DEF": ["Sebastiaan Bornauw", "Maxence Lacroix", "Ridle Baku"], "MID": ["Yannick Gerhardt", "Mattias Svanberg", "Lovro Majer"], "ATT": ["Jonas Wind", "Tiago Tomas", "Patrick Wimmer"]}}, {"name": "Freiburg", "short": "SCF", "comp": "WORLD", "c1": "#E2001A", "c2": "#FFFFFF", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Noah Atubolu", "Florian Müller"], "DEF": ["Matthias Ginter", "Philipp Lienhart", "Christian Günter"], "MID": ["Maximilian Eggestein", "Nicolas Höfler", "Ritsu Doan"], "ATT": ["Vincenzo Grifo", "Lucas Höler", "Michael Gregoritsch"]}}, {"name": "Union Berlin", "short": "FCU", "comp": "WORLD", "c1": "#EB1923", "c2": "#FFE500", "acc": "#FFE500", "crest": "halves", "sq": {"GK": ["Frederik Rönnow", "Alexander Schwolow"], "DEF": ["Danilho Doekhi", "Diogo Leite", "Robin Gosens"], "MID": ["Rani Khedira", "Janik Haberer", "Aljoscha Kemlein"], "ATT": ["Kevin Volland", "Benedict Hollerbach", "Andras Schäfer"]}}, {"name": "Werder Bremen", "short": "SVW", "comp": "WORLD", "c1": "#1D9053", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Michael Zetterer", "Jiri Pavlenka"], "DEF": ["Marco Friedl", "Amos Pieper", "Mitchell Weiser"], "MID": ["Leonardo Bittencourt", "Senne Lynen", "Romano Schmid"], "ATT": ["Marvin Ducksch", "Jens Stage", "Justin Njinmah"]}}, {"name": "Monaco", "short": "ASM", "comp": "WORLD", "c1": "#E51B22", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Philipp Köhn", "Radoslaw Majecki"], "DEF": ["Wilfried Singo", "Thilo Kehrer", "Caio Henrique"], "MID": ["Denis Zakaria", "Lamine Camara", "Aleksandr Golovin"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Lille", "short": "LIL", "comp": "WORLD", "c1": "#E01E13", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "halves", "sq": {"GK": ["Lucas Chevalier", "Vito Mannone"], "DEF": ["Bafodé Diakité", "Alexsandro", "Gabriel Gudmundsson"], "MID": ["Angel Gomes", "Benjamin André", "Ayyoub Bouaddi"], "ATT": ["Jonathan David", "Edon Zhegrova", "Matias Fernandez-Pardo"]}}, {"name": "Lens", "short": "RCL", "comp": "WORLD", "c1": "#FFD100", "c2": "#E30613", "acc": "#E30613", "crest": "hoops", "sq": {"GK": ["Brice Samba", "Hervé Koffi"], "DEF": ["Kevin Danso", "Facundo Medina", "Deiver Machado"], "MID": ["Salis Abdul Samed", "Neil El Aynaoui", "Andy Diouf"], "ATT": ["Elye Wahi", "Florian Sotoca", "Wesley Saïd"]}}, {"name": "Rennes", "short": "SRFC", "comp": "WORLD", "c1": "#E23122", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Steve Mandanda", "Brice Samba"], "DEF": ["Arthur Theate", "Warmed Omari", "Adrien Truffert"], "MID": ["Baptiste Santamaria", "Enzo Le Fée", "Benjamin Bourigeaud"], "ATT": ["Arnaud Kalimuendo", "Amine Gouiri", "Ludovic Blas"]}}, {"name": "Strasbourg", "short": "RCSA", "comp": "WORLD", "c1": "#009BDB", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Matz Sels", "Alaa Bellaarouch"], "DEF": ["Gerzino Nyamsi", "Abakar Sylla", "Guela Doué"], "MID": ["Habib Diarra", "Andrey Santos", "Dilane Bakwa"], "ATT": ["Emanuel Emegha", "Sebastian Nanasi", "Felix Lemarechal"]}}, {"name": "Valencia", "short": "VAL", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#F18E00", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Giorgi Mamardashvili", "Jaume Domenech"], "DEF": ["Mouctar Diakhaby", "Cristhian Mosquera", "José Gayà"], "MID": ["Pepelu", "Javi Guerra", "André Almeida"], "ATT": ["Hugo Duro", "Rafa Mir", "Diego López"]}}, {"name": "Girona", "short": "GIR", "comp": "WORLD", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Paulo Gazzaniga", "Juan Carlos"], "DEF": ["David López", "Daley Blind", "Miguel Gutiérrez"], "MID": ["Aleix Garcia", "Yangel Herrera", "Iván Martín"], "ATT": ["Artem Dovbyk", "Cristhian Stuani", "Viktor Tsygankov"]}}, {"name": "Osasuna", "short": "OSA", "comp": "WORLD", "c1": "#D91A21", "c2": "#0A2D6E", "acc": "#0A2D6E", "crest": "circle", "sq": {"GK": ["Sergio Herrera", "Aitor Fernández"], "DEF": ["David García", "Alejandro Catena", "Juan Cruz"], "MID": ["Lucas Torró", "Jon Moncayola", "Aimar Oroz"], "ATT": ["Ante Budimir", "Rubén García", "Chimy Ávila"]}}, {"name": "Rayo Vallecano", "short": "RAY", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#E30613", "acc": "#E30613", "crest": "sash", "sq": {"GK": ["Stole Dimitrievski", "Augusto Batalla"], "DEF": ["Florian Lejeune", "Abdul Mumin", "Pep Chavarría"], "MID": ["Óscar Valentín", "Unai López", "Isi Palazón"], "ATT": ["Raúl de Tomás", "Sergio Camello", "Randy Nteka"]}}, {"name": "Al Hilal", "short": "HIL", "comp": "WORLD", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Yassine Bounou", "Abdullah Al-Mayouf"], "DEF": ["Kalidou Koulibaly", "Ali Al-Bulaihi", "Renan Lodi"], "MID": ["Ruben Neves", "Sergej Milinkovic-Savic", "Salem Al-Dawsari"], "ATT": ["Aleksandar Mitrovic", "Malcom", "Marcos Leonardo"]}}, {"name": "Al Nassr", "short": "NAS", "comp": "WORLD", "c1": "#FFD700", "c2": "#0057B8", "acc": "#0057B8", "crest": "hoops", "sq": {"GK": ["Bento", "Nawaf Al-Aqidi"], "DEF": ["Aymeric Laporte", "Mohammed Al-Fatil", "Ali Lajami"], "MID": ["Marcelo Brozovic", "Otavio", "Sadio Mané"], "ATT": ["Cristiano Ronaldo", "Jhon Duran", "Ayman Yahya"]}}, {"name": "Al Ittihad", "short": "ITT", "comp": "WORLD", "c1": "#000000", "c2": "#FFD700", "acc": "#FFD700", "crest": "vstripe", "sq": {"GK": ["Predrag Rajkovic", "Marcelo Grohe"], "DEF": ["Danilo Pereira", "Ahmed Hegazy", "Saud Abdulhamid"], "MID": ["N'Golo Kanté", "Fabinho", "Houssem Aouar"], "ATT": ["Karim Benzema", "Moussa Diaby", "Abderrazak Hamdallah"]}}, {"name": "Al Ahli", "short": "AHL", "comp": "WORLD", "c1": "#00A651", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Edouard Mendy", "Mohammed Alrubaie"], "DEF": ["Roger Ibañez", "Merih Demiral", "Ali Majrashi"], "MID": ["Franck Kessié", "Matteo Guendouzi", "Ezgjan Alioski"], "ATT": ["Riyad Mahrez", "Ivan Toney", "Firas Al-Buraikan"]}}, {"name": "Al Shabab", "short": "SHB", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Kim Seung-gyu", "Fawaz Al-Qarni"], "DEF": ["Yannick Carrasco", "Metehan Baltaci", "Mohammed Al-Nakhli"], "MID": ["Gustavo Cuéllar", "Abdullah Al-Khaibari", "Hattan Bahebri"], "ATT": ["Carlos Junior", "Abderrazak Hamdallah", "Ever Banega"]}}, {"name": "Inter Miami", "short": "MIA", "comp": "WORLD", "c1": "#F7B5CD", "c2": "#000000", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Drake Callender", "Oscar Ustari"], "DEF": ["Sergio Busquets", "Jordi Alba", "Tomas Aviles"], "MID": ["Federico Redondo", "Benjamin Cremaschi", "Diego Gomez"], "ATT": ["Lionel Messi", "Luis Suárez", "Robert Taylor"]}}, {"name": "LA Galaxy", "short": "LAG", "comp": "WORLD", "c1": "#00245D", "c2": "#FFD200", "acc": "#FFD200", "crest": "sash", "sq": {"GK": ["John McCarthy", "Novak Micovic"], "DEF": ["Maya Yoshida", "Emiro Garces", "Julian Aude"], "MID": ["Riqui Puig", "Mark Delgado", "Gaston Brugman"], "ATT": ["Dejan Joveljic", "Gabriel Pec", "Joseph Paintsil"]}}, {"name": "LAFC", "short": "LFC", "comp": "WORLD", "c1": "#000000", "c2": "#C39E6D", "acc": "#C39E6D", "crest": "shield", "sq": {"GK": ["Hugo Lloris", "Eldin Jakupovic"], "DEF": ["Aaron Long", "Jesús Murillo", "Ryan Hollingshead"], "MID": ["Ilie Sánchez", "Timothy Tillman", "Mateusz Bogusz"], "ATT": ["Denis Bouanga", "Cristian Olivera", "David Martinez"]}}, {"name": "Seattle Sounders", "short": "SEA", "comp": "WORLD", "c1": "#5D9732", "c2": "#005595", "acc": "#005595", "crest": "circle", "sq": {"GK": ["Stefan Frei", "Andrew Thomas"], "DEF": ["Yeimar Gómez", "Jackson Ragen", "Nouhou Tolo"], "MID": ["João Paulo", "Cristian Roldan", "Albert Rusnák"], "ATT": ["Jordan Morris", "Raúl Ruidíaz", "Pedro de la Vega"]}}, {"name": "Atlanta United", "short": "ATL", "comp": "WORLD", "c1": "#80000A", "c2": "#000000", "acc": "#C39E6D", "crest": "vstripe", "sq": {"GK": ["Brad Guzan", "Quentin Westberg"], "DEF": ["Brooks Lennon", "Luis Abram", "Caleb Wiley"], "MID": ["Bartosz Slisz", "Tristan Muyumba", "Saba Lobjanidze"], "ATT": ["Giorgos Giakoumakis", "Alexey Miranchuk", "Jamal Thiare"]}}, {"name": "Celta Vigo", "short": "CLV", "comp": "WORLD", "c1": "#8AC3EE", "c2": "#FFFFFF", "acc": "#E30613", "crest": "circle", "sq": {"GK": ["Vicente Guaita", "Iván Villar"], "DEF": ["Unai Núñez", "Carl Starfelt", "Óscar Mingueza"], "MID": ["Fran Beltrán", "Luca de la Torre", "Hugo Álvarez"], "ATT": ["Iago Aspas", "Borja Iglesias", "Williot Swedberg"]}}];
 const CLUB_BY=Object.fromEntries(CLUBS.map(c=>[c.short,c]));
-const COMPS_LABEL={PL:"Premier League",UCL:"Champions League",EL:"Europa League",UECL:"Conference League"};
+const COMPS_LABEL={PL:"Premier League",UCL:"Champions League",EL:"Europa League",UECL:"Conference League",WORLD:"World"};
 /* ============================================================
    CREST GENERATOR v2 — original stylized crests (not official logos).
    Composition: shield/circle outline + colour pattern + emblem + code.
@@ -773,31 +891,25 @@ function crest(club,size){
     wall:'wall',shield:'shield'};
   const em=E[emblemFor[key]]||'';
 
-  /* ---- code text ---- */
-  const hasEmblem=!!em;
-  const txtY=hasEmblem?35.5:24.5, txtSize=hasEmblem?7:11;
-  const light=v=>{const h=(v||'#000').replace('#','');
-    const r=parseInt(h.slice(0,2),16)||0,g=parseInt(h.slice(2,4),16)||0,b=parseInt(h.slice(4,6),16)||0;
-    return (r*299+g*587+b*114)/1000>150};
-  const base=(patternFor[key]==='halves'||patternFor[key]==='vstripe')?c1:c1;
-  const txtCol=light(base)?'#111':'#fff';
-
-  const inner=round?`<circle cx="20" cy="20" r="14.5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width="1"/>`
-                  :`<path d="M20 6 L33 10.2 V20.4 C33 27.6 27 32.7 20 34.4 C13 32.7 7 27.6 7 20.4 V10.2 Z"
-                        fill="none" stroke="rgba(255,255,255,.32)" stroke-width="1"/>`;
+  /* readable name band across the bottom — no inner outline, no clipped text */
+  const bandY=26.5, band=`<rect x="0" y="${bandY}" width="40" height="9" fill="rgba(0,0,0,.5)"/>`;
+  const code=String(club.short||'').slice(0,4);
+  const tSize=code.length>=4?7.6:code.length===3?9:10.5;
   return `<svg width="${s}" height="${s}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <clipPath id="${id}">${clip}</clipPath>
       <linearGradient id="${id}gl" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#fff" stop-opacity=".28"/>
-        <stop offset=".45" stop-color="#fff" stop-opacity=".04"/>
-        <stop offset="1" stop-color="#000" stop-opacity=".14"/>
+        <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
+        <stop offset=".5" stop-color="#fff" stop-opacity=".03"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".10"/>
       </linearGradient>
     </defs>
-    <g clip-path="url(#${id})">${pat}${em}
-      <text x="20" y="${txtY}" font-family="-apple-system,Inter,sans-serif" font-size="${txtSize}"
-        font-weight="800" fill="${txtCol}" text-anchor="middle" letter-spacing="-.3">${club.short}</text>
-      ${inner}
+    <g clip-path="url(#${id})">
+      ${pat}
+      <g transform="translate(0,-3.2)">${em}</g>
+      ${band}
+      <text x="20" y="${bandY+6.6}" font-family="-apple-system,'SF Pro Text',Inter,sans-serif" font-size="${tSize}"
+        font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="0.2">${code}</text>
       <rect width="40" height="40" fill="url(#${id}gl)"/>
     </g>
     ${edge}</svg>`;
@@ -1029,6 +1141,68 @@ async function loadDB(){
 }
 async function save(){DB.current=CUR;await Store.set('st_db_v7',DB)}
 const season=()=>DB.seasons.find(s=>s.id===CUR)||DB.seasons[0];
+
+const MONTHNAME=k=>{const [y,mo]=String(k).split('-');
+  return new Date(+y,+mo-1,1).toLocaleDateString(undefined,{month:'long',year:'numeric'})};
+const AVAIL={
+  ok:      {label:'Available',          icon:'✅', col:'var(--green)',  short:''},
+  injured: {label:'Injured',            icon:'🤕', col:'var(--red)',    short:'INJ'},
+  intl:    {label:'International Break',icon:'✈️', col:'var(--blue)',   short:'INT'},
+  away:    {label:'Away / travelling',  icon:'🧳', col:'var(--orange)', short:'AWY'},
+  left:    {label:'Left the group',     icon:'👋', col:'var(--label3)', short:'OUT'}
+};
+const availOf=p=>AVAIL[(p&&p.avail)||'ok']||AVAIL.ok;
+function availPill(p){
+  const a=availOf(p); if(!p||!p.avail||p.avail==='ok')return '';
+  return `<span class="avpill" style="--ac:${a.col}">${a.icon} ${a.short}</span>`;
+}
+
+
+/* Player of the Month — goals and clean sheets weighted equally so
+   keepers and defenders can win it too. */
+function potm(){
+  const g=allGames().filter(x=>x.date);
+  const months={};
+  g.forEach(x=>{const k=(x.date||'').slice(0,7); if(!k)return; (months[k]=months[k]||[]).push(x)});
+  const out=[];
+  Object.keys(months).sort().forEach(k=>{
+    const gl=months[k], m={};
+    gl.forEach(x=>{
+      [['A',x.teamA,x.scoreA,x.scoreB],['B',x.teamB,x.scoreB,x.scoreA]].forEach(([sd,team,gf,ga])=>{
+        (team||[]).forEach(pid=>{
+          const p=player(pid); if(!p)return;
+          const e=m[pid]=m[pid]||{id:pid,name:p.name,pos:p.pos,P:0,W:0,D:0,L:0,G:0,cs:0,pts:0};
+          e.P++; e.G+=(x.goals&&x.goals[pid])||0;
+          if((ga??0)===0)e.cs++;
+          if(x.result==='D'){e.D++;e.pts++} else if(x.result===sd){e.W++;e.pts+=3} else e.L++;
+        })});
+    });
+    const arr=Object.values(m).filter(x=>x.P>=2);
+    if(!arr.length)return;
+    arr.forEach(x=>x.score=x.pts + x.G*1.5 + x.cs*1.5 + x.P*0.25);
+    arr.sort((a,b)=>b.score-a.score||(b.G+b.cs)-(a.G+a.cs));
+    out.push({month:k,games:gl.length,win:arr[0],runners:arr.slice(1,3)});
+  });
+  return out.reverse();
+}
+
+/* summary for any season — used by League history, Hall of Fame and season comparison.
+   NOTE: keep this near the top of the view layer; it is referenced from several places. */
+function seasonSummary(s){
+  const lg=(s.comps||[]).find(c=>c.type==='league')||(s.comps||[])[0];
+  const games=(s.games||[]).filter(g=>!lg||g.compId===lg.id);
+  const m={};(s.players||[]).forEach(p=>m[p.id]={id:p.id,name:p.name,P:0,W:0,D:0,L:0,G:0,GF:0,GA:0,pts:0});
+  games.forEach(g=>{const a=g.scoreA??0,b=g.scoreB??0;
+    [['A',g.teamA,a,b],['B',g.teamB,b,a]].forEach(([sd,tm,gf,ga])=>(tm||[]).forEach(pid=>{const x=m[pid];if(!x)return;
+      x.P++;x.GF+=gf;x.GA+=ga;x.G+=(g.goals&&g.goals[pid])||0;
+      if(g.result==='D'){x.D++;x.pts++}else if(g.result===sd){x.W++;x.pts+=3}else x.L++}))});
+  const arr=Object.values(m).filter(x=>x.P>0).map(x=>({...x,GD:x.GF-x.GA})).sort(tableSort);
+  const goals=games.reduce((t,g)=>t+(g.scoreA||0)+(g.scoreB||0),0);
+  const boot=[...arr].sort((a,b)=>b.G-a.G)[0];
+  return {games:games.length,goals,table:arr,champ:arr[0]||null,boot:(boot&&boot.G)?boot:null,players:arr.length};
+}
+
+
 const comps=()=>season().comps;
 const comp=()=>comps().find(c=>c.id===COMP)||comps()[0];
 const player=id=>season().players.find(p=>p.id===id);
@@ -1144,10 +1318,10 @@ const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Numb
 ['🔁','Rotation Option'],['🧩','Regular Starter'],['🛠️','Ever Present'],['📈','Breakout Season'],['💪','Proven Performer'],
 ['🔥','In Form'],['💥','Match Winner'],['⭐','Standout Season'],['🧠','Big Game Player'],['💎','Star Man'],
 ['🎖️','Fan Favourite'],['🏹','Consistent Threat'],['🧲','Difference Maker'],['👑','Club Captain'],['🚀','Talisman'],
-['🌍','Household Name'],['🏅','Trophy Winner'],['⚔️','Big Occasion King'],['📯','Record Breaker'],['🏆','Title Winner'],
+['🌍','Household Name'],['🏅','Cult Hero'],['⚔️','Big Occasion King'],['📯','Record Breaker'],['🏆','Title Winner'],
 ['🐉','Club Legend'],['🕊️','Hall of Fame'],['✨','All-Time Great'],['🌌','Immortal'],['🥇','Ballon d\'Or']];
 
-const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round(28*Math.pow(i,1.62)/5)*5}));
+const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round(47*Math.pow(i,1.62)/5)*5}));
 function xpOf(m){let x=m.P*XP.app+m.W*XP.win+m.D*XP.draw+m.G*XP.goal;
   m.seq.forEach(s=>{if(s.goals>=3)x+=XP.hat;if(s.ga===0)x+=XP.clean});
   if(m.streak.type==='W'&&m.streak.n>=3)x+=XP.streak*(m.streak.n-2);return Math.round(x)}
@@ -1197,16 +1371,44 @@ const CH=[
  {id:'wr70',g:'Winning',e:'📊',n:'Seven In Ten',d:'Finish with a 70% win rate (min 10 games)',x:420,
    f:m=>[m.P>=10?Math.min(Math.round(m.wr*100),70):0,70]},
  {id:'g20',g:'Scoring',e:'🎯',n:'Twenty Club',d:'Score 20 goals',x:400,f:m=>[Math.min(m.G,20),20]},
- {id:'g40',g:'Scoring',e:'🐐',n:'Forty Club',d:'Score 40 goals',x:650,f:m=>[Math.min(m.G,40),40]},
+ {id:'g40',g:'Scoring',e:'🐐',n:'Thirty Club',d:'Score 30 goals',x:650,f:m=>[Math.min(m.G,30),30]},
  {id:'gpg1',g:'Scoring',e:'⚡',n:'A Goal A Game',d:'Average a goal per game (min 8 games)',x:480,
    f:m=>[m.P>=8?Math.min(Math.round(m.gpg*100),100):0,100]},
- {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 15 clean sheets',x:520,f:m=>[Math.min(m.cs,15),15]},
- {id:'gd25',g:'Milestones',e:'📈',n:'Goal Machine Team',d:'Reach +25 goal difference',x:360,
-   f:m=>[Math.min(Math.max(m.GD,0),25),25]},
- {id:'p100',g:'Milestones',e:'🏆',n:'Century',d:'Reach 100 points',x:600,f:m=>[Math.min(m.pts,100),100]},
+ {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 12 clean sheets',x:520,f:m=>[Math.min(m.cs,12),12]},
+ {id:'gd25',g:'Milestones',e:'📈',n:'On The Right Side',d:'Reach +20 goal difference',x:360,
+   f:m=>[Math.min(Math.max(m.GD,0),20),20]},
+ {id:'p100',g:'Milestones',e:'🏆',n:'Seventy Five',d:'Reach 75 points',x:600,f:m=>[Math.min(m.pts,75),75]},
  {id:'idx85',g:'Milestones',e:'👑',n:'World Class',d:'Reach a POTY index of 85',x:700,f:m=>[Math.min(m.index,85),85]},
  {id:'ppg2',g:'Winning',e:'🔝',n:'Two Points A Game',d:'Average 2+ points per game (min 10 games)',x:500,
    f:m=>[m.P>=10?Math.min(Math.round(m.ppg*100),200):0,200]},
+
+ /* ---- built for defenders, keepers and midfielders ---- */
+ {id:'cs3row',g:'Defending',e:'🚫',n:'Three Straight Shut-outs',d:'Keep 3 clean sheets in a row',x:320,
+   f:m=>[Math.min(best(m.seq,s=>s.ga===0),3),3]},
+ {id:'tight',g:'Defending',e:'🔒',n:'Tight At The Back',d:'Concede under 1.5 per game (min 8 games)',x:380,
+   f:m=>[m.P>=8?Math.min(Math.round((3-Math.min(m.cpg,3))/1.5*100),100):0,100]},
+ {id:'cs8',g:'Defending',e:'🧊',n:'Regular Shut-out',d:'Keep 8 clean sheets',x:300,f:m=>[Math.min(m.cs,8),8]},
+ {id:'solid',g:'Defending',e:'🏗️',n:'Foundations',d:'Win 10 games while keeping a clean sheet',x:420,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga===0&&s.r==='W').length,10),10]},
+
+ {id:'chem5',g:'Team',e:'🤝',n:'Perfect Partner',d:'Win 5 games alongside the same team-mate',x:330,
+   f:m=>{const b=chemPairs(1).filter(p=>p.a===m.id||p.b===m.id).sort((x,y)=>y.W-x.W)[0];
+         return [Math.min(b?b.W:0,5),5]}},
+ {id:'chem10',g:'Team',e:'💞',n:'Dream Duo',d:'Win 10 games alongside the same team-mate',x:520,
+   f:m=>{const b=chemPairs(1).filter(p=>p.a===m.id||p.b===m.id).sort((x,y)=>y.W-x.W)[0];
+         return [Math.min(b?b.W:0,10),10]}},
+ {id:'mixer',g:'Team',e:'🔀',n:'Plays With Anyone',d:'Share a team with 10 different players',x:300,
+   f:m=>{const set=new Set();allGames().forEach(g=>{
+           [g.teamA,g.teamB].forEach(t=>{if((t||[]).includes(m.id))(t||[]).forEach(x=>{if(x!==m.id)set.add(x)})})});
+         return [Math.min(set.size,10),10]}},
+ {id:'glue',g:'Team',e:'🧲',n:'Glue Of The Team',d:'Reach a 65% win rate with 3+ team-mates (min 3 games each)',x:460,
+   f:m=>{const n=chemPairs(3).filter(p=>(p.a===m.id||p.b===m.id)&&p.wr>=0.65).length;
+         return [Math.min(n,3),3]}},
+
+ {id:'work',g:'Appearances',e:'🔁',n:'Never Misses',d:'Play 10 games in a row',x:280,
+   f:m=>[Math.min(m.seq.length>=10?10:m.seq.length,10),10]},
+ {id:'allround',g:'Milestones',e:'🎛️',n:'All-Rounder',d:'Score 5 goals and keep 5 clean sheets',x:420,
+   f:m=>[Math.min(Math.min(m.G,5)+Math.min(m.cs,5),10),10]},
 ];
 const chalFor=m=>CH.map(c=>{const [cur,tot]=c.f(m);return{...c,cur,tot,done:cur>=tot,pct:Math.min(100,Math.round(cur/tot*100))}});
 function careerOf(pid){const m=statsAll().find(x=>x.id===pid);if(!m)return null;
@@ -1304,6 +1506,7 @@ const NAV=[
  ['career','Career','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
  ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
+ ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
  ['comps','Competitions','🏆','M6 3h12v4a6 6 0 0 1-12 0V3zM4 5H2v1.5A3 3 0 0 0 5 9.5M20 5h2v1.5a3 3 0 0 1-3 3M9 21h6M12 17v4'],
  ['admin','Admin','🔐','M12 15v3M7 10V7a5 5 0 0 1 10 0v3M5.5 10h13a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5v-8A1.5 1.5 0 0 1 5.5 10z']];
 const TABS=['home','league','squad','tactics','admin'];
@@ -1325,7 +1528,7 @@ function navbar(back,action){return `<div class="navbar">${back?`<button class="
   <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}<button class="iconbtn themeIcon" onclick="toggleTheme()"></button></div></div>`}
 
 function render(){
-  ({home:vHome,league:vLeague,tactics:vTactics,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
+  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
     career:vCareer,settings:vAdmin,player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
 
@@ -1350,16 +1553,17 @@ function vHome(){
     <div class="subtitle">${g.length} league games · ${goals} goals · ${S.players.filter(p=>p.active!==false).length} players</div>
     <div class="wrap">
       <div class="sechead">${lc.icon} ${esc(lc.name)} table</div>
-      <div class="card"><div class="tw"><table class="sticky">
+      <div class="card"><div class="tw"><table class="hometbl">
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
-        <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
+        <td class="c opt">GF</td><td class="c opt">GA</td><td class="c opt">GD</td><td class="c opt2">⚽</td><td class="c opt2">Form</td><td class="pts">Pts</td></tr></thead>
         <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
           <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
-          <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}${x.pos?` <span class="pill ${x.pos}">${x.pos}</span>`:''}</span></span></td>
+          <td class="nm"><span style="display:inline-flex;align-items:center;gap:8px">${avatar(x,24)}<span>${esc(x.name)}</span></span></td>
           <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
-          <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
-          <td class="c">${x.G}</td><td class="c">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
-      <div class="note">Win 3 · Draw 1 · Loss 0 · GF/GA are your team's goals while you were on it.</div>
+          <td class="c opt">${x.GF}</td><td class="c opt">${x.GA}</td><td class="c opt">${x.GD>0?'+':''}${x.GD}</td>
+          <td class="c opt2">${x.G}</td><td class="c opt2">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
+      ${leagueKey(tbl.length)}
+      <div class="note">Win 3 · Draw 1 · Loss 0. <button class="lnk" onclick="go('league')">See the full table →</button></div>
 
       <div class="grid g2">
         <div><div class="sechead">⚽ Top scorers</div><div class="card">
@@ -1389,7 +1593,7 @@ function vHome(){
             <div class="rv" style="font-size:13px;font-weight:700;color:var(--tint)">${c.xp.toLocaleString()}</div></div>`).join('')}</div></div>
       </div>
 
-      <div class="sechead">Recent results <button class="act" onclick="go('fixtures')">All fixtures</button></div>
+      <div class="sechead">Recent results <button class="act" onclick="shareGameweek()">📸 Share gameweek</button></div>
       <div class="card">${recent.map(gameRow).join('')}</div>
       ${comps().length>1?`<div class="sechead">Other competitions <button class="act" onclick="go('comps')">Manage</button></div>
         <div class="card">${comps().filter(c=>c.type!=='league').map(c=>{
@@ -1401,7 +1605,15 @@ function vHome(){
         <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
         <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
 
+      ${potsRace()}
       ${closingIn()}
+      ${(function(){const cd=countdowns(); if(!cd.length)return '';
+        return `<div class="sechead">⏳ Milestone countdown</div>
+          <div class="card">${cd.map(o=>`<div class="row tap" onclick="openPlayer('${o.id}')">
+            <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
+            <div class="rt"><div class="r1" style="font-size:15px">${esc(o.name)}</div>
+              <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>`})()}
+      ${rotationWatch()}
 
       ${(function(){const pm=potm(); if(!pm.length)return '';
         const cur=pm[0];
@@ -1671,7 +1883,7 @@ function vSquad(){
     <div class="wrap"><button class="btn pri full" data-admin style="margin-bottom:16px" onclick="editPlayer(null)">Add player</button>
       ${list.length?`<div class="card">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);
         return `<div class="row tap" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
-        ${avatar(p,40)}<div class="rt"><div class="r1">${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}</div>
+        ${avatar(p,40)}<div class="rt"><div class="r1">${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
         <div class="r2">${r?`⭐ ${esc(r)} · `:''}${m.P} games · ${m.pts} pts</div></div>
         ${p.ps&&PS_BY[p.ps]?`<span class="squadps" title="${esc(PS_BY[p.ps].name)}">${psDiamond(p.ps,30)}</span>`:''}${chev}</div>`}).join('')}</div>`
       :`<div class="empty"><div class="ee">👥</div><h3>No players yet</h3><p>Add your regulars — more can be added at the venue.</p></div>`}
@@ -1705,6 +1917,8 @@ function vPlayer(pid){
       </div>
       <div class="fut-name">${esc(p.name)}</div>
       ${r?`<div class="fut-like">plays like <b>${esc(r)}</b></div>`:''}
+      ${(p.avail&&p.avail!=='ok')?`<div style="position:relative;z-index:1;text-align:center;margin-bottom:10px">
+        <span class="avpill big" style="--ac:${availOf(p).col}">${availOf(p).icon} ${availOf(p).label}</span></div>`:''}
       <div class="fut-stats">
         ${[['POINTS',m?m.pts:0],['GOALS',m?m.G:0],['WIN RATE',m?Math.round(m.wr*100)+'%':'0%'],
            ['PLAYED',m?m.P:0],['CLEAN SHEETS',m?m.cs:0],['RATING',m&&m.P?m.index:'—']].map(([l,v])=>`
@@ -1761,10 +1975,13 @@ function vPlayer(pid){
         <div class="rt"><div class="r1" style="font-size:15px">${gf}–${ga}${gg?` · ${gg} ⚽`:''}</div>
           <div class="r2">${fdate(g.date)}</div></div>${chev}</div>`}).join('')
       :'<div class="row"><div class="rt"><div class="r2">No games yet</div></div></div>'}</div>
+    ${lifetimeBlock(pid)}
+    ${pbBlock(pid)}
+    ${seasonLine(pid)}
     <div class="card" style="margin-top:14px">
       <div class="row tap" data-admin onclick="editPlayer('${pid}')"><div class="rt"><div class="r1">Edit player</div></div>${chev}</div>
-      <div class="row tap" onclick="downloadCardPNG('${pid}')"><div class="rt"><div class="r1">📸 Save card as image</div>
-        <div class="r2">PNG — best for sharing on WhatsApp</div></div>${chev}</div>
+      <div class="row tap" onclick="downloadCardPNG('${pid}')"><div class="rt"><div class="r1">📸 Share / save card</div>
+        <div class="r2">Opens the share sheet — save to Photos or send</div></div>${chev}</div>
       <div class="row tap" onclick="exportPlayer('${pid}')"><div class="rt"><div class="r1">✨ Preview card</div></div>${chev}</div>
       <div class="row tap" data-admin onclick="removePlayer('${pid}')"><div class="rt"><div class="r1" style="color:var(--red)">Remove from squad</div></div></div>
     </div></div></div>`}
@@ -1830,8 +2047,9 @@ function vPCareer(pid){
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--label2);margin-top:8px">
           <span><b style="color:var(--label)">${car.xp.toLocaleString()}</b> XP</span>
           <span>${car.lvl.next?`${car.lvl.need-car.lvl.into} to ${car.lvl.next.e} ${car.lvl.next.t}`:'Max level'}</span></div></div></div>
-    <div class="tiles">${tile(car.xp.toLocaleString(),'Total XP','','var(--tint)')}${tile(car.base.toLocaleString(),'From matches')}
-      ${tile(car.bonus.toLocaleString(),'From challenges','','var(--green)')}${tile(`${done}/${car.ch.length}`,'Unlocked')}</div>
+    <div class="tiles">${tile(car.xp.toLocaleString(),'Total XP','','var(--tint)')}${tile('LV'+car.lvl.n,'Level')}
+      ${tile(`${done}/${car.ch.length}`,'Challenges done','','var(--green)')}
+      ${tile(car.lvl.next?(car.lvl.next.xp-car.xp).toLocaleString():'—','XP to next')}</div>
     ${Object.keys(groups).map(g=>`<div class="sechead">${g} <span style="text-transform:none;font-weight:500;color:var(--label3)">${groups[g].filter(c=>c.done).length}/${groups[g].length}</span></div>
       <div class="card">${groups[g].map(chalRow).join('')}</div>`).join('')}
     <div class="sechead">All ${LEVELS.length} levels</div>
@@ -2011,61 +2229,591 @@ function psDiamondRaw(id,size){
     <g transform="translate(26,26) scale(2.05)" fill="none" stroke="#fff" stroke-width="1.7"
       stroke-linecap="round" stroke-linejoin="round">${psGlyph(ps.g)}</g></g>`;
 }
+/* Turn an SVG string into a PNG blob at 2x for crisp phone screens */
+async function svgToPng(svg,w,h,scale){
+  const sc=scale||2;
+  const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
+  const url=URL.createObjectURL(blob);
+  try{
+    const img=new Image();
+    await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(new Error('render'));img.src=url});
+    const cv=document.createElement('canvas');
+    cv.width=w*sc; cv.height=h*sc;
+    const ctx=cv.getContext('2d'); ctx.scale(sc,sc); ctx.drawImage(img,0,0,w,h);
+    return await new Promise(r=>cv.toBlob(r,'image/png'));
+  } finally { URL.revokeObjectURL(url); }
+}
+/* iOS-friendly: open the native share sheet (which offers "Save Image"),
+   falling back to a plain download on desktop browsers. */
+async function shareOrSave(blob,filename,title){
+  if(!blob){toast('Could not create the image');return}
+  const file=new File([blob],filename,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[file]})&&navigator.share){
+    try{ await navigator.share({files:[file],title}); toast('📤 Shared'); return; }
+    catch(e){ if(e&&e.name==='AbortError')return; }
+  }
+  const u=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=u;a.download=filename;document.body.appendChild(a);a.click();document.body.removeChild(a);
+  setTimeout(()=>URL.revokeObjectURL(u),2000);
+  toast('📸 Saved to your downloads');
+}
 async function downloadCardPNG(pid){
   const svg=playerCardSVG(pid); if(!svg){toast('No data for this player');return}
   const p=player(pid);
   toast('Making your card…');
   try{
-    const blob=new Blob([svg],{type:'image/svg+xml;charset=utf-8'});
-    const url=URL.createObjectURL(blob);
-    const img=new Image();
-    await new Promise((res,rej)=>{img.onload=res;img.onerror=()=>rej(new Error('render'));img.src=url});
-    const scale=2, cv=document.createElement('canvas');
-    cv.width=680*scale; cv.height=1020*scale;
-    const ctx=cv.getContext('2d'); ctx.scale(scale,scale);
-    ctx.drawImage(img,0,0,680,1020);
-    URL.revokeObjectURL(url);
-    cv.toBlob(b=>{
-      if(!b){toast('Could not create the image');return}
-      const u=URL.createObjectURL(b),a=document.createElement('a');
-      a.href=u;a.download=`${p.name.replace(/\s+/g,'-').toLowerCase()}-card.png`;
-      document.body.appendChild(a);a.click();document.body.removeChild(a);
-      setTimeout(()=>URL.revokeObjectURL(u),2000);
-      toast('📸 Card saved — ready to share');
-    },'image/png');
-  }catch(e){ toast('Could not make the image — try Save instead'); }
+    const blob=await svgToPng(svg,680,1020,2);
+    await shareOrSave(blob,`${p.name.replace(/\s+/g,'-').toLowerCase()}-card.png`,`${p.name} — Sunday Season`);
+  }catch(e){ toast('Could not make the image'); }
 }
 
-/* ============ PLAYER OF THE MONTH ============ */
-function potm(){
-  const g=allGames().filter(x=>x.date);
+/* ============ GAMEWEEK GRAPHIC ============ */
+function gameweekSVG(){
+  const g=allGames(); if(!g.length)return null;
+  const last=g[g.length-1];
+  const round=last.round||'Latest';
+  const dayGames=g.filter(x=>x.date===last.date);
+  const st=lgStats().filter(x=>x.P>0).sort(tableSort).slice(0,5);
+  const mv=movement(lgComp().id);
+  const e2=t=>String(t==null?'':t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const nm=(l,f)=>{const n=(l||[]).map(p=>player(p)?.name).filter(Boolean).concat(f||[]);
+    return n.length>2?n.slice(0,2).join(', ')+' +'+(n.length-2):(n.join(' & ')||'—')};
+  const W=680,H=1020,GOLD='#C9A227';
+  // results block
+  const rows=dayGames.slice(0,4).map((x,i)=>{
+    const y=300+i*84;
+    return `<rect x="44" y="${y}" width="592" height="68" rx="16" fill="rgba(255,255,255,.055)"/>
+      <text x="72" y="${y+29}" font-size="20" font-weight="700" fill="#fff">${e2(nm(x.teamA,x.fillA))}</text>
+      <text x="72" y="${y+53}" font-size="20" font-weight="700" fill="rgba(255,255,255,.72)">${e2(nm(x.teamB,x.fillB))}</text>
+      <text x="600" y="${y+29}" text-anchor="end" font-size="22" font-weight="800" fill="${(x.scoreA??0)>=(x.scoreB??0)?'#fff':'rgba(255,255,255,.5)'}">${x.scoreA??0}</text>
+      <text x="600" y="${y+53}" text-anchor="end" font-size="22" font-weight="800" fill="${(x.scoreB??0)>=(x.scoreA??0)?'#fff':'rgba(255,255,255,.5)'}">${x.scoreB??0}</text>`;
+  }).join('');
+  const tableY=300+Math.min(dayGames.length,4)*84+46;
+  const tRows=st.map((x,i)=>{
+    const y=tableY+44+i*46, m=mv[x.id]||0;
+    const arrow=m>0?'▲':m<0?'▼':'·';
+    const acol=m>0?'#30D158':m<0?'#FF453A':'rgba(255,255,255,.35)';
+    return `<text x="60" y="${y}" font-size="19" font-weight="800" fill="${i===0?GOLD:'rgba(255,255,255,.55)'}">${i+1}</text>
+      <text x="92" y="${y}" font-size="13" fill="${acol}">${arrow}</text>
+      <text x="118" y="${y}" font-size="20" font-weight="${i===0?'800':'600'}" fill="#fff">${e2(x.name)}</text>
+      <text x="530" y="${y}" text-anchor="end" font-size="18" fill="rgba(255,255,255,.55)">${x.G}</text>
+      <text x="618" y="${y}" text-anchor="end" font-size="21" font-weight="800" fill="${i===0?GOLD:'#fff'}">${x.pts}</text>`;
+  }).join('');
+  const scorers=[];
+  dayGames.forEach(x=>Object.entries(x.goals||{}).forEach(([pid,n])=>{
+    if(n>0&&player(pid))scorers.push({n:player(pid).name,g:n})}));
+  scorers.sort((a,b)=>b.g-a.g);
+  const scLine=scorers.slice(0,5).map(x=>`${x.n}${x.g>1?' ('+x.g+')':''}`).join('  ·  ');
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#12233A"/><stop offset=".55" stop-color="#0E1626"/><stop offset="1" stop-color="#0A0E17"/>
+    </linearGradient>
+    <linearGradient id="gd" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E8CE7A"/><stop offset=".5" stop-color="#C9A227"/><stop offset="1" stop-color="#8A6D14"/>
+    </linearGradient>
+  </defs>
+  <rect width="${W}" height="${H}" rx="40" fill="url(#bg)"/>
+  <rect x="4" y="4" width="${W-8}" height="${H-8}" rx="36" fill="none" stroke="url(#gd)" stroke-width="2.5" opacity=".65"/>
+
+  <text x="${W/2}" y="92" text-anchor="middle" font-size="19" font-weight="700" fill="${GOLD}" letter-spacing="6">SUNDAY SEASON</text>
+  <text x="${W/2}" y="152" text-anchor="middle" font-size="52" font-weight="900" fill="#fff" letter-spacing="-1.5">${e2(round)}</text>
+  <text x="${W/2}" y="188" text-anchor="middle" font-size="19" fill="rgba(255,255,255,.5)">${e2(fdate(last.date))}</text>
+  <line x1="220" y1="216" x2="460" y2="216" stroke="url(#gd)" stroke-width="2" opacity=".6"/>
+
+  <text x="44" y="270" font-size="17" font-weight="800" fill="rgba(255,255,255,.42)" letter-spacing="3">RESULTS</text>
+  ${rows}
+
+  <text x="44" y="${tableY}" font-size="17" font-weight="800" fill="rgba(255,255,255,.42)" letter-spacing="3">TABLE</text>
+  ${tRows}
+
+  ${scLine?`<text x="44" y="${tableY+44+st.length*46+40}" font-size="17" font-weight="800" fill="rgba(255,255,255,.42)" letter-spacing="3">SCORERS</text>
+  <text x="44" y="${tableY+44+st.length*46+74}" font-size="19" fill="rgba(255,255,255,.8)">${e2(scLine)}</text>`:''}
+
+  <text x="${W/2}" y="${H-44}" text-anchor="middle" font-size="16" fill="rgba(255,255,255,.32)" letter-spacing="2">sunday-season.vercel.app</text>
+</svg>`;
+}
+async function shareGameweek(){
+  const svg=gameweekSVG(); if(!svg){toast('No games yet');return}
+  toast('Making the graphic…');
+  try{
+    const blob=await svgToPng(svg,680,1020,2);
+    await shareOrSave(blob,'sunday-season-gameweek.png','Sunday Season — this week');
+  }catch(e){ toast('Could not make the graphic'); }
+}
+
+/* ============ AUTO MATCH REPORTS ============ */
+function matchReport(g){
+  if(!g)return '';
+  const a=g.scoreA??0,b=g.scoreB??0,marg=Math.abs(a-b),tot=a+b;
+  const nm=(l,f)=>{const n=(l||[]).map(p=>player(p)?.name).filter(Boolean).concat(f||[]);return n};
+  const A=nm(g.teamA,g.fillA), B=nm(g.teamB,g.fillB);
+  const winners=a>b?A:B, losers=a>b?B:A;
+  const scorers=Object.entries(g.goals||{}).filter(([,n])=>n>0)
+    .map(([pid,n])=>({name:player(pid)?.name,n})).filter(x=>x.name).sort((x,y)=>y.n-x.n);
+  const top=scorers[0];
+  const list=arr=>arr.length<=1?(arr[0]||'—'):arr.slice(0,-1).join(', ')+' and '+arr[arr.length-1];
+  let open;
+  if(a===b) open = tot===0 ? `A goalless stalemate.` : `Honours even in a ${a}–${b} draw.`;
+  else if(marg>=4) open = `A ${Math.max(a,b)}–${Math.min(a,b)} demolition.`;
+  else if(marg===1) open = `Settled by a single goal, ${Math.max(a,b)}–${Math.min(a,b)}.`;
+  else open = `${Math.max(a,b)}–${Math.min(a,b)} in the end.`;
+  const bits=[open];
+  if(a!==b) bits.push(`${list(winners)} came out on top against ${list(losers)}.`);
+  else bits.push(`${list(A)} and ${list(B)} couldn't be separated.`);
+  if(top){
+    if(top.n>=3) bits.push(`${top.name} helped himself to a hat-trick.`);
+    else if(top.n===2) bits.push(`${top.name} grabbed a brace.`);
+    else if(scorers.length) bits.push(`${list(scorers.map(x=>x.name))} got on the scoresheet.`);
+  }
+  if(Math.min(a,b)===0&&tot>0) bits.push(`A clean sheet for the winners.`);
+  if(tot>=8) bits.push(`${tot} goals in one game — chaos.`);
+  return bits.join(' ');
+}
+
+/* ============ PLAYER OF THE SEASON RACE ============ */
+function potsRace(){
+  const g=allGames().filter(x=>x.date).sort((p,q)=>(p.date||'').localeCompare(q.date||'')||(p.created||0)-(q.created||0));
+  if(g.length<4)return '';
+  const st=lgStats().filter(x=>x.P>0).sort(tableSort).slice(0,5);
+  if(st.length<2)return '';
+  const ids=st.map(x=>x.id);
+  const run={};ids.forEach(i=>run[i]=0);
+  const series={};ids.forEach(i=>series[i]=[0]);
+  g.forEach(x=>{
+    [['A',x.teamA],['B',x.teamB]].forEach(([sd,t])=>(t||[]).forEach(pid=>{
+      if(!(pid in run))return;
+      if(x.result==='D')run[pid]+=1; else if(x.result===sd)run[pid]+=3;
+    }));
+    ids.forEach(i=>series[i].push(run[i]));
+  });
+  const max=Math.max(...ids.map(i=>run[i]),1);
+  const W=300,H=110,n=g.length;
+  const cols=['var(--tint)','var(--green)','var(--orange)','var(--purple)','var(--teal)'];
+  const line=(i,ix)=>{
+    const pts=series[i].map((v,k)=>`${(k/n)*W},${H-(v/max)*(H-8)-4}`).join(' ');
+    return `<polyline points="${pts}" fill="none" stroke="${cols[ix%5]}" stroke-width="2.2"
+      stroke-linejoin="round" stroke-linecap="round"/>`;
+  };
+  return `<div class="sechead">🏁 Player of the Season race</div>
+    <div class="card pad">
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;height:118px;display:block">
+        ${[0.25,0.5,0.75].map(f=>`<line x1="0" y1="${H-(H-8)*f-4}" x2="${W}" y2="${H-(H-8)*f-4}"
+          stroke="var(--sep)" stroke-width="1"/>`).join('')}
+        ${ids.map(line).join('')}
+      </svg>
+      <div class="potsleg">${st.map((x,ix)=>`<span onclick="openPlayer('${x.id}')">
+        <i style="background:${cols[ix%5]}"></i>${esc(x.name)} <b>${x.pts}</b></span>`).join('')}</div>
+      <div class="note" style="padding:8px 0 0">Points accumulated across the season — the top five, gameweek by gameweek.</div>
+    </div>`;
+}
+
+/* ============ LIFETIME BLOCK FOR A PLAYER ============ */
+function lifetimeBlock(pid){
+  const p=player(pid); if(!p)return '';
+  if((DB.seasons||[]).length<2)return '';
+  const life=lifetime().find(l=>l.name.trim().toLowerCase()===p.name.trim().toLowerCase());
+  if(!life||life.seasons<2)return '';
+  return `<div class="sechead">Career totals</div>
+    <div class="card pad">
+      <div class="note" style="padding:0 0 10px">Across ${life.seasons} seasons</div>
+      <div class="tiles">
+        ${tile(life.P,'Games')}${tile(life.G,'Goals')}${tile(life.pts,'Points')}
+        ${tile(life.W,'Wins')}${tile(life.cs,'Clean sheets')}${tile(Math.round(life.wr*100)+'%','Win rate')}
+      </div></div>`;
+}
+
+/* ============ CHANGE LOG + UNDO ============ */
+function logEntry(action,detail){
+  const S=season(); if(!S.log)S.log=[];
+  S.log.push({t:Date.now(),a:action,d:detail});
+  if(S.log.length>200)S.log=S.log.slice(-200);
+}
+/* one-step undo: we stash a snapshot before each destructive change */
+let UNDO=null;
+function snapshot(label){
+  try{ UNDO={label,t:Date.now(),data:JSON.parse(JSON.stringify(DB)),cur:CUR}; }catch(e){ UNDO=null; }
+}
+function canUndo(){ return !!UNDO && (Date.now()-UNDO.t)<1000*60*30 }
+async function undoLast(){
+  if(!requireAdmin())return;
+  if(!canUndo()){toast('Nothing to undo');return}
+  const label=UNDO.label;
+  if(!await askConfirm('Undo?',`This will reverse: ${label}`,'Undo',false))return;
+  DB=UNDO.data; CUR=UNDO.cur;
+  if(!season().comps.some(c=>c.id===COMP))COMP=season().comps[0].id;
+  UNDO=null; await save(); render(); toast('↩︎ Undone');
+}
+const fmtWhen=t=>{const d=new Date(t),n=new Date();
+  const sameDay=d.toDateString()===n.toDateString();
+  return sameDay?d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})
+    :d.toLocaleDateString([],{day:'numeric',month:'short'})+' '+d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})};
+function changeLog(){
+  const L=[...(season().log||[])].reverse().slice(0,40);
+  if(!L.length)return `<div class="note">Nothing logged yet. Edits you make from now on appear here.</div>`;
+  return `<div class="card">${L.map(e=>`<div class="row">
+    <div style="font-size:17px;flex:0 0 24px">${e.a==='delete'?'🗑️':e.a==='edit'?'✏️':e.a==='add'?'➕':'•'}</div>
+    <div class="rt"><div class="r1" style="font-size:14.5px">${esc(e.d)}</div>
+      <div class="r2">${fmtWhen(e.t)}</div></div></div>`).join('')}</div>`;
+}
+/* ---- storage usage estimate (Supabase free tier is 500MB) ---- */
+function storageInfo(){
+  let bytes=0;
+  try{ bytes=new Blob([JSON.stringify(DB)]).size }catch(e){ try{bytes=JSON.stringify(DB).length}catch(_){} }
+  const mb=bytes/1048576, limit=500, pct=Math.min(100,(mb/limit)*100);
+  const kb=bytes/1024;
+  const nice=mb>=1?mb.toFixed(1)+' MB':kb.toFixed(0)+' KB';
+  const level=pct>80?'var(--red)':pct>50?'var(--orange)':'var(--green)';
+  return {bytes,nice,pct,level,limit,
+    msg: pct>80 ? 'Getting close to the free limit — consider archiving an old season.'
+       : pct>50 ? 'Comfortable, but worth keeping an eye on.'
+       : 'Plenty of room. A full season is typically well under 1 MB.'};
+}
+
+/* ============ PERSONAL BESTS / SEASON SUMMARY / COUNTDOWNS ============ */
+function personalBests(pid){
+  const m=statsAll().find(x=>x.id===pid); if(!m||!m.P)return null;
+  const seq=m.seq||[];
+  const bestGoals=Math.max(0,...seq.map(s=>s.goals||0));
+  const winRun=(function(){let b=0,c=0;seq.forEach(s=>{c=s.r==='W'?c+1:0;if(c>b)b=c});return b})();
+  const unbeaten=(function(){let b=0,c=0;seq.forEach(s=>{c=s.r!=='L'?c+1:0;if(c>b)b=c});return b})();
+  const csRun=(function(){let b=0,c=0;seq.forEach(s=>{c=s.ga===0?c+1:0;if(c>b)b=c});return b})();
+  const scoreRun=(function(){let b=0,c=0;seq.forEach(s=>{c=(s.goals||0)>0?c+1:0;if(c>b)b=c});return b})();
+  // best month
+  const g=allGames().filter(x=>(x.teamA||[]).includes(pid)||(x.teamB||[]).includes(pid));
   const months={};
-  g.forEach(x=>{const k=(x.date||'').slice(0,7); if(!k)return; (months[k]=months[k]||[]).push(x)});
+  g.forEach(x=>{const k=(x.date||'').slice(0,7);if(!k)return;
+    const onA=(x.teamA||[]).includes(pid),sd=onA?'A':'B';
+    const e=months[k]=months[k]||{P:0,pts:0,G:0};
+    e.P++;e.G+=(x.goals&&x.goals[pid])||0;
+    if(x.result==='D')e.pts++;else if(x.result===sd)e.pts+=3;});
+  let bestMonth=null;
+  Object.keys(months).forEach(k=>{const e=months[k];
+    if(e.P>=2&&(!bestMonth||e.pts/e.P>bestMonth.ppg))bestMonth={k,ppg:e.pts/e.P,...e}});
+  return {bestGoals,winRun,unbeaten,csRun,scoreRun,bestMonth};
+}
+function pbBlock(pid){
+  const pb=personalBests(pid); if(!pb)return '';
+  const gm=n=>n?n+(n===1?' game':' games'):'—';
+  const items=[
+    ['⚽','Most in a game',pb.bestGoals?pb.bestGoals+(pb.bestGoals===1?' goal':' goals'):'—'],
+    ['🔥','Longest win run',gm(pb.winRun)],
+    ['🛡️','Longest unbeaten',gm(pb.unbeaten)],
+    ['🎯','Scored in a row',gm(pb.scoreRun)],
+    ['🧤','Clean sheets in a row',gm(pb.csRun)],
+    ['📅','Best month',pb.bestMonth?MONTHNAME(pb.bestMonth.k).split(' ')[0]:'—']
+  ];
+  return `<div class="sechead">Personal bests</div>
+    <div class="pbgrid">${items.map(([e,l,v])=>`<div class="pbcard">
+      <div class="pb-e">${e}</div><div class="pb-l">${l}</div><div class="pb-v">${esc(String(v))}</div></div>`).join('')}</div>`;
+}
+/* plain-English season summary */
+function seasonLine(pid){
+  const p=player(pid),m=statsAll().find(x=>x.id===pid);
+  if(!m||!m.P)return '';
+  const pb=personalBests(pid);
+  const bits=[`You played ${m.P}`];
+  if(m.W)bits.push(`won ${m.W}`);
+  if(m.G)bits.push(`scored ${m.G}`);
+  let txt=bits.join(', ')+'.';
+  const extra=[];
+  if(pb&&pb.scoreRun>=3)extra.push(`You scored in ${pb.scoreRun} straight games`);
+  else if(pb&&pb.winRun>=3)extra.push(`You won ${pb.winRun} in a row at one point`);
+  else if(pb&&pb.unbeaten>=4)extra.push(`You went ${pb.unbeaten} games unbeaten`);
+  if(m.cs>=3)extra.push(`kept ${m.cs} clean sheets`);
+  if(pb&&pb.bestMonth&&pb.bestMonth.P>=2)extra.push(`and ${MONTHNAME(pb.bestMonth.k).split(' ')[0]} was your best month`);
+  if(extra.length)txt+=' '+extra.join(', ').replace(/^(\w)/,c=>c.toUpperCase())+'.';
+  const rank=ranks(lgStats()).find(x=>x.id===pid);
+  if(rank)txt+=` You're sitting ${ordinal(rank.rank)} in the table.`;
+  return `<div class="sechead">Your season</div>
+    <div class="card pad seasonline">${esc(txt)}</div>`;
+}
+const ordinal=n=>{const s=['th','st','nd','rd'],v=n%100;return n+(s[(v-20)%10]||s[v]||s[0])};
+
+/* ---- milestone countdowns: who is close to a round number ---- */
+function countdowns(){
+  const st=lgStats().filter(x=>x.P>0), out=[];
+  const marks=[10,25,50,75,100,150,200];
+  st.forEach(x=>{
+    const life=lifetime().find(l=>l.name.trim().toLowerCase()===x.name.trim().toLowerCase());
+    const apps=life?life.P:x.P;
+    marks.forEach(mk=>{const left=mk-apps;
+      if(left>0&&left<=3)out.push({id:x.id,name:x.name,e:'🎖️',t:`${left} game${left===1?'':'s'} from ${mk} appearances`,v:left})});
+    [10,25,50,100].forEach(mk=>{const left=mk-(life?life.G:x.G);
+      if(left>0&&left<=3)out.push({id:x.id,name:x.name,e:'⚽',t:`${left} goal${left===1?'':'s'} from ${mk} career goals`,v:left})});
+  });
+  return out.sort((a,b)=>a.v-b.v).slice(0,4);
+}
+
+/* ---- rotation fairness: are the same people always together? ---- */
+function rotationWatch(){
+  const g=allGames().slice(-6);
+  if(g.length<4)return '';
+  const key=(a,b)=>a<b?a+'|'+b:b+'|'+a, m={};
+  g.forEach(x=>{[x.teamA,x.teamB].forEach(t=>{
+    const arr=(t||[]).filter(id=>player(id));
+    for(let i=0;i<arr.length;i++)for(let j=i+1;j<arr.length;j++){
+      const k=key(arr[i],arr[j]); m[k]=(m[k]||0)+1;
+    }})});
+  const stuck=Object.entries(m).filter(([,n])=>n>=Math.min(5,g.length))
+    .map(([k,n])=>{const [a,b]=k.split('|');return {a,b,n}})
+    .filter(x=>player(x.a)&&player(x.b))
+    .sort((p,q)=>q.n-p.n).slice(0,3);
+  if(!stuck.length)return '';
+  return `<div class="sechead">🔄 Rotation watch</div>
+    <div class="card">${stuck.map(x=>`<div class="row">
+      <div style="font-size:20px;flex:0 0 26px">🔗</div>
+      <div class="rt"><div class="r1" style="font-size:15px">${esc(player(x.a).name)} &amp; ${esc(player(x.b).name)}</div>
+        <div class="r2">Same team ${x.n} of the last ${g.length} games</div></div></div>`).join('')}</div>
+    <div class="note">Worth splitting these up to keep games even.</div>`;
+}
+
+/* ============ HISTORY (all-time, hall of fame, rivalries) ============ */
+let HMODE='records';
+
+/* every game across every season, with the season it came from */
+function allTimeGames(){
   const out=[];
-  Object.keys(months).sort().forEach(k=>{
-    const gl=months[k], m={};
-    gl.forEach(x=>{
-      [['A',x.teamA,x.scoreA,x.scoreB],['B',x.teamB,x.scoreB,x.scoreA]].forEach(([sd,team,gf,ga])=>{
+  (DB.seasons||[]).forEach(s=>{
+    (s.games||[]).forEach(g=>out.push({g,s}));
+  });
+  return out;
+}
+/* lifetime totals keyed by player NAME (ids differ between seasons) */
+function lifetime(){
+  const m={};
+  (DB.seasons||[]).forEach(s=>{
+    const byId={};(s.players||[]).forEach(p=>byId[p.id]=p);
+    (s.games||[]).forEach(g=>{
+      [['A',g.teamA,g.scoreA,g.scoreB],['B',g.teamB,g.scoreB,g.scoreA]].forEach(([sd,team,gf,ga])=>{
         (team||[]).forEach(pid=>{
-          const p=player(pid); if(!p)return;
-          const e=m[pid]=m[pid]||{id:pid,name:p.name,pos:p.pos,P:0,W:0,D:0,L:0,G:0,cs:0,pts:0};
-          e.P++; e.G+=(x.goals&&x.goals[pid])||0;
+          const p=byId[pid]; if(!p)return;
+          const k=p.name.trim().toLowerCase();
+          const e=m[k]=m[k]||{name:p.name,P:0,W:0,D:0,L:0,G:0,GF:0,GA:0,cs:0,pts:0,seasons:new Set(),seq:[]};
+          e.P++; e.GF+=gf??0; e.GA+=ga??0; e.G+=(g.goals&&g.goals[pid])||0;
           if((ga??0)===0)e.cs++;
-          if(x.result==='D'){e.D++;e.pts++} else if(x.result===sd){e.W++;e.pts+=3} else e.L++;
+          e.seasons.add(s.id);
+          if(g.result==='D'){e.D++;e.pts++;e.seq.push('D')}
+          else if(g.result===sd){e.W++;e.pts+=3;e.seq.push('W')}
+          else {e.L++;e.seq.push('L')}
         })});
     });
-    const arr=Object.values(m).filter(x=>x.P>=2);
-    if(!arr.length)return;
-    /* Balanced so keepers and defenders can win it too: goals and clean sheets
-       are weighted the same, on top of the points the team actually earned. */
-    arr.forEach(x=>x.score=x.pts + x.G*1.5 + x.cs*1.5 + x.P*0.25);
-    arr.sort((a,b)=>b.score-a.score||(b.G+b.cs)-(a.G+a.cs));
-    out.push({month:k,games:gl.length,win:arr[0],runners:arr.slice(1,3)});
   });
-  return out.reverse();
+  return Object.values(m).map(x=>({...x,seasons:x.seasons.size,
+    wr:x.P?x.W/x.P:0, gpg:x.P?x.G/x.P:0, GD:x.GF-x.GA})).sort((a,b)=>b.P-a.P);
 }
-const MONTHNAME=k=>{const [y,mo]=k.split('-');
-  return new Date(+y,+mo-1,1).toLocaleDateString(undefined,{month:'long',year:'numeric'})};
+function longestRun(seq,ok){let b=0,c=0;seq.forEach(r=>{c=ok(r)?c+1:0;if(c>b)b=c});return b}
+
+function vHistory(){
+  $('#navMount').innerHTML=navbar();
+  const tabs=[['records','Records'],['fame','Champions'],['rivals','Rivalries'],['improve','Risers']];
+  let body='';
+  if(HMODE==='records')body=histRecords();
+  else if(HMODE==='fame')body=histFame();
+  else if(HMODE==='rivals')body=histRivals();
+  else body=histImproved();
+  app().innerHTML=`<div class="view active hof">
+    <div class="largetitle">Hall of Fame</div>
+    <div class="subtitle">${(DB.seasons||[]).length} season${(DB.seasons||[]).length===1?'':'s'} · ${allTimeGames().length} games all-time</div>
+    <div class="wrap">
+      <div class="seg" style="margin-bottom:16px">${tabs.map(([k,l])=>`<button class="${HMODE===k?'on':''}" onclick="HMODE='${k}';render()">${l}</button>`).join('')}</div>
+      ${body}</div></div>`;
+}
+
+/* ---------- ALL-TIME RECORDS ---------- */
+function histRecords(){
+  const lt=lifetime(), games=allTimeGames();
+  if(!lt.length)return `<div class="empty"><div class="ee">📜</div><h3>No history yet</h3>
+    <p>Records build up as you play. Come back after a few games.</p></div>`;
+  const top=(k,fmt)=>{const a=[...lt].filter(x=>x[k]>0).sort((p,q)=>q[k]-p[k])[0];
+    return a?{n:a.name,v:fmt?fmt(a[k]):a[k]}:null};
+  const runW=[...lt].map(x=>({n:x.name,v:longestRun(x.seq,r=>r==='W')})).sort((a,b)=>b.v-a.v)[0];
+  const runU=[...lt].map(x=>({n:x.name,v:longestRun(x.seq,r=>r!=='L')})).sort((a,b)=>b.v-a.v)[0];
+  // biggest win / highest scoring game
+  let big=null,high=null;
+  games.forEach(({g,s})=>{
+    const a=g.scoreA??0,b=g.scoreB??0,marg=Math.abs(a-b),tot=a+b;
+    if(!big||marg>big.marg)big={marg,a,b,date:g.date,season:s.name};
+    if(!high||tot>high.tot)high={tot,a,b,date:g.date,season:s.name};
+  });
+  const mostApps=top('P'), mostG=top('G'), mostPts=top('pts'), mostCS=top('cs');
+  const bestWR=[...lt].filter(x=>x.P>=10).sort((a,b)=>b.wr-a.wr)[0];
+  const card=(icon,label,val,sub)=>val?`<div class="reccard">
+    <div class="rec-i">${icon}</div>
+    <div class="rec-t"><div class="rec-l">${label}</div>
+      <div class="rec-v">${esc(String(val))}</div>${sub?`<div class="rec-s">${esc(sub)}</div>`:''}</div></div>`:'';
+  return `<div class="recgrid">
+    ${card('🎖️','Most appearances',mostApps?mostApps.v:'—',mostApps?mostApps.n:'')}
+    ${card('⚽','Most goals',mostG?mostG.v:'—',mostG?mostG.n:'')}
+    ${card('🏆','Most points',mostPts?mostPts.v:'—',mostPts?mostPts.n:'')}
+    ${card('🧤','Most clean sheets',mostCS?mostCS.v:'—',mostCS?mostCS.n:'')}
+    ${card('🔥','Longest winning run',runW&&runW.v?runW.v+' games':'—',runW?runW.n:'')}
+    ${card('🛡️','Longest unbeaten run',runU&&runU.v?runU.v+' games':'—',runU?runU.n:'')}
+    ${card('💪','Best win rate',bestWR?Math.round(bestWR.wr*100)+'%':'—',bestWR?bestWR.name+' (10+ games)':'')}
+    ${card('💥','Biggest win',big?`${Math.max(big.a,big.b)}–${Math.min(big.a,big.b)}`:'—',big?fdate(big.date):'')}
+    ${card('🎆','Highest scoring',high?`${high.a}–${high.b}`:'—',high?`${high.tot} goals · ${fdate(high.date)}`:'')}
+  </div>
+  <div class="sechead">Lifetime table</div>
+  <div class="card"><div class="tw"><table class="sticky">
+    <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">Sea</td><td class="c">P</td><td class="c">W</td>
+    <td class="c">D</td><td class="c">L</td><td class="c">⚽</td><td class="c">CS</td><td class="c">Win%</td><td class="pts">Pts</td></tr></thead>
+    <tbody>${lt.map((x,i)=>`<tr><td class="pos"><span class="posn" style="background:var(--fill2);color:var(--label2)">${i+1}</span></td>
+      <td class="nm">${esc(x.name)}</td><td class="c">${x.seasons}</td><td class="c">${x.P}</td><td class="c">${x.W}</td>
+      <td class="c">${x.D}</td><td class="c">${x.L}</td><td class="c">${x.G}</td><td class="c">${x.cs}</td>
+      <td class="c">${Math.round(x.wr*100)}%</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
+  <div class="note">Every game from every season, matched on player name.</div>
+  ${seasonCompare()}`;
+}
+
+/* ---------- SEASON-OVER-SEASON ---------- */
+function seasonCompare(){
+  const rows=(DB.seasons||[]).map(s=>{
+    const sm=seasonSummary(s);
+    return {id:s.id,name:s.name,games:sm.games,goals:sm.goals,players:sm.players,
+      pg:sm.games?sm.goals/sm.games:0,champ:sm.champ?sm.champ.name:null,boot:sm.boot?sm.boot.name:null};
+  }).filter(r=>r.games>0);
+  if(rows.length<2)return '';
+  const maxPg=Math.max(...rows.map(r=>r.pg),0.001);
+  return `<div class="sechead">Season by season</div>
+    <div class="card">${rows.map((r,i)=>{
+      const prev=rows[i-1];
+      const diff=prev?r.pg-prev.pg:0;
+      return `<div class="row"><div class="rt">
+        <div class="r1" style="font-size:15px">${esc(r.name)}</div>
+        <div class="r2">${r.games} games · ${r.goals} goals · ${r.players} players</div>
+        <div class="bar" style="margin-top:6px"><i style="width:${Math.round(r.pg/maxPg*100)}%"></i></div></div>
+        <div class="rv" style="text-align:right">
+          <div style="font-weight:700">${r.pg.toFixed(1)}</div>
+          <div style="font-size:11px;color:${diff>0?'var(--green)':diff<0?'var(--red)':'var(--label3)'}">
+            ${prev?(diff>0?'▲':diff<0?'▼':'–')+' '+Math.abs(diff).toFixed(1):'goals/game'}</div></div></div>`}).join('')}</div>
+    <div class="note">Goals per game, season by season — is the football getting more open?</div>`;
+}
+
+/* ---------- HALL OF FAME ---------- */
+function histFame(){
+  const rows=(DB.seasons||[]).map(s=>({s,sm:seasonSummary(s)})).filter(x=>x.sm.games>0).reverse();
+  if(!rows.length)return `<div class="empty"><div class="ee">🏛️</div><h3>Nothing enshrined yet</h3>
+    <p>Champions and Golden Boot winners appear here once a season has games.</p></div>`;
+  // count titles per player
+  const titles={},boots={};
+  rows.forEach(({sm})=>{
+    if(sm.champ)titles[sm.champ.name]=(titles[sm.champ.name]||0)+1;
+    if(sm.boot)boots[sm.boot.name]=(boots[sm.boot.name]||0)+1;
+  });
+  const rank=o=>Object.entries(o).sort((a,b)=>b[1]-a[1]);
+  return `${rows.map(({s,sm})=>`
+    <div class="card fame ${s.id===CUR?'live':''}" style="margin-bottom:12px">
+      <div class="fame-h">${esc(s.name)}${s.id===CUR?'<span class="fame-now">IN PROGRESS</span>':''}</div>
+      <div class="fame-b">
+        <div class="fame-w">
+          <div class="fame-tr">🏆</div>
+          <div><div class="fame-lbl">Champion</div>
+            <div class="fame-nm">${sm.champ?esc(sm.champ.name):'—'}</div>
+            ${sm.champ?`<div class="fame-sub">${sm.champ.pts} pts · ${sm.champ.W}-${sm.champ.D}-${sm.champ.L}</div>`:''}</div>
+        </div>
+        <div class="fame-w">
+          <div class="fame-tr">👟</div>
+          <div><div class="fame-lbl">Golden Boot</div>
+            <div class="fame-nm">${sm.boot?esc(sm.boot.name):'—'}</div>
+            ${sm.boot?`<div class="fame-sub">${sm.boot.G} goals</div>`:''}</div>
+        </div>
+      </div>
+      <div class="fame-f">${sm.games} games · ${sm.goals} goals · ${sm.players} players
+        ${s.id!==CUR?`<button class="lnk" onclick="openSeason('${s.id}')">View table →</button>`:''}</div>
+    </div>`).join('')}
+    ${rank(titles).length?`<div class="sechead">Most titles</div>
+      <div class="card">${rank(titles).map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">🏆</div>
+        <div class="rt"><div class="r1" style="font-size:15px">${esc(n)}</div></div>
+        <div class="rv" style="font-weight:700">${c}</div></div>`).join('')}</div>`:''}
+    ${rank(boots).length?`<div class="sechead">Most Golden Boots</div>
+      <div class="card">${rank(boots).map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">👟</div>
+        <div class="rt"><div class="r1" style="font-size:15px">${esc(n)}</div></div>
+        <div class="rv" style="font-weight:700">${c}</div></div>`).join('')}</div>`:''}`;
+}
+
+/* ---------- RIVALRIES ---------- */
+function rivalries(minGames){
+  const min=minGames||3;
+  const ids=season().players.map(p=>p.id);
+  const key=(a,b)=>a<b?a+'|'+b:b+'|'+a, m={};
+  allGames().forEach(g=>{
+    const A=(g.teamA||[]).filter(x=>ids.includes(x)), B=(g.teamB||[]).filter(x=>ids.includes(x));
+    A.forEach(a=>B.forEach(b=>{
+      const k=key(a,b); if(!m[k])m[k]={a:a<b?a:b,b:a<b?b:a,aw:0,bw:0,d:0,P:0};
+      const e=m[k]; e.P++;
+      if(g.result==='D')e.d++;
+      else{
+        const winnerOnA=g.result==='A';
+        const aOnA=A.includes(e.a);
+        const aWon=(winnerOnA&&aOnA)||(!winnerOnA&&!aOnA);
+        aWon?e.aw++:e.bw++;
+      }
+    }));
+  });
+  return Object.values(m).filter(x=>x.P>=min)
+    .map(x=>({...x,gap:Math.abs(x.aw-x.bw),
+      heat:Math.round((1-Math.abs(x.aw-x.bw)/Math.max(x.aw+x.bw,1))*100)}))
+    .sort((p,q)=>q.P-p.P).sort((p,q)=>p.gap-q.gap||q.P-p.P);
+}
+function histRivals(){
+  const rv=rivalries(3);
+  if(!rv.length)return `<div class="empty"><div class="ee">⚔️</div><h3>No rivalries yet</h3>
+    <p>Once two players have faced each other three times, the closest match-ups show up here.</p></div>`;
+  const top=rv.slice(0,10);
+  return `<div class="note" style="padding:0 4px 12px">The tightest head-to-heads in the group — closest record first.</div>
+    ${top.map((x,i)=>{
+      const a=player(x.a),b=player(x.b); if(!a||!b)return '';
+      const tot=Math.max(x.aw+x.bw,1);
+      return `<div class="card rival" style="margin-bottom:10px">
+        <div class="rv-h">${i===0?'🔥 Closest rivalry':`${x.P} meetings`}</div>
+        <div class="rv-b">
+          <div class="rv-p" onclick="openPlayer('${a.id}')">${avatar(a,38)}<span>${esc(a.name)}</span></div>
+          <div class="rv-s"><b>${x.aw}</b><span>–</span><b>${x.bw}</b>
+            ${x.d?`<div class="rv-d">${x.d} draw${x.d===1?'':'s'}</div>`:''}</div>
+          <div class="rv-p right" onclick="openPlayer('${b.id}')">${avatar(b,38)}<span>${esc(b.name)}</span></div>
+        </div>
+        <div class="rv-bar"><i style="width:${Math.round(x.aw/tot*100)}%"></i></div>
+        <div class="rv-f">${x.aw===x.bw?'Dead level':`${esc(x.aw>x.bw?a.name:b.name)} leads by ${x.gap}`} · ${x.P} games</div>
+      </div>`}).join('')}`;
+}
+
+/* ---------- MOST IMPROVED ---------- */
+function histImproved(){
+  const g=allGames(); if(g.length<6)return `<div class="empty"><div class="ee">📈</div><h3>Not enough games</h3>
+    <p>Once the season is a few weeks old you'll see who has kicked on.</p></div>`;
+  const half=Math.floor(g.length/2);
+  const calc=list=>{const m={};
+    list.forEach(x=>{
+      [['A',x.teamA],['B',x.teamB]].forEach(([sd,t])=>(t||[]).forEach(pid=>{
+        const e=m[pid]=m[pid]||{P:0,pts:0,G:0};
+        e.P++; e.G+=(x.goals&&x.goals[pid])||0;
+        if(x.result==='D')e.pts++; else if(x.result===sd)e.pts+=3;
+      }));
+    });
+    return m};
+  const first=calc(g.slice(0,half)), second=calc(g.slice(half));
+  const rows=[];
+  season().players.forEach(p=>{
+    const f=first[p.id],s2=second[p.id];
+    if(!f||!s2||f.P<2||s2.P<2)return;
+    const fp=f.pts/f.P, sp=s2.pts/s2.P;
+    rows.push({id:p.id,name:p.name,before:fp,after:sp,diff:sp-fp,
+      gBefore:f.G/f.P,gAfter:s2.G/s2.P});
+  });
+  if(!rows.length)return `<div class="empty"><div class="ee">📈</div><h3>Not enough data</h3>
+    <p>Players need at least two games in each half of the season.</p></div>`;
+  rows.sort((a,b)=>b.diff-a.diff);
+  const up=rows.filter(r=>r.diff>0).slice(0,5), down=rows.filter(r=>r.diff<0).slice(-5).reverse();
+  const row=r=>`<div class="row tap" onclick="openPlayer('${r.id}')">
+    <div class="rt"><div class="r1" style="font-size:15px">${esc(r.name)}</div>
+      <div class="r2">${r.before.toFixed(2)} → ${r.after.toFixed(2)} points per game</div></div>
+    <div class="rv" style="font-weight:800;color:${r.diff>0?'var(--green)':'var(--red)'}">
+      ${r.diff>0?'▲':'▼'} ${Math.abs(r.diff).toFixed(2)}</div></div>`;
+  return `<div class="note" style="padding:0 4px 12px">Comparing the first half of the season with the second — who has kicked on?</div>
+    ${up.length?`<div class="sechead">📈 Kicked on</div><div class="card">${up.map(row).join('')}</div>`:''}
+    ${down.length?`<div class="sechead">📉 Tailed off</div><div class="card">${down.map(row).join('')}</div>`:''}
+    <div class="note">Minimum two games in each half.</div>`;
+}
 
 /* ============ CHEMISTRY ============ */
 /* How often two players win when they're on the SAME team. */
@@ -2402,9 +3150,31 @@ function vAdmin(){
       <div class="card">
         <div class="row tap" onclick="exportWrapped()"><div class="rt"><div class="r1">✨ Season Wrapped</div><div class="r2">Shareable recap — view here or save</div></div>${chev}</div>
         <div class="row tap" onclick="exportSeason()"><div class="rt"><div class="r1">📄 Standings &amp; stats</div></div>${chev}</div>
+        <div class="row tap" onclick="shareGameweek()"><div class="rt"><div class="r1">📸 Gameweek graphic</div>
+          <div class="r2">One image for the group chat</div></div>${chev}</div>
       </div>
 
+      <div class="sechead">Undo &amp; history</div>
+      <div class="card">
+        <div class="row tap" onclick="undoLast()"><div class="rt">
+          <div class="r1" style="color:${canUndo()?'var(--tint)':'var(--label3)'}">↩︎ Undo last change</div>
+          <div class="r2">${canUndo()?esc(UNDO.label)+' · '+fmtWhen(UNDO.t):'Nothing to undo right now'}</div></div></div>
+        <div class="row tap" onclick="LOGOPEN=!LOGOPEN;render()"><div class="rt">
+          <div class="r1">📋 Change log</div>
+          <div class="r2">${(season().log||[]).length} recorded change${(season().log||[]).length===1?'':'s'}</div></div>
+          <div style="transform:rotate(${LOGOPEN?'90':'0'}deg);transition:.2s">${chev}</div></div>
+      </div>
+      ${LOGOPEN?changeLog():''}
+
       <div class="sechead">Your data</div>
+      ${(function(){const si=storageInfo();
+        return `<div class="card pad" style="margin-bottom:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
+            <span class="r1">Storage used</span>
+            <span style="font-weight:700;color:${si.level}">${si.nice}</span></div>
+          <div class="bar"><i style="width:${Math.max(1,si.pct)}%;background:${si.level}"></i></div>
+          <div class="note" style="padding:8px 0 0">${si.pct<1?'Under 1%':Math.round(si.pct)+'%'} of the ${si.limit} MB free tier. ${si.msg}</div>
+        </div>`})()}
       <div class="card pad">
         <div class="r1" style="margin-bottom:5px">${tt[0]} ${tt[1]}</div>
         <div class="note" style="padding:0 0 13px">${tt[2]}</div>
@@ -2483,6 +3253,27 @@ function board(){const S=season();
   return S.board}
 
 let TAC='formations', TSEL=null, SPX='';
+/* repaint only the tactics body — full render() rebuilds the whole page and feels laggy */
+function paintTac(){
+  const host=document.querySelector('#tacBody');
+  if(!host){render();return}
+  host.innerHTML = TAC==='formations'?tacFormations()
+    : TAC==='board'?tacBoard()
+    : TAC==='balance'?tacBalance()
+    : TAC==='setpiece'?tacSetpiece()
+    : tacTips();
+  if(TAC==='board')wireBoard();
+}
+/* viewers get their own local board so they can plan teams without touching the admin's */
+async function saveBoard(){
+  if(isAdmin()){await save();return}
+  try{localStorage.setItem('ss_board_local',JSON.stringify(season().board||{}))}catch(e){}
+}
+function loadLocalBoard(){
+  if(isAdmin())return;
+  try{const raw=localStorage.getItem('ss_board_local');
+    if(raw){const b=JSON.parse(raw); if(b&&b.fid)season().board=b}}catch(e){}
+}
 function vTactics(){
   $('#navMount').innerHTML=navbar();
   const tabs=[['formations','Formations'],['board','Whiteboard'],['balance','Team builder'],['setpiece','Set pieces'],['tips','Tips']];
@@ -2495,8 +3286,8 @@ function vTactics(){
   app().innerHTML=`<div class="view active">
     <div class="largetitle">Tactics</div><div class="subtitle">Built for 7-a-side</div>
     <div class="wrap">
-      <div class="seg" style="margin-bottom:16px">${tabs.map(([k,l])=>`<button class="${TAC===k?'on':''}" onclick="TAC='${k}';render()">${l}</button>`).join('')}</div>
-      ${body}
+      <div class="seg" style="margin-bottom:16px">${tabs.map(([k,l])=>`<button class="${TAC===k?'on':''}" onclick="TAC='${k}';paintTac()">${l}</button>`).join('')}</div>
+      <div id="tacBody">${body}</div>
     </div></div>`;
   if(TAC==='board')wireBoard();
 }
@@ -2519,12 +3310,12 @@ function tacFormations(){
         <div class="fmeta-c"><div class="fmeta-h" style="color:var(--green)">✓ Best for</div><div class="fmeta-t">${esc(f.best)}</div></div>
         <div class="fmeta-c"><div class="fmeta-h" style="color:var(--orange)">⚠ Watch out</div><div class="fmeta-t">${esc(f.watch)}</div></div>
       </div>
-      <button class="btn pri full" style="margin-top:14px" onclick="TAC='board';render()">Set this up on the whiteboard →</button>
+      <button class="btn pri full" style="margin-top:14px" onclick="TAC='board';paintTac()">Set this up on the whiteboard →</button>
     </div>`;
 }
 async function setFormation(id){
   const b=board(); b.fid=id; b.A={}; b.B={};
-  if(isAdmin())await save(); render(); toast(`Formation set to ${fmById(id).name}`);
+  await saveBoard(); paintTac(); toast(`Formation set to ${fmById(id).name}`);
 }
 
 /* ---------- WHITEBOARD ---------- */
@@ -2541,7 +3332,7 @@ function tacBoard(){
         <button class="${side==='A'?'on':''}" onclick="setBoardSide('A')">Team A</button>
         <button class="${side==='B'?'on':''}" onclick="setBoardSide('B')">Team B</button>
       </div>
-      <div class="note" style="padding:0 0 4px">Tap a player below, then tap a shirt on the pitch to place them. Drag any shirt to fine-tune the position.</div>
+      <div class="note" style="padding:0 0 4px">Tap a player below, then tap a shirt on the pitch to place them. Drag any shirt to fine-tune the position.${isAdmin()?'':' <b>This is your own board</b> — plan and propose freely, it won\'t change anyone else\'s.'}</div>
     </div>
     <div class="pitch" id="pitch" style="aspect-ratio:${window.innerWidth<640?'3/4':'4/3'}">
       <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
@@ -2573,9 +3364,9 @@ function tacBoard(){
     </div>
     <div class="note">Formation: <b>${f.name}</b> · change it in the Formations tab.</div>`;
 }
-async function setBoardSide(s){board().side=s;TSEL=null;if(isAdmin())await save();render()}
-function pickTok(pid){TSEL=(TSEL===pid)?null:pid;render()}
-async function clearBoard(){const b=board();b[b.side||'A']={};if(b.pos)b.pos[b.side||'A']={};if(isAdmin())await save();render()}
+async function setBoardSide(s){board().side=s;TSEL=null;await saveBoard();paintTac()}
+function pickTok(pid){TSEL=(TSEL===pid)?null:pid;paintTac()}
+async function clearBoard(){const b=board();b[b.side||'A']={};if(b.pos)b.pos[b.side||'A']={};await saveBoard();paintTac()}
 async function autoFillBoard(){
   const b=board(),side=b.side||'A',f=fmById(b.fid);
   const other=side==='A'?'B':'A';
@@ -2590,46 +3381,57 @@ async function autoFillBoard(){
     if(!pick)pick=pool.find(p=>!used.has(p.id));
     if(pick){used.add(pick.id);out[i]=pick.id}
   });
-  b[side]=out; if(isAdmin())await save(); render(); toast('Line-up filled by position');
+  b[side]=out; await saveBoard(); paintTac(); toast('Line-up filled by position');
 }
 function wireBoard(){
   const pitch=$('#pitch'); if(!pitch)return;
   const b=board(),side=b.side||'A';
   pitch.querySelectorAll('.tok').forEach(tok=>{
     const slot=+tok.dataset.slot;
-    let dragging=false,moved=false,sx=0,sy=0;
+    let dragging=false,moved=false,sx=0,sy=0,rect=null,raf=0,lastX=0,lastY=0;
+    const put=(cx,cy)=>{
+      const x=Math.max(5,Math.min(95,((cx-rect.left)/rect.width)*100));
+      const y=Math.max(5,Math.min(95,((cy-rect.top)/rect.height)*100));
+      return [x,y];
+    };
     tok.addEventListener('pointerdown',e=>{
       dragging=true;moved=false;sx=e.clientX;sy=e.clientY;
-      tok.setPointerCapture(e.pointerId);tok.classList.add('drag');
+      rect=pitch.getBoundingClientRect();          // measured once per drag, not per move
+      tok.setPointerCapture(e.pointerId);
+      tok.classList.add('drag');
+      e.preventDefault();
     });
     tok.addEventListener('pointermove',e=>{
       if(!dragging)return;
-      if(Math.abs(e.clientX-sx)>4||Math.abs(e.clientY-sy)>4)moved=true;
-      if(!moved)return;
-      const r=pitch.getBoundingClientRect();
-      const x=Math.max(4,Math.min(96,((e.clientX-r.left)/r.width)*100));
-      const y=Math.max(4,Math.min(96,((e.clientY-r.top)/r.height)*100));
-      tok.style.left=x+'%';tok.style.top=y+'%';
+      if(!moved&&Math.abs(e.clientX-sx)<5&&Math.abs(e.clientY-sy)<5)return;
+      moved=true; lastX=e.clientX; lastY=e.clientY;
+      if(raf)return;                                // coalesce to one update per frame
+      raf=requestAnimationFrame(()=>{
+        raf=0; const [x,y]=put(lastX,lastY);
+        tok.style.left=x+'%'; tok.style.top=y+'%';
+      });
     });
-    tok.addEventListener('pointerup',async e=>{
-      if(!dragging)return; dragging=false;tok.classList.remove('drag');
+    const finish=async e=>{
+      if(!dragging)return; dragging=false;
+      if(raf){cancelAnimationFrame(raf);raf=0}
+      tok.classList.remove('drag');
+      try{tok.releasePointerCapture(e.pointerId)}catch(_){}
       if(moved){
-        const r=pitch.getBoundingClientRect();
-        const x=Math.max(4,Math.min(96,((e.clientX-r.left)/r.width)*100));
-        const y=Math.max(4,Math.min(96,((e.clientY-r.top)/r.height)*100));
+        const [x,y]=put(e.clientX??lastX,e.clientY??lastY);
         if(!b.pos)b.pos={}; if(!b.pos[side])b.pos[side]={};
         b.pos[side][slot]=[Math.round(x),Math.round(y)];
-        if(isAdmin())await save();
+        tok.style.left=Math.round(x)+'%'; tok.style.top=Math.round(y)+'%';
+        await saveBoard();                          // no repaint — the token is already where it should be
       } else {
-        // tap: place selected player, or remove whoever is there
-        if(TSEL){ b[side][slot]=TSEL; TSEL=null; if(isAdmin())await save(); render(); }
-        else if(b[side][slot]){ delete b[side][slot]; if(isAdmin())await save(); render(); }
+        if(TSEL){ b[side][slot]=TSEL; TSEL=null; await saveBoard(); paintTac(); }
+        else if(b[side][slot]){ delete b[side][slot]; await saveBoard(); paintTac(); }
         else { toast('Pick a player from the list first'); }
       }
-    });
+    };
+    tok.addEventListener('pointerup',finish);
+    tok.addEventListener('pointercancel',finish);
   });
 }
-
 /* ---------- TEAM BUILDER ---------- */
 let BAL={sel:new Set(),done:null};
 function tacBalance(){
@@ -2656,9 +3458,9 @@ function tacBalance(){
       <div class="note">Balance gap: <b>${Math.abs(r.sa-r.sb).toFixed(2)}</b> — the lower the number, the more even the sides. Shuffle again for a different split.</div>
       <button class="btn sec full sm" onclick="doBalance()">🔀 Shuffle again</button>`:''}`;
 }
-function balTog(id){BAL.sel.has(id)?BAL.sel.delete(id):BAL.sel.add(id);render()}
-function balAll(){season().players.filter(p=>p.active!==false).forEach(p=>BAL.sel.add(p.id));render()}
-function balNone(){BAL.sel.clear();BAL.done=null;render()}
+function balTog(id){BAL.sel.has(id)?BAL.sel.delete(id):BAL.sel.add(id);paintTac()}
+function balAll(){season().players.filter(p=>p.active!==false).forEach(p=>BAL.sel.add(p.id));paintTac()}
+function balNone(){BAL.sel.clear();BAL.done=null;paintTac()}
 function doBalance(){
   const ids=[...BAL.sel]; if(ids.length<2){toast('Pick at least two players');return}
   const st=statsAll();
@@ -2678,7 +3480,7 @@ function doBalance(){
   }
   if(!best){toast('Could not split those players');return}
   BAL.done={A:best.A.map(player).filter(Boolean),B:best.B.map(player).filter(Boolean),sa:best.sa,sb:best.sb};
-  render(); toast('Teams balanced');
+  paintTac(); toast('Teams balanced');
 }
 
 /* ---------- TIPS ---------- */
@@ -2846,7 +3648,7 @@ function vSeason(id){
 
 
 /* ============ GAME ENTRY ============ */
-let G=null,LVLOPEN='',POTMOPEN=false;
+let G=null,LVLOPEN='',POTMOPEN=false,LOGOPEN=false;
 function nextRound(cid){
   const n=compGames(cid).length+1;
   return 'GW'+n;
@@ -2952,6 +3754,9 @@ function paintGame(){
           <div class="gstep"><button onclick="setGoal('${pid}',-1)">−</button><span class="gv">${n}</span><button onclick="setGoal('${pid}',1)">+</button></div></div>`}).join('')}</div>
       <div class="note">Attributed: A ${gA} · B ${gB}${(G.fillA.length||G.fillB.length)?' (fillers\' goals go unattributed)':''}</div>`:''}
 
+    ${(G.sa||G.sb||G.A.size||G.B.size)?`<div class="lbl">Match report</div>
+      <div class="card pad report">${esc(matchReport({scoreA:G.sa,scoreB:G.sb,teamA:[...G.A],teamB:[...G.B],
+        fillA:G.fillA,fillB:G.fillB,goals:G.goals}))}</div>`:''}
     ${G.id?`<button class="btn dan full" style="margin-top:18px" onclick="deleteGame()">Delete this game</button>`:''}
     <div class="formbar">
       <button class="btn sec" onclick="closeSheet()">Cancel</button>
@@ -2991,6 +3796,7 @@ function setGoal(pid,d){G.goals[pid]=Math.max(0,(G.goals[pid]||0)+d);if(!G.goals
   const sd=G.A.has(pid)?'A':'B',t=goalSum(sd);
   if(sd==='A'&&t>G.sa)G.sa=t;if(sd==='B'&&t>G.sb)G.sb=t;paintGame()}
 async function saveGame(){if(!requireAdmin())return;
+  snapshot(G.id?'editing a game':'logging a game');
   if(!teamCount('A')||!teamCount('B')){toast('Both teams need at least one player');return}
   const gA=goalSum('A'),gB=goalSum('B');
   if((gA>0||gB>0)&&(gA!==G.sa||gB!==G.sb)){
@@ -3008,15 +3814,17 @@ async function saveGame(){if(!requireAdmin())return;
   await save();closeSheet();
   const i=allGames().findIndex(x=>x.id===g.id),ms=feed().filter(e=>e.i===i);
   render();
+  logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
   if(ms.length){const p=player(ms[0].pid);toast(`${ms[0].e} ${p?p.name:''} — ${ms[0].t}!`)}else toast(G.id?'Game saved':'Game logged')}
-async function deleteGame(){if(!requireAdmin())return;if(!await askConfirm('Delete game?','This removes it and its stats permanently.','Delete',true))return;
-  const S=season();S.games=S.games.filter(x=>x.id!==G.id);await save();closeSheet();render();toast('Game deleted')}
+async function deleteGame(){if(!requireAdmin())return;
+  snapshot('deleting a game');if(!await askConfirm('Delete game?','This removes it and its stats permanently.','Delete',true))return;
+  const S=season();S.games=S.games.filter(x=>x.id!==G.id);logEntry('delete',`Deleted ${G.round||'a game'}`);await save();closeSheet();render();toast('Game deleted')}
 
 /* ============ PLAYER EDITOR ============ */
 let PE=null;
 function editPlayer(pid){if(!requireAdmin())return;const p=pid?player(pid):null;
   PE={id:pid,name:p?p.name:'',pos:p?p.pos:null,nation:p?p.nation||'':'',club:p?p.club:null,star:p?p.star:null,
-      ps:p?p.ps||null:null,active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
+      ps:p?p.ps||null:null,avail:p?p.avail||'ok':'ok',active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
   if(PE.club&&CLUB_BY[PE.club])PE.comp=CLUB_BY[PE.club].comp;
   openSheet(pid?'Edit player':'New player','<div id="peb"></div>','Save');$('#_sact').onclick=savePlayer;paintPE()}
 function paintPE(){
@@ -3027,6 +3835,8 @@ function paintPE(){
     <div class="seg">${['GK','DEF','MID','ATT'].map(x=>`<button class="${PE.pos===x?'on':''}" onclick="setPos('${x}')">${x}</button>`).join('')}</div>
     <div class="lbl">Flag <span style="text-transform:none;font-weight:400">(optional)</span></div>
     <input value="${esc(PE.nation)}" placeholder="🇮🇶" maxlength="8" oninput="PE.nation=this.value">
+    <div class="lbl">Availability</div>
+    <div class="chips" style="margin-bottom:6px">${Object.keys(AVAIL).map(k=>`<button class="${(PE.avail||'ok')===k?'on':''}" onclick="PE.avail='${k}';paintPE()">${AVAIL[k].icon} ${AVAIL[k].label}</button>`).join('')}</div>
     <div class="lbl">PlayStyle+ <span style="text-transform:none;font-weight:400">(optional)</span></div>
     ${PE.ps?`<div class="pscard" style="--pc:${PS_CAT[PS_BY[PE.ps].cat].col};margin-bottom:10px">
       ${psDiamond(PE.ps,52)}
@@ -3068,10 +3878,11 @@ function pickClub(s){PE.club=PE.club===s?null:s;const c=PE.club?CLUB_BY[PE.club]
 async function customStar(){const v=await askText('Road to Glory','Who do they play like?',PE.star||'','Set');
   if(v!==null){PE.star=v||null;paintPE()}}
 async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim();if(!n){toast('Enter a name');return}
-  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,active:PE.active});
-  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,active:true});
-  await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
-async function removePlayer(pid){if(!requireAdmin())return;const p=player(pid);if(!p)return;
+  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:PE.active});
+  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:true});
+  logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
+async function removePlayer(pid){if(!requireAdmin())return;
+  snapshot('removing a player');const p=player(pid);if(!p)return;
   const inG=season().games.some(g=>(g.teamA||[]).includes(pid)||(g.teamB||[]).includes(pid));
   if(!await askConfirm(`Remove ${p.name}?`,inG?'Past games keep their results, but they leave the squad.':'This removes them from the squad.','Remove',true))return;
   season().players=season().players.filter(x=>x.id!==pid);
@@ -3231,11 +4042,13 @@ async function newSeason(){if(!requireAdmin())return;const n=await askText('New 
   DB.seasons.push(s);CUR=s.id;COMP=s.comps[0].id;await save();go('home');toast('Season created')}
 async function renameSeason(){if(!requireAdmin())return;const n=await askText('Rename season','',season().name,'Save');
   if(n===null)return;season().name=n||season().name;await save();render();toast('Renamed')}
-async function wipeSeason(){if(!requireAdmin())return;if(!await askConfirm('Clear all games?','Players stay. Every game is deleted.','Clear',true))return;
-  season().games=[];await save();render();toast('Games cleared')}
+async function wipeSeason(){if(!requireAdmin())return;
+  snapshot('clearing all games');if(!await askConfirm('Clear all games?','Players stay. Every game is deleted.','Clear',true))return;
+  season().games=[];logEntry('delete','Cleared all games');await save();render();toast('Games cleared')}
 async function switchSeason(id){if(!requireAdmin())return;CUR=id;COMP=season().comps[0].id;await save();go('home')}
 async function deleteSeason(id){
   if(!requireAdmin())return;
+  snapshot('deleting a season');
   const s=DB.seasons.find(x=>x.id===id); if(!s)return;
   if(DB.seasons.length<=1){ toast('This is your only season — you can\'t delete it'); return; }
   const games=(s.games||[]).length, players=(s.players||[]).length;
@@ -3259,7 +4072,7 @@ async function deleteSeason(id){
   const wasCurrent=(id===CUR);
   DB.seasons=DB.seasons.filter(x=>x.id!==id);
   if(wasCurrent){ CUR=DB.seasons[0].id; COMP=season().comps[0].id; }
-  await save(); render(); toast('Season deleted');
+  logEntry('delete',`Deleted season ${s.name}`);await save(); render(); toast('Season deleted');
 }
 
 /* ============ BACKUP / RESTORE ============ */
@@ -3477,6 +4290,7 @@ document.addEventListener('keydown',e=>{
 (async function(){
   await loadDB();
   if(supa){ await initSupa(); } else { applyAdminClass(); }
+  loadLocalBoard();
   buildNav();go('home');initGestures();
   if(!supaConfigured && Store.tier()==='memory')setTimeout(()=>toast('⚠️ This browser blocks saving — back up before closing'),1400);
   if(supaConfigured && !supa)setTimeout(()=>toast('⚠️ Could not reach the shared database — check your setup'),1400);
