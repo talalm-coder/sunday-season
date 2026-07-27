@@ -154,17 +154,20 @@ tr[class*="z-"] td.pos{position:relative;padding-left:15px}
 tr[class*="z-"] td.pos::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
 tr[class*="z-"] td.pos .posn{display:inline-flex;align-items:center;justify-content:center;
   min-width:22px;height:22px;border-radius:7px;font-size:12.5px;font-weight:800;color:#fff;padding:0 5px}
-tr.z-champ td.pos::before{background:#D4AF37}
+tr.z-champ td.pos::before{background:linear-gradient(180deg,#F5D76E,#C9A227)}
 tr.z-ucl   td.pos::before{background:#0A84FF}
-tr.z-eur   td.pos::before{background:#FF9F0A}
+tr.z-eur   td.pos::before{background:#FF6B00}
+tr.z-con   td.pos::before{background:#00C08B}
 tr.z-rel   td.pos::before{background:#FF453A}
-tr.z-champ td.pos .posn{background:#D4AF37}
+tr.z-champ td.pos .posn{background:linear-gradient(150deg,#F5D76E,#C9A227);color:#4a3a06}
 tr.z-ucl   td.pos .posn{background:#0A84FF}
-tr.z-eur   td.pos .posn{background:#FF9F0A}
+tr.z-eur   td.pos .posn{background:#FF6B00}
+tr.z-con   td.pos .posn{background:#00C08B}
 tr.z-rel   td.pos .posn{background:#FF453A}
 tr.z-champ{background:color-mix(in srgb,#D4AF37 9%,transparent)}
 tr.z-ucl{background:color-mix(in srgb,#0A84FF 7%,transparent)}
-tr.z-eur{background:color-mix(in srgb,#FF9F0A 7%,transparent)}
+tr.z-eur{background:color-mix(in srgb,#FF6B00 8%,transparent)}
+tr.z-con{background:color-mix(in srgb,#00C08B 8%,transparent)}
 tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
 /* league key: clearer, one row per zone */
 .lgkey{display:flex;flex-direction:column;gap:0;padding:0;margin-top:10px;
@@ -179,8 +182,8 @@ tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
   background:var(--card);border-radius:13px;box-shadow:var(--shadow)}
 .lgkey-i{display:flex;align-items:center;gap:7px;font-size:12.5px}
 .lgkey-d{width:4px;height:15px;border-radius:2px;flex:0 0 4px}
-.lgkey-d.z-champ{background:#D4AF37}.lgkey-d.z-ucl{background:#0A84FF}
-.lgkey-d.z-eur{background:#FF9F0A}.lgkey-d.z-rel{background:#FF453A}
+.lgkey-d.z-champ{background:linear-gradient(150deg,#F5D76E,#C9A227)}.lgkey-d.z-ucl{background:#0A84FF}
+.lgkey-d.z-eur{background:#FF6B00}.lgkey-d.z-con{background:#00C08B}.lgkey-d.z-rel{background:#FF453A}
 .lgkey-l{color:var(--label);font-weight:600}
 .lgkey-r{color:var(--label3);font-weight:600;font-variant-numeric:tabular-nums}
 .mv{font-size:10px;margin-right:2px;font-weight:700}
@@ -1346,13 +1349,6 @@ function vHome(){
     <div class="largetitle">${esc(S.name)}</div>
     <div class="subtitle">${g.length} league games · ${goals} goals · ${S.players.filter(p=>p.active!==false).length} players</div>
     <div class="wrap">
-      <div class="chips" style="margin-bottom:16px">
-        <button onclick="go('fixtures')">📅 Fixtures</button>
-        <button onclick="go('career')">🏅 Career</button>
-        <button onclick="go('stats')">📊 Stats</button>
-        <button onclick="go('compare')">⚖️ Compare</button>
-        <button onclick="go('comps')">🏆 Cups</button>
-      </div>
       <div class="sechead">${lc.icon} ${esc(lc.name)} table</div>
       <div class="card"><div class="tw"><table class="sticky">
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
@@ -1393,6 +1389,20 @@ function vHome(){
             <div class="rv" style="font-size:13px;font-weight:700;color:var(--tint)">${c.xp.toLocaleString()}</div></div>`).join('')}</div></div>
       </div>
 
+      <div class="sechead">Recent results <button class="act" onclick="go('fixtures')">All fixtures</button></div>
+      <div class="card">${recent.map(gameRow).join('')}</div>
+      ${comps().length>1?`<div class="sechead">Other competitions <button class="act" onclick="go('comps')">Manage</button></div>
+        <div class="card">${comps().filter(c=>c.type!=='league').map(c=>{
+          const w=c.bracket?bracketWinner(c.bracket):null;
+          return `<div class="row tap" onclick="COMP='${c.id}';go('comps')"><div style="font-size:22px;flex:0 0 26px">${c.icon}</div>
+          <div class="rt"><div class="r1">${esc(c.name)}</div><div class="r2">${CT[c.type].label} · ${(c.teams||[]).length} teams${w?` · 🏆 ${esc(teamName(c,w))}`:''}</div></div>${chev}</div>`}).join('')}</div>`:''}
+      ${fd.length?`<div class="sechead">Milestones <button class="act" onclick="go('career')">Career</button></div>
+      <div class="card">${fd.map(e=>{const p=player(e.pid);return `<div class="row"><div style="font-size:21px;flex:0 0 26px">${e.e}</div>
+        <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
+        <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
+
+      ${closingIn()}
+
       ${(function(){const pm=potm(); if(!pm.length)return '';
         const cur=pm[0];
         return `<div class="sechead">🏅 Player of the Month</div>
@@ -1412,18 +1422,37 @@ function vHome(){
                   <div class="r2">${MONTHNAME(x.month)} · ${x.win.pts} pts${x.win.G?` · ${x.win.G} ⚽`:''}${x.win.cs?` · ${x.win.cs} 🧤`:''}</div></div>${chev}</div>`).join(''):''}`:''}
           </div>`})()}
 
-      <div class="sechead">Recent results <button class="act" onclick="go('fixtures')">All fixtures</button></div>
-      <div class="card">${recent.map(gameRow).join('')}</div>
-      ${comps().length>1?`<div class="sechead">Other competitions <button class="act" onclick="go('comps')">Manage</button></div>
-        <div class="card">${comps().filter(c=>c.type!=='league').map(c=>{
-          const w=c.bracket?bracketWinner(c.bracket):null;
-          return `<div class="row tap" onclick="COMP='${c.id}';go('comps')"><div style="font-size:22px;flex:0 0 26px">${c.icon}</div>
-          <div class="rt"><div class="r1">${esc(c.name)}</div><div class="r2">${CT[c.type].label} · ${(c.teams||[]).length} teams${w?` · 🏆 ${esc(teamName(c,w))}`:''}</div></div>${chev}</div>`}).join('')}</div>`:''}
-      ${fd.length?`<div class="sechead">Milestones <button class="act" onclick="go('career')">Career</button></div>
-      <div class="card">${fd.map(e=>{const p=player(e.pid);return `<div class="row"><div style="font-size:21px;flex:0 0 26px">${e.e}</div>
-        <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
-        <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
     </div></div>`;
+}
+/* ---- what's within reach next Sunday ---- */
+function closingIn(){
+  const st=lgStats().filter(x=>x.P>0);
+  if(!st.length)return '';
+  const out=[];
+  st.forEach(x=>{
+    const car=careerOf(x.id); if(!car)return;
+    // next level
+    if(car.lvl.next){
+      const need=car.lvl.next.xp-car.xp;
+      if(need>0&&need<=180)out.push({id:x.id,name:x.name,e:car.lvl.next.e,
+        t:`${need} XP from ${car.lvl.next.t}`,v:need,k:'lvl'});
+    }
+    // next unfinished challenge that's close
+    car.ch.filter(c=>!c.done).forEach(c=>{
+      const [cur,tot]=c.f(x); const left=tot-cur;
+      if(left>0&&left<=3)out.push({id:x.id,name:x.name,e:c.e,t:`${left} from “${c.n}”`,v:left,k:'ch'});
+    });
+  });
+  if(!out.length)return '';
+  out.sort((a,b)=>a.v-b.v);
+  const seen=new Set(),list=[];
+  out.forEach(o=>{if(list.length<5&&!seen.has(o.id+o.t)){seen.add(o.id+o.t);list.push(o)}});
+  return `<div class="sechead">🎯 Closing in</div>
+    <div class="card">${list.map(o=>`<div class="row tap" onclick="openCareer('${o.id}')">
+      <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
+      <div class="rt"><div class="r1" style="font-size:15px">${esc(o.name)}</div>
+        <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>
+    <div class="note">Within touching distance next Sunday.</div>`;
 }
 function gameRow(g){
   const c=comps().find(x=>x.id===g.compId);
@@ -2709,41 +2738,34 @@ function tacSetpiece(){
    1 champion · 2-5 Champions League · 6-7 Europa · bottom 3 relegation.
    Zones scale down sensibly for small leagues so they never overlap. ---- */
 function zoneOf(i,total){
-  const pos=i+1;
+  const z=zoneBands(total),pos=i+1;
   if(pos===1)return 'z-champ';
-  const ucl=Math.min(5,Math.max(2,Math.floor(total*0.28)));
-  const eur=Math.min(7,ucl+2);
-  const relStart=total-2;
-  if(total>=8&&pos>=relStart)return 'z-rel';
-  if(pos<=ucl)return 'z-ucl';
-  if(pos<=eur&&total>=8)return 'z-eur';
+  if(z.rel&&pos>=z.rel)return 'z-rel';
+  if(pos<=z.ucl)return 'z-ucl';
+  if(z.eur&&pos<=z.eur)return 'z-eur';
+  if(z.con&&pos<=z.con)return 'z-con';
   return '';
 }
-function leagueKey(total){
+/* Premier League shape, scaled to however many players you have:
+   1 champion · UCL · Europa · Conference · bottom 3 relegated. */
+function zoneBands(total){
   const ucl=Math.min(5,Math.max(2,Math.floor(total*0.28)));
-  const eur=Math.min(7,ucl+2);
-  const relStart=total-2;
+  const eur=total>=8?Math.min(7,ucl+2):0;
+  const con=total>=10?Math.min(8,eur+1):0;
+  const rel=total>=8?total-2:0;
+  // never let the european places collide with the drop zone
+  const cap=rel?rel-1:total;
+  return {ucl:Math.min(ucl,cap), eur:eur?Math.min(eur,cap):0, con:con?Math.min(con,cap):0, rel};
+}
+function leagueKey(total){
+  const z=zoneBands(total);
   const items=[['z-champ','Champion','1']];
-  if(ucl>=2)items.push(['z-ucl','Champions League',`2–${ucl}`]);
-  if(total>=8&&eur>ucl)items.push(['z-eur','Europa League',`${ucl+1}–${eur}`]);
-  if(total>=8)items.push(['z-rel','Relegation',`${relStart}–${total}`]);
+  if(z.ucl>=2)items.push(['z-ucl','Champions League',`2–${z.ucl}`]);
+  if(z.eur>z.ucl)items.push(['z-eur','Europa League',z.eur===z.ucl+1?`${z.eur}`:`${z.ucl+1}–${z.eur}`]);
+  if(z.con>z.eur)items.push(['z-con','Conference League',z.con===z.eur+1?`${z.con}`:`${z.eur+1}–${z.con}`]);
+  if(z.rel)items.push(['z-rel','Relegation',`${z.rel}–${total}`]);
   return `<div class="lgkey">${items.map(([c,l,r])=>`<div class="lgkey-i">
     <span class="lgkey-d ${c}"></span><span class="lgkey-l">${l}</span><span class="lgkey-r">${r}</span></div>`).join('')}</div>`;
-}
-
-
-function seasonSummary(s){
-  const lg=(s.comps||[]).find(c=>c.type==='league')||(s.comps||[])[0];
-  const games=(s.games||[]).filter(g=>!lg||g.compId===lg.id);
-  const m={};(s.players||[]).forEach(p=>m[p.id]={id:p.id,name:p.name,P:0,W:0,D:0,L:0,G:0,GF:0,GA:0,pts:0});
-  games.forEach(g=>{const a=g.scoreA??0,b=g.scoreB??0;
-    [['A',g.teamA,a,b],['B',g.teamB,b,a]].forEach(([sd,tm,gf,ga])=>(tm||[]).forEach(pid=>{const x=m[pid];if(!x)return;
-      x.P++;x.GF+=gf;x.GA+=ga;x.G+=(g.goals&&g.goals[pid])||0;
-      if(g.result==='D'){x.D++;x.pts++}else if(g.result===sd){x.W++;x.pts+=3}else x.L++}))});
-  const arr=Object.values(m).filter(x=>x.P>0).map(x=>({...x,GD:x.GF-x.GA})).sort(tableSort);
-  const goals=games.reduce((t,g)=>t+(g.scoreA||0)+(g.scoreB||0),0);
-  const boot=[...arr].sort((a,b)=>b.G-a.G)[0];
-  return {games:games.length,goals,table:arr,champ:arr[0]||null,boot:boot&&boot.G?boot:null,players:arr.length};
 }
 function vLeague(){
   const S=season(),lc=lgComp(),st=lgStats(),g=compGames(lc.id),m=movement(lc.id);
