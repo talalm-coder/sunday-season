@@ -149,10 +149,32 @@ td.pts{text-align:right;font-weight:700;font-size:16px;padding-right:16px;width:
 tr.qual td.pos{border-left:3px solid var(--green);padding-left:13px}
 tr.qual2 td.pos{border-left:3px solid var(--blue);padding-left:13px}
 /* Premier League style qualification zones */
-tr.z-champ td.pos{border-left:3px solid #D4AF37;padding-left:13px}
-tr.z-ucl   td.pos{border-left:3px solid #0A84FF;padding-left:13px}
-tr.z-eur   td.pos{border-left:3px solid #FF9F0A;padding-left:13px}
-tr.z-rel   td.pos{border-left:3px solid #FF453A;padding-left:13px}
+/* ---- qualification zones: solid bar + numbered badge + row tint ---- */
+tr[class*="z-"] td.pos{position:relative;padding-left:15px}
+tr[class*="z-"] td.pos::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
+tr[class*="z-"] td.pos .posn{display:inline-flex;align-items:center;justify-content:center;
+  min-width:22px;height:22px;border-radius:7px;font-size:12.5px;font-weight:800;color:#fff;padding:0 5px}
+tr.z-champ td.pos::before{background:#D4AF37}
+tr.z-ucl   td.pos::before{background:#0A84FF}
+tr.z-eur   td.pos::before{background:#FF9F0A}
+tr.z-rel   td.pos::before{background:#FF453A}
+tr.z-champ td.pos .posn{background:#D4AF37}
+tr.z-ucl   td.pos .posn{background:#0A84FF}
+tr.z-eur   td.pos .posn{background:#FF9F0A}
+tr.z-rel   td.pos .posn{background:#FF453A}
+tr.z-champ{background:color-mix(in srgb,#D4AF37 9%,transparent)}
+tr.z-ucl{background:color-mix(in srgb,#0A84FF 7%,transparent)}
+tr.z-eur{background:color-mix(in srgb,#FF9F0A 7%,transparent)}
+tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
+/* league key: clearer, one row per zone */
+.lgkey{display:flex;flex-direction:column;gap:0;padding:0;margin-top:10px;
+  background:var(--card);border-radius:13px;box-shadow:var(--shadow);overflow:hidden}
+.lgkey-i{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:10px 14px}
+.lgkey-i+.lgkey-i{border-top:.5px solid var(--sep)}
+.lgkey-d{width:20px;height:20px;border-radius:6px;flex:0 0 20px}
+.lgkey-l{color:var(--label);font-weight:600;flex:1}
+.lgkey-r{color:var(--label2);font-weight:700;font-variant-numeric:tabular-nums;
+  background:var(--fill);border-radius:20px;padding:2px 10px;font-size:12.5px}
 .lgkey{display:flex;flex-wrap:wrap;gap:7px 14px;padding:11px 14px;margin-top:9px;
   background:var(--card);border-radius:13px;box-shadow:var(--shadow)}
 .lgkey-i{display:flex;align-items:center;gap:7px;font-size:12.5px}
@@ -571,10 +593,16 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .pgchip .x{font-size:10px;color:var(--label3);font-style:normal;margin-left:1px}
 .pgchip .fillav{width:26px;height:26px;border-radius:50%;background:var(--fill2);display:flex;align-items:center;justify-content:center;font-size:13px}
 .pgpool{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
-.pgselbar{margin-top:10px;padding:9px 12px;border-radius:11px;background:var(--tint-soft);color:var(--label);
-  font-size:13px;font-weight:600}
-.pgselbar b{color:var(--tint)}
-.pgselbar button{background:none;border:none;color:var(--tint);font-weight:700;text-decoration:underline;cursor:pointer;font-size:13px}
+.pgselbar{margin-top:10px;padding:9px 10px 9px 14px;border-radius:12px;background:var(--tint-soft);color:var(--label);
+  font-size:13.5px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  position:sticky;bottom:78px;z-index:5;box-shadow:0 3px 12px rgba(0,0,0,.12)}
+.pgselbar b{color:var(--tint);font-size:15px}
+.pgselbtns{display:flex;gap:6px}
+.pgselbar button{border:none;border-radius:9px;padding:8px 13px;font-size:13px;font-weight:700;cursor:pointer;
+  background:var(--tint);color:#fff}
+.pgselbar button.b{background:var(--blue)}
+.pgchip .tick{font-style:normal;font-size:11px;font-weight:900;color:var(--tint);margin-left:2px}
+.pgteam-add.hot{background:var(--tint);color:#fff}
 .pgscore{display:flex;align-items:center;justify-content:center;gap:12px}
 .pgscore-t{flex:1;text-align:center;background:var(--card);box-shadow:var(--shadow);border-radius:15px;padding:12px 8px;border-top:3px solid var(--tc)}
 .pgscore-l{font-size:12px;font-weight:800;color:var(--tc);margin-bottom:8px}
@@ -1330,7 +1358,7 @@ function vHome(){
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
         <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
         <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
-          <td class="pos">${mvA(m[x.id]||0)}${i+1}</td>
+          <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
           <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}${x.pos?` <span class="pill ${x.pos}">${x.pos}</span>`:''}</span></span></td>
           <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
           <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
@@ -1446,7 +1474,7 @@ function lgBlock(c){
       <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
       <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
       <tbody>${rows.map((x,i)=>`<tr class="${zoneOf(i,rows.length)}" onclick="openPlayer('${x.id}')">
-        <td class="pos">${mvA(m[x.id]||0)}${i+1}</td>
+        <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
         <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}</span></span></td>
         <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
         <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
@@ -2734,7 +2762,7 @@ function vLeague(){
           <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
           <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
           <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
-            <td class="pos">${mvA(m[x.id]||0)}${i+1}</td>
+            <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
             <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}${x.pos?` <span class="pill ${x.pos}">${x.pos}</span>`:''}</span></span></td>
             <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
             <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
@@ -2804,12 +2832,12 @@ function nextRound(cid){
 function newGame(){if(!requireAdmin())return;
   const cid=(comp().type==='league'?comp().id:lgComp().id);
   G={id:null,compId:cid,date:new Date().toISOString().slice(0,10),round:nextRound(cid),
-     A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},sa:0,sb:0,q:'',__sel:null};
+     A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},sa:0,sb:0,q:'',__sel:new Set()};
   gameSheet()}
 function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x.id===id);if(!g)return;
   G={id:g.id,compId:g.compId,date:g.date,round:g.round||'',A:new Set(g.teamA||[]),B:new Set(g.teamB||[]),
      fillA:[...(g.fillA||[])],fillB:[...(g.fillB||[])],goals:{...(g.goals||{})},
-     sa:g.scoreA??0,sb:g.scoreB??0,q:'',__sel:null};gameSheet()}
+     sa:g.scoreA??0,sb:g.scoreB??0,q:'',__sel:new Set()};gameSheet()}
 function gameSheet(){
   $('#sheet').innerHTML=`<div class="shead"><span class="sa"></span><div class="st">${G.id?'Edit game':'New game'}</div><span class="sa"></span></div>
     <div class="sbody"><div id="gb"></div></div>`;
@@ -2840,10 +2868,10 @@ function paintGame(){
         ${ids.length||fills.length?`${ids.map(id=>chip(player(id),sd.toLowerCase())).join('')}
           ${fills.map((n,fi)=>`<button class="pgchip fill" onclick="rmFiller('${sd}',${fi})">
             <span class="fillav">👤</span><span>${esc(n)}</span><i class="x">✕</i></button>`).join('')}`
-        :`<div class="pgteam-empty">Tap a player, then tap here${G.__sel?` — placing <b>${esc(player(G.__sel)?.name||'')}</b>`:''}</div>`}
+        :`<div class="pgteam-empty">${G.__sel.size?`Tap “Add ${G.__sel.size}” below`:'Pick players below, then add them here'}</div>`}
       </div>
-      <button class="pgteam-add" onclick="${G.__sel?`pgPlace('${sd}')`:`addFiller('${sd}')`}">
-        ${G.__sel?`Add ${esc(player(G.__sel)?.name.split(' ')[0]||'')} to ${sd}`:`+ Filler`}</button>
+      <button class="pgteam-add ${G.__sel.size?'hot':''}" onclick="${G.__sel.size?`pgPlace('${sd}')`:`addFiller('${sd}')`}">
+        ${G.__sel.size?`↓ Add ${G.__sel.size} to ${sd}`:`+ Filler`}</button>
     </div>`;
   };
   $('#gb').innerHTML=`
@@ -2861,12 +2889,22 @@ function paintGame(){
       <button class="btn sec sm" onclick="clearTeams()">Clear all</button>
     </div>
 
-    <div class="lbl">Available <span style="text-transform:none;font-weight:400;color:var(--label3)">tap to pick, then choose a team</span></div>
+    <div class="lbl">Available
+      <span style="text-transform:none;font-weight:400;color:var(--label3)">tap as many as you like, then add them to a team</span></div>
     <input class="search" placeholder="Search players…" value="${esc(G.q||'')}" oninput="G.q=this.value;paintGame()" id="gq">
-    ${G.__sel?`<div class="pgselbar">Placing <b>${esc(player(G.__sel)?.name||'')}</b> — tap Team A or Team B above, or <button onclick="G.__sel=null;paintGame()">cancel</button></div>`:''}
+    ${pool.length?`<div class="btnrow" style="margin:9px 0 0">
+      <button class="btn sec sm" onclick="pgSelectAll()">${pool.every(p=>G.__sel.has(p.id))?'Deselect all':`Select all ${pool.length}`}</button>
+      ${G.__sel.size?`<button class="btn sec sm" onclick="pgClearSel()">Clear ${G.__sel.size}</button>`:''}
+    </div>`:''}
+    ${G.__sel.size?`<div class="pgselbar">
+      <span><b>${G.__sel.size}</b> selected</span>
+      <span class="pgselbtns">
+        <button onclick="pgPlace('A')">Add to A</button>
+        <button class="b" onclick="pgPlace('B')">Add to B</button>
+      </span></div>`:''}
     <div class="pgpool">
-      ${pool.length?pool.map(p=>`<button class="pgchip ${G.__sel===p.id?'sel':''}" onclick="pgSelect('${p.id}')">
-        ${avatar(p,26)}<span>${esc(p.name.split(' ')[0])}</span></button>`).join('')
+      ${pool.length?pool.map(p=>`<button class="pgchip ${G.__sel.has(p.id)?'sel':''}" onclick="pgSelect('${p.id}')">
+        ${avatar(p,26)}<span>${esc(p.name.split(' ')[0])}</span>${G.__sel.has(p.id)?'<i class="tick">✓</i>':''}</button>`).join('')
       :`<div class="note" style="padding:8px 4px">${q?'No players match.':'Everyone\'s been placed.'}</div>`}
     </div>
     <div class="note" style="padding:8px 4px 0">Fillers are one-off guests — they make the teams add up but don't join the squad or the table.</div>
@@ -2899,10 +2937,22 @@ function paintGame(){
     </div><div style="height:6px"></div>`;
   const el=$('#gq');if(el&&G.q){el.focus();el.setSelectionRange(el.value.length,el.value.length)}}
 function pgSelect(pid){
-  // if already on a team, tapping removes; otherwise select for placement
+  // already on a team? tapping takes them off. Otherwise toggle them in the selection.
   if(G.A.has(pid)||G.B.has(pid)){setSide(pid,'');return}
-  G.__sel=(G.__sel===pid?null:pid);paintGame()}
-function pgPlace(sd){ if(!G.__sel)return; const pid=G.__sel; G.__sel=null; setSide(pid,sd); }
+  G.__sel.has(pid)?G.__sel.delete(pid):G.__sel.add(pid);paintGame()}
+function pgPlace(sd){
+  if(!G.__sel.size)return;
+  const ids=[...G.__sel]; G.__sel.clear();
+  ids.forEach(pid=>{G.A.delete(pid);G.B.delete(pid);G[sd].add(pid)});
+  paintGame(); toast(`${ids.length} added to Team ${sd}`);}
+function pgSelectAll(){
+  const all=season().players.filter(p=>p.active!==false&&!G.A.has(p.id)&&!G.B.has(p.id));
+  const q=(G.q||'').toLowerCase().trim();
+  const pool=q?all.filter(p=>p.name.toLowerCase().includes(q)):all;
+  const everyone=pool.every(p=>G.__sel.has(p.id));
+  pool.forEach(p=>everyone?G.__sel.delete(p.id):G.__sel.add(p.id));
+  paintGame()}
+function pgClearSel(){G.__sel.clear();paintGame()}
 function pickComp(cid){G.compId=cid;if(!G.id)G.round=nextRound(cid);paintGame()}
 function clearTeams(){G.A.clear();G.B.clear();G.fillA=[];G.fillB=[];G.goals={};paintGame()}
 async function addFiller(sd){
