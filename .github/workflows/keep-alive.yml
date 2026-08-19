@@ -1,0 +1,69 @@
+name: Keep Supabase awake
+
+# Two jobs in one:
+#  1. Pings your Supabase project so it never hits the 7-day inactivity pause.
+#  2. Commits a tiny heartbeat file, which counts as repository activity and
+#     stops GitHub disabling this very workflow after 60 days of no commits.
+#     (Without step 2 the keep-alive silently dies around month two.)
+
+on:
+  schedule:
+    - cron: '0 12 */3 * *'   # every 3 days at 12:00 UTC
+  workflow_dispatch:          # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write             # needed to push the heartbeat commit
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Ping Supabase
+        run: |
+          CODE=$(curl -s -o /tmp/out.txt -w "%{http_code}" \
+            "${{ secrets.SUPABASE_URL }}/rest/v1/tracker_kv?select=key&limit=1" \
+            -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}")
+          echo "Supabase responded: $CODE"
+          cat /tmp/out.txt || true
+          # 540 is Supabase's "project paused" code. Anything not 2xx should fail
+          # loudly so you get an email instead of a silent no-op.
+          if [ "$CODE" -lt 200 ] || [ "$CODE" -ge 300 ]; then
+            echo "::error::Supabase did not respond OK (HTTP $CODE). If this is 540 the project is paused - open the dashboard and press Resume."
+            exit 1
+          fi
+
+      - name: Write heartbeat (keeps this workflow from being auto-disabled)
+        run: |
+          mkdir -p .github
+          date -u +"last-keepalive: %Y-%m-%dT%H:%M:%SZ" > .github/heartbeat.txt
+
+      - name: Commit heartbeat
+        run: |
+          git config user.name  "keep-alive bot"
+          git config user.email "actions@github.com"
+          git add .github/heartbeat.txt
+          if git diff --staged --quiet; then
+            echo "Nothing to commit"
+          else
+            git commit -m "chore: keep-alive heartbeat [skip ci]"
+            git push
+          fi
+
+# ============================================================
+# One-time setup:
+# 1. Save this as  .github/workflows/keep-alive.yml  in your repo.
+# 2. Repo Settings -> Secrets and variables -> Actions -> New repository secret:
+#      SUPABASE_URL        https://hgaulhlnvhsysfgcgvci.supabase.co
+#      SUPABASE_ANON_KEY   sb_publishable_Wu70tpfgRAOALUuAW2G-Ig_dakfrT1r
+# 3. Repo Settings -> Actions -> General -> Workflow permissions ->
+#      select "Read and write permissions" -> Save
+#      (this lets the heartbeat commit push)
+# 4. Actions tab -> "Keep Supabase awake" -> Run workflow, to test it now.
+#
+# If Supabase is ever paused or unreachable this job FAILS, and GitHub emails
+# you. A keep-alive that fails silently is worse than none, so it's loud.
+# ============================================================
