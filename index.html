@@ -971,6 +971,35 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
   padding:1px 7px;border-radius:20px}
 .totw-p.star .totw-pts{background:linear-gradient(150deg,#F5D76E,#C9A227);color:#3B2D04}
 .totw-star{position:absolute;top:-8px;right:2px;font-size:14px;color:#F4C048;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+
+/* ================= FPL RULES ================= */
+.fr-steps{display:flex;flex-direction:column;gap:13px}
+.fr-s{display:flex;gap:11px;font-size:14px;line-height:1.5;color:var(--label2)}
+.fr-s b{color:var(--label)}
+.fr-n{width:24px;height:24px;flex:0 0 24px;border-radius:50%;background:var(--tint);color:#fff;
+  font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.fr-g{display:flex;flex-direction:column}
+.fr-r{display:flex;justify-content:space-between;align-items:center;padding:8px 0;font-size:14px;color:var(--label2)}
+.fr-r+.fr-r{border-top:.5px solid var(--sep)}
+.fr-r b{color:var(--tint);font-weight:800;font-variant-numeric:tabular-nums}
+/* ================= LEVEL LADDER ================= */
+.ladder{overflow:hidden}
+.lad-top{padding:14px 15px 10px;border-bottom:.5px solid var(--sep)}
+.lad-t{font-size:15px;font-weight:700}
+.lad-s{font-size:12.5px;color:var(--label2);margin-top:2px}
+.lad-list{max-height:none}
+.lad-r{display:flex;align-items:center;gap:11px;padding:9px 15px;border-bottom:.5px solid var(--sep)}
+.lad-r.gold{background:color-mix(in srgb,#C9A227 12%,transparent)}
+.lad-b{width:32px;height:32px;flex:0 0 32px;border-radius:10px;background:var(--fill2);
+  display:flex;align-items:center;justify-content:center;font-size:16px}
+.lad-r.gold .lad-b{background:linear-gradient(150deg,#F5D76E,#C9A227)}
+.lad-i{flex:1;min-width:0}
+.lad-n{font-size:14.5px;font-weight:700}
+.lad-x{font-size:11.5px;color:var(--label3)}
+.lad-c{font-size:11.5px;font-weight:700;color:var(--tint);white-space:nowrap}
+
+.qrbox{display:flex;justify-content:center;padding:10px;background:#fff;border-radius:14px}
+.qrbox svg{display:block;border-radius:6px}
 </style>
 </head>
 <body>
@@ -1448,11 +1477,11 @@ function monitors(){
     :S('ok','Write protection','ARMED','Blocks any save that would erase the season'));
   // 4. local mirror
   M.push(mir&&mir.games!=null
-    ? S('ok','Local mirror',`${mir.games} GAMES`,`Mirrored ${fmtWhen(mir.t)}`)
+    ? S('ok','Local mirror',`${mir.games} GAME${mir.games===1?'':'S'}`,`Mirrored ${fmtWhen(mir.t)}`)
     : S('warn','Local mirror','EMPTY','Will populate the next time data loads'));
   // 5. snapshots
-  M.push(snaps.length>=2?S('ok','Snapshots',`${snaps.length} KEPT`,'Restorable from Admin → Safety net')
-    :S('warn','Snapshots',`${snaps.length} KEPT`,'Builds up automatically as you log games'));
+  M.push(snaps.length>=1?S('ok','Snapshots',`${snaps.length} KEPT`,snaps.length>1?'Restorable from Admin → Safety net':'More build up as you log games')
+    :S('warn','Snapshots','NONE YET','They start saving the first time data loads'));
   // 6. offsite backup
   M.push(bd===null?S('crit','Offsite backup','NEVER','Download one and email it to yourself')
     :bd>45?S('warn','Offsite backup',`${bd} DAYS OLD`,'Worth downloading a fresh copy')
@@ -1491,7 +1520,7 @@ function healthPanel(){
       <div class="mon-metrics">
         ${[['Storage',si.nice,`${si.pct<1?'<1':Math.round(si.pct)}% of ${si.limit}MB`],
            ['Games',String(dbSize(DB)),'this database'],
-           ['Players',String(dbPlayers(DB)),'across seasons'],
+           ['Players',String((season().players||[]).length),'this season'],
            ['Version',APP_VERSION,'build']].map(([l,v,sub])=>`
           <div class="mon-m"><div class="mon-m-l">${l}</div><div class="mon-m-v">${esc(v)}</div><div class="mon-m-s">${esc(sub)}</div></div>`).join('')}
       </div>
@@ -1916,7 +1945,7 @@ const NAV=[
  ['squad','Squad','👥','M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16.5 7.2a3.5 3.5 0 0 1 0 6.6M18 20a6.5 6.5 0 0 0-1.6-4.3'],
  ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
  ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
- ['fpl','Sunday FPL','🎽','M4 6h16v12H4zM9 6v12M15 6v12'],
+ ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
  ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
  ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
@@ -2412,7 +2441,8 @@ function vCareer(){
     ${!board.length?`<div class="empty"><div class="ee">🎮</div><h3>Career starts here</h3>
       <p>Log a game and everyone starts earning XP, climbing levels and unlocking challenges.</p>
       <button class="btn pri" onclick="newGame()">Log a game</button></div>`
-    :`<div class="sechead">Leaderboard</div>
+    :`${levelLadder(board)}
+      <div class="sechead">Leaderboard</div>
       <div class="card">${board.map(({m,c},i)=>`<div class="row tap" onclick="openCareer('${m.id}')">
         <div style="width:22px;color:var(--label2);font-size:14px">${i+1}</div>
         <div class="lvbadge" style="width:44px;height:44px;flex:0 0 44px;border-radius:14px"><div class="le" style="font-size:18px">${c.lvl.e}</div><div class="ln" style="font-size:8px">LV${c.lvl.n}</div></div>
@@ -2431,6 +2461,29 @@ function vCareer(){
         <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
         <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}`}
     </div></div>`}
+let LADOPEN=false;
+/* the 30 levels, shown up top so everyone can see what they're climbing towards */
+function levelLadder(board){
+  const me=board[0];
+  const reached={};
+  board.forEach(({m,c})=>{ for(let i=1;i<=c.lvl.n;i++)reached[i]=(reached[i]||0)+1 });
+  const show=LADOPEN?LEVELS.slice().reverse():LEVELS.slice(-6).reverse();
+  return `<div class="sechead">🪜 The 30 levels</div>
+    <div class="card ladder">
+      <div class="lad-top">
+        <div class="lad-t"><b>Academy Prospect</b> → <b>Ballon d'Or</b></div>
+        <div class="lad-s">Earn XP every game. ${LEVELS[29].xp.toLocaleString()} XP takes you all the way.</div>
+      </div>
+      <div class="lad-list">${show.map(L=>{
+        const n=reached[L.n]||0, top=L.n>=30;
+        return `<div class="lad-r ${top?'gold':''}">
+          <div class="lad-b">${top?'🥇':L.e}</div>
+          <div class="lad-i"><div class="lad-n">${esc(L.t)}</div>
+            <div class="lad-x">LV${L.n} · ${L.xp.toLocaleString()} XP</div></div>
+          <div class="lad-c">${n?`${n} there`:'—'}</div></div>`}).join('')}</div>
+      <button class="lvltoggle" onclick="LADOPEN=!LADOPEN;render()">${LADOPEN?'Show fewer ▲':'See all 30 levels ▼'}</button>
+    </div>`;
+}
 let MSG='All';
 function milestoneCatalogue(board){
   const gs=[...new Set(CH.map(c=>c.g))];
@@ -3009,11 +3062,12 @@ let FTAB='team', FSORT2='total', FPOS='ALL', FPICK=null;
 function vFpl(){
   $('#navMount').innerHTML=navbar();
   const f=fpl(), me=fplMine(), locked=fplLocked();
-  const tabs=[['team','My Team'],['market','Market'],['league','Mini League']];
+  const tabs=[['team','My Team'],['market','Market'],['league','League'],['rules','Rules']];
   let body='';
   if(!me) body=fplJoin();
   else if(FTAB==='team') body=fplMyTeam(me,locked);
   else if(FTAB==='market') body=fplMarket(me,locked);
+  else if(FTAB==='rules') body=fplRules();
   else body=fplLeague();
   app().innerHTML=`<div class="view active">
     <div class="largetitle">Sunday FPL</div>
@@ -3023,17 +3077,81 @@ function vFpl(){
       ${body}</div></div>`;
 }
 
+/* ---------- rules & scoring, shown before and after joining ---------- */
+function fplRules(compact){
+  const R=FPL_RULES;
+  const row=(l,v)=>`<div class="fr-r"><span>${l}</span><b>${v}</b></div>`;
+  return `
+    <div class="sechead">How it works</div>
+    <div class="card pad">
+      <div class="fr-steps">
+        <div class="fr-s"><span class="fr-n">1</span><div><b>Pick three players</b><br>One defender, one midfielder, one attacker from the Sunday squad.</div></div>
+        <div class="fr-s"><span class="fr-n">2</span><div><b>Stay within £${R.budget}m</b><br>Everyone starts at £${R.startPrice}m, so you can afford anyone at first — but prices move with form.</div></div>
+        <div class="fr-s"><span class="fr-n">3</span><div><b>Name a captain</b><br>They score double. Pick whoever you fancy that week.</div></div>
+        <div class="fr-s"><span class="fr-n">4</span><div><b>Confirm your team</b><br>Nothing saves until you press Confirm. You'll be told if anything's missing.</div></div>
+      </div>
+    </div>
+
+    <div class="sechead">Scoring</div>
+    <div class="card pad">
+      <div class="fr-g">
+        ${row('Playing a game',`+${R.played}`)}
+        ${row('Winning',`+${R.win}`)}
+        ${row('Drawing',`+${R.draw}`)}
+        ${row('Goal — attacker',`+${R.goal.ATT}`)}
+        ${row('Goal — midfielder',`+${R.goal.MID}`)}
+        ${row('Goal — defender',`+${R.goal.DEF}`)}
+        ${row('Goal — keeper',`+${R.goal.GK}`)}
+        ${row('Hat-trick bonus',`+${R.hatTrick}`)}
+        ${row('Clean sheet — keeper',`+${R.cleanSheet.GK}`)}
+        ${row('Clean sheet — defender',`+${R.cleanSheet.DEF}`)}
+        ${row('Clean sheet — midfielder',`+${R.cleanSheet.MID}`)}
+        ${row('Clean sheet — attacker',`+${R.cleanSheet.ATT}`)}
+        ${row('Captain','×2')}
+        ${row('Triple captain chip','×3')}
+        ${row("Didn't play",'0')}
+      </div>
+      <div class="note" style="padding:10px 0 0">A clean sheet means your player's team didn't concede.</div>
+    </div>
+
+    <div class="sechead">Transfers &amp; deadlines</div>
+    <div class="card pad">
+      <div class="note" style="padding:0;line-height:1.75">
+        📅 <b>No deadline to miss.</b> Change your team whenever you like. Whatever you have confirmed when the admin logs the next game is the team that scores for it — later changes only count from the following game.<br><br>
+        🔁 <b>${R.transfersPerMonth} transfers a month.</b> They don't roll over. Building your very first team is free.<br><br>
+        💷 <b>Prices move every gameweek</b> based on how a player is scoring compared with everyone else. Range £${R.minPrice}m–£${R.maxPrice}m.
+      </div>
+    </div>
+
+    <div class="sechead">Chips</div>
+    <div class="card pad">
+      <div class="note" style="padding:0;line-height:1.75">
+        🃏 <b>Wildcard</b> — unlimited free transfers for one set of changes. One use all season.<br>
+        🔥 <b>Triple Captain</b> — your captain scores ×3 instead of ×2 for one gameweek. One use all season.
+      </div>
+    </div>
+
+    <div class="sechead">Good to know</div>
+    <div class="card pad">
+      <div class="note" style="padding:0;line-height:1.75">
+        🏆 Everyone with a confirmed team is entered in the <b>${esc(fpl().league)}</b> automatically — there's only one league.<br><br>
+        👀 The market shows <b>% owned</b>, <b>form</b> and <b>threat</b> (a player's share of all goals scored) so you can spot a differential.<br><br>
+        ⚽ This is a side game. The real Sunday league table is what counts.
+      </div>
+    </div>`;
+}
+
 /* ---------- joining with a code ---------- */
 function fplJoin(){
   return `<div class="card pad" style="text-align:center">
       <div style="font-size:44px">🎽</div>
       <div style="font-size:19px;font-weight:800;margin:6px 0 4px">Join the mini league</div>
-      <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b> — message Talal and he'll send it over. Then pick your team of three.</div>
+      <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b>, then pick your team of three.</div>
       <input id="fplCode" placeholder="e.g. TALAL-7K2M" style="text-align:center;text-transform:uppercase;letter-spacing:.1em;font-weight:700"
         onkeydown="if(event.key==='Enter')fplLogin($('#fplCode').value)">
       <button class="btn pri full" style="margin-top:10px" onclick="fplLogin($('#fplCode').value)">Continue</button>
     </div>
-    <div class="note">One defender, one midfielder, one attacker. £33m to spend — everyone starts at £10m and prices move with form.</div>
+    ${fplRules()}
     ${isAdmin()?`<div class="sechead" data-admin>Manager codes</div>
       <div class="card" data-admin>${fpl().managers.map(m=>`<div class="row">
         <div class="rt"><div class="r1" style="font-size:15px">${esc(m.name)}</div>
@@ -3302,6 +3420,155 @@ function fplLeague(){
         <td class="c">${r.gw}</td><td class="pts">${r.total}</td></tr>`).join('')}</tbody></table></div></div>
     <div class="note">${esc(f.league)} · everyone with a team is entered automatically.</div>
 `;
+}
+
+/* ============ QR CODE (self-contained, no network) ============
+   Byte mode, error-correction level M, auto version 1-10.
+   Enough for any Vercel URL. */
+const QR_ECB={ // [total codewords, ec codewords per block, blocks] for level M
+  1:[26,10,1],2:[44,16,1],3:[70,26,1],4:[100,18,2],5:[134,24,2],
+  6:[172,16,4],7:[196,18,4],8:[242,22,4],9:[292,22,5],10:[346,26,5]
+};
+const QR_CAP={1:14,2:26,3:42,4:62,5:84,6:106,7:122,8:152,9:180,10:213}; // byte-mode capacity, level M
+const QR_ALIGN={1:[],2:[6,18],3:[6,22],4:[6,26],5:[6,30],6:[6,34],
+  7:[6,22,38],8:[6,24,42],9:[6,26,46],10:[6,28,50]};
+
+function qrGF(){
+  const exp=new Array(512),log=new Array(256);
+  let x=1;
+  for(let i=0;i<255;i++){exp[i]=x;log[x]=i;x<<=1;if(x&0x100)x^=0x11d}
+  for(let i=255;i<512;i++)exp[i]=exp[i-255];
+  return {exp,log};
+}
+const QRGF=qrGF();
+function qrPoly(ec){
+  let p=[1];
+  for(let i=0;i<ec;i++){
+    const q=[1,QRGF.exp[i]],r=new Array(p.length+1).fill(0);
+    for(let a=0;a<p.length;a++)for(let b=0;b<2;b++){
+      if(p[a]===0||q[b]===0)continue;
+      r[a+b]^=QRGF.exp[(QRGF.log[p[a]]+QRGF.log[q[b]])%255];
+    }
+    p=r;
+  }
+  return p;
+}
+function qrEC(data,ec){
+  const gen=qrPoly(ec), res=data.concat(new Array(ec).fill(0));
+  for(let i=0;i<data.length;i++){
+    const c=res[i]; if(c===0)continue;
+    for(let j=0;j<gen.length;j++)
+      res[i+j]^=QRGF.exp[(QRGF.log[gen[j]]+QRGF.log[c])%255];
+  }
+  return res.slice(data.length);
+}
+function qrEncode(text){
+  const bytes=[];
+  for(const ch of unescape(encodeURIComponent(text)))bytes.push(ch.charCodeAt(0));
+  let ver=1; while(ver<=10 && bytes.length>QR_CAP[ver])ver++;
+  if(ver>10)return null;
+  const [total,ecPer,blocks]=QR_ECB[ver];
+  const dataCw=total-ecPer*blocks;
+  // bit stream
+  const bits=[];
+  const push=(v,n)=>{for(let i=n-1;i>=0;i--)bits.push((v>>i)&1)};
+  push(4,4);                                   // byte mode
+  push(bytes.length, ver<10?8:16);
+  bytes.forEach(b=>push(b,8));
+  const cap=dataCw*8;
+  for(let i=0;i<4&&bits.length<cap;i++)bits.push(0);
+  while(bits.length%8)bits.push(0);
+  const cw=[]; for(let i=0;i<bits.length;i+=8){let v=0;for(let j=0;j<8;j++)v=(v<<1)|bits[i+j];cw.push(v)}
+  const pad=[0xEC,0x11]; let pi=0;
+  while(cw.length<dataCw)cw.push(pad[pi++%2]);
+  // split into blocks
+  const short=Math.floor(dataCw/blocks), extra=dataCw%blocks;
+  const dBlocks=[],eBlocks=[]; let p=0;
+  for(let i=0;i<blocks;i++){
+    const len=short+(i>=blocks-extra?1:0);
+    const d=cw.slice(p,p+len); p+=len;
+    dBlocks.push(d); eBlocks.push(qrEC(d,ecPer));
+  }
+  const out=[];
+  const maxD=Math.max(...dBlocks.map(b=>b.length));
+  for(let i=0;i<maxD;i++)dBlocks.forEach(b=>{if(i<b.length)out.push(b[i])});
+  for(let i=0;i<ecPer;i++)eBlocks.forEach(b=>out.push(b[i]));
+  // matrix
+  const size=17+ver*4;
+  const m=Array.from({length:size},()=>new Array(size).fill(null));
+  const setF=(r,c,v)=>{if(r>=0&&r<size&&c>=0&&c<size)m[r][c]=v};
+  const finder=(r,c)=>{
+    for(let i=-1;i<=7;i++)for(let j=-1;j<=7;j++){
+      const rr=r+i,cc=c+j; if(rr<0||cc<0||rr>=size||cc>=size)continue;
+      const on=(i>=0&&i<=6&&(j===0||j===6))||(j>=0&&j<=6&&(i===0||i===6))||(i>=2&&i<=4&&j>=2&&j<=4);
+      setF(rr,cc,on?1:0);
+    }};
+  finder(0,0);finder(0,size-7);finder(size-7,0);
+  for(let i=8;i<size-8;i++){m[6][i]=i%2===0?1:0;m[i][6]=i%2===0?1:0}
+  const al=QR_ALIGN[ver];
+  al.forEach(r=>al.forEach(c=>{
+    if((r<=8&&c<=8)||(r<=8&&c>=size-9)||(r>=size-9&&c<=8))return;
+    for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)
+      setF(r+i,c+j,(Math.abs(i)===2||Math.abs(j)===2||(i===0&&j===0))?1:0);
+  }));
+  m[size-8][8]=1;
+  // reserve format areas
+  const fmt=[];
+  for(let i=0;i<=5;i++)fmt.push([8,i],[i,8]);
+  fmt.push([8,7],[8,8],[7,8]);
+  for(let i=0;i<8;i++)fmt.push([size-1-i,8]);
+  for(let i=0;i<8;i++)fmt.push([8,size-1-i]);
+  fmt.forEach(([r,c])=>{if(m[r][c]===null)m[r][c]=0});
+  // place data with mask 0
+  let bi=0, up=true;
+  const bitAt=i=>i<out.length*8 ? (out[i>>3]>>(7-(i&7)))&1 : 0;
+  for(let col=size-1;col>0;col-=2){
+    if(col===6)col--;
+    for(let k=0;k<size;k++){
+      const row=up?size-1-k:k;
+      for(let c=0;c<2;c++){
+        const cc=col-c;
+        if(m[row][cc]!==null)continue;
+        let v=bitAt(bi++);
+        if((row+cc)%2===0)v^=1;                 // mask pattern 0
+        m[row][cc]=v;
+      }
+    }
+    up=!up;
+  }
+  // format info: level M (00) + mask 0 -> 101010000010010
+  const fbits='101010000010010'.split('').map(Number);
+  for(let i=0;i<=5;i++)m[8][i]=fbits[i];
+  m[8][7]=fbits[6];m[8][8]=fbits[7];m[7][8]=fbits[8];
+  for(let i=9;i<15;i++)m[14-i][8]=fbits[i];
+  for(let i=0;i<8;i++)m[size-1-i][8]=fbits[i];
+  for(let i=8;i<15;i++)m[8][size-15+i]=fbits[i];
+  return m;
+}
+function qrSVG(text,px){
+  const m=qrEncode(text);
+  if(!m)return '<div class="note">Link is too long for a QR code.</div>';
+  const n=m.length, q=4, size=n+q*2, s=px||220;
+  let path='';
+  for(let r=0;r<n;r++)for(let c=0;c<n;c++)
+    if(m[r][c])path+=`M${c+q} ${r+q}h1v1h-1z`;
+  return `<svg width="${s}" height="${s}" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges"
+    xmlns="http://www.w3.org/2000/svg"><rect width="${size}" height="${size}" fill="#fff"/>
+    <path d="${path}" fill="#000"/></svg>`;
+}
+
+async function copyLink(){
+  const url=location.origin+location.pathname;
+  try{ await navigator.clipboard.writeText(url); toast('🔗 Link copied'); }
+  catch(e){ toast('Could not copy — long-press the link to copy it'); }
+}
+async function shareQR(){
+  const url=location.origin+location.pathname;
+  const svg=qrSVG(url,600).replace('<svg','<svg style="background:#fff"');
+  try{
+    const blob=await svgToPng(svg,600,600,2);
+    await shareOrSave(blob,'sunday-season-qr.png','Sunday Season');
+  }catch(e){ toast('Could not create the QR image'); }
 }
 
 /* ============ MATCH CENTRE ============ */
@@ -4244,6 +4511,17 @@ function vAdmin(){
       </div>
 
       ${healthPanel()}
+
+      <div class="sechead">Share the app</div>
+      <div class="card pad" style="text-align:center">
+        <div class="qrbox">${qrSVG(location.origin+location.pathname,200)}</div>
+        <div style="font-size:13.5px;font-weight:600;margin-top:10px;word-break:break-all">${esc(location.origin+location.pathname)}</div>
+        <div class="note" style="padding:8px 0 12px">Anyone can scan this to open the tracker — handy at the pitch.</div>
+        <div class="btnrow">
+          <button class="btn pri sm" onclick="copyLink()">Copy link</button>
+          <button class="btn sec sm" onclick="shareQR()">Share QR image</button>
+        </div>
+      </div>
 
       <div class="sechead">Safety net</div>
       ${(function(){const m=readMirror(),h=mirrorHistory();
