@@ -2894,28 +2894,35 @@ function fplPrice(pid){
   if(f.prices[pid]==null)f.prices[pid]=FPL_RULES.startPrice;
   return f.prices[pid];
 }
-/* recalculated whenever a gameweek closes: form drives the drift */
-function updatePrices(){
-  const f=fpl(),S=season();
+/* Prices are RECOMPUTED from scratch off the games that actually exist, rather
+   than drifting incrementally. That makes them deterministic and self-healing:
+   delete a game and the prices correct themselves instead of staying stuck. */
+function recalcPrices(){
+  const f=fpl(), S=season(), gws=playedGws();
+  const live=S.players.filter(p=>p.active!==false);
+  const price={}; live.forEach(p=>price[p.id]=FPL_RULES.startPrice);
   const moves=[];
-  S.players.filter(p=>p.active!==false).forEach(p=>{
-    /* judged against what everyone else is scoring, so the market self-balances:
-       a runaway performer climbs out of reach and forces cheaper picks elsewhere */
-    const pts=fplRecentPoints(p.id,3);
-    const all=S.players.filter(x=>x.active!==false).map(x=>fplRecentPoints(x.id,3));
-    const avg=all.length?all.reduce((a,b)=>a+b,0)/all.length:0;
-    const diff=pts-avg;
-    let d=0;
-    if(diff>=12)d=0.5; else if(diff>=7)d=0.3; else if(diff>=3)d=0.2;
-    else if(diff<=-12)d=-0.5; else if(diff<=-7)d=-0.3; else if(diff<=-3)d=-0.2;
-    if(!d)return;
-    const was=fplPrice(p.id);
-    const now=Math.max(FPL_RULES.minPrice,Math.min(FPL_RULES.maxPrice,Math.round((was+d)*10)/10));
-    if(now!==was){ f.prices[p.id]=now; moves.push({pid:p.id,name:p.name,from:was,to:now}); }
+  gws.forEach((gw,idx)=>{
+    const win=gws.slice(Math.max(0,idx-2),idx+1);          // rolling 3-gameweek form
+    const pts={}; live.forEach(p=>pts[p.id]=win.reduce((t,g)=>t+fplPlayerGw(p.id,g),0));
+    const vals=live.map(p=>pts[p.id]);
+    const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
+    live.forEach(p=>{
+      const diff=pts[p.id]-avg;
+      let d=0;
+      if(diff>=12)d=0.5; else if(diff>=7)d=0.3; else if(diff>=3)d=0.2;
+      else if(diff<=-12)d=-0.5; else if(diff<=-7)d=-0.3; else if(diff<=-3)d=-0.2;
+      if(!d)return;
+      const was=price[p.id];
+      const now=Math.max(FPL_RULES.minPrice,Math.min(FPL_RULES.maxPrice,Math.round((was+d)*10)/10));
+      if(now!==was){ price[p.id]=now; if(idx===gws.length-1)moves.push({pid:p.id,name:p.name,from:was,to:now}); }
+    });
   });
-  if(moves.length){ f.ticker=moves.concat(f.ticker).slice(0,20); }
+  f.prices=price;
+  f.ticker=moves.slice(0,20);
   return moves;
 }
+const updatePrices=recalcPrices;    // keep the old name working
 
 /* ---------- scoring ---------- */
 /* points a player earned in one specific game */
@@ -3006,6 +3013,17 @@ function fplStats(){
       captainPct:Math.round(managers.filter(m=>m.captain===p.id).length/owners*100)
     };
   });
+}
+
+/* keep FPL consistent when games are removed */
+function fplResync(){
+  try{
+    const f=fpl(), gws=new Set(playedGws());
+    f.managers.forEach(m=>{ if(m.history)m.history=m.history.filter(h=>gws.has(h.gw)); });
+    if(!gws.size){ f.gw=1; f.ticker=[]; }
+    else f.gw=Math.max(...gws);
+    recalcPrices();
+  }catch(e){}
 }
 
 /* ---------- how scoring is fixed in time ----------
@@ -5200,7 +5218,7 @@ async function saveGame(){if(!requireAdmin())return;
   if(ms.length){const p=player(ms[0].pid);toast(`${ms[0].e} ${p?p.name:''} — ${ms[0].t}!`)}else toast(G.id?'Game saved':'Game logged')}
 async function deleteGame(){if(!requireAdmin())return;
   snapshot('deleting a game');if(!await askConfirm('Delete game?','This removes it and its stats permanently.','Delete',true))return;
-  const S=season();S.games=S.games.filter(x=>x.id!==G.id);logEntry('delete',`Deleted ${G.round||'a game'}`);await save();closeSheet();render();toast('Game deleted')}
+  const S=season();S.games=S.games.filter(x=>x.id!==G.id);logEntry('delete',`Deleted ${G.round||'a game'}`);fplResync();await save();closeSheet();render();toast('Game deleted')}
 
 /* ============ PLAYER EDITOR ============ */
 let PE=null;
@@ -5426,7 +5444,7 @@ async function renameSeason(){if(!requireAdmin())return;const n=await askText('R
   if(n===null)return;season().name=n||season().name;await save();render();toast('Renamed')}
 async function wipeSeason(){if(!requireAdmin())return;
   snapshot('clearing all games');if(!await askConfirm('Clear all games?','Players stay. Every game is deleted.','Clear',true))return;
-  season().games=[];logEntry('delete','Cleared all games');WIPE_OK=true;await save();WIPE_OK=false;render();toast('Games cleared')}
+  season().games=[];logEntry('delete','Cleared all games');fplResync();WIPE_OK=true;await save();WIPE_OK=false;render();toast('Games cleared')}
 async function switchSeason(id){if(!requireAdmin())return;CUR=id;COMP=season().comps[0].id;await save();go('home')}
 async function deleteSeason(id){
   if(!requireAdmin())return;
