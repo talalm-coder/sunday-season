@@ -534,14 +534,16 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 /* ================= PLAYER CARD ================= */
 .fut{position:relative;border-radius:24px;padding:24px 20px 20px;margin:6px auto 4px;overflow:hidden;
   max-width:480px;
-  /* back to the original richer treatment: the accent fills the top of the card
-     and falls away into deep ink, like a stadium under lights */
+  /* a deep, calm tone that fades to ink — the accent only appears as a thin
+     line and a soft halo, so the card never turns into a slab of colour */
   background:
-    radial-gradient(128% 92% at 50% -6%, color-mix(in srgb,var(--futc) 62%,#171922) 0%,
-                                          color-mix(in srgb,var(--futc) 22%,#14161D) 38%,
-                                          #12141A 68%, #0B0C11 100%);
-  box-shadow:0 18px 46px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.12);
-  border:1px solid color-mix(in srgb,var(--futc) 34%,rgba(255,255,255,.08))}
+    radial-gradient(130% 96% at 50% -14%, color-mix(in srgb,var(--futc) 78%,#141720) 0%,
+                                          color-mix(in srgb,var(--futc) 30%,#12141B) 34%,
+                                          #101219 62%, #0A0B10 100%);
+  box-shadow:0 18px 46px rgba(0,0,0,.44), inset 0 1px 0 rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.09)}
+.fut::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1.5px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,var(--futa,#fff),transparent);opacity:.6}
 .fut-sheen{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(150deg,rgba(255,255,255,.14) 0%,transparent 46%)}
 .fut-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;position:relative;z-index:1}
@@ -1218,6 +1220,11 @@ kbd{display:inline-block;background:var(--fill2);border-radius:5px;padding:1px 6
   background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:800;cursor:pointer;line-height:1;
   display:flex;align-items:center;justify-content:center;z-index:2}
 .sh-name.empty{background:rgba(255,255,255,.22);color:#fff}
+
+.sh-c{white-space:nowrap;padding:3px 9px;font-size:9px}
+.sh-top.empty.req{border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.24)}
+.sh-line.flexline{opacity:.96}
+.sh-line.flexline .sh-name.empty{background:rgba(255,255,255,.16);letter-spacing:.08em;font-size:9.5px}
 </style>
 </head>
 <body>
@@ -2601,7 +2608,7 @@ function vPlayer(pid){
   app().innerHTML=`<div class="view active"><div class="wrap" style="padding-top:8px">
 
     <!-- player card -->
-    <div class="fut" style="--futc:${pscol}">
+    <div class="fut" style="--futc:${cardTone(p)};--futa:${pscol}">
       <div class="fut-sheen"></div>
       <div class="fut-top">
         <div class="fut-side">
@@ -3132,6 +3139,10 @@ async function shareGameweek(){
   }catch(e){ toast('Could not make the graphic'); }
 }
 
+/* The PlayStyle colours are neon by design, which looks harsh across a whole
+   card. The card instead uses a curated deep tone per position. */
+const CARD_TONE={ATT:'#8E2140', MID:'#1B5E7A', DEF:'#1D4E7C', GK:'#7A5A14'};
+const cardTone=p=>CARD_TONE[(p&&p.pos)||'MID']||'#2B3A55';
 /* ============ OVR (FC-style overall rating) ============
    Level 1 = 80, level 30 = 90. Everyone starts gold; 90 is the special card. */
 function ovrOf(pid){
@@ -3553,13 +3564,15 @@ function fplJoin(){
         <div class="rv" style="font-family:ui-monospace,monospace;font-weight:700;font-size:13px">${m.code}</div></div>`).join('')}</div>
       <div class="note" data-admin>Send each person their code — it's how they claim their team.</div>`:''}`;
 }
+function fplReset(){ FDRAFT=null; FSWAP=null; FPICK=null; FTAB='team'; }
 function fplLogin(code){
   const m=fplManager(code);
   if(!m){toast('That code was not recognised');return}
+  fplReset();                       // never carry one person's draft into another's team
   fplRemember(m.code);
   render(); toast(`Welcome, ${m.name}`);
 }
-function fplLogout(){ fplForget(); FDRAFT=null; FTAB='team'; render(); toast('Signed out'); }
+function fplLogout(){ fplForget(); fplReset(); render(); toast('Signed out'); }
 
 /* ---------- my team ---------- */
 function fplMyTeam(m,locked){
@@ -3596,29 +3609,32 @@ function fplMyTeam(m,locked){
       <button class="sh-x" onclick="event.stopPropagation();fplDrop('${pid}')" title="Remove">✕</button>
       <div class="sh-name">${esc(p.name.split(' ')[0])}</div>
       <div class="sh-pts">${pts}</div>
-      <button class="sh-c ${cap?'on':''}" onclick="event.stopPropagation();draftCaptain('${pid}')">${cap?'C':'set C'}</button>
+      <button class="sh-c ${cap?'on':''}" onclick="event.stopPropagation();draftCaptain('${pid}')">${cap?'Captain':'Set captain'}</button>
     </div>`;
   };
-  const emptySlot=pos=>`<div class="sh">
-      <button class="sh-top empty" onclick="fplSwap('${pos||''}')"><span class="sh-plus">+</span></button>
-      <div class="sh-name empty">${pos||'Any'}</div>
-      <div class="sh-pts need">empty</div>
+  const emptySlot=(pos,required)=>`<div class="sh">
+      <button class="sh-top empty ${required?'req':''}" onclick="fplSwap('${pos||''}')">
+        <span class="sh-plus">+</span></button>
+      <div class="sh-name empty">${pos||'ANY'}</div>
+      <div class="sh-pts need">${required?'needed':'free pick'}</div>
     </div>`;
   /* Work out where the empty shirts belong so the pitch ALWAYS shows five.
      Positions you still must fill get an empty slot first; any spare places
      go to midfield, then attack. */
+  /* One empty slot for each position you still MUST cover; everything left over
+     is a free choice, shown as its own "any position" row so the pitch never
+     implies a fixed formation. */
   const missing=FPL_RULES.slots.filter(pos=>!sh[pos]);
-  let spare=FPL_RULES.squadSize-d.squad.length-missing.length;
-  const extra={DEF:0,MID:0,ATT:0};
-  const order=['MID','ATT','DEF'];
-  let oi=0; while(spare>0){ extra[order[oi%3]]++; spare--; oi++; }
+  const flex=Math.max(0,FPL_RULES.squadSize-d.squad.length-missing.length);
   const line=pos=>{
     const ids=d.squad.filter(x=>(player(x)||{}).pos===pos);
-    const blanks=(missing.includes(pos)?1:0)+extra[pos];
-    if(!ids.length&&!blanks)return '';
+    const needOne=missing.includes(pos);
+    if(!ids.length&&!needOne)return '';
     return `<div class="sh-line">${ids.map(shirt).join('')}
-      ${Array.from({length:blanks},()=>emptySlot(pos)).join('')}</div>`;
+      ${needOne?emptySlot(pos,true):''}</div>`;
   };
+  const flexLine=()=>flex?`<div class="sh-line flexline">
+      ${Array.from({length:flex},()=>emptySlot(null,false)).join('')}</div>`:'';
 
   return `
     ${fplInfoNote()}
@@ -3642,7 +3658,7 @@ function fplMyTeam(m,locked){
 
     <div class="fpitch">
       <div class="fp-lines"></div>
-      <div class="fp-rows">${line('ATT')}${line('MID')}${line('DEF')}</div>
+      <div class="fp-rows">${line('ATT')}${flexLine()}${line('MID')}${line('DEF')}</div>
     </div>
 
     ${need>0?`<button class="btn pri full" style="margin-top:10px" onclick="fplSwap()">
