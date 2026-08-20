@@ -1000,6 +1000,22 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 
 .qrbox{display:flex;justify-content:center;padding:10px;background:#fff;border-radius:14px}
 .qrbox svg{display:block;border-radius:6px}
+
+.pips{display:inline-flex;gap:3px;margin-left:6px;vertical-align:middle}
+.pips i{width:7px;height:7px;border-radius:50%;background:var(--fill2);display:block}
+.pips i.on{background:var(--green)}
+
+.codebtn{font-family:ui-monospace,SFMono-Regular,monospace;font-size:12.5px;font-weight:700;
+  background:var(--fill);border:none;border-radius:9px;padding:7px 10px;color:var(--tint);cursor:pointer;flex:0 0 auto}
+.codebtn:active{background:var(--tint);color:#fff}
+
+.fpl-line{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}
+.fpl-rows .fpl-slot{min-width:0}
+.fpl-card{width:88px;padding:8px 5px 6px}
+.fpl-card .fpl-nm{font-size:11.5px}
+.fpl-meta{font-size:9.5px}
+@media(max-width:400px){.fpl-card{width:74px}.fpl-line{gap:6px}}
+.fpl-capbtn{padding:3px 8px;font-size:9.5px}
 </style>
 </head>
 <body>
@@ -1274,17 +1290,29 @@ function pinHash(v){
   for(let i=0;i<t.length;i++){h^=t.charCodeAt(i);h=Math.imul(h,0x01000193)>>>0}
   return h.toString(16).padStart(8,'0');
 }
-let pinOK = (!supaConfigured) || (sessionStorage.getItem('ss_pin')==='1');
+function pinSaved(){
+  /* localStorage survives closing the browser; sessionStorage is a fallback for
+     locked-down browsers that block it. */
+  try{ if(localStorage.getItem('ss_pin')==='1')return true }catch(e){}
+  try{ if(sessionStorage.getItem('ss_pin')==='1')return true }catch(e){}
+  return false;
+}
+let pinOK = (!supaConfigured) || pinSaved();
 function isAdmin(){ return pinOK; }
 function requireAdmin(){ if(isAdmin())return true; toast('👀 View only — enter the password in Admin to make changes'); return false; }
 function applyAdminClass(){ document.body.classList.toggle('is-admin', isAdmin()); }
 function pinUnlock(v){
   if(pinHash(v)===ADMIN_PIN_HASH){
-    pinOK=true; try{sessionStorage.setItem('ss_pin','1')}catch(e){}
+    pinOK=true;
+    try{localStorage.setItem('ss_pin','1')}catch(e){}
+    try{sessionStorage.setItem('ss_pin','1')}catch(e){}
     applyAdminClass(); render(); toast('🔓 Admin unlocked');
   } else { toast('Incorrect password'); }
 }
-function pinLock(){ pinOK=false; try{sessionStorage.removeItem('ss_pin')}catch(e){} applyAdminClass(); render(); toast('🔒 Admin locked'); }
+function pinLock(){ pinOK=false;
+  try{localStorage.removeItem('ss_pin')}catch(e){}
+  try{sessionStorage.removeItem('ss_pin')}catch(e){}
+  applyAdminClass(); render(); toast('🔒 Admin locked'); }
 /* kept so old calls are harmless no-ops */
 function adminSignOut(){ pinLock(); }
 async function initSupa(){
@@ -2852,8 +2880,10 @@ const FPL_RULES={
   goal:{GK:6,DEF:6,MID:5,ATT:4},
   cleanSheet:{GK:3,DEF:3,MID:2,ATT:1},
   hatTrick:3,
-  budget:31, startPrice:10, minPrice:6, maxPrice:16,
-  transfersPerMonth:2, squadSize:3, slots:['DEF','MID','ATT']
+  budget:52, startPrice:10, minPrice:6, maxPrice:16, chips:2,
+  transfersPerWeek:3, squadSize:5,
+  slots:['DEF','MID','ATT'],        // at least one of each, five in total
+  eligible:['DEF','MID','ATT']      // outfield only — no keepers
 };
 function fpl(){
   const S=season();
@@ -2880,13 +2910,32 @@ function syncManagers(){
   live.forEach(p=>{
     if(!f.managers.some(m=>m.pid===p.id)){
       f.managers.push({pid:p.id,name:p.name,code:fplCode(p.name,p.id),
-        teamName:null,squad:[],captain:null,transfers:{},wildcard:false,tripleCap:false,tcGw:null,history:[],joined:Date.now()});
+        teamName:null,squad:[],captain:null,transfers:{},wildcards:0,tripleCaps:0,tcGws:[],history:[],joined:Date.now()});
     }
   });
-  f.managers.forEach(m=>{const p=player(m.pid); if(p)m.name=p.name;});
+  f.managers.forEach(m=>{
+    const p=player(m.pid); if(p)m.name=p.name;
+    /* migrate the old single-use chip fields */
+    if(m.wildcards==null)m.wildcards=m.wildcard?1:0;
+    if(m.tripleCaps==null)m.tripleCaps=m.tripleCap?1:0;
+    if(!m.tcGws)m.tcGws=m.tcGw?[m.tcGw]:[];
+  });
 }
 const fplManager=code=>fpl().managers.find(m=>m.code===String(code||'').trim().toUpperCase());
-const fplMine=()=>{try{const c=localStorage.getItem('ss_fpl_code');return c?fplManager(c):null}catch(e){return null}};
+function fplRemember(code){
+  try{localStorage.setItem('ss_fpl_code',code)}catch(e){}
+  try{sessionStorage.setItem('ss_fpl_code',code)}catch(e){}
+}
+function fplForget(){
+  try{localStorage.removeItem('ss_fpl_code')}catch(e){}
+  try{sessionStorage.removeItem('ss_fpl_code')}catch(e){}
+}
+const fplMine=()=>{
+  let c=null;
+  try{c=localStorage.getItem('ss_fpl_code')}catch(e){}
+  if(!c){try{c=sessionStorage.getItem('ss_fpl_code')}catch(e){}}
+  return c?fplManager(c):null;
+};
 
 /* ---------- prices ---------- */
 function fplPrice(pid){
@@ -2930,7 +2979,9 @@ function fplGamePoints(pid,g){
   const p=player(pid); if(!p||!g)return 0;
   const onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
   if(!onA&&!onB)return 0;                       // didn't play
-  const pos=p.pos||'MID';
+  /* use the position the player had ON THE DAY, so changing someone's position
+     later never rewrites points they already earned */
+  const pos=(g.pos&&g.pos[pid])||p.pos||'MID';
   const sd=onA?'A':'B';
   const ga=onA?(g.scoreB??0):(g.scoreA??0);
   const goals=(g.goals&&g.goals[pid])||0;
@@ -2964,7 +3015,7 @@ function fplManagerGw(m,gw){
   const snap=(m.history||[]).find(h=>h.gw===gw);
   const squad=snap?snap.squad:m.squad, cap=snap?snap.captain:m.captain;
   if(!squad||!squad.length)return 0;
-  const mult=(m.tcGw===gw)?3:2;      // triple captain applies only to its gameweek
+  const mult=((m.tcGws||[]).includes(gw))?3:2;   // triple captain applies only to the gameweeks it was played on
   return squad.reduce((t,pid)=>{
     let p=fplPlayerGw(pid,gw);
     if(pid===cap)p*=mult;
@@ -2997,7 +3048,7 @@ function fplStats(){
   const managers=f.managers.filter(m=>m.squad&&m.squad.length===FPL_RULES.squadSize);
   const owners=managers.length||1;
   const totalGoals=allGames().reduce((t,g)=>t+Object.values(g.goals||{}).reduce((a,b)=>a+b,0),0)||1;
-  return season().players.filter(p=>p.active!==false).map(p=>{
+  return season().players.filter(p=>p.active!==false&&FPL_RULES.eligible.includes(p.pos||'MID')).map(p=>{
     const total=gws.reduce((t,gw)=>t+fplPlayerGw(p.id,gw),0);
     const form=gws.length?fplRecentPoints(p.id,3)/Math.min(3,gws.length):0;
     const owned=managers.filter(m=>m.squad.includes(p.id)).length;
@@ -3063,13 +3114,22 @@ async function fplOpenNextGw(){
   f.gw=next; await save(); render(); toast(`✅ GW${next} open — teams unlocked`);
 }
 /* transfers remaining this calendar month */
+/* transfers reset every week (Monday-based ISO week) */
+function weekKey(d){
+  const t=new Date(d||Date.now());
+  t.setHours(0,0,0,0);
+  t.setDate(t.getDate()+4-(t.getDay()||7));          // nearest Thursday
+  const y0=new Date(t.getFullYear(),0,1);
+  const wk=Math.ceil((((t-y0)/86400000)+1)/7);
+  return t.getFullYear()+'-W'+String(wk).padStart(2,'0');
+}
 function transfersLeft(m){
-  const k=new Date().toISOString().slice(0,7);
+  const k=weekKey();
   const used=(m.transfers&&m.transfers[k])||0;
-  return Math.max(0,FPL_RULES.transfersPerMonth-used);
+  return Math.max(0,FPL_RULES.transfersPerWeek-used);
 }
 function useTransfer(m,n){
-  const k=new Date().toISOString().slice(0,7);
+  const k=weekKey();
   if(!m.transfers)m.transfers={};
   m.transfers[k]=((m.transfers[k])||0)+(n||1);
 }
@@ -3103,7 +3163,7 @@ function fplRules(compact){
     <div class="sechead">How it works</div>
     <div class="card pad">
       <div class="fr-steps">
-        <div class="fr-s"><span class="fr-n">1</span><div><b>Pick three players</b><br>One defender, one midfielder, one attacker from the Sunday squad.</div></div>
+        <div class="fr-s"><span class="fr-n">1</span><div><b>Pick five outfield players</b><br>Any mix of defenders, midfielders and attackers, with at least one of each. Keepers are not included.</div></div>
         <div class="fr-s"><span class="fr-n">2</span><div><b>Stay within £${R.budget}m</b><br>Everyone starts at £${R.startPrice}m, so you can afford anyone at first — but prices move with form.</div></div>
         <div class="fr-s"><span class="fr-n">3</span><div><b>Name a captain</b><br>They score double. Pick whoever you fancy that week.</div></div>
         <div class="fr-s"><span class="fr-n">4</span><div><b>Confirm your team</b><br>Nothing saves until you press Confirm. You'll be told if anything's missing.</div></div>
@@ -3136,7 +3196,7 @@ function fplRules(compact){
     <div class="card pad">
       <div class="note" style="padding:0;line-height:1.75">
         📅 <b>No deadline to miss.</b> Change your team whenever you like. Whatever you have confirmed when the admin logs the next game is the team that scores for it — later changes only count from the following game.<br><br>
-        🔁 <b>${R.transfersPerMonth} transfers a month.</b> They don't roll over. Building your very first team is free.<br><br>
+        🔁 <b>${R.transfersPerWeek} transfers a week.</b> They reset every Monday and do not roll over. Building your very first team is free.<br><br>
         💷 <b>Prices move every gameweek</b> based on how a player is scoring compared with everyone else. Range £${R.minPrice}m–£${R.maxPrice}m.
       </div>
     </div>
@@ -3162,7 +3222,7 @@ function fplRules(compact){
 /* ---------- joining with a code ---------- */
 function fplJoin(){
   return `<div class="card pad" style="text-align:center">
-      <div style="font-size:44px">🎽</div>
+      <div style="font-size:44px">🕹️</div>
       <div style="font-size:19px;font-weight:800;margin:6px 0 4px">Join the mini league</div>
       <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b>, then pick your team of three.</div>
       <input id="fplCode" placeholder="e.g. TALAL-7K2M" style="text-align:center;text-transform:uppercase;letter-spacing:.1em;font-weight:700"
@@ -3180,10 +3240,10 @@ function fplJoin(){
 function fplLogin(code){
   const m=fplManager(code);
   if(!m){toast('That code was not recognised');return}
-  try{localStorage.setItem('ss_fpl_code',m.code)}catch(e){}
+  fplRemember(m.code);
   render(); toast(`Welcome, ${m.name}`);
 }
-function fplLogout(){ try{localStorage.removeItem('ss_fpl_code')}catch(e){} FTAB='team'; render(); }
+function fplLogout(){ fplForget(); FDRAFT=null; FTAB='team'; render(); toast('Signed out'); }
 
 /* ---------- my team ---------- */
 function fplMyTeam(m,locked){
@@ -3200,29 +3260,34 @@ function fplMyTeam(m,locked){
   const confirmed=m.squad&&m.squad.length===FPL_RULES.squadSize;
   const gws=playedGws(), last=gws[gws.length-1];
   const ch=draftChanges(m);
-  const slot=pos=>{
-    const pid=d.squad.find(x=>(player(x)||{}).pos===pos);
-    const p=pid?player(pid):null;
-    const isNew=pid&&!(m.squad||[]).includes(pid);
-    return `<div class="fpl-slot ${pos}">
-      ${p?`<div class="fpl-card ${d.captain===pid?'cap':''} ${isNew?'fresh':''}" onclick="fplSwap('${pos}')">
-          ${d.captain===pid?`<span class="fpl-capbadge">${m.tripleCap&&m.tcGw===fplNextGw()?'3C':'C'}</span>`:''}
-          ${isNew?'<span class="fpl-new">NEW</span>':''}
-          <div class="fpl-crest">${avatar(p,44)}</div>
-          <div class="fpl-nm">${esc(p.name.split(' ')[0])}</div>
-          <div class="fpl-meta"><span>£${fplPrice(pid).toFixed(1)}m</span><span>${last?fplPlayerGw(pid,last):0} pts</span></div>
-        </div>
-        <button class="fpl-capbtn ${d.captain===pid?'on':''}" onclick="draftCaptain('${pid}')">${d.captain===pid?'Captain':'Make captain'}</button>`
-      :`<div class="fpl-card empty" onclick="fplSwap('${pos}')">
-          <div class="fpl-plus">+</div><div class="fpl-nm">${pos}</div></div>
-        <span class="fpl-hint">Tap to pick</span>`}
+  const sh=squadShape(d.squad);
+  const card=pid=>{
+    const p=player(pid); if(!p)return '';
+    const isNew=!(m.squad||[]).includes(pid);
+    return `<div class="fpl-slot">
+      <div class="fpl-card ${d.captain===pid?'cap':''} ${isNew?'fresh':''}" onclick="fplPick('${pid}')">
+        ${d.captain===pid?`<span class="fpl-capbadge">${(m.tcGws||[]).includes(fplNextGw())?'3C':'C'}</span>`:''}
+        ${isNew?'<span class="fpl-new">NEW</span>':''}
+        <div class="fpl-crest">${avatar(p,40)}</div>
+        <div class="fpl-nm">${esc(p.name.split(' ')[0])}</div>
+        <div class="fpl-meta"><span>£${fplPrice(pid).toFixed(1)}m</span><span>${last?fplPlayerGw(pid,last):0}</span></div>
+      </div>
+      <button class="fpl-capbtn ${d.captain===pid?'on':''}" onclick="event.stopPropagation();draftCaptain('${pid}')">${d.captain===pid?'Captain':'Captain?'}</button>
     </div>`;
+  };
+  const row=pos=>{
+    const ids=d.squad.filter(x=>(player(x)||{}).pos===pos);
+    return `<div class="fpl-line">${ids.map(card).join('')}
+      ${d.squad.length<FPL_RULES.squadSize?`<div class="fpl-slot">
+        <div class="fpl-card empty" onclick="fplSwap('${pos}')"><div class="fpl-plus">+</div>
+          <div class="fpl-nm">${pos}</div></div></div>`:''}</div>`;
   };
   return `
     <div class="note" style="background:var(--fill);border-radius:12px;padding:11px 13px;margin-bottom:12px">
-      ✏️ Change your team whenever you like. Whatever is confirmed when the next game is logged is what scores.</div>
+      ✏️ Five outfield players, at least one from each position. Change your team whenever you like — whatever is confirmed when the next game is logged is what scores.</div>
     <div class="fpl-head">
-      <div><div class="fpl-tn">${esc(m.teamName)}</div><div class="fpl-mn">${esc(m.name)}</div></div>
+      <div><div class="fpl-tn">${esc(m.teamName)}</div>
+        <div class="fpl-mn">${esc(m.name)} · ${sh.DEF}-${sh.MID}-${sh.ATT}</div></div>
       <div class="fpl-bud"><b style="color:${left<0?'var(--red)':'var(--tint)'}">£${left.toFixed(1)}m</b><span>${left<0?'over':'left'}</span></div>
     </div>
     ${m.wildcardActive?`<div class="note" style="background:color-mix(in srgb,var(--purple) 14%,transparent);border-radius:12px;padding:10px 13px;margin-bottom:10px">
@@ -3233,11 +3298,14 @@ function fplMyTeam(m,locked){
         <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
         <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
         <rect x="30" y="2" width="40" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".55"/>
-        <rect x="30" y="84" width="40" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".55"/>
       </svg>
-      <div class="fpl-rows">${slot('ATT')}${slot('MID')}${slot('DEF')}</div>
+      <div class="fpl-rows">${row('ATT')}${row('MID')}${row('DEF')}</div>
     </div>
 
+    ${(!confirmed&&(m.squad||[]).length&&(m.squad||[]).length<FPL_RULES.squadSize)?`<div class="fpl-todo" style="background:color-mix(in srgb,var(--blue) 12%,var(--card));border-color:color-mix(in srgb,var(--blue) 40%,transparent)"><div class="fpl-todo-i">📣 <b>The game moved to ${FPL_RULES.squadSize} players.</b> Your original ${(m.squad||[]).length} are safe — just add ${FPL_RULES.squadSize-(m.squad||[]).length} more and confirm. No transfers used.</div></div>`:''}
+    ${(function(){const dup=squadClash(d.squad);
+      return dup?`<div class="fpl-todo" style="background:color-mix(in srgb,var(--red) 12%,var(--card));border-color:color-mix(in srgb,var(--red) 40%,transparent)">
+        <div class="fpl-todo-i">🔄 <b>${esc(dup)}</b> is now a keeper, and keepers are not in the fantasy game. Swap them out to fix it — your points so far are safe.</div></div>`:''})()}
     ${probs.length?`<div class="fpl-todo">${probs.map(p=>`<div class="fpl-todo-i">⚠️ ${esc(p)}</div>`).join('')}</div>`:''}
 
     ${dirty?`<div class="fpl-confirm">
@@ -3255,19 +3323,22 @@ function fplMyTeam(m,locked){
       ${tile(transfersLeft(m),'Transfers left')}
       ${tile('£'+spend.toFixed(1)+'m','Squad value')}</div>`:''}
 
-    <div class="sechead">Chips</div>
-    <div class="card">
-      <div class="row ${m.wildcard?'':'tap'}" onclick="${m.wildcard?'':'playWildcard()'}">
-        <div style="font-size:21px;flex:0 0 28px">🃏</div>
-        <div class="rt"><div class="r1">Wildcard</div>
-          <div class="r2">${m.wildcard?'Used this season':'Rebuild your whole team free — one use'}</div></div>
-        <span class="chip-state ${m.wildcard?'used':''}">${m.wildcard?'USED':'AVAILABLE'}</span></div>
-      <div class="row ${m.tripleCap?'':'tap'}" onclick="${m.tripleCap?'':'playTripleCaptain()'}">
-        <div style="font-size:21px;flex:0 0 28px">🔥</div>
-        <div class="rt"><div class="r1">Triple Captain</div>
-          <div class="r2">${m.tripleCap?`Used on GW${m.tcGw}`:'Captain scores ×3 instead of ×2 — one use'}</div></div>
-        <span class="chip-state ${m.tripleCap?'used':''}">${m.tripleCap?'USED':'AVAILABLE'}</span></div>
-    </div>
+    ${(function(){const wcL=FPL_RULES.chips-(m.wildcards||0), tcL=FPL_RULES.chips-(m.tripleCaps||0);
+      const pips=(left)=>`<span class="pips">${Array.from({length:FPL_RULES.chips},(_,i)=>
+        `<i class="${i<left?'on':''}"></i>`).join('')}</span>`;
+      return `<div class="sechead">Chips</div>
+      <div class="card">
+        <div class="row ${wcL>0?'tap':''}" onclick="${wcL>0?'playWildcard()':''}">
+          <div style="font-size:21px;flex:0 0 28px">🃏</div>
+          <div class="rt"><div class="r1">Wildcard ${pips(wcL)}</div>
+            <div class="r2">${wcL>0?`Unlimited free transfers for one set of changes · ${wcL} of ${FPL_RULES.chips} left`:'Both used this season'}</div></div>
+          <span class="chip-state ${wcL>0?'':'used'}">${wcL>0?wcL+' LEFT':'USED'}</span></div>
+        <div class="row ${tcL>0?'tap':''}" onclick="${tcL>0?'playTripleCaptain()':''}">
+          <div style="font-size:21px;flex:0 0 28px">🔥</div>
+          <div class="rt"><div class="r1">Triple Captain ${pips(tcL)}</div>
+            <div class="r2">${tcL>0?`Captain scores ×3 for one gameweek · ${tcL} of ${FPL_RULES.chips} left`:'Both used this season'}${(m.tcGws||[]).length?` · played GW${m.tcGws.join(', GW')}`:''}</div></div>
+          <span class="chip-state ${tcL>0?'':'used'}">${tcL>0?tcL+' LEFT':'USED'}</span></div>
+      </div>`})()}
 
     <div class="card" style="margin-top:12px">
       <div class="row tap" onclick="renameTeam()"><div class="rt"><div class="r1">Rename team</div></div>${chev}</div>
@@ -3284,6 +3355,18 @@ async function renameTeam(){
   const n=await askText('Rename your team','',m.teamName||'','Save');
   if(n===null)return; if(!n.trim())return;
   m.teamName=n.trim(); await fplSave(); render(); toast('Renamed');
+}
+
+/* if two of a manager's picks now share a position, name the culprit */
+function squadClash(squad){
+  const seen={};
+  for(const id of (squad||[])){
+    const p=player(id); if(!p)continue;
+    const pos=p.pos||'MID';
+    if(seen[pos])return p.name;
+    seen[pos]=id;
+  }
+  return null;
 }
 
 /* ---------- picking: changes go into a draft you must confirm ---------- */
@@ -3304,33 +3387,43 @@ function draftChanges(m){
   return {out,inn,count:Math.max(out.length,inn.length)};
 }
 /* everything wrong with the current draft, in plain English */
+function squadShape(squad){
+  const c={DEF:0,MID:0,ATT:0};
+  (squad||[]).forEach(id=>{const p=player(id); if(p&&c[p.pos]!=null)c[p.pos]++});
+  return c;
+}
 function draftProblems(m){
-  const d=draftOf(m), p=[];
-  FPL_RULES.slots.forEach(pos=>{
-    if(!d.squad.some(x=>(player(x)||{}).pos===pos))p.push(`Pick a ${pos}`);
-  });
+  const d=draftOf(m), p=[], n=d.squad.length, need=FPL_RULES.squadSize;
+  if(n<need)p.push(`Pick ${need-n} more player${need-n===1?'':'s'} (${n} of ${need})`);
+  if(n>need)p.push(`You have ${n} players — only ${need} allowed`);
+  const sh=squadShape(d.squad);
+  FPL_RULES.slots.forEach(pos=>{ if(!sh[pos])p.push(`You need at least one ${pos}`) });
   const spend=draftSpend(m);
   if(spend>FPL_RULES.budget)p.push(`You're £${(spend-FPL_RULES.budget).toFixed(1)}m over budget`);
-  if(!d.captain&&d.squad.length===FPL_RULES.squadSize)p.push('Choose a captain');
+  if(!d.captain&&n===need)p.push('Choose a captain');
   const ch=draftChanges(m);
   const firstTeam=!(m.squad&&m.squad.length===FPL_RULES.squadSize);
   if(!firstTeam&&!m.wildcardActive&&ch.count>transfersLeft(m))
-    p.push(`That's ${ch.count} transfer${ch.count===1?'':'s'} but you only have ${transfersLeft(m)} left this month`);
+    p.push(`That's ${ch.count} transfer${ch.count===1?'':'s'} but you only have ${transfersLeft(m)} left this week`);
   return p;
 }
-function fplSwap(pos){ FPICK=pos; FTAB='market'; render(); }
+function fplSwap(pos){ FPICK=pos||null; FTAB='market'; render(); }
 function fplPick(pid){
   const m=fplMine(); if(!m)return;
   const p=player(pid); if(!p)return;
-  const d=draftOf(m), pos=p.pos||'MID';
-  if(d.squad.includes(pid)){ // tapping someone already drafted removes them
+  if(!FPL_RULES.eligible.includes(p.pos||'MID')){toast('Keepers aren\'t in the fantasy game');return}
+  const d=draftOf(m);
+  if(d.squad.includes(pid)){
     d.squad=d.squad.filter(x=>x!==pid);
     if(d.captain===pid)d.captain=null;
-  } else {
-    d.squad=d.squad.filter(x=>(player(x)||{}).pos!==pos);   // one per position
-    d.squad.push(pid);
+    render(); return;
   }
-  FPICK=null; FTAB='team'; render();
+  if(d.squad.length>=FPL_RULES.squadSize){
+    toast(`You already have ${FPL_RULES.squadSize} — tap one to drop them first`); return;
+  }
+  d.squad.push(pid);
+  if(d.squad.length===FPL_RULES.squadSize){ FPICK=null; FTAB='team'; }
+  render();
 }
 function draftCaptain(pid){
   const m=fplMine(); if(!m)return;
@@ -3352,32 +3445,37 @@ async function confirmDraft(){
     useTransfer(m,ch.count);
   }
   m.squad=[...d.squad]; m.captain=d.captain;
-  if(m.wildcardActive){ m.wildcardActive=false; m.wildcard=true; }
+  if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; }
   FDRAFT=null;
   await fplSave();
   render();
   toast(firstTeam?'✅ Team confirmed — you\'re in the league':'✅ Transfers confirmed');
 }
+async function fplSave(){
+  if(CLOUD_FAIL){toast('⛔️ Not saved — database unreachable');return}
+  await save();
+}
 async function playWildcard(){
   const m=fplMine(); if(!m)return;
-  if(m.wildcard){toast('You have already used your wildcard');return}
-  if(!await askConfirm('Play your wildcard?','Unlimited free transfers for this one set of changes. You only get one all season.','Play it',false))return;
+  const left=FPL_RULES.chips-(m.wildcards||0);
+  if(left<=0){toast('You have used both wildcards');return}
+  if(!await askConfirm('Play a wildcard?',
+     `Unlimited free transfers for one set of changes. You have ${left} of ${FPL_RULES.chips} left.`,'Play it',false))return;
   m.wildcardActive=true; FDRAFT={squad:[],captain:null};
   await fplSave(); render(); toast('🃏 Wildcard active — rebuild your three, then confirm');
 }
 async function playTripleCaptain(){
   const m=fplMine(); if(!m)return;
-  if(m.tripleCap){toast('You have already used your triple captain');return}
+  const left=FPL_RULES.chips-(m.tripleCaps||0);
+  if(left<=0){toast('You have used both triple captains');return}
   if(!m.captain){toast('Pick a captain first');return}
   const nextGw=fplNextGw();
-  if(!await askConfirm('Play triple captain?',
-     `${player(m.captain)?.name} scores triple in GW${nextGw} instead of double. One use all season.`,'Play it',false))return;
-  m.tripleCap=true; m.tcGw=nextGw;
+  if((m.tcGws||[]).includes(nextGw)){toast('Already armed for GW'+nextGw);return}
+  if(!await askConfirm('Play a triple captain?',
+     `${player(m.captain)?.name} scores ×3 in GW${nextGw} instead of ×2. You have ${left} of ${FPL_RULES.chips} left.`,'Play it',false))return;
+  m.tripleCaps=(m.tripleCaps||0)+1;
+  m.tcGws=[...(m.tcGws||[]),nextGw];
   await fplSave(); render(); toast(`🔥 Triple captain armed for GW${nextGw}`);
-}
-async function fplSave(){
-  if(CLOUD_FAIL){toast('⛔️ Not saved — database unreachable');return}
-  await save();
 }
 
 /* ---------- market ---------- */
@@ -3418,6 +3516,57 @@ function fplMarket(m,locked){
     <div class="note">Green = form · Blue = how many managers own them · Orange = share of all goals scored.</div>`;
 }
 
+/* ---------- view another manager's team ---------- */
+function viewManager(pid){
+  const f=fpl(), m=f.managers.find(x=>x.pid===pid);
+  if(!m||!m.squad||!m.squad.length){toast('No team picked yet');return}
+  const gws=playedGws(), last=gws[gws.length-1];
+  const me=fplMine(), mine=me&&me.pid===pid;
+  const total=fplManagerTotal(m), gwPts=last?fplManagerGw(m,last):0;
+  const rank=fplTable().findIndex(r=>r.m.pid===pid)+1;
+  const vcard=id=>{
+    const p=player(id); if(!p)return '';
+    const isCap=m.captain===id;
+    return `<div class="fpl-slot">
+      <div class="fpl-card ${isCap?'cap':''}" onclick="closeSheet();openPlayer('${id}')">
+        ${isCap?`<span class="fpl-capbadge">${(m.tcGws||[]).includes(last)?'3C':'C'}</span>`:''}
+        <div class="fpl-crest">${avatar(p,40)}</div>
+        <div class="fpl-nm">${esc(p.name.split(' ')[0])}</div>
+        <div class="fpl-meta"><span>£${fplPrice(id).toFixed(1)}m</span><span>${last?fplPlayerGw(id,last):0}</span></div>
+      </div></div>`;
+  };
+  const vrow=pos=>`<div class="fpl-line">${m.squad.filter(x=>(player(x)||{}).pos===pos).map(vcard).join('')}</div>`;
+  $('#sheet').innerHTML=`<div class="shead"><span class="sa"></span>
+    <div class="st">${esc(m.teamName||m.name)}</div>
+    <button class="sa r" onclick="closeSheet()">Done</button></div>
+    <div class="sbody">
+      <div class="fpl-head" style="margin-bottom:10px">
+        <div><div class="fpl-tn">${esc(m.teamName||'—')}${mine?' <span class="fpl-owned">YOU</span>':''}</div>
+          <div class="fpl-mn">${esc(m.name)}${rank?` · ${ordinal(rank)} in the league`:''}</div></div>
+        <div class="fpl-bud"><b>${total}</b><span>points</span></div>
+      </div>
+      <div class="fpl-pitch">
+        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect x="2" y="2" width="96" height="96" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
+          <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
+          <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
+        </svg>
+        <div class="fpl-rows">${vrow('ATT')}${vrow('MID')}${vrow('DEF')}</div>
+      </div>
+      <div class="tiles" style="margin-top:12px">
+        ${tile(total,'Total','','var(--tint)')}${tile(gwPts,'Last GW')}
+        ${tile('£'+m.squad.reduce((t,x)=>t+fplPrice(x),0).toFixed(1)+'m','Squad value')}
+        ${tile((FPL_RULES.chips-(m.wildcards||0))+'/'+(FPL_RULES.chips-(m.tripleCaps||0)),'Chips left')}
+      </div>
+      ${gws.length>1?`<div class="sechead">Gameweek by gameweek</div>
+        <div class="card">${gws.slice().reverse().slice(0,8).map(gw=>`<div class="row">
+          <div class="rt"><div class="r1" style="font-size:15px">GW${gw}</div></div>
+          <div class="rv" style="font-weight:700">${fplManagerGw(m,gw)}</div></div>`).join('')}</div>`:''}
+      <div style="height:10px"></div>
+    </div>`;
+  $('#sbg').classList.add('open');
+}
+
 /* ---------- mini league ---------- */
 function fplLeague(){
   const rows=fplTable(), f=fpl(), gws=playedGws(), last=gws[gws.length-1];
@@ -3431,11 +3580,12 @@ function fplLeague(){
       <div style="font-size:13px;color:var(--label2)">${best.gw} points</div></div>
     <div class="card"><div class="tw"><table>
       <thead><tr><td style="padding-left:16px">#</td><td>Team</td><td class="c">GW</td><td class="pts">Total</td></tr></thead>
-      <tbody>${rows.map((r,i)=>`<tr class="${me&&r.m.pid===me.pid?'z-ucl':''}">
+      <tbody>${rows.map((r,i)=>`<tr class="${me&&r.m.pid===me.pid?'z-ucl':''}" onclick="viewManager('${r.m.pid}')">
         <td class="pos">${r.move>0?'<span class="mv up">▲</span>':r.move<0?'<span class="mv dn">▼</span>':'<span class="mv eq">·</span>'}<span class="posn" style="background:${i===0?'linear-gradient(150deg,#F5D76E,#C9A227)':'var(--fill2)'};color:${i===0?'#4a3a06':'var(--label2)'}">${i+1}</span></td>
         <td class="nm"><div style="font-weight:700">${esc(r.m.teamName||'—')}</div>
           <div style="font-size:11.5px;color:var(--label3)">${esc(r.m.name)}</div></td>
         <td class="c">${r.gw}</td><td class="pts">${r.total}</td></tr>`).join('')}</tbody></table></div></div>
+    <div class="note" style="padding:6px 4px 0">Tap any team to see their three.</div>
     <div class="note">${esc(f.league)} · everyone with a team is entered automatically.</div>
 `;
 }
@@ -3587,6 +3737,18 @@ async function shareQR(){
     const blob=await svgToPng(svg,600,600,2);
     await shareOrSave(blob,'sunday-season-qr.png','Sunday Season');
   }catch(e){ toast('Could not create the QR image'); }
+}
+
+async function copyCode(code,name){
+  try{ await navigator.clipboard.writeText(code); toast(`📋 ${name}'s code copied`); }
+  catch(e){ toast('Code: '+code); }
+}
+async function copyAllCodes(){
+  const url=location.origin+location.pathname;
+  const lines=fpl().managers.map(m=>`${m.name}: ${m.code}`).join('\n');
+  const txt=`Sunday FPL — your code\n${url}\n\n${lines}\n\nOpen the link, tap the 🕹️ tab, enter your code and pick 3 players.`;
+  try{ await navigator.clipboard.writeText(txt); toast('📋 All codes copied — paste into WhatsApp'); }
+  catch(e){ toast('Could not copy'); }
 }
 
 /* ============ MATCH CENTRE ============ */
@@ -4530,6 +4692,20 @@ function vAdmin(){
 
       ${healthPanel()}
 
+      <div class="sechead">🕹️ Sunday FPL codes</div>
+      ${(function(){const f=fpl(),ms=f.managers;
+        if(!ms.length)return `<div class="note">Add players to the squad and their codes appear here.</div>`;
+        const joined=ms.filter(m=>m.teamName&&m.squad.length===FPL_RULES.squadSize).length;
+        return `<div class="card">
+          <div class="row"><div class="rt"><div class="r1">${joined} of ${ms.length} have a team</div>
+            <div class="r2">Send each person their code — it's how they claim their team</div></div>
+            <button class="btn sec sm" onclick="copyAllCodes()">Copy all</button></div>
+          ${ms.map(m=>`<div class="row">
+            <div class="rt"><div class="r1" style="font-size:15px">${esc(m.name)}</div>
+              <div class="r2">${m.teamName?`✅ ${esc(m.teamName)}`:'No team yet'}</div></div>
+            <button class="codebtn" onclick="copyCode('${m.code}','${esc(m.name)}')">${m.code}</button></div>`).join('')}
+        </div>`})()}
+
       <div class="sechead">Share the app</div>
       <div class="card pad" style="text-align:center">
         <div class="qrbox">${qrSVG(location.origin+location.pathname,200)}</div>
@@ -5205,9 +5381,10 @@ async function saveGame(){if(!requireAdmin())return;
     if(c==='goals'){G.sa=gA;G.sb=gB}
   }
   const S=season();
+  const posSnap={}; [...G.A,...G.B].forEach(pid=>{const pl=player(pid); if(pl)posSnap[pid]=pl.pos||'MID'});
   const g={id:G.id||uid(),compId:G.compId,created:G.id?(S.games.find(x=>x.id===G.id)?.created||Date.now()):Date.now(),
     date:G.date,round:(G.round||'').trim(),teamA:[...G.A],teamB:[...G.B],fillA:[...G.fillA],fillB:[...G.fillB],
-    goals:{...G.goals},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D'};
+    pos:posSnap,goals:{...G.goals},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D'};
   if(G.id)S.games[S.games.findIndex(x=>x.id===G.id)]=g;else S.games.push(g);
   await save();closeSheet();
   const i=allGames().findIndex(x=>x.id===g.id),ms=feed().filter(e=>e.i===i);
@@ -5278,6 +5455,19 @@ function pickClub(s){PE.club=PE.club===s?null:s;const c=PE.club?CLUB_BY[PE.club]
 async function customStar(){const v=await askText('Road to Glory','Who do they play like?',PE.star||'','Set');
   if(v!==null){PE.star=v||null;paintPE()}}
 async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim();if(!n){toast('Enter a name');return}
+  /* changing a position can break FPL squads, so say so first */
+  if(PE.id){
+    const was=player(PE.id);
+    if(was&&was.pos&&PE.pos&&was.pos!==PE.pos){
+      const affected=fpl().managers.filter(m=>(m.squad||[]).includes(PE.id)&&m.teamName);
+      if(affected.length){
+        const who=affected.map(m=>m.teamName).join(', ');
+        if(!await askConfirm('This will break some FPL teams',
+          `${n} is moving from ${was.pos} to ${PE.pos}. ${affected.length} team${affected.length===1?'':'s'} picked them (${who}) and will need to fix their line-up. Points already earned won't change.`,
+          'Change anyway',false))return;
+      }
+    }
+  }
   if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:PE.active});
   else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:true});
   logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
