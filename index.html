@@ -2,6 +2,12 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Sunday Season">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#F2F2F7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
 <title>Sunday Season</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
@@ -76,7 +82,9 @@ body.drawer .drawer-bg{opacity:1;pointer-events:auto}
 .navbar .nb-r{margin-left:auto;display:flex;align-items:center;gap:6px}
 .iconbtn{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--fill);flex:0 0 34px}
 .iconbtn svg{width:17px;height:17px;stroke:var(--tint);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.backbtn{display:inline-flex;align-items:center;gap:3px;color:var(--tint);font-size:16px;font-weight:400;margin-left:-4px}
+.backbtn{display:inline-flex;align-items:center;gap:3px;color:var(--tint);font-size:16px;font-weight:400;
+  margin-left:-4px;min-width:0;max-width:44vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.backbtn svg{flex:0 0 auto}
 .backbtn svg{width:16px;height:16px;stroke:var(--tint);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 
 /* ---------- CONTENT ---------- */
@@ -521,35 +529,52 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .navaction{background:var(--tint);color:#fff;border:none;border-radius:9px;padding:7px 15px;
   font-size:14px;font-weight:700;cursor:pointer;margin-right:8px}
 
-/* ================= PLAYER CARD ================= */
-.fut{position:relative;border-radius:22px;padding:20px 18px 16px;margin:6px 0 4px;overflow:hidden;
-  background:radial-gradient(125% 85% at 50% 0%,color-mix(in srgb,var(--futc) 30%,#191a20) 0%,#141519 58%,#0e0f13 100%);
-  box-shadow:0 12px 34px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.07);
-  border:1px solid color-mix(in srgb,var(--futc) 32%,transparent)}
-.fut-sheen{position:absolute;inset:0;background:linear-gradient(150deg,rgba(255,255,255,.1),transparent 46%);pointer-events:none}
-.fut-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px;position:relative;z-index:1}
-.fut-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:96px}
-.fut-ovn{font-size:40px;font-weight:900;line-height:.9;color:#fff;letter-spacing:-.045em;text-shadow:0 2px 8px rgba(0,0,0,.4)}
-.fut-ovp{font-size:13px;font-weight:800;color:color-mix(in srgb,var(--futc) 72%,#fff);letter-spacing:.06em}
+/* ================= PLAYER CARD (FC-style) ================= */
+.fut{position:relative;border-radius:22px;padding:22px 18px 18px;margin:6px auto 4px;overflow:hidden;
+  max-width:460px;
+  /* deep graphite base with a restrained accent glow, rather than a flat colour wash */
+  background:
+    /* the accent is a whisper of colour, not a wash — it should read as a lit
+       graphite card, the way an FC card does */
+    radial-gradient(110% 62% at 50% -18%, color-mix(in srgb,var(--futc) 20%,transparent) 0%, transparent 58%),
+    radial-gradient(70% 40% at 50% 112%, color-mix(in srgb,var(--futc) 9%,transparent) 0%, transparent 72%),
+    linear-gradient(168deg,#2A2D36 0%,#1B1E25 44%,#101218 100%);
+  box-shadow:0 16px 44px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.09);
+  border:1px solid color-mix(in srgb,var(--futc) 24%,rgba(255,255,255,.08))}
+/* thin luminous hairline along the top, like an FC card */
+.fut::before{content:"";position:absolute;top:0;left:18%;right:18%;height:1.5px;border-radius:2px;
+  background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--futc) 65%,#fff),transparent);
+  opacity:.7}
+.fut-sheen{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(152deg,rgba(255,255,255,.09) 0%,transparent 42%)}
+.fut-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;position:relative;z-index:1}
+.fut-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:96px}
+.fut-ovn{font-size:42px;font-weight:900;line-height:.9;color:#fff;letter-spacing:-.05em;
+  text-shadow:0 2px 18px color-mix(in srgb,var(--futc) 38%,transparent),0 1px 2px rgba(0,0,0,.5)}
+.fut-ovp{font-size:11.5px;font-weight:800;letter-spacing:.14em;
+  color:color-mix(in srgb,var(--futc) 45%,#fff);
+  background:color-mix(in srgb,var(--futc) 15%,rgba(255,255,255,.06));
+  border:1px solid color-mix(in srgb,var(--futc) 25%,transparent);
+  padding:3px 11px;border-radius:20px}
 .fut-psd{min-height:40px;display:flex;align-items:center;justify-content:center}
-.fut-crest{width:96px;height:96px;display:flex;align-items:center;justify-content:center;
-  filter:drop-shadow(0 8px 18px rgba(0,0,0,.45))}
-.fut-flag{font-size:22px;line-height:1;min-height:24px}
+.fut-flag{font-size:21px;line-height:1;min-height:24px}
+.fut-crest{width:92px;height:92px;display:flex;align-items:center;justify-content:center;
+  filter:drop-shadow(0 8px 20px rgba(0,0,0,.55))}
 .fut-av{display:flex;justify-content:center}
-.fut-av>*{filter:drop-shadow(0 8px 18px rgba(0,0,0,.42))}
-.fut-initials{width:100px;height:100px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:38px;font-weight:800;color:#fff;letter-spacing:-.02em;
-  background:color-mix(in srgb,var(--futc) 26%,rgba(255,255,255,.06));
-  border:2px solid rgba(255,255,255,.22)}
-.fut-name{position:relative;z-index:1;text-align:center;color:#fff;font-size:24px;font-weight:800;
-  letter-spacing:-.02em;margin:12px 0 2px;text-transform:uppercase}
-.fut-like{position:relative;z-index:1;text-align:center;font-size:12.5px;color:rgba(255,255,255,.55);margin-bottom:14px}
-.fut-like b{color:color-mix(in srgb,var(--futc) 72%,#fff);font-weight:700}
-.fut-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:14px 6px;
-  padding-top:14px;border-top:1px solid rgba(255,255,255,.13)}
+.fut-initials{width:92px;height:92px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:34px;font-weight:800;color:#fff;letter-spacing:-.02em;
+  background:linear-gradient(160deg,color-mix(in srgb,var(--futc) 34%,rgba(255,255,255,.1)),rgba(255,255,255,.05));
+  border:2px solid color-mix(in srgb,var(--futc) 40%,rgba(255,255,255,.18))}
+.fut-name{position:relative;z-index:1;text-align:center;color:#fff;font-size:25px;font-weight:800;
+  letter-spacing:.01em;margin:14px 0 2px;text-transform:uppercase}
+.fut-like{position:relative;z-index:1;text-align:center;font-size:12.5px;color:rgba(255,255,255,.5);margin-bottom:15px}
+.fut-like b{color:color-mix(in srgb,var(--futc) 42%,#fff);font-weight:700}
+.fut-stats{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);gap:15px 6px;
+  padding-top:15px;border-top:1px solid rgba(255,255,255,.11)}
 .fut-st{text-align:center}
-.fut-st b{display:block;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.02em}
-.fut-st span{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.52);letter-spacing:.07em;line-height:1.3;display:block;margin-top:2px}
+.fut-st b{display:block;font-size:21px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.fut-st span{font-size:9px;font-weight:700;color:rgba(255,255,255,.42);letter-spacing:.09em;
+  line-height:1.3;display:block;margin-top:3px}
 
 /* ================= LEVEL CARD + DROPDOWN ================= */
 .lvlcard{overflow:hidden}
@@ -665,13 +690,46 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .potm-r span{cursor:pointer}
 
 /* ================= PULL TO REFRESH ================= */
-.ptr{position:fixed;top:-46px;left:50%;margin-left:-18px;width:36px;height:36px;border-radius:50%;
-  background:var(--card);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;
+.ptr{position:fixed;top:-46px;left:50%;margin-left:-19px;width:38px;height:38px;border-radius:50%;
+  background:var(--card);box-shadow:0 3px 12px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;
   z-index:60;opacity:0;pointer-events:none}
-.ptr-s{width:17px;height:17px;border-radius:50%;border:2.2px solid var(--fill2);border-top-color:var(--tint)}
-.ptr.spin .ptr-s{animation:ptrspin .7s linear infinite}
+.ptr-a{width:19px;height:19px;stroke:var(--label3);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform .18s ease,stroke .18s}
+.ptr.armed .ptr-a{stroke:var(--tint)}
+.ptr-s{position:absolute;width:19px;height:19px;border-radius:50%;
+  border:2.2px solid var(--fill2);border-top-color:var(--tint);opacity:0}
+.ptr.spin .ptr-a{opacity:0}
+.ptr.spin .ptr-s{opacity:1;animation:ptrspin .7s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
 @media(min-width:900px){.ptr{display:none}}
+
+/* ---- spring-in for cards landing on the pitch ---- */
+@keyframes springIn{
+  0%{transform:scale(.4) translateY(14px);opacity:0}
+  55%{transform:scale(1.12) translateY(-3px);opacity:1}
+  75%{transform:scale(.96) translateY(1px)}
+  100%{transform:scale(1) translateY(0);opacity:1}
+}
+.sh{animation:springIn .46s cubic-bezier(.34,1.56,.64,1) backwards}
+.sh:nth-child(1){animation-delay:.02s}
+.sh:nth-child(2){animation-delay:.07s}
+.sh:nth-child(3){animation-delay:.12s}
+.sh:nth-child(4){animation-delay:.17s}
+.sh:nth-child(5){animation-delay:.22s}
+.sh-line:nth-child(2) .sh{animation-delay:.10s}
+.sh-line:nth-child(3) .sh{animation-delay:.18s}
+@media(prefers-reduced-motion:reduce){.sh{animation:none}}
+/* the newest pick gets a little pop */
+@keyframes popIn{0%{transform:scale(.7)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+.sh-new .sh-top{animation:popIn .4s cubic-bezier(.34,1.56,.64,1)}
+/* toggle switch used in Admin */
+.sw{position:relative;display:inline-block;width:50px;height:30px;flex:0 0 50px}
+.sw input{opacity:0;width:0;height:0}
+.sw span{position:absolute;inset:0;background:var(--fill2);border-radius:30px;transition:.25s;cursor:pointer}
+.sw span::before{content:"";position:absolute;width:26px;height:26px;left:2px;top:2px;background:#fff;
+  border-radius:50%;transition:.25s cubic-bezier(.32,.72,0,1);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.sw input:checked+span{background:var(--green)}
+.sw input:checked+span::before{transform:translateX(20px)}
 
 /* ================= SHRINKING TITLE ================= */
 .navbar{transition:box-shadow .2s,background .2s}
@@ -1016,6 +1074,120 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .fpl-meta{font-size:9.5px}
 @media(max-width:400px){.fpl-card{width:74px}.fpl-line{gap:6px}}
 .fpl-capbtn{padding:3px 8px;font-size:9.5px}
+
+/* ================= FPL — real-FPL styling ================= */
+.fh{border-radius:18px;overflow:hidden;margin-bottom:12px;box-shadow:var(--shadow);
+  background:linear-gradient(135deg,#37003C 0%,#2B0030 55%,#1E0022 100%)}
+.fh-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px 12px}
+.fh-tn{font-size:19px;font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15}
+.fh-mn{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:2px}
+.fh-gw{text-align:center;background:#00FF87;border-radius:13px;padding:7px 14px;min-width:74px}
+.fh-gw b{display:block;font-size:24px;font-weight:900;color:#37003C;line-height:1;letter-spacing:-.03em}
+.fh-gw span{font-size:9.5px;font-weight:800;color:#37003C;opacity:.75;letter-spacing:.06em}
+.fh-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.14)}
+.fh-stats>div{padding:9px 4px;text-align:center;border-right:1px solid rgba(255,255,255,.1)}
+.fh-stats>div:last-child{border-right:none}
+.fh-stats b{display:block;font-size:14.5px;font-weight:800;color:#fff}
+.fh-stats b.neg{color:#FF5C5C}
+.fh-stats span{font-size:9.5px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.05em;text-transform:uppercase}
+/* pitch */
+.fpitch{position:relative;border-radius:16px;overflow:hidden;padding:16px 8px 14px;
+  background:linear-gradient(180deg,#0E9F52 0%,#0B8746 45%,#097038 100%);box-shadow:var(--shadow)}
+.fp-lines{position:absolute;inset:0;pointer-events:none;
+  background:
+    repeating-linear-gradient(180deg,rgba(255,255,255,.045) 0 34px,transparent 34px 68px),
+    radial-gradient(circle at 50% 50%,transparent 52px,rgba(255,255,255,.22) 53px,transparent 54px);
+  border:2px solid rgba(255,255,255,.22);border-radius:16px;margin:6px}
+.fp-rows{position:relative;z-index:1;display:flex;flex-direction:column;gap:14px}
+.sh-line{display:flex;justify-content:center;gap:6px;flex-wrap:wrap}
+.sh{width:70px;display:flex;flex-direction:column;align-items:center}
+.sh-top{position:relative;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;padding:0;
+  background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 3px 8px rgba(0,0,0,.28)}
+.sh-top.empty{background:rgba(255,255,255,.16);border:2px dashed rgba(255,255,255,.55)}
+.sh-plus{font-size:26px;color:#fff;font-weight:300;line-height:1}
+.sh-new .sh-top{box-shadow:0 0 0 2.5px #00FF87,0 3px 8px rgba(0,0,0,.3)}
+.sh-cap{position:absolute;top:-4px;left:-4px;width:20px;height:20px;border-radius:50%;background:#37003C;
+  color:#00FF87;font-size:10px;font-weight:900;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 1px 4px rgba(0,0,0,.4)}
+.sh-badge{position:absolute;top:-5px;right:-8px;font-size:8px;font-weight:900;background:#00FF87;color:#37003C;
+  padding:1px 5px;border-radius:20px}
+.sh-name{width:100%;margin-top:5px;background:#fff;border-radius:5px 5px 0 0;
+  font-size:10.5px;font-weight:700;color:#242424;text-align:center;padding:3px 2px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sh-pts{width:100%;background:#37003C;color:#fff;border-radius:0 0 5px 5px;
+  font-size:11px;font-weight:800;text-align:center;padding:2px}
+.sh-pts.need{background:rgba(0,0,0,.3);font-size:9px;font-weight:700}
+.sh-c{margin-top:5px;background:rgba(255,255,255,.9);border:none;border-radius:20px;
+  padding:2px 9px;font-size:9.5px;font-weight:800;color:#37003C;cursor:pointer}
+.sh-c.on{background:#00FF87;color:#37003C}
+.fpl-chipbar{background:color-mix(in srgb,var(--purple) 16%,var(--card));border-radius:12px;
+  padding:10px 13px;margin-bottom:10px;font-size:13.5px;color:var(--label)}
+/* collapsible info */
+.infonote{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px;box-shadow:var(--shadow);
+  border:1px solid var(--sep)}
+.infonote-t{font-size:15px;font-weight:700;margin-bottom:4px}
+.infonote-b{font-size:13.5px;color:var(--label2);line-height:1.5}
+.infotag{background:var(--fill);border:none;border-radius:20px;padding:6px 13px;font-size:12.5px;
+  font-weight:600;color:var(--label2);cursor:pointer;margin-bottom:12px}
+
+/* keep the sticky confirm bar from covering the pitch, and get the FAB out of its way */
+body.fpl-editing .main{padding-bottom:150px}
+body.fpl-editing .fab{display:none}
+.fpl-confirm{margin-top:14px}
+
+/* ================= ADD TO HOME SCREEN ================= */
+.a2hs{position:relative;display:flex;gap:12px;align-items:flex-start;background:var(--card);
+  border-radius:15px;padding:14px 38px 14px 14px;margin-bottom:14px;box-shadow:var(--shadow);
+  border:1px solid var(--sep)}
+.a2hs-i{font-size:26px;flex:0 0 auto;line-height:1.1}
+.a2hs-t{font-size:13px;color:var(--label2);line-height:1.5}
+.a2hs-t b{color:var(--label)}
+.a2hs-t>b{display:block;font-size:15px;margin-bottom:2px}
+.a2hs-s{display:inline-block;transform:translateY(1px);color:var(--tint);font-weight:700}
+.a2hs-x{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--label3);
+  font-size:15px;padding:5px 8px;cursor:pointer}
+/* ================= LEVEL-UP CELEBRATION ================= */
+.cele{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(7px);opacity:0;transition:opacity .28s;padding:24px}
+.cele.in{opacity:1}
+.cele.fade{opacity:0}
+.cele-burst{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.cele-burst i{position:absolute;top:-24px;border-radius:2px;opacity:.95;
+  animation:confetti 2.6s cubic-bezier(.2,.7,.4,1) forwards}
+@keyframes confetti{
+  0%{transform:translateY(0) rotate(0);opacity:1}
+  100%{transform:translateY(105vh) rotate(720deg);opacity:.15}
+}
+.cele-card{position:relative;background:var(--card);border-radius:24px;padding:26px 22px 22px;
+  text-align:center;max-width:320px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.4);
+  transform:scale(.8);animation:celePop .5s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes celePop{to{transform:scale(1)}}
+.cele-card.gold{background:linear-gradient(160deg,#FFF6D8,#F4C048 55%,#C9A227);color:#3B2D04}
+.cele-lab{font-size:11px;font-weight:900;letter-spacing:.18em;color:var(--tint)}
+.cele-card.gold .cele-lab{color:#7A5A0C}
+.cele-em{font-size:60px;line-height:1.1;margin:6px 0 2px}
+.cele-name{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.cele-title{font-size:16px;font-weight:700;color:var(--tint);margin-top:2px}
+.cele-card.gold .cele-title{color:#6B4E08}
+.cele-lv{font-size:13.5px;color:var(--label2);margin-top:8px}
+.cele-card.gold .cele-lv{color:#5A4708}
+.cele-lv b{font-size:17px;color:var(--label)}
+.cele-card.gold .cele-lv b{color:#3B2D04}
+.cele-max{margin-top:8px;font-size:12.5px;font-weight:700}
+.cele-more{margin-top:8px;font-size:12.5px;color:var(--label3)}
+@media(prefers-reduced-motion:reduce){
+  .cele-burst{display:none}
+  .cele-card{animation:none;transform:none}
+}
+kbd{display:inline-block;background:var(--fill2);border-radius:5px;padding:1px 6px;
+  font:600 11.5px ui-monospace,SFMono-Regular,monospace;color:var(--label);border:1px solid var(--sep)}
+
+.crosslink{display:inline-flex;align-items:center;gap:7px;margin-top:12px;background:var(--fill);
+  border:none;border-radius:22px;padding:6px 12px 6px 7px;font-size:13.5px;font-weight:600;
+  color:var(--tint);cursor:pointer}
+.crosslink svg{width:14px;height:14px;stroke:var(--tint);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.crosslink .av{width:22px;height:22px;font-size:9px}
 </style>
 </head>
 <body>
@@ -1050,20 +1222,26 @@ function crest(club,size){
   const c1=club.c1||'#888',c2=club.c2||'#fff',ac=club.acc||'#fff';
   const key=club.crest||'solid';
   const round=['circle','ship','snake','wolfc'].includes(key);
-  const SHIELD="M20 2.5 L36.5 8 V20.5 C36.5 30 28.8 36.6 20 38.5 C11.2 36.6 3.5 30 3.5 20.5 V8 Z";
-  const clip=round?`<circle cx="20" cy="20" r="17.5"/>`:`<path d="${SHIELD}"/>`;
-  const edge=round?`<circle cx="20" cy="20" r="17.5" fill="none" stroke="${ac}" stroke-width="1.6"/>`
-                  :`<path d="${SHIELD}" fill="none" stroke="${ac}" stroke-width="1.6"/>`;
+  /* a proper crest silhouette: straight shoulders, tapered waist, pointed base */
+  const SHIELD="M20 1.8 C26 3.4 32 4.4 37 4.6 V19 C37 28.4 29.8 35.8 20 38.6 C10.2 35.8 3 28.4 3 19 V4.6 C8 4.4 14 3.4 20 1.8 Z";
+  const clip=round?`<circle cx="20" cy="20" r="18"/>`:`<path d="${SHIELD}"/>`;
+  /* white outer rim + coloured keyline, the way real badges are built */
+  const edge=round
+    ? `<circle cx="20" cy="20" r="18" fill="none" stroke="url(#${id}rim)" stroke-width="2.2"/>
+       <circle cx="20" cy="20" r="15.6" fill="none" stroke="${ac}" stroke-width="1" opacity=".85"/>`
+    : `<path d="${SHIELD}" fill="none" stroke="url(#${id}rim)" stroke-width="2.2" stroke-linejoin="round"/>
+       <path d="${SHIELD}" fill="none" stroke="${ac}" stroke-width="0.9" opacity=".8"
+         transform="translate(20,20) scale(0.88) translate(-20,-20)" stroke-linejoin="round"/>`;
 
   /* ---- colour patterns ---- */
   const P={
     solid:  `<rect width="40" height="40" fill="${c1}"/>`,
     vstripe:`<rect width="40" height="40" fill="${c2}"/>`+
-            [0,1,2,3].map(i=>`<rect x="${2+i*9.5}" width="5" height="40" fill="${c1}"/>`).join(''),
+            [0,1,2,3,4].map(i=>`<rect x="${1.5+i*7.8}" width="4.2" height="40" fill="${c1}"/>`).join(''),
     halves: `<rect width="40" height="40" fill="${c2}"/><rect width="20" height="40" fill="${c1}"/>`,
     hoops:  `<rect width="40" height="40" fill="${c2}"/>`+
-            [0,1,2,3].map(i=>`<rect y="${2+i*9.5}" width="40" height="5" fill="${c1}"/>`).join(''),
-    sash:   `<rect width="40" height="40" fill="${c2}"/><path d="M-4 26 L26 -4 L38 4 L8 34 Z" fill="${c1}"/>`,
+            [0,1,2,3,4].map(i=>`<rect y="${1.5+i*7.8}" width="40" height="4.2" fill="${c1}"/>`).join(''),
+    sash:   `<rect width="40" height="40" fill="${c2}"/><path d="M-6 28 L28 -6 L40 2 L6 36 Z" fill="${c1}"/>`,
     quarter:`<rect width="40" height="40" fill="${c2}"/><rect width="20" height="20" fill="${c1}"/><rect x="20" y="20" width="20" height="20" fill="${c1}"/>`,
     chevron:`<rect width="40" height="40" fill="${c2}"/><path d="M0 8 L20 20 L40 8 V18 L20 30 L0 18 Z" fill="${c1}"/>`,
     circle: `<rect width="40" height="40" fill="${c1}"/><circle cx="20" cy="20" r="12.5" fill="${c2}"/>`
@@ -1102,28 +1280,47 @@ function crest(club,size){
     wall:'wall',shield:'shield'};
   const em=E[emblemFor[key]]||'';
 
-  /* readable name band across the bottom — no inner outline, no clipped text */
-  const bandY=26.5, band=`<rect x="0" y="${bandY}" width="40" height="9" fill="rgba(0,0,0,.5)"/>`;
+  /* name band shaped to the crest, with a hairline above it like real badges */
+  const bandY = round?27.5:26.5;
+  const band=`<rect x="0" y="${bandY}" width="40" height="10" fill="rgba(8,10,14,.62)"/>
+    <rect x="0" y="${bandY}" width="40" height="0.7" fill="${ac}" opacity=".75"/>`;
   const code=String(club.short||'').slice(0,4);
-  const tSize=code.length>=4?7.6:code.length===3?9:10.5;
+  const tSize=code.length>=4?7.4:code.length===3?8.8:10.2;
   return `<svg width="${s}" height="${s}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <clipPath id="${id}">${clip}</clipPath>
-      <linearGradient id="${id}gl" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
-        <stop offset=".5" stop-color="#fff" stop-opacity=".03"/>
-        <stop offset="1" stop-color="#000" stop-opacity=".10"/>
+      <linearGradient id="${id}gl" x1="0" y1="0" x2="0.35" y2="1">
+        <stop offset="0" stop-color="#fff" stop-opacity=".26"/>
+        <stop offset=".42" stop-color="#fff" stop-opacity=".05"/>
+        <stop offset=".62" stop-color="#000" stop-opacity=".06"/>
+        <stop offset="1" stop-color="#000" stop-opacity=".22"/>
       </linearGradient>
+      <linearGradient id="${id}rim" x1=".15" y1="0" x2=".85" y2="1">
+        <stop offset="0" stop-color="#ffffff"/>
+        <stop offset=".28" stop-color="#f2f4f7"/>
+        <stop offset=".52" stop-color="#c9ced6"/>
+        <stop offset=".74" stop-color="#eef1f5"/>
+        <stop offset="1" stop-color="#a8aeb8"/>
+      </linearGradient>
+      <radialGradient id="${id}sp" cx=".32" cy=".22" r=".7">
+        <stop offset="0" stop-color="#fff" stop-opacity=".30"/>
+        <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+      </radialGradient>
+      <filter id="${id}sh" x="-30%" y="-30%" width="160%" height="160%">
+        <feDropShadow dx="0" dy="0.6" stdDeviation="0.7" flood-color="#000" flood-opacity=".45"/>
+      </filter>
     </defs>
     <g clip-path="url(#${id})">
       ${pat}
-      <g transform="translate(0,-3.2)">${em}</g>
+      <g transform="translate(0,-3.6)" filter="url(#${id}sh)">${em}</g>
       ${band}
-      <text x="20" y="${bandY+6.6}" font-family="-apple-system,'SF Pro Text',Inter,sans-serif" font-size="${tSize}"
-        font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="0.2">${code}</text>
+      <text x="20" y="${bandY+7.2}" font-family="-apple-system,'SF Pro Text',Inter,sans-serif" font-size="${tSize}"
+        font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="0.3">${code}</text>
       <rect width="40" height="40" fill="url(#${id}gl)"/>
+      <rect width="40" height="40" fill="url(#${id}sp)"/>
     </g>
     ${edge}</svg>`;
+
 }
 
 
@@ -1795,7 +1992,7 @@ const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Numb
 ['🌍','Household Name'],['🏅','Cult Hero'],['⚔️','Big Occasion King'],['📯','Record Breaker'],['🏆','Title Winner'],
 ['🐉','Club Legend'],['🕊️','Hall of Fame'],['✨','All-Time Great'],['🌌','Immortal'],['🥇','Ballon d\'Or']];
 
-const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round(42*Math.pow(i,1.62)/5)*5}));
+const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round((20*i + 0.98*Math.pow(i,2.74))/5)*5}));
 function xpOf(m){let x=m.P*XP.app+m.W*XP.win+m.D*XP.draw+m.G*XP.goal;
   m.seq.forEach(s=>{if(s.goals>=3)x+=XP.hat;if(s.ga===0)x+=XP.clean});
   if(m.streak.type==='W'&&m.streak.n>=3)x+=XP.streak*(m.streak.n-2);return Math.round(x)}
@@ -1899,7 +2096,7 @@ function feed(){const gl=allGames(),ap={},go_={},ev=[],T=[1,5,10,25,50,100];
 const $=s=>document.querySelector(s);
 const app=()=>$('#app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
+function toast(m){ const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 const initials=n=>{const p=String(n||'?').trim().split(/\s+/);return((p[0]||'?')[0]+((p[1]||'')[0]||'')).toUpperCase()};
 const fdate=d=>{if(!d)return'—';const x=new Date(d);return isNaN(x)?esc(d):x.toLocaleDateString('en-GB',{day:'numeric',month:'short'})};
 const clubOf=p=>p&&p.club?CLUB_BY[p.club]:null;
@@ -1989,7 +2186,9 @@ const wideScreen=()=>window.innerWidth>=900;
 function openDrawer(){document.body.classList.add('drawer')}
 function closeDrawer(){document.body.classList.remove('drawer')}
 function toggleDrawer(){document.body.classList.contains('drawer')?closeDrawer():openDrawer()}
-function go(v){VIEW=v;document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===v));
+function go(v){haptic('light');
+  if(v!==VIEW&&!['player','pcareer','match','seasonView'].includes(v))BACKSTACK=[];
+  VIEW=v;if(v!=='fpl')fplEditingClass(false);document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===v));
   if(!wideScreen())closeDrawer();
   render();window.scrollTo(0,0)}
 const chev='<svg class="chev" viewBox="0 0 8 13"><path d="M1.5 1.5L6.5 6.5l-5 5"/></svg>';
@@ -2015,7 +2214,7 @@ function vHome(){
   const carTop=st.filter(x=>x.P>0).map(x=>({x,c:careerOf(x.id)})).sort((a,b)=>b.c.xp-a.c.xp).slice(0,3);
   $('#navMount').innerHTML=navbar();
   if(!ag.length){app().innerHTML=`<div class="view active"><div class="largetitle">${esc(S.name)}</div>
-    <div class="wrap">${cloudBanner()}<div class="empty"><div class="ee">⚽</div><h3>${S.players.length?'Ready when you are':'Let\'s set up'}</h3>
+    <div class="wrap">${cloudBanner()}${a2hsBanner()}<div class="empty"><div class="ee">⚽</div><h3>${S.players.length?'Ready when you are':'Let\'s set up'}</h3>
     <p>${S.players.length?'Log your first game and the table, stats and career all start filling in.':'Add your regulars first, then log a game.'}</p>
     <button class="btn pri" onclick="${S.players.length?'newGame()':'editPlayer(null)'}">${S.players.length?'Log a game':'Add players'}</button></div></div></div>`;return}
   app().innerHTML=`<div class="view active">
@@ -2361,14 +2560,14 @@ function vSquad(){
     </div></div>`}
 
 /* ============ PLAYER — simplified ============ */
-function openPlayer(id){pushBack(()=>go('squad'));app()._pid=id;go('player')}
+function openPlayer(id){if(VIEW==='player'&&app()._pid===id)return;pushBack();app()._pid=id;go('player')}
 function vPlayer(pid){
   const p=player(pid);if(!p){go('squad');return}
   const m=statsAll().find(x=>x.id===pid);const car=careerOf(pid);
   const c=clubOf(p),r=rtg(p),rk=ranks(lgStats()).find(x=>x.id===pid);
   const gl=allGames().filter(g=>(g.teamA||[]).includes(pid)||(g.teamB||[]).includes(pid)).reverse().slice(0,8);
   const ps=(p.ps&&PS_BY[p.ps])?PS_BY[p.ps]:null, pscol=ps?PS_CAT[ps.cat].col:'var(--tint)';
-  $('#navMount').innerHTML=navbar({label:'Squad',on:"go('squad')"},{label:'Edit',on:`editPlayer('${pid}')`});
+  $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"},{label:'Edit',on:`editPlayer('${pid}')`});
   app().innerHTML=`<div class="view active"><div class="wrap" style="padding-top:8px">
 
     <!-- player card -->
@@ -2527,17 +2726,19 @@ function milestoneCatalogue(board){
           <div class="cd">${esc(c.d)} · <span class="chalx">+${c.x} XP</span></div></div>
         <div class="cx" style="${n?'color:var(--green)':'color:var(--label3)'}">${n?n+' ✓':'—'}</div></div>`}).join('')}</div>
     <div class="note">The tick count shows how many of the squad have unlocked each one.</div>`}
-function openCareer(id){pushBack(()=>go('career'));app()._pid=id;go('pcareer')}
+function openCareer(id){if(VIEW==='pcareer'&&app()._pid===id)return;pushBack();app()._pid=id;go('pcareer')}
 function vPCareer(pid){
   const p=player(pid),car=careerOf(pid);if(!p||!car){go('career');return}
   const groups={};car.ch.forEach(c=>(groups[c.g]=groups[c.g]||[]).push(c));
   const done=car.ch.filter(c=>c.done).length;
-  $('#navMount').innerHTML=navbar({label:'Career',on:"go('career')"});
+  $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"});
   app().innerHTML=`<div class="view active"><div class="wrap" style="padding-top:8px">
     <div style="text-align:center;padding:12px 0 22px">
       <div style="font-size:62px;line-height:1">${car.lvl.e}</div>
       <div style="font-size:27px;font-weight:800;letter-spacing:-.035em;margin-top:8px">${car.lvl.t}</div>
-      <div style="font-size:15px;color:var(--label2);margin-top:3px">${esc(p.name)} · Level ${car.lvl.n} of ${LEVELS.length}</div>
+      <div style="font-size:15px;color:var(--label2);margin-top:3px">Level ${car.lvl.n} of ${LEVELS.length}</div>
+      <button class="crosslink" onclick="openPlayer('${pid}')">${avatar(p,22)}<span>${esc(p.name)}'s profile</span>
+        <svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
       <div style="max-width:320px;margin:18px auto 0"><div class="xpbar"><i style="width:${car.lvl.pct}%"></i></div>
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--label2);margin-top:8px">
           <span><b style="color:var(--label)">${car.xp.toLocaleString()}</b> XP</span>
@@ -2563,10 +2764,52 @@ function chalRow(c){return `<div class="chal ${c.done?'done':'locked'}">
   <div class="cx" style="${c.done?'color:var(--green)':'color:var(--label3)'}">${c.done?'✓':c.cur+'/'+c.tot}</div></div>`}
 
 /* ============ iOS-STYLE GESTURES ============ */
-/* Back-stack so swipe-right returns to where you came from */
+/* ============ HISTORY ============
+   We snapshot the ACTUAL state you are leaving (which view, which player,
+   which tab, where you were scrolled) rather than a fixed destination — so
+   Denis's profile → his Career → back lands you on Denis's profile again. */
 let BACKSTACK=[];
-function pushBack(fn){BACKSTACK.push(fn); if(BACKSTACK.length>12)BACKSTACK.shift()}
-function goBack(){const f=BACKSTACK.pop(); if(f){f()}else{go('home')}}
+const NAV_LABEL={home:'Home',league:'League',fixtures:'Fixtures',squad:'Squad',tactics:'Tactics',
+  career:'Career',fpl:'Sunday FPL',stats:'Stats',compare:'Compare',history:'Hall of Fame',
+  comps:'Competitions',admin:'Admin',player:'Player',pcareer:'Career',match:'Match',seasonView:'Season'};
+function viewSnap(){
+  return {v:VIEW, pid:app()._pid, gid:app()._gid, sid:app()._sid,
+    y:window.scrollY||0,
+    t:{FTAB,HMODE,SMODE,CMODE,TAC,SCOMP,PF,SMIN,LADOPEN,POTMOPEN,LVLOPEN}};
+}
+const trimLabel=t=>{t=String(t||'Back'); return t.length>14?t.slice(0,13).trim()+'…':t};
+function labelFor(snap){
+  if(!snap)return 'Back';
+  if(snap.v==='player'){const p=player(snap.pid); return trimLabel(p?p.name.split(' ')[0]:'Player')}
+  if(snap.v==='pcareer'){const p=player(snap.pid); return trimLabel(p?p.name.split(' ')[0]:'Career')}
+  return trimLabel(NAV_LABEL[snap.v]||'Back');
+}
+function backLabel(){ return labelFor(BACKSTACK[BACKSTACK.length-1]) }
+function pushBack(){
+  const snap=viewSnap();
+  const top=BACKSTACK[BACKSTACK.length-1];
+  /* don't stack the same place twice */
+  if(top&&top.v===snap.v&&top.pid===snap.pid&&top.gid===snap.gid&&top.sid===snap.sid)return;
+  BACKSTACK.push(snap);
+  if(BACKSTACK.length>20)BACKSTACK.shift();
+}
+function goBack(){
+  const s=BACKSTACK.pop();
+  if(!s){ go('squad'); return; }
+  haptic('light');
+  VIEW=s.v;
+  if(s.pid!=null)app()._pid=s.pid;
+  if(s.gid!=null)app()._gid=s.gid;
+  if(s.sid!=null)app()._sid=s.sid;
+  const t=s.t||{};
+  if(t.FTAB!=null)FTAB=t.FTAB; if(t.HMODE!=null)HMODE=t.HMODE; if(t.SMODE!=null)SMODE=t.SMODE;
+  if(t.CMODE!=null)CMODE=t.CMODE; if(t.TAC!=null)TAC=t.TAC; if(t.SCOMP!=null)SCOMP=t.SCOMP;
+  if(t.PF!=null)PF=t.PF; if(t.SMIN!=null)SMIN=t.SMIN; if(t.LADOPEN!=null)LADOPEN=t.LADOPEN;
+  if(t.POTMOPEN!=null)POTMOPEN=t.POTMOPEN; if(t.LVLOPEN!=null)LVLOPEN=t.LVLOPEN;
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav===VIEW));
+  render();
+  requestAnimationFrame(()=>window.scrollTo(0,s.y||0));
+}
 
 function initGestures(){
   const main=document.querySelector('.main')||document.body;
@@ -2594,36 +2837,58 @@ function initGestures(){
     moved=0;
   },{passive:true});
 
-  /* ---- pull to refresh ---- */
+  /* ---- pull to refresh (iOS style: arrow rotates, then becomes a spinner) ---- */
   const ind=document.createElement('div');
-  ind.className='ptr'; ind.innerHTML='<div class="ptr-s"></div>';
+  ind.className='ptr';
+  ind.innerHTML='<svg class="ptr-a" viewBox="0 0 24 24"><path d="M12 5v14M12 19l-5-5M12 19l5-5"/></svg><div class="ptr-s"></div>';
   document.body.appendChild(ind);
-  let py=0,pulling=false,dist=0;
+  const TRIG=72;
+  let py=0,pulling=false,dist=0,armed=false,busy=false;
   document.addEventListener('touchstart',e=>{
-    if(e.touches.length!==1)return;
-    pulling=(window.scrollY<=0); py=e.touches[0].clientY; dist=0;
+    if(e.touches.length!==1||busy)return;
+    pulling=(window.scrollY<=0); py=e.touches[0].clientY; dist=0; armed=false;
+    ind.style.transition='';
   },{passive:true});
   document.addEventListener('touchmove',e=>{
     if(!pulling||e.touches.length!==1)return;
     if($('#sbg').classList.contains('open')||$('#vbg').classList.contains('open')){pulling=false;return}
     dist=e.touches[0].clientY-py;
     if(dist>0&&window.scrollY<=0){
-      const d=Math.min(dist*.5,90);
-      ind.style.transform=`translateY(${d}px)`;ind.style.opacity=String(Math.min(d/60,1));
-      ind.querySelector('.ptr-s').style.transform=`rotate(${d*4}deg)`;
+      const d=Math.min(dist*0.55,96);                 // rubber-band
+      const p=Math.min(d/TRIG,1);
+      ind.style.transform=`translateY(${d}px)`;
+      ind.style.opacity=String(Math.min(p*1.2,1));
+      ind.querySelector('.ptr-a').style.transform=`rotate(${p>=1?180:p*180}deg)`;
+      if(p>=1&&!armed){armed=true;haptic('light');ind.classList.add('armed')}
+      if(p<1&&armed){armed=false;ind.classList.remove('armed')}
     }
   },{passive:true});
   document.addEventListener('touchend',async()=>{
     if(!pulling)return; pulling=false;
-    ind.style.transition='transform .3s,opacity .3s';
-    if(dist>110){
+    ind.style.transition='transform .34s cubic-bezier(.32,.72,0,1),opacity .3s';
+    if(armed){
+      busy=true;
       ind.classList.add('spin');
-      try{ if(supa){DB=await Store.get(MAIN_KEY)||DB; CUR=DB.current; } }catch(e){}
-      render(); toast('↻ Refreshed');
+      ind.style.transform='translateY(58px)'; ind.style.opacity='1';
+      haptic('success');
+      try{
+        if(supa){
+          const fresh=await Store.get(MAIN_KEY);
+          if(fresh&&fresh.seasons&&fresh.seasons.length){
+            DB=fresh; CUR=DB.current||DB.seasons[0].id;
+            if(!season().comps.some(c=>c.id===COMP))COMP=season().comps[0].id;
+          }
+        }
+      }catch(e){}
+      await new Promise(r=>setTimeout(r,420));        // let the spinner be seen
+      render();
+      toast(CLOUD_FAIL?'⚠️ Could not reach the database':'↻ Up to date');
+      busy=false;
     }
-    ind.style.transform='';ind.style.opacity='0';
-    setTimeout(()=>{ind.style.transition='';ind.classList.remove('spin')},320);
-    dist=0;
+    ind.style.transform=''; ind.style.opacity='0';
+    setTimeout(()=>{ind.style.transition='';ind.classList.remove('spin','armed');
+      ind.querySelector('.ptr-a').style.transform='';},360);
+    dist=0; armed=false;
   },{passive:true});
 
   /* ---- large title shrinks into the nav bar on scroll ---- */
@@ -2930,6 +3195,24 @@ function fplForget(){
   try{localStorage.removeItem('ss_fpl_code')}catch(e){}
   try{sessionStorage.removeItem('ss_fpl_code')}catch(e){}
 }
+/* Personal links: opening  <site>/#c=CODE  signs that person in automatically.
+   Phones sometimes clear stored data after a week of not opening a site, so a
+   saved personal link means nobody ever has to retype their code. */
+function fplAutoLogin(){
+  try{
+    const h=(location.hash||'').replace(/^#/,'');
+    const m=h.match(/(?:^|&)c=([A-Za-z0-9\-]+)/);
+    if(!m)return;
+    const mgr=fplManager(decodeURIComponent(m[1]));
+    if(mgr){
+      fplRemember(mgr.code);
+      try{history.replaceState(null,'',location.href.split('#')[0])}catch(e){}   // tidy the address bar
+      setTimeout(()=>toast(`Welcome back, ${mgr.name}`),600);
+    }
+  }catch(e){}
+}
+function fplLinkFor(code){ return location.href.split('#')[0]+'#c='+encodeURIComponent(code) }
+
 const fplMine=()=>{
   let c=null;
   try{c=localStorage.getItem('ss_fpl_code')}catch(e){}
@@ -3259,84 +3542,97 @@ function fplMyTeam(m,locked){
   const probs=draftProblems(m), dirty=draftDirty(m);
   const confirmed=m.squad&&m.squad.length===FPL_RULES.squadSize;
   const gws=playedGws(), last=gws[gws.length-1];
-  const ch=draftChanges(m);
-  const sh=squadShape(d.squad);
-  const card=pid=>{
+  const ch=draftChanges(m), sh=squadShape(d.squad);
+  const need=FPL_RULES.squadSize-d.squad.length;
+  const gwPts=last?fplManagerGw(m,last):0, total=fplManagerTotal(m);
+  const rank=fplTable().findIndex(r=>r.m.pid===m.pid)+1;
+
+  /* an FPL-style shirt: crest badge, name bar, points bar */
+  const shirt=pid=>{
     const p=player(pid); if(!p)return '';
     const isNew=!(m.squad||[]).includes(pid);
-    return `<div class="fpl-slot">
-      <div class="fpl-card ${d.captain===pid?'cap':''} ${isNew?'fresh':''}" onclick="fplPick('${pid}')">
-        ${d.captain===pid?`<span class="fpl-capbadge">${(m.tcGws||[]).includes(fplNextGw())?'3C':'C'}</span>`:''}
-        ${isNew?'<span class="fpl-new">NEW</span>':''}
-        <div class="fpl-crest">${avatar(p,40)}</div>
-        <div class="fpl-nm">${esc(p.name.split(' ')[0])}</div>
-        <div class="fpl-meta"><span>£${fplPrice(pid).toFixed(1)}m</span><span>${last?fplPlayerGw(pid,last):0}</span></div>
-      </div>
-      <button class="fpl-capbtn ${d.captain===pid?'on':''}" onclick="event.stopPropagation();draftCaptain('${pid}')">${d.captain===pid?'Captain':'Captain?'}</button>
+    const cap=d.captain===pid;
+    const tc=(m.tcGws||[]).includes(fplNextGw());
+    const pts=last?fplPlayerGw(pid,last):0;
+    return `<div class="sh ${isNew?'sh-new':''}">
+      <button class="sh-top" onclick="fplPick('${pid}')">
+        ${cap?`<span class="sh-cap">${tc?'3C':'C'}</span>`:''}
+        ${isNew?'<span class="sh-badge">NEW</span>':''}
+        <span class="sh-kit">${avatar(p,40)}</span>
+      </button>
+      <div class="sh-name">${esc(p.name.split(' ')[0])}</div>
+      <div class="sh-pts">${pts}</div>
+      <button class="sh-c ${cap?'on':''}" onclick="event.stopPropagation();draftCaptain('${pid}')">${cap?'C':'set C'}</button>
     </div>`;
   };
-  const row=pos=>{
+  const line=pos=>{
     const ids=d.squad.filter(x=>(player(x)||{}).pos===pos);
-    return `<div class="fpl-line">${ids.map(card).join('')}
-      ${d.squad.length<FPL_RULES.squadSize?`<div class="fpl-slot">
-        <div class="fpl-card empty" onclick="fplSwap('${pos}')"><div class="fpl-plus">+</div>
-          <div class="fpl-nm">${pos}</div></div></div>`:''}</div>`;
+    const mustFill=need>0&&!ids.length;
+    if(!ids.length&&!mustFill)return '';
+    return `<div class="sh-line">${ids.map(shirt).join('')}
+      ${mustFill?`<div class="sh"><button class="sh-top empty" onclick="fplSwap('${pos}')">
+        <span class="sh-plus">+</span></button><div class="sh-name">${pos}</div>
+        <div class="sh-pts need">needed</div></div>`:''}</div>`;
   };
+
+  fplEditingClass(dirty);
   return `
-    <div class="note" style="background:var(--fill);border-radius:12px;padding:11px 13px;margin-bottom:12px">
-      ✏️ Five outfield players, at least one from each position. Change your team whenever you like — whatever is confirmed when the next game is logged is what scores.</div>
-    <div class="fpl-head">
-      <div><div class="fpl-tn">${esc(m.teamName)}</div>
-        <div class="fpl-mn">${esc(m.name)} · ${sh.DEF}-${sh.MID}-${sh.ATT}</div></div>
-      <div class="fpl-bud"><b style="color:${left<0?'var(--red)':'var(--tint)'}">£${left.toFixed(1)}m</b><span>${left<0?'over':'left'}</span></div>
-    </div>
-    ${m.wildcardActive?`<div class="note" style="background:color-mix(in srgb,var(--purple) 14%,transparent);border-radius:12px;padding:10px 13px;margin-bottom:10px">
-      🃏 <b>Wildcard active</b> — unlimited changes until you confirm.</div>`:''}
-    <div class="fpl-pitch">
-      <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <rect x="2" y="2" width="96" height="96" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
-        <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
-        <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".6"/>
-        <rect x="30" y="2" width="40" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".55"/>
-      </svg>
-      <div class="fpl-rows">${row('ATT')}${row('MID')}${row('DEF')}</div>
+    ${fplInfoNote()}
+
+    <!-- FPL-style header -->
+    <div class="fh">
+      <div class="fh-row">
+        <div class="fh-team"><div class="fh-tn">${esc(m.teamName)}</div>
+          <div class="fh-mn">${esc(m.name)}${rank?` · ${ordinal(rank)}`:''}</div></div>
+        <div class="fh-gw"><b>${gwPts}</b><span>${last?`GW${last}`:'points'}</span></div>
+      </div>
+      <div class="fh-stats">
+        <div><b>${total}</b><span>Total</span></div>
+        <div><b>${sh.DEF}-${sh.MID}-${sh.ATT}</b><span>Shape</span></div>
+        <div><b class="${left<0?'neg':''}">£${left.toFixed(1)}m</b><span>${left<0?'Over':'Left'}</span></div>
+        <div><b>${transfersLeft(m)}</b><span>Transfers</span></div>
+      </div>
     </div>
 
-    ${(!confirmed&&(m.squad||[]).length&&(m.squad||[]).length<FPL_RULES.squadSize)?`<div class="fpl-todo" style="background:color-mix(in srgb,var(--blue) 12%,var(--card));border-color:color-mix(in srgb,var(--blue) 40%,transparent)"><div class="fpl-todo-i">📣 <b>The game moved to ${FPL_RULES.squadSize} players.</b> Your original ${(m.squad||[]).length} are safe — just add ${FPL_RULES.squadSize-(m.squad||[]).length} more and confirm. No transfers used.</div></div>`:''}
+    ${m.wildcardActive?`<div class="fpl-chipbar">🃏 <b>Wildcard active</b> — unlimited changes until you confirm</div>`:''}
+
+    <div class="fpitch">
+      <div class="fp-lines"></div>
+      <div class="fp-rows">${line('ATT')}${line('MID')}${line('DEF')}</div>
+    </div>
+
+    ${need>0?`<button class="btn pri full" style="margin-top:10px" onclick="fplSwap()">
+      + Add ${need} more player${need===1?'':'s'} <span style="opacity:.7">(${d.squad.length}/${FPL_RULES.squadSize})</span></button>`:''}
+
+    ${(!confirmed&&(m.squad||[]).length&&(m.squad||[]).length<FPL_RULES.squadSize)?`<div class="fpl-todo" style="background:color-mix(in srgb,var(--blue) 12%,var(--card));border-color:color-mix(in srgb,var(--blue) 40%,transparent)">
+      <div class="fpl-todo-i">📣 <b>The game moved to ${FPL_RULES.squadSize} players.</b> Your original ${(m.squad||[]).length} are safe — add ${FPL_RULES.squadSize-(m.squad||[]).length} more and confirm. No transfers used.</div></div>`:''}
     ${(function(){const dup=squadClash(d.squad);
       return dup?`<div class="fpl-todo" style="background:color-mix(in srgb,var(--red) 12%,var(--card));border-color:color-mix(in srgb,var(--red) 40%,transparent)">
-        <div class="fpl-todo-i">🔄 <b>${esc(dup)}</b> is now a keeper, and keepers are not in the fantasy game. Swap them out to fix it — your points so far are safe.</div></div>`:''})()}
+        <div class="fpl-todo-i">🔄 <b>${esc(dup)}</b> is now a keeper, and keepers are not in the fantasy game. Swap them out to fix it.</div></div>`:''})()}
     ${probs.length?`<div class="fpl-todo">${probs.map(p=>`<div class="fpl-todo-i">⚠️ ${esc(p)}</div>`).join('')}</div>`:''}
 
     ${dirty?`<div class="fpl-confirm">
-        <div class="fpl-c-t">${confirmed?`${ch.count} change${ch.count===1?'':'s'} not saved yet`:'Your team is not saved yet'}</div>
+        <div class="fpl-c-t">${confirmed?`${ch.count} change${ch.count===1?'':'s'} not saved`:'Team not saved yet'}</div>
         <div class="btnrow">
           <button class="btn sec" onclick="discardDraft()">Discard</button>
           <button class="btn pri" ${probs.length?'style="opacity:.5"':''} onclick="confirmDraft()">
             ${confirmed?(m.wildcardActive?'Confirm wildcard':`Confirm ${ch.count} transfer${ch.count===1?'':'s'}`):'Confirm my team'}</button>
         </div></div>`
-      :confirmed?`<div class="fpl-saved">✅ Team saved and entered in the mini league</div>`:''}
-
-    ${confirmed?`<div class="tiles" style="margin-top:12px">
-      ${tile(fplManagerTotal(m),'Total points','','var(--tint)')}
-      ${tile(last?fplManagerGw(m,last):0,'Last gameweek')}
-      ${tile(transfersLeft(m),'Transfers left')}
-      ${tile('£'+spend.toFixed(1)+'m','Squad value')}</div>`:''}
+      :confirmed?`<div class="fpl-saved">✅ Saved and entered in the mini league</div>`:''}
 
     ${(function(){const wcL=FPL_RULES.chips-(m.wildcards||0), tcL=FPL_RULES.chips-(m.tripleCaps||0);
-      const pips=(left)=>`<span class="pips">${Array.from({length:FPL_RULES.chips},(_,i)=>
-        `<i class="${i<left?'on':''}"></i>`).join('')}</span>`;
+      const pips=l=>`<span class="pips">${Array.from({length:FPL_RULES.chips},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}</span>`;
       return `<div class="sechead">Chips</div>
       <div class="card">
         <div class="row ${wcL>0?'tap':''}" onclick="${wcL>0?'playWildcard()':''}">
           <div style="font-size:21px;flex:0 0 28px">🃏</div>
           <div class="rt"><div class="r1">Wildcard ${pips(wcL)}</div>
-            <div class="r2">${wcL>0?`Unlimited free transfers for one set of changes · ${wcL} of ${FPL_RULES.chips} left`:'Both used this season'}</div></div>
+            <div class="r2">${wcL>0?'Unlimited free transfers for one set of changes':'Both used this season'}</div></div>
           <span class="chip-state ${wcL>0?'':'used'}">${wcL>0?wcL+' LEFT':'USED'}</span></div>
         <div class="row ${tcL>0?'tap':''}" onclick="${tcL>0?'playTripleCaptain()':''}">
           <div style="font-size:21px;flex:0 0 28px">🔥</div>
           <div class="rt"><div class="r1">Triple Captain ${pips(tcL)}</div>
-            <div class="r2">${tcL>0?`Captain scores ×3 for one gameweek · ${tcL} of ${FPL_RULES.chips} left`:'Both used this season'}${(m.tcGws||[]).length?` · played GW${m.tcGws.join(', GW')}`:''}</div></div>
+            <div class="r2">${tcL>0?'Captain scores ×3 for one gameweek':'Both used this season'}${(m.tcGws||[]).length?` · GW${m.tcGws.join(', GW')}`:''}</div></div>
           <span class="chip-state ${tcL>0?'':'used'}">${tcL>0?tcL+' LEFT':'USED'}</span></div>
       </div>`})()}
 
@@ -3345,6 +3641,19 @@ function fplMyTeam(m,locked){
       <div class="row tap" onclick="fplLogout()"><div class="rt"><div class="r1" style="color:var(--red)">Sign out of FPL</div></div></div>
     </div>`;
 }
+/* the "how it works" note — read once, then it collapses to a small ⓘ */
+function fplEditingClass(on){ try{document.body.classList.toggle('fpl-editing',!!on)}catch(e){} }
+function fplInfoNote(){
+  let seen=false; try{seen=localStorage.getItem('ss_fpl_info')==='1'}catch(e){}
+  if(seen)return `<button class="infotag" onclick="fplInfoShow()">ⓘ How scoring works</button>`;
+  return `<div class="infonote">
+    <div class="infonote-t">✏️ Five outfield players, at least one from each position.</div>
+    <div class="infonote-b">Change your team whenever you like — whatever is confirmed when the next game is logged is what scores.</div>
+    <button class="btn pri sm full" style="margin-top:10px" onclick="fplInfoHide()">Got it</button></div>`;
+}
+function fplInfoHide(){ try{localStorage.setItem('ss_fpl_info','1')}catch(e){} render(); }
+function fplInfoShow(){ FTAB='rules'; render(); }
+
 async function setTeamName(v){
   const m=fplMine(); if(!m)return;
   const n=(v||'').trim(); if(!n){toast('Give your team a name');return}
@@ -3358,13 +3667,12 @@ async function renameTeam(){
 }
 
 /* if two of a manager's picks now share a position, name the culprit */
+/* Positions may now repeat (2 attackers is fine), so the only structural
+   problem is someone in your squad becoming a keeper. */
 function squadClash(squad){
-  const seen={};
   for(const id of (squad||[])){
     const p=player(id); if(!p)continue;
-    const pos=p.pos||'MID';
-    if(seen[pos])return p.name;
-    seen[pos]=id;
+    if(!FPL_RULES.eligible.includes(p.pos||'MID'))return p.name;
   }
   return null;
 }
@@ -3409,6 +3717,7 @@ function draftProblems(m){
 }
 function fplSwap(pos){ FPICK=pos||null; FTAB='market'; render(); }
 function fplPick(pid){
+  haptic('light');
   const m=fplMine(); if(!m)return;
   const p=player(pid); if(!p)return;
   if(!FPL_RULES.eligible.includes(p.pos||'MID')){toast('Keepers aren\'t in the fantasy game');return}
@@ -3426,6 +3735,7 @@ function fplPick(pid){
   render();
 }
 function draftCaptain(pid){
+  haptic('light');
   const m=fplMine(); if(!m)return;
   const d=draftOf(m);
   if(!d.squad.includes(pid)){toast('You can only captain someone in your team');return}
@@ -3449,6 +3759,7 @@ async function confirmDraft(){
   FDRAFT=null;
   await fplSave();
   render();
+  haptic('success');
   toast(firstTeam?'✅ Team confirmed — you\'re in the league':'✅ Transfers confirmed');
 }
 async function fplSave(){
@@ -3739,6 +4050,13 @@ async function shareQR(){
   }catch(e){ toast('Could not create the QR image'); }
 }
 
+async function copyInvite(code,name){
+  const link=fplLinkFor(code);
+  const txt=`${name} — your Sunday FPL link:\n${link}\n\nOpen it and you're signed in automatically. Pick ${FPL_RULES.squadSize} outfield players (at least one defender, midfielder and attacker) with £${FPL_RULES.budget}m.\n\nTip: save the link or add it to your home screen.`;
+  try{ await navigator.clipboard.writeText(txt); toast(`📋 ${name}'s invite copied`); }
+  catch(e){ toast(link); }
+}
+
 async function copyCode(code,name){
   try{ await navigator.clipboard.writeText(code); toast(`📋 ${name}'s code copied`); }
   catch(e){ toast('Code: '+code); }
@@ -3746,13 +4064,137 @@ async function copyCode(code,name){
 async function copyAllCodes(){
   const url=location.origin+location.pathname;
   const lines=fpl().managers.map(m=>`${m.name}: ${m.code}`).join('\n');
-  const txt=`Sunday FPL — your code\n${url}\n\n${lines}\n\nOpen the link, tap the 🕹️ tab, enter your code and pick 3 players.`;
+  const txt=`🕹️ Sunday FPL\n${url}\n\n${lines}\n\nOpen the link, tap the 🕹️ tab, enter your code and pick ${FPL_RULES.squadSize} outfield players with £${FPL_RULES.budget}m.\nYou only enter the code once.`;
   try{ await navigator.clipboard.writeText(txt); toast('📋 All codes copied — paste into WhatsApp'); }
   catch(e){ toast('Could not copy'); }
 }
 
+/* ============ ADD TO HOME SCREEN ============
+   iOS gives no API to trigger the install, so there we can only show the steps.
+   Android fires beforeinstallprompt, which we can turn into a real one-tap
+   install button. Either way it is shown once and dismissible. */
+let INSTALL_EVT=null;
+window.addEventListener('beforeinstallprompt',e=>{ e.preventDefault(); INSTALL_EVT=e; });
+const isStandalone=()=>{
+  try{ return window.navigator.standalone===true ||
+    window.matchMedia('(display-mode: standalone)').matches; }catch(e){ return false }
+};
+const isIOS=()=>/iPad|iPhone|iPod/.test(navigator.userAgent||'');
+function a2hsDismissed(){ try{return localStorage.getItem('ss_a2hs')==='1'}catch(e){return false} }
+function dismissA2HS(){ try{localStorage.setItem('ss_a2hs','1')}catch(e){} render(); }
+async function doInstall(){
+  if(INSTALL_EVT){
+    INSTALL_EVT.prompt();
+    try{ await INSTALL_EVT.userChoice }catch(e){}
+    INSTALL_EVT=null; dismissA2HS(); return;
+  }
+  dismissA2HS();
+}
+const isMac=()=>/Macintosh|Mac OS X/.test(navigator.userAgent||'')&&!('ontouchend' in document);
+function a2hsBanner(){
+  if(isStandalone()||a2hsDismissed())return '';
+  const canPrompt=!!INSTALL_EVT;
+  const desktop=window.innerWidth>=900;
+  /* laptops get a bookmark tip instead — there is no home screen to add to */
+  const body = desktop
+    ? `Press <kbd>${isMac()?'⌘':'Ctrl'}</kbd> + <kbd>D</kbd> to bookmark it, so it is one click away each week.`
+    : canPrompt
+      ? 'Opens full screen and keeps you signed in.'
+      : isIOS()
+        ? 'Tap <b>Share</b> <span class="a2hs-s">⎋</span> then <b>Add to Home Screen</b>. It opens full screen and keeps you signed in.'
+        : 'Open your browser menu and choose <b>Add to Home screen</b>.';
+  return `<div class="a2hs">
+    <button class="a2hs-x" onclick="dismissA2HS()">✕</button>
+    <div class="a2hs-i">${desktop?'🔖':'⚽'}</div>
+    <div class="a2hs-t"><b>${desktop?'Bookmark this page':'Add to your home screen'}</b>
+      <div>${body}</div>
+      ${(!desktop&&canPrompt)?`<button class="btn pri sm" style="margin-top:9px" onclick="doInstall()">Install</button>`:''}
+    </div></div>`;
+}
+
+/* ============ LEVEL-UP CELEBRATION ============ */
+function levelSnapshot(){
+  const o={};
+  season().players.forEach(p=>{ const c=careerOf(p.id); if(c)o[p.id]=c.lvl.n; });
+  return o;
+}
+function levelUps(before){
+  const out=[];
+  season().players.forEach(p=>{
+    const c=careerOf(p.id); if(!c)return;
+    const was=before[p.id];
+    if(was!=null&&c.lvl.n>was)out.push({p,from:was,to:c.lvl.n,lvl:c.lvl});
+  });
+  return out.sort((a,b)=>b.to-a.to);
+}
+function celebrate(ups){
+  if(!ups||!ups.length)return;
+  const u=ups[0], more=ups.length-1;
+  const gold=u.to>=30;
+  const el=document.createElement('div');
+  el.className='cele';
+  el.innerHTML=`
+    <div class="cele-burst">${Array.from({length:42},(_,i)=>{
+      const cols=['#FF3B30','#FF9F0A','#FFD60A','#30D158','#0A84FF','#BF5AF2','#FF2D6F'];
+      const c=cols[i%cols.length], x=(Math.random()*100).toFixed(1);
+      const d=(Math.random()*0.5).toFixed(2), r=(Math.random()*360).toFixed(0);
+      const w=(6+Math.random()*6).toFixed(0);
+      return `<i style="left:${x}%;background:${c};animation-delay:${d}s;transform:rotate(${r}deg);width:${w}px;height:${(+w*1.6).toFixed(0)}px"></i>`;
+    }).join('')}</div>
+    <div class="cele-card ${gold?'gold':''}">
+      <div class="cele-lab">LEVEL UP</div>
+      <div class="cele-em">${u.lvl.e}</div>
+      <div class="cele-name">${esc(u.p.name)}</div>
+      <div class="cele-title">${esc(u.lvl.t)}</div>
+      <div class="cele-lv">Level ${u.from} → <b>${u.to}</b></div>
+      ${gold?'<div class="cele-max">Maxed out — a true great</div>':''}
+      ${more>0?`<div class="cele-more">…and ${more} other${more===1?'':'s'} levelled up</div>`:''}
+      <button class="btn pri full" style="margin-top:16px" onclick="this.closest('.cele').remove()">Nice</button>
+    </div>`;
+  document.body.appendChild(el);
+  haptic('success');
+  requestAnimationFrame(()=>el.classList.add('in'));
+  setTimeout(()=>{ if(el.isConnected)el.classList.add('fade') },6000);
+  setTimeout(()=>{ if(el.isConnected)el.remove() },6600);
+}
+
+/* ============ HAPTICS ============
+   Android exposes the Vibration API. iOS Safari does not — but since 17.4 a
+   <input type="checkbox" switch> fires a real haptic when toggled by a label
+   click, so we use that as the iOS path. Falls back to nothing elsewhere. */
+let HAPTIC_OK=true;
+try{ HAPTIC_OK = localStorage.getItem('ss_haptics')!=='0' }catch(e){}
+let _hapEl=null;
+function initHaptics(){
+  if(_hapEl)return;
+  const wrap=document.createElement('label');
+  wrap.setAttribute('aria-hidden','true');
+  wrap.style.cssText='position:absolute;width:0;height:0;opacity:0;pointer-events:none;overflow:hidden';
+  const cb=document.createElement('input');
+  cb.type='checkbox'; cb.setAttribute('switch',''); cb.id='_hapt';
+  wrap.htmlFor='_hapt'; wrap.appendChild(cb);
+  document.body.appendChild(wrap);
+  _hapEl=wrap;
+}
+function haptic(kind){
+  if(!HAPTIC_OK)return;
+  try{
+    if(navigator.vibrate){                       // Android
+      navigator.vibrate(kind==='heavy'?18:kind==='success'?[8,30,8]:7);
+      return;
+    }
+    if(_hapEl)_hapEl.click();                    // iOS 17.4+
+  }catch(e){}
+}
+function setHaptics(on){
+  HAPTIC_OK=!!on;
+  try{localStorage.setItem('ss_haptics',on?'1':'0')}catch(e){}
+  if(on)haptic('light');
+  render();
+}
+
 /* ============ MATCH CENTRE ============ */
-function openMatch(id){ pushBack(()=>go('fixtures')); app()._gid=id; VIEW='match'; render(); window.scrollTo(0,0); }
+function openMatch(id){ pushBack(); app()._gid=id; VIEW='match'; render(); window.scrollTo(0,0); }
 function vMatch(gid){
   const g=allGames().find(x=>x.id===gid); if(!g){go('fixtures');return}
   const c=comps().find(x=>x.id===g.compId);
@@ -3769,7 +4211,7 @@ function vMatch(gid){
   const scorers=Object.entries(g.goals||{}).filter(([,n])=>n>0)
     .map(([pid,n])=>({pid,n,name:player(pid)?.name,onA:(g.teamA||[]).includes(pid)}))
     .filter(x=>x.name).sort((x,y)=>y.n-x.n);
-  $('#navMount').innerHTML=navbar({label:'Fixtures',on:"go('fixtures')"},isAdmin()?{label:'Edit',on:`openGame('${g.id}')`}:null);
+  $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"},isAdmin()?{label:'Edit',on:`openGame('${g.id}')`}:null);
   app().innerHTML=`<div class="view active"><div class="wrap" style="padding-top:8px">${cloudBanner()}
     <div class="mc-head">
       <div class="mc-comp">${c?c.icon+' '+esc(c.name):''}${g.round?' · '+esc(g.round):''}</div>
@@ -4692,13 +5134,19 @@ function vAdmin(){
 
       ${healthPanel()}
 
+      <div class="card" style="margin-bottom:16px">
+        <div class="row"><div class="rt"><div class="r1">Haptics</div>
+          <div class="r2">A gentle tap when you press things</div></div>
+          <label class="sw"><input type="checkbox" ${HAPTIC_OK?'checked':''} onchange="setHaptics(this.checked)"><span></span></label></div>
+      </div>
+
       <div class="sechead">🕹️ Sunday FPL codes</div>
       ${(function(){const f=fpl(),ms=f.managers;
         if(!ms.length)return `<div class="note">Add players to the squad and their codes appear here.</div>`;
         const joined=ms.filter(m=>m.teamName&&m.squad.length===FPL_RULES.squadSize).length;
         return `<div class="card">
           <div class="row"><div class="rt"><div class="r1">${joined} of ${ms.length} have a team</div>
-            <div class="r2">Send each person their code — it's how they claim their team</div></div>
+            <div class="r2">Tap a code to copy it, then send it to that person</div></div>
             <button class="btn sec sm" onclick="copyAllCodes()">Copy all</button></div>
           ${ms.map(m=>`<div class="row">
             <div class="rt"><div class="r1" style="font-size:15px">${esc(m.name)}</div>
@@ -5188,13 +5636,13 @@ function vLeague(){
       </div>
     </div></div>`;
 }
-function openSeason(id){pushBack(()=>go('league'));app()._sid=id;VIEW='seasonView';
+function openSeason(id){pushBack();app()._sid=id;VIEW='seasonView';
   document.querySelectorAll('[data-nav]').forEach(b=>b.classList.remove('on'));
   vSeason(id);window.scrollTo(0,0)}
 function vSeason(id){
   const s=DB.seasons.find(x=>x.id===id);if(!s){go('league');return}
   const sm=seasonSummary(s);
-  $('#navMount').innerHTML=navbar({label:'League',on:"go('league')"});
+  $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"});
   app().innerHTML=`<div class="view active">
     <div class="largetitle">${esc(s.name)}</div><div class="subtitle">Archived season</div>
     <div class="wrap">${cloudBanner()}
@@ -5371,6 +5819,7 @@ function setGoal(pid,d){G.goals[pid]=Math.max(0,(G.goals[pid]||0)+d);if(!G.goals
   if(sd==='A'&&t>G.sa)G.sa=t;if(sd==='B'&&t>G.sb)G.sb=t;paintGame()}
 async function saveGame(){if(!requireAdmin())return;
   snapshot(G.id?'editing a game':'logging a game');
+  const _lvlBefore=levelSnapshot();
   if(!teamCount('A')||!teamCount('B')){toast('Both teams need at least one player');return}
   const gA=goalSum('A'),gB=goalSum('B');
   if((gA>0||gB>0)&&(gA!==G.sa||gB!==G.sb)){
@@ -5391,8 +5840,11 @@ async function saveGame(){if(!requireAdmin())return;
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
+  const _ups=levelUps(_lvlBefore);
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
-  if(ms.length){const p=player(ms[0].pid);toast(`${ms[0].e} ${p?p.name:''} — ${ms[0].t}!`)}else toast(G.id?'Game saved':'Game logged')}
+  if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
+  else if(ms.length){const p=player(ms[0].pid);toast(`${ms[0].e} ${p?p.name:''} — ${ms[0].t}!`)}
+  else toast(G.id?'Game saved':'Game logged')}
 async function deleteGame(){if(!requireAdmin())return;
   snapshot('deleting a game');if(!await askConfirm('Delete game?','This removes it and its stats permanently.','Delete',true))return;
   const S=season();S.games=S.games.filter(x=>x.id!==G.id);logEntry('delete',`Deleted ${G.round||'a game'}`);fplResync();await save();closeSheet();render();toast('Game deleted')}
@@ -5881,6 +6333,11 @@ document.addEventListener('keydown',e=>{
   await loadDB();
   if(supa){ await initSupa(); } else { applyAdminClass(); }
   loadLocalBoard();
+  try{fplAutoLogin()}catch(e){}
+  /* also handle a personal link tapped while the app is already open (a hash
+     change alone does not reload the page) */
+  window.addEventListener('hashchange',()=>{try{fplAutoLogin();render()}catch(e){}});
+  initHaptics();
   buildNav();go('home');initGestures();
   if(!supaConfigured && Store.tier()==='memory')setTimeout(()=>toast('⚠️ This browser blocks saving — back up before closing'),1400);
   if(supaConfigured && !supa)setTimeout(()=>toast('⚠️ Could not reach the shared database — check your setup'),1400);
