@@ -532,35 +532,37 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
   font-size:14px;font-weight:700;cursor:pointer;margin-right:8px}
 
 /* ================= PLAYER CARD ================= */
-.fut{position:relative;border-radius:24px;padding:24px 20px 20px;margin:6px auto 4px;overflow:hidden;
-  max-width:480px;
-  /* a deep, calm tone that fades to ink — the accent only appears as a thin
-     line and a soft halo, so the card never turns into a slab of colour */
+.fut{position:relative;border-radius:22px;padding:26px 22px 22px;margin:6px 0 4px;overflow:hidden;
+  /* full width, like every other card in the app — the club colour sweeps
+     across the top and settles into ink */
   background:
-    radial-gradient(130% 96% at 50% -14%, color-mix(in srgb,var(--futc) 78%,#141720) 0%,
-                                          color-mix(in srgb,var(--futc) 30%,#12141B) 34%,
-                                          #101219 62%, #0A0B10 100%);
-  box-shadow:0 18px 46px rgba(0,0,0,.44), inset 0 1px 0 rgba(255,255,255,.13);
-  border:1px solid rgba(255,255,255,.09)}
-.fut::before{content:"";position:absolute;top:0;left:20%;right:20%;height:1.5px;border-radius:2px;
-  background:linear-gradient(90deg,transparent,var(--futa,#fff),transparent);opacity:.6}
+    linear-gradient(150deg,
+      color-mix(in srgb,var(--futc) 88%,#0E1016) 0%,
+      color-mix(in srgb,var(--futc) 52%,#0E1016) 30%,
+      color-mix(in srgb,var(--futc) 18%,#0D0F14) 58%,
+      #0A0C11 100%),
+    radial-gradient(80% 55% at 82% 8%, rgba(255,255,255,.14) 0%, transparent 60%);
+  box-shadow:0 14px 40px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.1)}
+.fut::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,transparent,var(--futa,#fff),transparent);opacity:.55}
 .fut-sheen{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(150deg,rgba(255,255,255,.14) 0%,transparent 46%)}
 .fut-top{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;position:relative;z-index:1}
-.fut-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:98px}
-.fut-ovn{font-size:46px;font-weight:900;line-height:.9;color:#fff;letter-spacing:-.05em;
+.fut-side{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:106px}
+.fut-ovn{font-size:50px;font-weight:900;line-height:.9;color:#fff;letter-spacing:-.05em;
   text-shadow:0 3px 16px rgba(0,0,0,.45)}
 .fut-ovp{font-size:12.5px;font-weight:800;letter-spacing:.16em;color:rgba(255,255,255,.9);
   text-shadow:0 1px 3px rgba(0,0,0,.4)}
 .fut-psd{min-height:40px;display:flex;align-items:center;justify-content:center}
 .fut-flag{font-size:22px;line-height:1;min-height:24px}
-.fut-crest{width:96px;height:96px;display:flex;align-items:center;justify-content:center;
+.fut-crest{width:104px;height:104px;display:flex;align-items:center;justify-content:center;
   filter:drop-shadow(0 10px 22px rgba(0,0,0,.5))}
 .fut-av{display:flex;justify-content:center}
-.fut-initials{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+.fut-initials{width:104px;height:104px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-size:36px;font-weight:800;color:#fff;letter-spacing:-.02em;
   background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3)}
-.fut-name{position:relative;z-index:1;text-align:center;color:#fff;font-size:27px;font-weight:800;
+.fut-name{position:relative;z-index:1;text-align:center;color:#fff;font-size:29px;font-weight:800;
   letter-spacing:.01em;margin:14px 0 2px;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,.35)}
 .fut-like{position:relative;z-index:1;text-align:center;font-size:13px;color:rgba(255,255,255,.62);margin-bottom:16px}
 .fut-like b{color:#fff;font-weight:700}
@@ -3142,7 +3144,20 @@ async function shareGameweek(){
 /* The PlayStyle colours are neon by design, which looks harsh across a whole
    card. The card instead uses a curated deep tone per position. */
 const CARD_TONE={ATT:'#8E2140', MID:'#1B5E7A', DEF:'#1D4E7C', GK:'#7A5A14'};
-const cardTone=p=>CARD_TONE[(p&&p.pos)||'MID']||'#2B3A55';
+/* The card takes the player's club colour so each one feels like their team.
+   Very light club colours (Real Madrid, Spurs) are swapped for their accent so
+   the card never washes out. */
+function cardTone(p){
+  const c=clubOf(p);
+  if(!c)return CARD_TONE[(p&&p.pos)||'MID']||'#2B3A55';
+  const lum=hex=>{const h=String(hex||'').replace('#','');
+    if(h.length<6)return 0;
+    const r=parseInt(h.slice(0,2),16),g=parseInt(h.slice(2,4),16),b=parseInt(h.slice(4,6),16);
+    return (r*299+g*587+b*114)/1000};
+  let t=c.c1||'#2B3A55';
+  if(lum(t)>170)t=(lum(c.acc)<=170&&c.acc)||(lum(c.c2)<=170&&c.c2)||'#2B3A55';
+  return t;
+}
 /* ============ OVR (FC-style overall rating) ============
    Level 1 = 80, level 30 = 90. Everyone starts gold; 90 is the special card. */
 function ovrOf(pid){
