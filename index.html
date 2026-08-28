@@ -1227,6 +1227,11 @@ kbd{display:inline-block;background:var(--fill2);border-radius:5px;padding:1px 6
 .sh-top.empty.req{border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.24)}
 .sh-line.flexline{opacity:.96}
 .sh-line.flexline .sh-name.empty{background:rgba(255,255,255,.16);letter-spacing:.08em;font-size:9.5px}
+
+.row.chip-armed{background:color-mix(in srgb,var(--orange) 10%,transparent)}
+.chip-state.armed{background:color-mix(in srgb,var(--orange) 20%,transparent);color:#B36F00}
+[data-theme="dark"] .chip-state.armed{color:#FBBF24}
+.row.chip-blocked{opacity:.5}
 </style>
 </head>
 <body>
@@ -3201,7 +3206,7 @@ const FPL_RULES={
   goal:{GK:6,DEF:6,MID:5,ATT:4},
   cleanSheet:{GK:3,DEF:3,MID:2,ATT:1},
   hatTrick:3,
-  budget:52, startPrice:10, minPrice:6, maxPrice:16, chips:2,
+  budget:52, startPrice:10, minPrice:6, maxPrice:16, chips:3,
   transfersPerWeek:3, squadSize:5,
   slots:['DEF','MID','ATT'],        // at least one of each, five in total
   eligible:['DEF','MID','ATT']      // outfield only — no keepers
@@ -3231,7 +3236,7 @@ function syncManagers(){
   live.forEach(p=>{
     if(!f.managers.some(m=>m.pid===p.id)){
       f.managers.push({pid:p.id,name:p.name,code:fplCode(p.name,p.id),
-        teamName:null,squad:[],captain:null,transfers:{},wildcards:0,tripleCaps:0,tcGws:[],history:[],joined:Date.now()});
+        teamName:null,squad:[],captain:null,transfers:{},wildcards:0,tripleCaps:0,tcGws:[],doublePts:0,dpGws:[],history:[],joined:Date.now()});
     }
   });
   f.managers.forEach(m=>{
@@ -3240,6 +3245,8 @@ function syncManagers(){
     if(m.wildcards==null)m.wildcards=m.wildcard?1:0;
     if(m.tripleCaps==null)m.tripleCaps=m.tripleCap?1:0;
     if(!m.tcGws)m.tcGws=m.tcGw?[m.tcGw]:[];
+    if(m.doublePts==null)m.doublePts=0;
+    if(!m.dpGws)m.dpGws=[];
   });
 }
 const fplManager=code=>fpl().managers.find(m=>m.code===String(code||'').trim().toUpperCase());
@@ -3355,11 +3362,13 @@ function fplManagerGw(m,gw){
   const squad=snap?snap.squad:m.squad, cap=snap?snap.captain:m.captain;
   if(!squad||!squad.length)return 0;
   const mult=((m.tcGws||[]).includes(gw))?3:2;   // triple captain applies only to the gameweeks it was played on
-  return squad.reduce((t,pid)=>{
+  let total=squad.reduce((t,pid)=>{
     let p=fplPlayerGw(pid,gw);
     if(pid===cap)p*=mult;
     return t+p;
   },0);
+  if((m.dpGws||[]).includes(gw))total*=2;       // double points doubles the whole week
+  return total;
 }
 function fplManagerTotal(m){
   return playedGws().reduce((t,gw)=>t+fplManagerGw(m,gw),0);
@@ -3695,21 +3704,40 @@ function fplMyTeam(m,locked){
         </div></div>`
       :confirmed?`<div class="fpl-saved">✅ Saved and entered in the mini league</div>`:''}
 
-    ${(function(){const wcL=FPL_RULES.chips-(m.wildcards||0), tcL=FPL_RULES.chips-(m.tripleCaps||0);
+    ${(function(){
+      const wcL=FPL_RULES.chips-(m.wildcards||0),
+            tcL=FPL_RULES.chips-(m.tripleCaps||0),
+            dpL=FPL_RULES.chips-(m.doublePts||0);
+      const tcOn=tcArmed(m), dpOn=dpArmed(m), wcOn=!!m.wildcardActive, next=fplNextGw();
+      const tcPast=(m.tcGws||[]).filter(g=>g!==next);
+      const dpPast=(m.dpGws||[]).filter(g=>g!==next);
       const pips=l=>`<span class="pips">${Array.from({length:FPL_RULES.chips},(_,i)=>`<i class="${i<l?'on':''}"></i>`).join('')}</span>`;
-      return `<div class="sechead">Chips</div>
+      const inPlay=chipArmedFor(m,next);
+      const chipRow=(icon,name,left,on,fn,onText,offText,past)=>{
+        const blocked = !on && !!inPlay;                 // another chip already has this week
+        const tap=on||(left>0&&!blocked);
+        return `<div class="row ${tap?'tap':''} ${on?'chip-armed':''} ${blocked?'chip-blocked':''}" onclick="${tap?fn:''}">
+          <div style="font-size:21px;flex:0 0 28px">${icon}</div>
+          <div class="rt"><div class="r1">${name} ${pips(left)}</div>
+            <div class="r2">${on?onText
+              :blocked?`${inPlay} is on for GW${next} — one chip a week`
+              :left>0?offText:'All used this season'}${past&&past.length?` · played GW${past.join(', GW')}`:''}</div></div>
+          <span class="chip-state ${on?'armed':blocked?'used':left>0?'':'used'}">${on?(name==='Wildcard'?'ACTIVE':'ARMED'):left>0?left+' LEFT':'USED'}</span></div>`;
+      };
+      return `<div class="sechead">Chips <span style="text-transform:none;font-weight:500;color:var(--label3)">${FPL_RULES.chips} of each per season</span></div>
       <div class="card">
-        <div class="row ${wcL>0?'tap':''}" onclick="${wcL>0?'playWildcard()':''}">
-          <div style="font-size:21px;flex:0 0 28px">🃏</div>
-          <div class="rt"><div class="r1">Wildcard ${pips(wcL)}</div>
-            <div class="r2">${wcL>0?'Unlimited free transfers for one set of changes':'Both used this season'}</div></div>
-          <span class="chip-state ${wcL>0?'':'used'}">${wcL>0?wcL+' LEFT':'USED'}</span></div>
-        <div class="row ${tcL>0?'tap':''}" onclick="${tcL>0?'playTripleCaptain()':''}">
-          <div style="font-size:21px;flex:0 0 28px">🔥</div>
-          <div class="rt"><div class="r1">Triple Captain ${pips(tcL)}</div>
-            <div class="r2">${tcL>0?'Captain scores ×3 for one gameweek':'Both used this season'}${(m.tcGws||[]).length?` · GW${m.tcGws.join(', GW')}`:''}</div></div>
-          <span class="chip-state ${tcL>0?'':'used'}">${tcL>0?tcL+' LEFT':'USED'}</span></div>
-      </div>`})()}
+        ${chipRow('🃏','Wildcard',wcL,wcOn,'playWildcard()',
+          'Active — tap to cancel and keep the chip',
+          'Unlimited free transfers for one set of changes')}
+        ${chipRow('🔥','Triple Captain',tcL,tcOn,'playTripleCaptain()',
+          `Armed for GW${next} — tap to take it back off`,
+          'Your captain scores ×3 instead of ×2', tcPast)}
+        ${chipRow('✨','Double Points',dpL,dpOn,'playDoublePoints()',
+          `Armed for GW${next} — tap to take it back off`,
+          'Everything your five score that week counts twice', dpPast)}
+      </div>
+      <div class="note">One chip per gameweek. Anything you arm can be taken back off until that game is logged.</div>`;
+    })()}
 
     <div class="card" style="margin-top:12px">
       <div class="row tap" onclick="renameTeam()"><div class="rt"><div class="r1">Rename team</div></div>${chev}</div>
@@ -3861,25 +3889,79 @@ async function fplSave(){
 }
 async function playWildcard(){
   const m=fplMine(); if(!m)return;
+  if(m.wildcardActive){
+    if(!await askConfirm('Cancel your wildcard?','Your team goes back to how it was and you keep the chip.','Cancel it',false))return;
+    m.wildcardActive=false; FDRAFT=null;
+    await fplSave(); render(); toast('Wildcard cancelled');
+    return;
+  }
+  const clash=chipArmedFor(m,fplNextGw());
+  if(clash){toast(`${clash} is already on for GW${fplNextGw()} — only one chip a week`);return}
   const left=FPL_RULES.chips-(m.wildcards||0);
-  if(left<=0){toast('You have used both wildcards');return}
+  if(left<=0){toast('You have used all your wildcards');return}
   if(!await askConfirm('Play a wildcard?',
      `Unlimited free transfers for one set of changes. You have ${left} of ${FPL_RULES.chips} left.`,'Play it',false))return;
   m.wildcardActive=true; FDRAFT={squad:[],captain:null};
   await fplSave(); render(); toast('🃏 Wildcard active — rebuild your three, then confirm');
 }
+/* The triple captain can be taken back off as long as the gameweek it is armed
+   for has not been played yet — once a game is logged it is locked in. */
+/* Only one chip may be armed for any given gameweek — stacking Triple Captain
+   with Double Points turned a normal week into a runaway score. */
+function chipArmedFor(m,gw){
+  if((m.tcGws||[]).includes(gw))return 'Triple Captain';
+  if((m.dpGws||[]).includes(gw))return 'Double Points';
+  if(m.wildcardActive)return 'Wildcard';
+  return null;
+}
+const tcArmed=m=>(m.tcGws||[]).includes(fplNextGw());
 async function playTripleCaptain(){
   const m=fplMine(); if(!m)return;
+  const next=fplNextGw();
+  if(tcArmed(m)){
+    if(!await askConfirm('Remove triple captain?',
+       `It will no longer apply to GW${next} and you get the chip back.`,'Remove',false))return;
+    m.tcGws=(m.tcGws||[]).filter(g=>g!==next);
+    m.tripleCaps=Math.max(0,(m.tripleCaps||0)-1);
+    await fplSave(); render(); toast('Triple captain removed');
+    return;
+  }
+  const clash=chipArmedFor(m,next);
+  if(clash){toast(`${clash} is already on for GW${next} — only one chip a week`);return}
   const left=FPL_RULES.chips-(m.tripleCaps||0);
-  if(left<=0){toast('You have used both triple captains');return}
+  if(left<=0){toast('You have used all your triple captains');return}
   if(!m.captain){toast('Pick a captain first');return}
-  const nextGw=fplNextGw();
-  if((m.tcGws||[]).includes(nextGw)){toast('Already armed for GW'+nextGw);return}
   if(!await askConfirm('Play a triple captain?',
-     `${player(m.captain)?.name} scores ×3 in GW${nextGw} instead of ×2. You have ${left} of ${FPL_RULES.chips} left.`,'Play it',false))return;
+     `${player(m.captain)?.name} scores ×3 in GW${next} instead of ×2. You can take it off again any time before that game is logged. ${left} of ${FPL_RULES.chips} left.`,'Play it',false))return;
   m.tripleCaps=(m.tripleCaps||0)+1;
-  m.tcGws=[...(m.tcGws||[]),nextGw];
-  await fplSave(); render(); toast(`🔥 Triple captain armed for GW${nextGw}`);
+  m.tcGws=[...(m.tcGws||[]),next];
+  await fplSave(); render(); toast(`🔥 Triple captain armed for GW${next}`);
+}
+
+/* Double Points — doubles everything you score that gameweek. Like the others
+   it can be taken back off right up until that gameweek's first game is logged. */
+const dpArmed=m=>(m.dpGws||[]).includes(fplNextGw());
+async function playDoublePoints(){
+  const m=fplMine(); if(!m)return;
+  const next=fplNextGw();
+  if(dpArmed(m)){
+    if(!await askConfirm('Remove double points?',
+       `It will no longer apply to GW${next} and you get the chip back.`,'Remove',false))return;
+    m.dpGws=(m.dpGws||[]).filter(g=>g!==next);
+    m.doublePts=Math.max(0,(m.doublePts||0)-1);
+    await fplSave(); render(); toast('Double points removed');
+    return;
+  }
+  const clash=chipArmedFor(m,next);
+  if(clash){toast(`${clash} is already on for GW${next} — only one chip a week`);return}
+  const left=FPL_RULES.chips-(m.doublePts||0);
+  if(left<=0){toast('You have used all your double points chips');return}
+  if(!m.squad||m.squad.length!==FPL_RULES.squadSize){toast('Finish your team first');return}
+  if(!await askConfirm('Play double points?',
+     `Everything your five score in GW${next} counts twice. You can take it off again before that game is logged. ${left} of ${FPL_RULES.chips} left.`,'Play it',false))return;
+  m.doublePts=(m.doublePts||0)+1;
+  m.dpGws=[...(m.dpGws||[]),next];
+  await fplSave(); render(); toast(`✨ Double points armed for GW${next}`);
 }
 
 /* ---------- market ---------- */
@@ -3980,7 +4062,7 @@ function viewManager(pid){
       <div class="tiles" style="margin-top:12px">
         ${tile(total,'Total','','var(--tint)')}${tile(gwPts,'Last GW')}
         ${tile('£'+m.squad.reduce((t,x)=>t+fplPrice(x),0).toFixed(1)+'m','Squad value')}
-        ${tile((FPL_RULES.chips-(m.wildcards||0))+'/'+(FPL_RULES.chips-(m.tripleCaps||0)),'Chips left')}
+        ${tile((FPL_RULES.chips-(m.wildcards||0))+'·'+(FPL_RULES.chips-(m.tripleCaps||0))+'·'+(FPL_RULES.chips-(m.doublePts||0)),'Chips left')}
       </div>
       ${gws.length>1?`<div class="sechead">Gameweek by gameweek</div>
         <div class="card">${gws.slice().reverse().slice(0,8).map(gw=>`<div class="row">
