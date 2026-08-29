@@ -52,7 +52,9 @@ input:focus{box-shadow:0 0 0 3px var(--tint-soft)}
 /* ---------- LAYOUT + LEFT DRAWER ---------- */
 .shell{display:flex;min-height:100%;max-width:1440px;margin:0 auto}
 .side{display:flex;flex-direction:column;width:252px;flex:0 0 252px;position:fixed;top:0;left:0;height:100vh;
-  padding:18px 12px calc(14px + env(safe-area-inset-bottom));gap:2px;border-right:.5px solid var(--sep);
+  /* clear the notch / Dynamic Island on every iPhone, and the home indicator */
+  padding:calc(16px + env(safe-area-inset-top,0px)) 12px calc(14px + env(safe-area-inset-bottom,0px));
+  gap:2px;border-right:.5px solid var(--sep);
   background:var(--bg);z-index:70;
   transform:translateX(-100%);transition:transform .28s cubic-bezier(.32,.72,0,1)}
 body.drawer .side{transform:translateX(0);box-shadow:0 0 40px rgba(0,0,0,.22)}
@@ -1235,6 +1237,22 @@ kbd{display:inline-block;background:var(--fill2);border-radius:5px;padding:1px 6
 .chip-state.armed{background:color-mix(in srgb,var(--orange) 20%,transparent);color:#B36F00}
 [data-theme="dark"] .chip-state.armed{color:#FBBF24}
 .row.chip-blocked{opacity:.5}
+
+/* ---- drawer proportions across phone sizes ---- */
+.side{width:min(84vw,290px);flex-basis:min(84vw,290px)}
+@media(min-width:900px){ .side{width:252px;flex-basis:252px} body.drawer .main{padding-left:252px} }
+.side .brand{padding:6px 12px 14px;min-height:34px}
+.side .brand span{font-size:clamp(17px,4.6vw,22px);line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.side nav{-webkit-overflow-scrolling:touch}
+.side nav button{padding:11px 12px;font-size:clamp(14.5px,3.9vw,15.5px)}
+/* very short screens (SE, mini in landscape): tighten so every item reaches */
+@media(max-height:700px){
+  .side .brand{padding-bottom:8px}
+  .side nav button{padding:8.5px 12px}
+}
+/* the navbar itself must clear the notch too */
+.navbar{padding-top:env(safe-area-inset-top,0px)}
+.largetitle{padding-top:2px}
 </style>
 </head>
 <body>
@@ -2031,7 +2049,13 @@ function movement(cid){const g=compGames(cid);if(g.length<2)return{};
   pv.forEach(x=>pm[x.id]=x.rank);const o={};now.forEach(x=>o[x.id]=pm[x.id]===undefined?0:pm[x.id]-x.rank);return o}
 
 /* ============ CAREER: 30 LEVELS ============ */
-const XP={app:10,win:25,draw:12,goal:20,hat:60,clean:25,streak:15};
+const XP={app:10,win:25,draw:12,goal:20,hat:60,streak:15,
+  /* Defensive XP by goals conceded [0,1,2,3,4,5,6,7+]. In 7-a-side a clean
+     sheet is rare and four or five conceded is an ordinary game, so the ladder
+     keeps paying well down the scale. Weighted by position the same way the
+     FPL side is, so defenders are actually rewarded for defending. */
+  defend:[70,58,49,41,34,28,22,16],
+  defendW:{GK:1, DEF:1, MID:0.7, ATT:0.45}};
 const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Number'],['⚡','First Appearance'],['🎯','Squad Player'],
 ['🔁','Rotation Option'],['🧩','Regular Starter'],['🛠️','Ever Present'],['📈','Breakout Season'],['💪','Proven Performer'],
 ['🔥','In Form'],['💥','Match Winner'],['⭐','Standout Season'],['🧠','Big Game Player'],['💎','Star Man'],
@@ -2041,7 +2065,9 @@ const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Numb
 
 const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round((20*i + 0.98*Math.pow(i,2.74))/5)*5}));
 function xpOf(m){let x=m.P*XP.app+m.W*XP.win+m.D*XP.draw+m.G*XP.goal;
-  m.seq.forEach(s=>{if(s.goals>=3)x+=XP.hat;if(s.ga===0)x+=XP.clean});
+  m.seq.forEach(s=>{if(s.goals>=3)x+=XP.hat;
+    const w=XP.defendW[m.pos||'MID']??0.7;
+    x+=Math.round(XP.defend[Math.min(s.ga??0,XP.defend.length-1)]*w);});
   if(m.streak.type==='W'&&m.streak.n>=3)x+=XP.streak*(m.streak.n-2);return Math.round(x)}
 function levelOf(xp){let c=LEVELS[0],nx=LEVELS[1];
   for(let i=0;i<LEVELS.length;i++){if(xp>=LEVELS[i].xp){c=LEVELS[i];nx=LEVELS[i+1]||null}}
@@ -2060,6 +2086,8 @@ const CH=[
  {id:'g10',g:'Goals',e:'🔟',n:'Double Figures',d:'Score 10 goals',x:150,f:m=>[Math.min(m.G,10),10]},
  {id:'g35',g:'Goals',e:'🐐',n:'The Haaland Return',d:'Score 25 goals',x:450,f:m=>[Math.min(m.G,25),25]},
  {id:'g60',g:'Goals',e:'👑',n:'Golden Boot Legend',d:'Score 30 goals',x:800,f:m=>[Math.min(m.G,30),30]},
+ {id:'gpg2',g:'Goals',e:'🚀',n:'Two A Game',d:'Average 2 goals a game (min 12 games)',x:950,
+   f:m=>[m.P>=12?Math.min(Math.round(m.gpg*100),200):0,200]},
  {id:'hat',g:'Goals',e:'🎩',n:'Match Ball',d:'Score a hat-trick',x:180,f:m=>[m.seq.some(s=>s.goals>=3)?1:0,1]},
  {id:'hat3',g:'Goals',e:'🎪',n:'Hat-Trick Hero',d:'Score 3 hat-tricks',x:400,f:m=>[Math.min(m.seq.filter(s=>s.goals>=3).length,3),3]},
  {id:'g4',g:'Goals',e:'💫',n:'Four-Goal Haul',d:'Score 4 in one game',x:250,f:m=>[m.seq.some(s=>s.goals>=4)?1:0,1]},
@@ -2073,9 +2101,9 @@ const CH=[
  {id:'ws8',g:'Winning',e:'🌪️',n:'Unstoppable',d:'Win 8 in a row',x:480,f:m=>[Math.min(best(m.seq,s=>s.r==='W'),8),8]},
  {id:'unb6',g:'Winning',e:'🪄',n:'Invincible',d:'Go 6 games unbeaten',x:300,f:m=>[Math.min(best(m.seq,s=>s.r!=='L'),6),6]},
  {id:'unb10',g:'Winning',e:'🧿',n:'The Arsenal Run',d:'Go 10 games unbeaten',x:550,f:m=>[Math.min(best(m.seq,s=>s.r!=='L'),10),10]},
- {id:'cs1',g:'Defending',e:'🧤',n:'Shut Out',d:'Keep a clean sheet',x:60,f:m=>[Math.min(m.cs,1),1]},
- {id:'cs4',g:'Defending',e:'🧱',n:'The Van Dijk Wall',d:'Keep 4 clean sheets',x:170,f:m=>[Math.min(m.cs,4),4]},
- {id:'cs10',g:'Defending',e:'🏰',n:'Fortress',d:'Keep 10 clean sheets',x:380,f:m=>[Math.min(m.cs,10),10]},
+ {id:'cs1',g:'Defending',e:'🧤',n:'Shut Out',d:'Keep a clean sheet',x:120,f:m=>[Math.min(m.cs,1),1]},
+ {id:'cs4',g:'Defending',e:'🧱',n:'The Van Dijk Wall',d:'Keep 3 clean sheets',x:280,f:m=>[Math.min(m.cs,3),3]},
+ {id:'cs10',g:'Defending',e:'🏰',n:'Fortress',d:'Keep 6 clean sheets',x:460,f:m=>[Math.min(m.cs,6),6]},
  {id:'p30',g:'Milestones',e:'📊',n:'Thirty Points',d:'Reach 30 points',x:180,f:m=>[Math.min(m.pts,30),30]},
  {id:'p60',g:'Milestones',e:'💯',n:'Sixty Points',d:'Reach 60 points',x:340,f:m=>[Math.min(m.pts,60),60]},
  {id:'idx75',g:'Milestones',e:'💎',n:'Elite Rating',d:'Reach a POTY index of 75',x:400,f:m=>[Math.min(m.index,75),75]},
@@ -2087,7 +2115,7 @@ const CH=[
  {id:'g20',g:'Scoring',e:'🎯',n:'Twenty Club',d:'Score 20 goals',x:400,f:m=>[Math.min(m.G,20),20]},
  {id:'gpg1',g:'Scoring',e:'⚡',n:'A Goal A Game',d:'Average a goal per game (min 8 games)',x:480,
    f:m=>[m.P>=8?Math.min(Math.round(m.gpg*100),100):0,100]},
- {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 12 clean sheets',x:520,f:m=>[Math.min(m.cs,12),12]},
+ {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 9 clean sheets',x:640,f:m=>[Math.min(m.cs,9),9]},
  {id:'gd25',g:'Milestones',e:'📈',n:'On The Right Side',d:'Reach +20 goal difference',x:360,
    f:m=>[Math.min(Math.max(m.GD,0),20),20]},
  {id:'p100',g:'Milestones',e:'🏆',n:'Seventy Five',d:'Reach 75 points',x:600,f:m=>[Math.min(m.pts,75),75]},
@@ -2096,13 +2124,14 @@ const CH=[
    f:m=>[m.P>=10?Math.min(Math.round(m.ppg*100),200):0,200]},
 
  /* ---- built for defenders, keepers and midfielders ---- */
- {id:'cs3row',g:'Defending',e:'🚫',n:'Three Straight Shut-outs',d:'Keep 3 clean sheets in a row',x:320,
-   f:m=>[Math.min(best(m.seq,s=>s.ga===0),3),3]},
+ {id:'cs3row',g:'Defending',e:'🚫',n:'Locked Down',d:'Concede 2 or fewer in 4 straight games',x:320,
+   f:m=>[Math.min(best(m.seq,s=>s.ga<=2),4),4]},
  {id:'tight',g:'Defending',e:'🔒',n:'Tight At The Back',d:'Concede under 1.5 per game (min 8 games)',x:380,
    f:m=>[m.P>=8?Math.min(Math.round((3-Math.min(m.cpg,3))/1.5*100),100):0,100]},
- {id:'cs8',g:'Defending',e:'🧊',n:'Regular Shut-out',d:'Keep 8 clean sheets',x:300,f:m=>[Math.min(m.cs,8),8]},
- {id:'solid',g:'Defending',e:'🏗️',n:'Foundations',d:'Win 10 games while keeping a clean sheet',x:420,
-   f:m=>[Math.min(m.seq.filter(s=>s.ga===0&&s.r==='W').length,10),10]},
+ {id:'cs8',g:'Defending',e:'🥶',n:'Back-to-Back Blanks',d:'Keep 2 clean sheets in a row',x:340,
+   f:m=>[Math.min(best(m.seq,s=>s.ga===0),2),2]},
+ {id:'solid',g:'Defending',e:'🏗️',n:'Foundations',d:'Win 6 games conceding 2 or fewer',x:420,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=2&&s.r==='W').length,6),6]},
 
  {id:'chem5',g:'Team',e:'🤝',n:'Perfect Partner',d:'Win 5 games alongside the same team-mate',x:330,
    f:m=>{const b=chemPairs(1).filter(p=>p.a===m.id||p.b===m.id).sort((x,y)=>y.W-x.W)[0];
@@ -2120,8 +2149,47 @@ const CH=[
 
  {id:'work',g:'Appearances',e:'🔁',n:'Never Misses',d:'Play 10 games in a row',x:280,
    f:m=>[Math.min(m.seq.length>=10?10:m.seq.length,10),10]},
- {id:'allround',g:'Milestones',e:'🎛️',n:'All-Rounder',d:'Score 5 goals and keep 5 clean sheets',x:420,
-   f:m=>[Math.min(Math.min(m.G,5)+Math.min(m.cs,5),10),10]},
+ {id:'allround',g:'Milestones',e:'🎛️',n:'All-Rounder',d:'Score 5 goals and keep 3 clean sheets',x:420,
+   f:m=>[Math.min(Math.min(m.G,5)+Math.min(m.cs,3),8),8]},
+
+ /* ---- rewarding defenders properly ---- */
+ {id:'tight10',g:'Defending',e:'🔩',n:'Hard To Beat',d:'Play 10 games conceding 3 or fewer',x:360,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=3).length,10),10]},
+ {id:'tight20',g:'Defending',e:'⛓️',n:'Miserly',d:'Play 18 games conceding 4 or fewer',x:560,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=4).length,18),18]},
+ {id:'cpg1',g:'Defending',e:'📉',n:'Under Four A Game',d:'Concede under 4 per game (min 8 games)',x:520,
+   f:m=>[m.P>=8?Math.min(Math.round((6-Math.min(m.cpg,6))/2*100),100):0,100]},
+ {id:'wall5',g:'Defending',e:'🧊',n:'Ice Cold',d:'Keep 3 clean sheets in a row',x:600,
+   f:m=>[Math.min(best(m.seq,s=>s.ga===0),3),3]},
+ {id:'gaunder',g:'Defending',e:'🥅',n:'Rearguard',d:'Average under 4.5 conceded (min 10 games)',x:400,
+   f:m=>[m.P>=10?Math.min(Math.round((6-Math.min(m.cpg,6))/1.5*100),100):0,100]},
+ {id:'defgoal',g:'Defending',e:'🎯',n:'Up For A Corner',d:'Score 3 goals as a defender',x:340,
+   f:m=>[(m.pos==='DEF'||m.pos==='GK')?Math.min(m.G,3):0,3]},
+
+ /* ---- the top end of scoring, so a monster season actually shows ---- */
+ {id:'g40',g:'Scoring',e:'💫',n:'Forty Club',d:'Score 40 goals',x:800,f:m=>[Math.min(m.G,40),40]},
+ {id:'g50',g:'Scoring',e:'🔱',n:'Half a Century',d:'Score 50 goals',x:1000,f:m=>[Math.min(m.G,50),50]},
+ {id:'gpg15',g:'Scoring',e:'🚀',n:'Goal And A Half',d:'Average 1.5 goals a game (min 12 games)',x:750,
+   f:m=>[m.P>=12?Math.min(Math.round(m.gpg*100),150):0,150]},
+ {id:'g5one',g:'Scoring',e:'🎆',n:'Nap Hand',d:'Score 5 in one game',x:520,
+   f:m=>[Math.min(Math.max(0,...m.seq.map(s=>s.goals||0)),5),5]},
+ {id:'scorerun8',g:'Scoring',e:'🌋',n:'On Fire',d:'Score in 8 games running',x:700,
+   f:m=>[Math.min(best(m.seq,s=>(s.goals||0)>0),8),8]},
+ {id:'cs20',g:'Defending',e:'🏔️',n:'The Great Wall',d:'Keep 12 clean sheets',x:760,f:m=>[Math.min(m.cs,12),12]},
+ {id:'csrate',g:'Defending',e:'📐',n:'One In Four',d:'Keep a clean sheet in a quarter of your games (min 10)',x:600,
+   f:m=>[m.P>=10?Math.min(Math.round(m.cs/m.P*100),25):0,25]},
+ {id:'gd40',g:'Defending',e:'🛡️',n:'Immovable',d:'Reach +25 goal difference',x:560,
+   f:m=>[Math.min(Math.max(m.GD,0),25),25]},
+
+ /* ---- all-round work, which is where midfielders live ---- */
+ {id:'b2b',g:'Team',e:'🔄',n:'Box To Box',d:'Score 8 goals and win 8 games conceding under 3',x:620,
+   f:m=>[Math.min(m.G,8)+Math.min(m.seq.filter(s=>s.r==='W'&&s.ga<3).length,8),16]},
+ {id:'metro',g:'Team',e:'🎼',n:'Metronome',d:'Score or concede under 3 in 15 games',x:560,
+   f:m=>[Math.min(m.seq.filter(s=>(s.goals||0)>0||s.ga<3).length,15),15]},
+ {id:'involved',g:'Team',e:'🧭',n:'Always Involved',d:'Take something from 18 games',x:520,
+   f:m=>[Math.min(m.seq.filter(s=>s.r!=='L').length,18),18]},
+ {id:'engine',g:'Team',e:'⚙️',n:'The Engine',d:'Play 15 games and average 2+ points',x:540,
+   f:m=>[m.P>=15?Math.min(Math.round(m.ppg*100),200):0,200]},
 ];
 const chalFor=m=>CH.map(c=>{const [cur,tot]=c.f(m);return{...c,cur,tot,done:cur>=tot,pct:Math.min(100,Math.round(cur/tot*100))}});
 function careerOf(pid){const m=statsAll().find(x=>x.id===pid);if(!m)return null;
@@ -2215,10 +2283,10 @@ const NAV=[
  ['league','League','📊','M4 20V9M10 20V4M16 20v-8M2 20h20'],
  ['fixtures','Fixtures','📅','M8 2v3M16 2v3M3.5 9h17M5 5h14a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 19 21H5a1.5 1.5 0 0 1-1.5-1.5v-13A1.5 1.5 0 0 1 5 5z'],
  ['squad','Squad','👥','M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16.5 7.2a3.5 3.5 0 0 1 0 6.6M18 20a6.5 6.5 0 0 0-1.6-4.3'],
- ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
- ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
  ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
+ ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
+ ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
  ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
  ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
  ['comps','Competitions','🏆','M6 3h12v4a6 6 0 0 1-12 0V3zM4 5H2v1.5A3 3 0 0 0 5 9.5M20 5h2v1.5a3 3 0 0 1-3 3M9 21h6M12 17v4'],
@@ -2727,7 +2795,9 @@ function vCareer(){
       <div class="card pad"><div class="note" style="padding:0;line-height:1.8">
         🎮 <b>+${XP.app}</b> an appearance · <b>+${XP.win}</b> a win · <b>+${XP.draw}</b> a draw<br>
         ⚽ <b>+${XP.goal}</b> a goal · <b>+${XP.hat}</b> hat-trick bonus<br>
-        🧤 <b>+${XP.clean}</b> a clean sheet · <b>+${XP.streak}</b> per win past a 2-game streak<br>
+        🔥 <b>+${XP.streak}</b> per win once you're past a 2-game winning streak<br>
+        🧤 <b>Defending</b> — XP for how few your team conceded (a defender gets the full amount, a midfielder 70%, an attacker 45%):<br>
+        ${XP.defend.map((v,i)=>`${i===0?'clean sheet':i===XP.defend.length-1?'7+':i}&nbsp;<b>+${v}</b>`).join(' · ')}<br>
         🏅 Each challenge pays its own XP bonus when unlocked.</div></div>
       ${milestoneCatalogue(board)}
       ${fd.length?`<div class="sechead">Recent milestones</div><div class="card">${fd.slice(0,25).map(e=>{const p=player(e.pid);
@@ -3207,7 +3277,14 @@ function ovrBadge(pid,size){
 const FPL_RULES={
   played:2, win:3, draw:1,
   goal:{GK:6,DEF:6,MID:5,ATT:4},
-  cleanSheet:{GK:3,DEF:3,MID:2,ATT:1},
+  /* Defenders are rewarded for how little the team conceded, not just for a
+     clean sheet — [0,1,2,3,4,5+] goals against. */
+  defence:{
+    GK :[10,7,5,3,2,1,0],
+    DEF:[10,7,5,3,2,1,0],
+    MID:[ 4,3,2,1,0,0,0],
+    ATT:[ 2,1,1,0,0,0,0]
+  },
   hatTrick:3,
   budget:52, startPrice:10, minPrice:6, maxPrice:16, chips:3,
   transfersPerWeek:3, squadSize:5,
@@ -3337,7 +3414,8 @@ function fplGamePoints(pid,g){
   let pts=FPL_RULES.played;
   if(g.result==='D')pts+=FPL_RULES.draw; else if(g.result===sd)pts+=FPL_RULES.win;
   pts+=goals*(FPL_RULES.goal[pos]||FPL_RULES.goal.MID);
-  if(ga===0&&FPL_RULES.cleanSheet[pos])pts+=FPL_RULES.cleanSheet[pos];
+  const dl=FPL_RULES.defence[pos]||FPL_RULES.defence.MID;
+  pts+=dl[Math.min(ga??0,dl.length-1)];
   if(goals>=3)pts+=FPL_RULES.hatTrick;
   return pts;
 }
@@ -3533,24 +3611,31 @@ function fplRules(compact){
         ${row('Goal — attacker',`+${R.goal.ATT}`)}
         ${row('Goal — midfielder',`+${R.goal.MID}`)}
         ${row('Goal — defender',`+${R.goal.DEF}`)}
-        ${row('Goal — keeper',`+${R.goal.GK}`)}
         ${row('Hat-trick bonus',`+${R.hatTrick}`)}
-        ${row('Clean sheet — keeper',`+${R.cleanSheet.GK}`)}
-        ${row('Clean sheet — defender',`+${R.cleanSheet.DEF}`)}
-        ${row('Clean sheet — midfielder',`+${R.cleanSheet.MID}`)}
-        ${row('Clean sheet — attacker',`+${R.cleanSheet.ATT}`)}
         ${row('Captain','×2')}
-        ${row('Triple captain chip','×3')}
         ${row("Didn't play",'0')}
       </div>
-      <div class="note" style="padding:10px 0 0">A clean sheet means your player's team didn't concede.</div>
+    </div>
+
+    <div class="sechead">Keeping them out</div>
+    <div class="card pad">
+      <div class="note" style="padding:0 0 10px">Defenders earn on how little their team conceded, not just on a clean sheet.</div>
+      <div class="tw"><table>
+        <thead><tr><td>Conceded</td><td class="c">DEF</td><td class="c">MID</td><td class="c">ATT</td></tr></thead>
+        <tbody>${['Clean sheet','1 goal','2 goals','3 goals','4 goals','5 goals','6+'].map((l,i)=>`
+          <tr><td class="nm">${l}</td>
+            <td class="c" style="font-weight:800;color:${R.defence.DEF[i]?'var(--tint)':'var(--label3)'}">+${R.defence.DEF[i]}</td>
+            <td class="c">${R.defence.MID[i]?'+'+R.defence.MID[i]:'–'}</td>
+            <td class="c">${R.defence.ATT[i]?'+'+R.defence.ATT[i]:'–'}</td></tr>`).join('')}</tbody>
+      </table></div>
+      <div class="note" style="padding:10px 0 0">A defender in a 1–0 win takes ${R.played+R.win+R.defence.DEF[0]} points before doing anything else.</div>
     </div>
 
     <div class="sechead">Transfers &amp; deadlines</div>
     <div class="card pad">
       <div class="note" style="padding:0;line-height:1.75">
         📅 <b>No deadline to miss.</b> Change your team whenever you like. Whatever you have confirmed when the admin logs the next game is the team that scores for it — later changes only count from the following game.<br><br>
-        🔁 <b>${R.transfersPerWeek} transfers a week.</b> They reset every Monday and do not roll over. Building your very first team is free.<br><br>
+        🔁 <b>${R.transfersPerWeek} transfers a week</b>, resetting every Monday. They do not roll over. Building your first team is free, and transfers are <b>unlimited until the first game is logged</b>.<br><br>
         💷 <b>Prices move every gameweek</b> based on how a player is scoring compared with everyone else. Range £${R.minPrice}m–£${R.maxPrice}m.
       </div>
     </div>
@@ -3558,8 +3643,11 @@ function fplRules(compact){
     <div class="sechead">Chips</div>
     <div class="card pad">
       <div class="note" style="padding:0;line-height:1.75">
-        🃏 <b>Wildcard</b> — unlimited free transfers for one set of changes. One use all season.<br>
-        🔥 <b>Triple Captain</b> — your captain scores ×3 instead of ×2 for one gameweek. One use all season.
+        You get <b>${R.chips} of each</b> per season, and may play <b>only one in any gameweek</b>.
+        Anything you arm can be taken back off right up until that gameweek's first game is logged.<br><br>
+        🃏 <b>Wildcard</b> — unlimited free transfers for one set of changes.<br>
+        🔥 <b>Triple Captain</b> — your captain scores ×3 instead of ×2.<br>
+        ✨ <b>Double Points</b> — everything your five score that week counts twice.
       </div>
     </div>
 
@@ -3578,7 +3666,7 @@ function fplJoin(){
   return `<div class="card pad" style="text-align:center">
       <div style="font-size:44px">🕹️</div>
       <div style="font-size:19px;font-weight:800;margin:6px 0 4px">Join the mini league</div>
-      <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b>, then pick your team of three.</div>
+      <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b>, then pick your ${FPL_RULES.squadSize}.</div>
       <input id="fplCode" placeholder="e.g. TALAL-7K2M" style="text-align:center;text-transform:uppercase;letter-spacing:.1em;font-weight:700"
         onkeydown="if(event.key==='Enter')fplLogin($('#fplCode').value)">
       <button class="btn pri full" style="margin-top:10px" onclick="fplLogin($('#fplCode').value)">Continue</button>
@@ -3810,8 +3898,14 @@ function draftProblems(m){
   const d=draftOf(m), p=[], n=d.squad.length, need=FPL_RULES.squadSize;
   if(n<need)p.push(`Pick ${need-n} more player${need-n===1?'':'s'} (${n} of ${need})`);
   if(n>need)p.push(`You have ${n} players — only ${need} allowed`);
-  const sh=squadShape(d.squad);
-  FPL_RULES.slots.forEach(pos=>{ if(!sh[pos])p.push(`You need at least one ${pos}`) });
+  /* Only enforce the shape while the team is being changed. A squad that was
+     valid when confirmed stays valid even if the admin later moves someone to
+     a different position. */
+  const settled = (m.squad||[]).length===need && !draftDirty(m);
+  if(!settled){
+    const sh=squadShape(d.squad);
+    FPL_RULES.slots.forEach(pos=>{ if(!sh[pos])p.push(`You need at least one ${pos}`) });
+  }
   const spend=draftSpend(m);
   if(spend>FPL_RULES.budget)p.push(`You're £${(spend-FPL_RULES.budget).toFixed(1)}m over budget`);
   if(!d.captain&&n===need)p.push('Choose a captain');
@@ -4081,7 +4175,7 @@ function fplLeague(){
   const rows=fplTable(), f=fpl(), gws=playedGws(), last=gws[gws.length-1];
   const me=fplMine();
   if(!rows.length)return `<div class="empty"><div class="ee">🏆</div><h3>No teams yet</h3>
-    <p>Once people pick their three, the mini league fills up here.</p></div>`;
+    <p>Once people pick their ${FPL_RULES.squadSize}, the mini league fills up here.</p></div>`;
   const best=rows.reduce((a,b)=>b.gw>a.gw?b:a,rows[0]);
   return `<div class="card pad" style="text-align:center;margin-bottom:12px;background:var(--tint-soft)">
       <div style="font-size:11px;font-weight:800;letter-spacing:.08em;color:var(--tint)">GAMEWEEK ${last||1} WINNER</div>
@@ -4094,7 +4188,7 @@ function fplLeague(){
         <td class="nm"><div style="font-weight:700">${esc(r.m.teamName||'—')}</div>
           <div style="font-size:11.5px;color:var(--label3)">${esc(r.m.name)}</div></td>
         <td class="c">${r.gw}</td><td class="pts">${r.total}</td></tr>`).join('')}</tbody></table></div></div>
-    <div class="note" style="padding:6px 4px 0">Tap any team to see their three.</div>
+    <div class="note" style="padding:6px 4px 0">Tap any team to see their ${FPL_RULES.squadSize}.</div>
     <div class="note">${esc(f.league)} · everyone with a team is entered automatically.</div>
 `;
 }
@@ -6105,19 +6199,8 @@ function pickClub(s){PE.club=PE.club===s?null:s;const c=PE.club?CLUB_BY[PE.club]
 async function customStar(){const v=await askText('Road to Glory','Who do they play like?',PE.star||'','Set');
   if(v!==null){PE.star=v||null;paintPE()}}
 async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim();if(!n){toast('Enter a name');return}
-  /* changing a position can break FPL squads, so say so first */
-  if(PE.id){
-    const was=player(PE.id);
-    if(was&&was.pos&&PE.pos&&was.pos!==PE.pos){
-      const affected=fpl().managers.filter(m=>(m.squad||[]).includes(PE.id)&&m.teamName);
-      if(affected.length){
-        const who=affected.map(m=>m.teamName).join(', ');
-        if(!await askConfirm('This will break some FPL teams',
-          `${n} is moving from ${was.pos} to ${PE.pos}. ${affected.length} team${affected.length===1?'':'s'} picked them (${who}) and will need to fix their line-up. Points already earned won't change.`,
-          'Change anyway',false))return;
-      }
-    }
-  }
+  /* A position change no longer breaks anyone's FPL team — squads that are
+     already confirmed simply carry on with their new shape. */
   if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:PE.active});
   else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:true});
   logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
