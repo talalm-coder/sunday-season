@@ -1270,6 +1270,130 @@ button,a,.row.tap,[onclick],select,input,label{touch-action:manipulation}
 body.sheet-open{overflow:hidden;position:fixed;width:100%}
 /* inputs: 16px stops iOS zooming in on focus */
 input,select,textarea{font-size:16px}
+
+/* ================= SKY SPORTS ================= */
+:root{--skyRed:#E4002B;--skyNavy:#0B1B33;--skyYellow:#FFE500;--beinPurple:#6A1B9A}
+.sky-h{font-size:12px;font-weight:900;letter-spacing:.16em;color:#fff;text-transform:uppercase;
+  background:linear-gradient(90deg,var(--skyRed),#B00020);padding:8px 14px;border-radius:8px;
+  margin:18px 0 12px;display:inline-block;box-shadow:0 3px 10px rgba(228,0,43,.32)}
+.sky-h.mnf{background:linear-gradient(90deg,var(--beinPurple),#3F0D5C);box-shadow:0 3px 10px rgba(106,27,154,.32)}
+/* deadline-day ticker */
+.ddl{display:flex;align-items:stretch;border-radius:10px;overflow:hidden;margin-bottom:14px;
+  background:var(--skyYellow);box-shadow:var(--shadow)}
+.ddl-tag{background:#111;color:var(--skyYellow);font-size:9.5px;font-weight:900;letter-spacing:.1em;
+  padding:9px 10px;display:flex;align-items:center;flex:0 0 auto}
+.ddl-track{flex:1;overflow:hidden;position:relative;display:flex;align-items:center}
+.ddl-run{display:flex;gap:22px;white-space:nowrap;padding-left:14px;
+  animation:ddlrun 26s linear infinite;will-change:transform}
+.ddl-run span{font-size:12.5px;font-weight:700;color:#111}
+.ddl-run b{font-weight:800}
+.ddl-run .up{color:#0A7D2C}.ddl-run .dn{color:#B3001B}
+@keyframes ddlrun{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.ddl-run{animation:none}}
+/* man of the match */
+.sky-motm{border-radius:16px;overflow:hidden;margin-bottom:6px;box-shadow:var(--shadow);
+  background:linear-gradient(135deg,var(--skyNavy),#132B4D 60%,#0B1B33)}
+.sky-motm-tag{background:var(--skyRed);color:#fff;font-size:9.5px;font-weight:900;letter-spacing:.14em;
+  padding:6px 14px;display:flex;align-items:center;gap:6px}
+.sky-motm-tag span{font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.78);text-transform:none;font-size:10px}
+.sky-motm-b{display:flex;align-items:center;gap:13px;padding:14px}
+.sky-motm-av{flex:0 0 auto}
+.sky-motm-t{flex:1;min-width:0}
+.sky-motm-t b{display:block;color:#fff;font-size:20px;font-weight:800;letter-spacing:-.02em}
+.sky-motm-t span{display:block;color:rgba(255,255,255,.72);font-size:13px;margin-top:2px}
+.sky-motm-t i{display:block;color:rgba(255,255,255,.45);font-size:11.5px;font-style:normal;margin-top:3px}
+.sky-motm-go{flex:0 0 auto;background:rgba(255,255,255,.14);border:none;color:#fff;font-size:12px;
+  font-weight:700;padding:8px 11px;border-radius:20px;cursor:pointer}
+/* award race cards */
+.sky-card{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:12px}
+.sky-cap{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:.5px solid var(--sep);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--skyRed) 10%,transparent),transparent)}
+.sky-em{font-size:23px;flex:0 0 auto}
+.sky-cap b{display:block;font-size:15.5px;font-weight:800;letter-spacing:-.01em}
+.sky-cap i{display:block;font-style:normal;font-size:11.5px;color:var(--label3);margin-top:1px}
+.sky-row{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:.5px solid var(--sep);cursor:pointer}
+.sky-row:last-child{border-bottom:none}
+.sky-row:active{background:var(--fill)}
+.sky-row.lead{background:color-mix(in srgb,var(--skyRed) 7%,transparent)}
+.sky-pos{flex:0 0 20px;font-size:12px;font-weight:800;color:var(--label3);text-align:center}
+.sky-row.lead .sky-pos{color:var(--skyRed)}
+.sky-av{flex:0 0 auto;display:flex}
+.sky-nm{flex:1;font-size:14.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sky-row.lead .sky-nm{font-weight:800}
+.sky-val{flex:0 0 auto;font-size:12.5px;font-weight:700;color:var(--label2)}
+.sky-val.up{color:var(--green)}
+/* MNF analysis */
+.mnf-wrap{display:grid;gap:11px}
+.mnf-card{background:linear-gradient(150deg,#241033,#160A22 70%);border-radius:14px;padding:14px;
+  border:1px solid rgba(168,85,247,.22);box-shadow:var(--shadow)}
+.mnf-t{font-size:10.5px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#C084FC}
+.mnf-b{font-size:18px;font-weight:800;color:#fff;margin:5px 0 5px;letter-spacing:-.02em}
+.mnf-d{font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.55}
+
+/* ================= FPL STOCKS ================= */
+.idx{background:linear-gradient(150deg,#141821,#0C0F16);border-radius:15px;overflow:hidden;
+  margin-bottom:12px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.07)}
+.idx-h{display:flex;justify-content:space-between;align-items:center;padding:9px 14px;
+  border-bottom:1px solid rgba(255,255,255,.08)}
+.idx-h b{font-size:10px;font-weight:900;letter-spacing:.16em;color:rgba(255,255,255,.85)}
+.idx-h span{font-size:10.5px;color:rgba(255,255,255,.4)}
+.idx-b{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px 14px}
+.idx-big{font-size:26px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1}
+.idx-big span{display:block;font-size:10px;font-weight:600;color:rgba(255,255,255,.42);
+  letter-spacing:.06em;text-transform:uppercase;margin-top:4px}
+.idx-mv{text-align:right;font-size:12px;font-weight:700;line-height:1.7}
+.idx-mv .up{color:#30D158}.idx-mv .dn{color:#FF6B6B}.idx-mv .flat{color:rgba(255,255,255,.35)}
+.watch{display:flex;gap:6px;overflow-x:auto;margin-bottom:10px;padding-bottom:2px;scrollbar-width:none}
+.watch::-webkit-scrollbar{display:none}
+.watch button{flex:0 0 auto;background:var(--fill);border:none;border-radius:20px;padding:7px 13px;
+  font-size:12.5px;font-weight:600;color:var(--label2);cursor:pointer}
+.watch button.on{background:var(--label);color:var(--bg)}
+.stk-list{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.stk{border-bottom:.5px solid var(--sep);cursor:pointer}
+.stk:last-child{border-bottom:none}
+.stk.open{background:var(--fill)}
+.stk-row{display:flex;align-items:center;gap:10px;padding:10px 13px}
+.stk-kit{flex:0 0 auto;display:flex}
+.stk-nm{flex:1;min-width:0}
+.stk-nm b{display:block;font-size:14.5px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.stk-nm i{display:block;font-style:normal;font-size:11px;color:var(--label3);margin-top:1px}
+.stk-spark{flex:0 0 auto;display:flex;align-items:center}
+.stk-px{flex:0 0 auto;text-align:right;min-width:76px}
+.stk-px b{display:block;font-size:14.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.stk-px i{display:block;font-style:normal;font-size:11px;font-weight:700;margin-top:2px;
+  padding:1px 6px;border-radius:5px;font-variant-numeric:tabular-nums}
+.stk-px .up{color:#fff;background:#30D158}
+.stk-px .dn{color:#fff;background:#FF453A}
+.stk-px .flat{color:var(--label3);background:var(--fill2)}
+.stk-open{padding:4px 13px 14px;animation:in .22s ease}
+.stk-rangebar{display:flex;gap:5px;margin-bottom:8px}
+.stk-rangebar button{flex:1;background:var(--fill2);border:none;border-radius:8px;padding:6px 0;
+  font-size:11.5px;font-weight:700;color:var(--label2);cursor:pointer}
+.stk-rangebar button.on{background:var(--tint);color:#fff}
+.stk-chart{width:100%;height:150px;display:block}
+.stk-facts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
+.stk-facts>div{background:var(--card);border-radius:9px;padding:8px 4px;text-align:center}
+.stk-facts b{display:block;font-size:13.5px;font-weight:800}
+.stk-facts span{font-size:8.5px;font-weight:700;color:var(--label3);letter-spacing:.05em;text-transform:uppercase}
+.stk-sub{background:var(--card);border-radius:10px;overflow:hidden}
+.stk-sub-r{display:flex;justify-content:space-between;padding:9px 12px;border-bottom:.5px solid var(--sep);font-size:13px}
+.stk-sub-r:last-child{border-bottom:none}
+.stk-sub-r span{color:var(--label2)}
+.stk-sub-r b{font-weight:700;font-variant-numeric:tabular-nums}
+.stk-sub-r b.up{color:var(--green)}.stk-sub-r b.dn{color:var(--red)}
+
+/* ============ SKY / beIN — stronger broadcast look ============ */
+.sky-hero{position:relative;border-radius:16px;overflow:hidden;margin-bottom:14px;
+  background:linear-gradient(115deg,#E4002B 0%,#B00020 42%,#0B1B33 42%,#0B1B33 100%);
+  padding:18px 16px 20px;box-shadow:0 10px 26px rgba(11,27,51,.34)}
+.sky-hero:before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+.sky-hero-t{position:relative;font-size:10px;font-weight:900;letter-spacing:.2em;color:rgba(255,255,255,.8)}
+.sky-hero-b{position:relative;font-size:40px;font-weight:900;color:#fff;letter-spacing:-.035em;margin-top:5px;line-height:1}
+.sky-hero-s{position:relative;font-size:12.5px;color:rgba(255,255,255,.66);margin-top:5px}
+.sky-h{position:relative;padding-left:14px}
+.sky-h:before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:5px;height:70%;background:#fff;border-radius:3px}
 </style>
 </head>
 <body>
@@ -2303,6 +2427,7 @@ const NAV=[
  ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
  ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
+ ['sky','Sky Sports','📺','M4 17a5 5 0 0 1 .6-9.96A6 6 0 0 1 17 6.5 4.5 4.5 0 0 1 18 17zM9 21l3-3 3 3'],
  ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
  ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
  ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
@@ -2383,7 +2508,7 @@ function lockScroll(on){
 }
 
 function render(){
-  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
+  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
 
@@ -2958,7 +3083,7 @@ function chalRow(c){return `<div class="chal ${c.done?'done':'locked'}">
    Denis's profile → his Career → back lands you on Denis's profile again. */
 let BACKSTACK=[];
 const NAV_LABEL={home:'Home',league:'League',fixtures:'Fixtures',squad:'Squad',tactics:'Tactics',
-  career:'Career',fpl:'Sunday FPL',stats:'Stats',compare:'Compare',history:'Hall of Fame',
+  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',stats:'Stats',compare:'Compare',history:'Hall of Fame',
   comps:'Competitions',admin:'Admin',player:'Player',pcareer:'Career',match:'Match',seasonView:'Season'};
 function viewSnap(){
   return {v:VIEW, pid:app()._pid, gid:app()._gid, sid:app()._sid,
@@ -3443,30 +3568,42 @@ function fplPrice(pid){
 /* Prices are RECOMPUTED from scratch off the games that actually exist, rather
    than drifting incrementally. That makes them deterministic and self-healing:
    delete a game and the prices correct themselves instead of staying stuck. */
-function recalcPrices(){
-  const f=fpl(), S=season(), gws=playedGws();
+/* Single source of truth for prices. Returns the final price map, the moves
+   made in the latest gameweek, and the full per-gameweek history — so the
+   stocks chart can never drift from what the rest of the app shows. */
+function walkPrices(){
+  const S=season(), gws=playedGws();
   const live=S.players.filter(p=>p.active!==false);
-  const price={}; live.forEach(p=>price[p.id]=FPL_RULES.startPrice);
-  const moves=[];
+  const price={}, hist={};
+  live.forEach(p=>{ price[p.id]=FPL_RULES.startPrice; hist[p.id]=[{gw:0,v:FPL_RULES.startPrice}]; });
+  let moves=[];
   gws.forEach((gw,idx)=>{
-    const win=gws.slice(Math.max(0,idx-2),idx+1);          // rolling 3-gameweek form
+    const win=gws.slice(Math.max(0,idx-2),idx+1);
     const pts={}; live.forEach(p=>pts[p.id]=win.reduce((t,g)=>t+fplPlayerGw(p.id,g),0));
     const vals=live.map(p=>pts[p.id]);
     const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
+    const stepMoves=[];
     live.forEach(p=>{
       const diff=pts[p.id]-avg;
       let d=0;
       if(diff>=12)d=0.5; else if(diff>=7)d=0.3; else if(diff>=3)d=0.2;
       else if(diff<=-12)d=-0.5; else if(diff<=-7)d=-0.3; else if(diff<=-3)d=-0.2;
-      if(!d)return;
-      const was=price[p.id];
-      const now=Math.max(FPL_RULES.minPrice,Math.min(FPL_RULES.maxPrice,Math.round((was+d)*10)/10));
-      if(now!==was){ price[p.id]=now; if(idx===gws.length-1)moves.push({pid:p.id,name:p.name,from:was,to:now}); }
+      if(d){
+        const was=price[p.id];
+        const now=Math.max(FPL_RULES.minPrice,Math.min(FPL_RULES.maxPrice,Math.round((was+d)*10)/10));
+        if(now!==was){ price[p.id]=now; stepMoves.push({pid:p.id,name:p.name,from:was,to:now}); }
+      }
+      hist[p.id].push({gw,v:price[p.id]});
     });
+    if(idx===gws.length-1)moves=stepMoves;
   });
-  f.prices=price;
-  f.ticker=moves.slice(0,20);
-  return moves;
+  return {price,moves,hist};
+}
+function recalcPrices(){
+  const f=fpl(), r=walkPrices();
+  f.prices=r.price;
+  f.ticker=r.moves.slice(0,20);
+  return r.moves;
 }
 const updatePrices=recalcPrices;    // keep the old name working
 
@@ -3643,11 +3780,12 @@ let FTAB='team', FSORT2='total', FPOS='ALL', FPICK=null;
 function vFpl(){
   $('#navMount').innerHTML=navbar();
   const f=fpl(), me=fplMine(), locked=fplLocked();
-  const tabs=[['team','My Team'],['market','Market'],['league','League'],['rules','Rules']];
+  const tabs=[['team','My Team'],['market','Market'],['stocks','Analytics'],['league','League'],['rules','Rules']];
   let body='';
   if(!me) body=fplJoin();
   else if(FTAB==='team') body=fplMyTeam(me,locked);
   else if(FTAB==='market') body=fplMarket(me,locked);
+  else if(FTAB==='stocks') body=fplStocks(me);
   else if(FTAB==='rules') body=fplRules();
   else body=fplLeague();
   app().innerHTML=`<div class="view active">
@@ -4132,6 +4270,183 @@ async function playDoublePoints(){
   await fplSave(); render(); toast(`✨ Double points armed for GW${next}`);
 }
 
+/* ============ FPL STOCKS ============
+   The price history is replayed with exactly the same maths recalcPrices uses,
+   so every gameweek value is the real one. Between gameweeks we draw a small
+   deterministic wobble so the chart looks alive — it is seeded from the player
+   id and gameweek, so it never changes between renders, and it always lands
+   exactly on the true price at each gameweek. */
+function priceSeries(){ return walkPrices().hist; }
+
+/* stable 0..1 from a string — no Math.random, so the chart never flickers */
+function seedRand(str){
+  let h=2166136261;
+  for(let i=0;i<str.length;i++){ h^=str.charCodeAt(i); h=Math.imul(h,16777619); }
+  return ((h>>>0)%100000)/100000;
+}
+/* a drawable curve: real anchors plus gentle in-between motion */
+function priceCurve(pid,perStep){
+  const ser=(priceSeries()[pid])||[];
+  if(ser.length<2)return ser.map(x=>({...x,real:true}));
+  const step=perStep||4, out=[];
+  for(let i=0;i<ser.length-1;i++){
+    const a=ser[i], b=ser[i+1];
+    out.push({gw:a.gw,v:a.v,real:true});
+    for(let k=1;k<step;k++){
+      const t=k/step;
+      const lin=a.v+(b.v-a.v)*t;
+      // wobble is a fraction of the move, biggest mid-way, zero at both ends
+      const amp=Math.max(0.05,Math.abs(b.v-a.v)*0.45)*Math.sin(Math.PI*t);
+      const n=(seedRand(pid+'|'+a.gw+'|'+k)-0.5)*2;
+      out.push({gw:a.gw+t,v:Math.max(FPL_RULES.minPrice,Math.min(FPL_RULES.maxPrice,lin+n*amp)),real:false});
+    }
+  }
+  const last=ser[ser.length-1];
+  out.push({gw:last.gw,v:last.v,real:true});
+  return out;
+}
+function stockOf(pid){
+  const ser=(priceSeries()[pid])||[];
+  const now=ser.length?ser[ser.length-1].v:FPL_RULES.startPrice;
+  const prev=ser.length>1?ser[ser.length-2].v:FPL_RULES.startPrice;
+  const open=FPL_RULES.startPrice;
+  const chg=now-prev, pct=prev?(chg/prev*100):0;
+  const season=now-open, seasonPct=open?(season/open*100):0;
+  const highs=ser.map(x=>x.v);
+  return {pid,now,prev,chg,pct,season,seasonPct,
+          hi:Math.max(...highs,now), lo:Math.min(...highs,now), n:ser.length};
+}
+/* sparkline: 8-10 gameweeks, coloured by direction */
+function sparkline(pid,w,h){
+  const c=priceCurve(pid,4);
+  const keep=c.slice(Math.max(0,c.length-40));
+  if(keep.length<2)return `<svg width="${w||72}" height="${h||26}"></svg>`;
+  const W=w||72, H=h||26, pad=2;
+  const vs=keep.map(p=>p.v), lo=Math.min(...vs), hi=Math.max(...vs), rng=(hi-lo)||1;
+  const x=i=>pad+(i/(keep.length-1))*(W-pad*2);
+  const y=v=>H-pad-((v-lo)/rng)*(H-pad*2);
+  const up=keep[keep.length-1].v>=keep[0].v;
+  const col=up?'#30D158':'#FF453A';
+  const d=keep.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join('');
+  const area=`${d}L${x(keep.length-1).toFixed(1)},${H-pad}L${x(0).toFixed(1)},${H-pad}Z`;
+  const id='sp'+pid.replace(/\W/g,'');
+  return `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${col}" stop-opacity=".26"/>
+      <stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#${id})"/>
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </svg>`;
+}
+/* full chart for the expanded view */
+function priceChart(pid,range){
+  const all=priceCurve(pid,5);
+  const gws=playedGws(), lastGw=gws[gws.length-1]||0;
+  const spans={'3W':3,'1M':4,'3M':12,'ALL':9999};
+  const back=spans[range]||9999;
+  const from=Math.max(0,lastGw-back);
+  const c=all.filter(p=>p.gw>=from);
+  if(c.length<2)return `<div class="note" style="padding:24px;text-align:center">Not enough history yet — prices move once games are logged.</div>`;
+  const W=320,H=150,pad=8,padL=30;
+  const vs=c.map(p=>p.v), lo=Math.min(...vs), hi=Math.max(...vs), rng=(hi-lo)||1;
+  const x=i=>padL+(i/(c.length-1))*(W-padL-pad);
+  const y=v=>H-22-((v-lo)/rng)*(H-32);
+  const up=c[c.length-1].v>=c[0].v, col=up?'#30D158':'#FF453A';
+  const d=c.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join('');
+  const area=`${d}L${x(c.length-1).toFixed(1)},${H-22}L${x(0).toFixed(1)},${H-22}Z`;
+  const anchors=c.map((p,i)=>({...p,i})).filter(p=>p.real);
+  return `<svg viewBox="0 0 ${W} ${H}" class="stk-chart" preserveAspectRatio="none">
+    <defs><linearGradient id="cg${pid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="${col}" stop-opacity=".3"/>
+      <stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
+    ${[0,.5,1].map(f=>{const v=lo+rng*f;return `
+      <line x1="${padL}" y1="${y(v)}" x2="${W-pad}" y2="${y(v)}" stroke="var(--sep)" stroke-width=".6"/>
+      <text x="2" y="${y(v)+3}" font-size="8" fill="var(--label3)">£${v.toFixed(1)}</text>`}).join('')}
+    <path d="${area}" fill="url(#cg${pid})"/>
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>
+    ${anchors.map(a=>`<circle cx="${x(a.i).toFixed(1)}" cy="${y(a.v).toFixed(1)}" r="2.2" fill="${col}"/>`).join('')}
+    <text x="${padL}" y="${H-6}" font-size="8" fill="var(--label3)">GW${Math.ceil(from)||1}</text>
+    <text x="${W-pad}" y="${H-6}" font-size="8" fill="var(--label3)" text-anchor="end">GW${lastGw}</text>
+  </svg>`;
+}
+function marketIndex(){
+  const st=fplStats();
+  const rows=st.map(x=>stockOf(x.id));
+  const total=rows.reduce((t,r)=>t+r.now,0);
+  const up=rows.slice().sort((a,b)=>b.chg-a.chg)[0];
+  const dn=rows.slice().sort((a,b)=>a.chg-b.chg)[0];
+  return {total,up,dn,n:rows.length};
+}
+
+let SSORT='movers', SOPEN=null, SRANGE='ALL';
+function fplStocks(m){
+  const st=fplStats();
+  if(!st.length)return `<div class="empty"><div class="ee">📈</div><h3>The market opens with the first game</h3>
+    <p>Once results are in, every player gets a price chart that moves with their form.</p></div>`;
+  const rows=st.map(x=>({...x,...stockOf(x.id)}));
+  const idx=marketIndex();
+  const sorts={
+    movers:(a,b)=>Math.abs(b.chg)-Math.abs(a.chg)||b.now-a.now,
+    gainers:(a,b)=>b.chg-a.chg||b.now-a.now,
+    losers:(a,b)=>a.chg-b.chg||a.now-b.now,
+    owned:(a,b)=>b.ownedPct-a.ownedPct||b.now-a.now,
+  };
+  rows.sort(sorts[SSORT]||sorts.movers);
+  const sign=v=>`${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}`;
+  const pct=v=>`${v>=0?'+':'−'}${Math.abs(v).toFixed(1)}%`;
+
+  const expanded=r=>`
+    <div class="stk-open">
+      <div class="stk-rangebar">${['3W','1M','3M','ALL'].map(k=>
+        `<button class="${SRANGE===k?'on':''}" onclick="event.stopPropagation();SRANGE='${k}';render()">${k==='ALL'?'Season':k}</button>`).join('')}</div>
+      ${priceChart(r.id,SRANGE)}
+      <div class="stk-facts">
+        <div><b>£${r.hi.toFixed(1)}m</b><span>High</span></div>
+        <div><b>£${r.lo.toFixed(1)}m</b><span>Low</span></div>
+        <div><b>${r.total}</b><span>Points</span></div>
+        <div><b>${r.ownedPct}%</b><span>Owned</span></div>
+      </div>
+      <div class="stk-sub">
+        <div class="stk-sub-r"><span>Since the start</span>
+          <b class="${r.season>=0?'up':'dn'}">${sign(r.season)}m (${pct(r.seasonPct)})</b></div>
+        <div class="stk-sub-r"><span>Form (last 3 GW)</span><b>${r.form} pts</b></div>
+        <div class="stk-sub-r"><span>Share of all goals</span><b>${r.threat}%</b></div>
+        <div class="stk-sub-r"><span>Points per million</span><b>${(r.total/Math.max(r.now,1)).toFixed(1)}</b></div>
+      </div>
+      <button class="btn sec full" style="margin-top:10px" onclick="event.stopPropagation();openPlayer('${r.id}')">Full profile ›</button>
+    </div>`;
+
+  return `
+    <div class="idx">
+      <div class="idx-h"><b>SUNDAY MARKET</b><span>${idx.n} listed</span></div>
+      <div class="idx-b">
+        <div class="idx-big">£${idx.total.toFixed(1)}m<span>total value</span></div>
+        <div class="idx-mv">
+          ${idx.up&&idx.up.chg>0?`<div class="up">▲ ${esc((player(idx.up.pid)||{}).name||'')} ${sign(idx.up.chg)}</div>`:'<div class="flat">no risers</div>'}
+          ${idx.dn&&idx.dn.chg<0?`<div class="dn">▼ ${esc((player(idx.dn.pid)||{}).name||'')} ${sign(idx.dn.chg)}</div>`:'<div class="flat">no fallers</div>'}
+        </div>
+      </div>
+    </div>
+
+    <div class="watch">${[['movers','Movers'],['gainers','Gainers'],['losers','Losers'],['owned','Most owned']]
+      .map(([k,l])=>`<button class="${SSORT===k?'on':''}" onclick="SSORT='${k}';render()">${l}</button>`).join('')}</div>
+
+    <div class="stk-list">${rows.map(r=>`
+      <div class="stk ${SOPEN===r.id?'open':''}" onclick="SOPEN=SOPEN==='${r.id}'?null:'${r.id}';render()">
+        <div class="stk-row">
+          <span class="stk-kit">${avatar(player(r.id),32)}</span>
+          <span class="stk-nm"><b>${esc(r.name)}</b><i>${r.pos} · ${r.ownedPct}% owned</i></span>
+          <span class="stk-spark">${sparkline(r.id,70,26)}</span>
+          <span class="stk-px">
+            <b>£${r.now.toFixed(1)}m</b>
+            <i class="${r.chg>0?'up':r.chg<0?'dn':'flat'}">${r.chg?`${sign(r.chg)} (${pct(r.pct)})`:'—'}</i>
+          </span>
+        </div>
+        ${SOPEN===r.id?expanded(r):''}
+      </div>`).join('')}</div>
+    <div class="note">Prices move when games are logged. The line between gameweeks is drawn for readability — every marked point is a real price.</div>`;
+}
+
 /* ---------- market ---------- */
 function fplMarket(m,locked){
   let st=fplStats();
@@ -4556,6 +4871,148 @@ function setHaptics(on){
   render();
 }
 
+/* ============ SKY SPORTS ============
+   A broadcast-styled read of the season: the award races, man of the match,
+   a deadline-day price ticker, and Monday-Night-Football style analysis. */
+function skyAwards(){
+  return [...skyAwardsCore(), ...skyPosAwards()];
+}
+function skyAwardsCore(){
+  const st=statsAll().filter(x=>x.P>0);
+  const p=id=>player(id)||{name:'—'};
+  const mk=(key,label,emoji,pick,fmt,sub)=>{
+    const rank=st.slice().sort(pick).slice(0,3);
+    return {key,label,emoji,sub,rows:rank.map(x=>({id:x.id,name:p(x.id).name,v:fmt(x),raw:x}))};
+  };
+  return [
+    mk('potm','Player of the Season','🏆',
+       (a,b)=>(b.pts+b.G*1.5+b.cs*1.5+b.P*.25)-(a.pts+a.G*1.5+a.cs*1.5+a.P*.25),
+       x=>`${Math.round(x.pts+x.G*1.5+x.cs*1.5+x.P*.25)} rating`,'Points, goals, shut-outs and turning up'),
+    mk('boot','Golden Boot','👟',(a,b)=>b.G-a.G||b.gpg-a.gpg,
+       x=>`${x.G} goal${x.G===1?'':'s'}`,'Most goals this season'),
+  ];
+}
+/* these two are position-specific, so filter rather than just sort */
+function skyPosAwards(){
+  const st=statsAll().filter(x=>x.P>0);
+  const posOf=id=>((player(id)||{}).pos)||'MID';
+  const p=id=>player(id)||{name:'—'};
+  const build=(key,label,emoji,sub,pool,sortf,fmt)=>{
+    const rows=st.filter(x=>pool.includes(posOf(x.id))&&x.P>=3).sort(sortf).slice(0,3)
+      .map(x=>({id:x.id,name:p(x.id).name,v:fmt(x)}));
+    return rows.length?{key,label,emoji,sub,rows}:null;
+  };
+  return [
+    build('glove','Golden Defence','🧤','Fewest let in per game — defenders only (min 3)',
+      ['DEF','GK'],(a,b)=>(a.GA/a.P)-(b.GA/b.P)||b.cs-a.cs,
+      x=>`${(x.GA/Math.max(x.P,1)).toFixed(1)} conceded/gm`),
+    build('mid','Golden Midfielder','🎩','Best return from midfield (min 3)',
+      ['MID'],(a,b)=>(b.pts+b.G*2)-(a.pts+a.G*2),
+      x=>`${x.pts} pts · ${x.G} goal${x.G===1?'':'s'}`),
+  ].filter(Boolean);
+}
+
+/* biggest climb in points-per-game between the first half and the second */
+function mostImproved(){
+  const g=allGames(); if(g.length<6)return [];
+  const half=Math.floor(g.length/2);
+  const early=statsFor(g.slice(0,half)), late=statsFor(g.slice(half));
+  const em={}; early.forEach(x=>em[x.id]=x);
+  return late.filter(x=>x.P>=2).map(x=>{
+    const e=em[x.id];
+    if(!e||e.P<2)return null;
+    const d=(x.pts/x.P)-(e.pts/e.P);
+    return {id:x.id,name:(player(x.id)||{}).name||'—',delta:d,
+            from:(e.pts/e.P),to:(x.pts/x.P),G:x.G-e.G};
+  }).filter(Boolean).sort((a,b)=>b.delta-a.delta).slice(0,3);
+}
+/* man of the match for the most recent game */
+function motm(g){
+  if(!g)return null;
+  const ids=[...(g.teamA||[]),...(g.teamB||[])];
+  const won=sd=>g.result===sd;
+  let best=null;
+  ids.forEach(id=>{
+    const onA=(g.teamA||[]).includes(id);
+    const goals=(g.goals||{})[id]||0;
+    const ga=onA?(g.scoreB||0):(g.scoreA||0);
+    const w=won(onA?'A':'B'), d=g.result==='D';
+    let sc=goals*4 + (w?4:d?1.5:0) + (ga===0?3:ga<=2?1.5:0);
+    if(goals>=3)sc+=3;
+    if(!best||sc>best.sc)best={id,sc,goals,w,d,ga};
+  });
+  if(!best)return null;
+  return {...best,name:(player(best.id)||{}).name||'—'};
+}
+/* Monday-Night-Football style read on the season */
+function mnfNotes(){
+  const out=[], g=allGames();
+  if(g.length<3)return out;
+  const pairs=chemPairs(3);
+  const p=id=>(player(id)||{}).name||'—';
+
+  if(pairs.length){
+    const top=pairs[0];
+    out.push({t:'The partnership',e:'🤝',
+      b:`${p(top.a)} and ${p(top.b)}`,
+      d:`Together ${top.P} times and winning ${top.W} of them — a ${top.chem}% record. No pairing in the group has done better.`});
+    const worst=pairs[pairs.length-1];
+    if(pairs.length>2&&worst.chem<40)
+      out.push({t:'It just does not click',e:'🧊',
+        b:`${p(worst.a)} and ${p(worst.b)}`,
+        d:`${worst.P} games together, only ${worst.W} won. Worth splitting them up next time you pick sides.`});
+  }
+  // tightest defensive pairing
+  const dmap={};
+  g.forEach(x=>{
+    [['A',x.teamA,x.scoreB],['B',x.teamB,x.scoreA]].forEach(([sd,team,conceded])=>{
+      const t=(team||[]);
+      for(let i=0;i<t.length;i++)for(let j=i+1;j<t.length;j++){
+        const pa=player(t[i]),pb=player(t[j]);
+        if(!pa||!pb)continue;
+        if(!['DEF','GK'].includes(pa.pos)||!['DEF','GK'].includes(pb.pos))continue;
+        const k=t[i]<t[j]?t[i]+'|'+t[j]:t[j]+'|'+t[i];
+        if(!dmap[k])dmap[k]={a:t[i],b:t[j],P:0,GA:0};
+        dmap[k].P++; dmap[k].GA+=(conceded||0);
+      }});
+  });
+  const back=Object.values(dmap).filter(x=>x.P>=3).sort((a,b)=>a.GA/a.P-b.GA/b.P)[0];
+  if(back)out.push({t:'The back line',e:'🧱',b:`${p(back.a)} and ${p(back.b)}`,
+    d:`${(back.GA/back.P).toFixed(1)} conceded a game across ${back.P} outings — the meanest pairing at the back.`});
+
+  // most goals alongside a team-mate
+  const smap={};
+  g.forEach(x=>{
+    [['A',x.teamA],['B',x.teamB]].forEach(([sd,team])=>{
+      const t=(team||[]);
+      for(let i=0;i<t.length;i++)for(let j=i+1;j<t.length;j++){
+        const k=t[i]<t[j]?t[i]+'|'+t[j]:t[j]+'|'+t[i];
+        if(!smap[k])smap[k]={a:t[i],b:t[j],P:0,G:0};
+        smap[k].P++; smap[k].G+=((x.goals||{})[t[i]]||0)+((x.goals||{})[t[j]]||0);
+      }});
+  });
+  const front=Object.values(smap).filter(x=>x.P>=3).sort((a,b)=>b.G/b.P-a.G/a.P)[0];
+  if(front&&front.G)out.push({t:'The front two',e:'⚡',b:`${p(front.a)} and ${p(front.b)}`,
+    d:`${front.G} goals between them in ${front.P} games — ${(front.G/front.P).toFixed(1)} a game when they line up together.`});
+
+  // form
+  const st=statsAll().filter(x=>x.P>=3);
+  const hot=st.map(x=>{
+    const last=x.seq.slice(-4);
+    return {id:x.id,pts:last.reduce((t,s)=>t+(s.r==='W'?3:s.r==='D'?1:0),0),n:last.length};
+  }).filter(x=>x.n>=3).sort((a,b)=>b.pts-a.pts)[0];
+  if(hot&&hot.pts>=7)out.push({t:'In form',e:'🔥',b:p(hot.id),
+    d:`${hot.pts} points from the last ${hot.n} games. Whoever gets them on their side right now is starting ahead.`});
+
+  // scoreline character
+  const avg=g.reduce((t,x)=>t+(x.scoreA||0)+(x.scoreB||0),0)/g.length;
+  out.push({t:'The story of the season',e:'📈',b:`${avg.toFixed(1)} goals a game`,
+    d: avg>8?'Chaos. Nobody is defending and everybody is enjoying it.'
+      : avg>6?'End to end, and the defenders are earning their money.'
+      : 'Tight, low-scoring football — the shut-outs are deciding it.'});
+  return out;
+}
+
 /* ============ MATCH CENTRE ============ */
 function openMatch(id){ pushBack(); app()._gid=id; VIEW='match'; render(); window.scrollTo(0,0); }
 function vMatch(gid){
@@ -4941,6 +5398,89 @@ function lifetime(){
     wr:x.P?x.W/x.P:0, gpg:x.P?x.G/x.P:0, GD:x.GF-x.GA})).sort((a,b)=>b.P-a.P);
 }
 function longestRun(seq,ok){let b=0,c=0;seq.forEach(r=>{c=ok(r)?c+1:0;if(c>b)b=c});return b}
+
+function vSky(){
+  $('#navMount').innerHTML=navbar();
+  const S=season(), g=allGames();
+  const last=g.length?g[g.length-1]:null;
+  const m=motm(last);
+  const awards=skyAwards(), imp=mostImproved(), notes=mnfNotes();
+  const f=fpl(), tick=(f.ticker||[]).slice(0,14);
+  const p=id=>(player(id)||{name:'—'});
+
+  if(!g.length){ app().innerHTML=`<div class="view active">
+    <div class="largetitle">Sky Sports</div>
+    <div class="subtitle">The studio</div>
+    <div class="wrap">${cloudBanner()}
+      <div class="empty"><div class="ee">📺</div><h3>Nothing to broadcast yet</h3>
+      <p>Log a game and the studio comes alive — award races, man of the match and the analysis desk.</p></div>
+    </div></div>`; return; }
+
+  const podium=a=>`
+    <div class="sky-card">
+      <div class="sky-cap"><span class="sky-em">${a.emoji}</span>
+        <div><b>${a.label}</b><i>${a.sub}</i></div></div>
+      ${a.rows.map((r,i)=>`
+        <div class="sky-row ${i===0?'lead':''}" onclick="openPlayer('${r.id}')">
+          <span class="sky-pos">${i+1}</span>
+          <span class="sky-av">${avatar(p(r.id),26)}</span>
+          <span class="sky-nm">${esc(r.name)}</span>
+          <span class="sky-val">${esc(r.v)}</span>
+        </div>`).join('')}
+    </div>`;
+
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">Sky Sports</div>
+    <div class="wrap">${cloudBanner()}
+
+    <div class="sky-hero">
+      <div class="sky-hero-t">SUNDAY SEASON · LIVE</div>
+      <div class="sky-hero-b">Super Sunday</div>
+    </div>
+
+    ${tick.length?`<div class="ddl">
+      <div class="ddl-tag">DEADLINE DAY</div>
+      <div class="ddl-track"><div class="ddl-run">
+        ${[...tick,...tick].map(t=>`<span class="${t.to>t.from?'up':'dn'}">
+          <b>${esc(t.name)}</b> ${t.to>t.from?'▲':'▼'} £${t.to.toFixed(1)}m</span>`).join('')}
+      </div></div></div>`:''}
+
+    ${m?`<div class="sky-motm">
+      <div class="sky-motm-tag">MAN OF THE MATCH
+        <span>— ${esc(fdate(last.date))}${last.round?` · ${esc(last.round)}`:''}</span></div>
+      <div class="sky-motm-b">
+        <div class="sky-motm-av">${avatar(p(m.id),58)}</div>
+        <div class="sky-motm-t">
+          <b>${esc(m.name)}</b>
+          <span>${m.goals?`${m.goals} goal${m.goals===1?'':'s'} · `:''}${m.w?'winner':m.d?'draw':'defeat'}${m.ga===0?' · clean sheet':''}</span>
+          <i>Final score ${last.scoreA}–${last.scoreB}</i>
+        </div>
+        <button class="sky-motm-go" onclick="openMatch('${last.id}')">Match centre ›</button>
+      </div></div>`:''}
+
+    <div class="sky-h">The races</div>
+    ${awards.map(podium).join('')}
+
+    ${imp.length?`<div class="sky-card">
+      <div class="sky-cap"><span class="sky-em">📈</span>
+        <div><b>Most Improved</b><i>Biggest jump from the first half of the season</i></div></div>
+      ${imp.map((r,i)=>`<div class="sky-row ${i===0?'lead':''}" onclick="openPlayer('${r.id}')">
+        <span class="sky-pos">${i+1}</span>
+        <span class="sky-av">${avatar(p(r.id),26)}</span>
+        <span class="sky-nm">${esc(r.name)}</span>
+        <span class="sky-val up">+${r.delta.toFixed(2)} ppg</span></div>`).join('')}
+    </div>`:''}
+
+    ${notes.length?`<div class="sky-h mnf">Analysis</div>
+      <div class="mnf-wrap">${notes.map(n=>`
+        <div class="mnf-card">
+          <div class="mnf-t">${n.e} ${esc(n.t)}</div>
+          <div class="mnf-b">${esc(n.b)}</div>
+          <div class="mnf-d">${esc(n.d)}</div>
+        </div>`).join('')}</div>`:''}
+    <div style="height:20px"></div>
+  </div></div>`;
+}
 
 function vHistory(){
   $('#navMount').innerHTML=navbar();
@@ -6690,6 +7230,10 @@ document.addEventListener('keydown',e=>{
   await loadDB();
   if(supa){ await initSupa(); } else { applyAdminClass(); }
   loadLocalBoard();
+  /* Prices are fully derived from the games, so recompute once at boot. This
+     self-heals any map saved under older rules and guarantees the stocks chart
+     and the market always agree. */
+  try{ if(season()&&season().games&&season().games.length)recalcPrices(); }catch(e){}
   try{fplAutoLogin()}catch(e){}
   /* also handle a personal link tapped while the app is already open (a hash
      change alone does not reload the page) */
