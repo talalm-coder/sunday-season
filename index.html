@@ -235,16 +235,20 @@ tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
 .sbg{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);display:none;align-items:flex-end;justify-content:center}
 .sbg.open{display:flex;animation:fade .25s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:14px 14px 0 0;
-  animation:up .38s cubic-bezier(.32,.72,0,1);padding-bottom:calc(24px + env(safe-area-inset-bottom))}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92vh;border-radius:14px 14px 0 0;
+  animation:up .38s cubic-bezier(.32,.72,0,1);
+  /* header stays put, only the middle scrolls, the action bar is pinned to the
+     bottom — the old version scrolled everything which made the buttons drift */
+  display:flex;flex-direction:column;overflow:hidden}
 @media(min-width:700px){.sbg{align-items:center}.sheet{border-radius:16px;max-height:88vh}}
 @keyframes up{from{transform:translateY(100%)}to{transform:none}}
-.shead{position:sticky;top:0;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+.shead{flex:0 0 auto;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:.5px solid var(--sep);padding:14px 16px;display:flex;align-items:center;gap:10px;z-index:5}
 .shead .st{font-size:17px;font-weight:600;flex:1;text-align:center}
 .shead .sa{color:var(--tint);font-size:16px;font-weight:400;min-width:56px}
 .shead .sa.r{text-align:right;font-weight:600}
-.sbody{padding:16px}
+.sbody{padding:16px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;flex:1 1 auto;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 .lbl{font-size:13px;font-weight:600;color:var(--label2);text-transform:uppercase;letter-spacing:.04em;padding:18px 4px 8px}
 .lbl:first-child{padding-top:4px}
 
@@ -367,9 +371,11 @@ tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
 input.search{background:var(--fill);border-radius:11px;padding:11px 14px;font-size:16px}
 .warn{background:color-mix(in srgb,var(--orange) 15%,transparent);border:1px solid color-mix(in srgb,var(--orange) 35%,transparent);
   color:var(--label);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.45;margin-bottom:10px}
-.formbar{position:sticky;bottom:0;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border-top:.5px solid var(--sep);margin:20px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));
-  display:flex;gap:10px}
+/* A real footer: a sibling of the scrolling body, so it never moves. */
+.formbar{flex:0 0 auto;display:flex;gap:10px;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
+  background:var(--bg);border-top:.5px solid var(--sep);
+  box-shadow:0 -8px 20px -12px rgba(0,0,0,.28)}
 .formbar .btn{flex:1;font-size:16px;padding:14px}
 .formbar .btn.pri{flex:1.4}
 .chalx{font-size:11px;font-weight:700;color:var(--tint);white-space:nowrap}
@@ -1253,6 +1259,17 @@ kbd{display:inline-block;background:var(--fill2);border-radius:5px;padding:1px 6
 /* the navbar itself must clear the notch too */
 .navbar{padding-top:env(safe-area-inset-top,0px)}
 .largetitle{padding-top:2px}
+
+/* ---- responsive taps: kill the 300ms delay and give instant feedback ---- */
+button,a,.row.tap,[onclick],select,input,label{touch-action:manipulation}
+.row.tap,button:not(:disabled){-webkit-user-select:none;user-select:none}
+.row.tap:active{background:var(--fill);transition:none}
+.btn:active{transform:scale(.975);transition:transform .06s}
+.side nav button:active{background:var(--fill2)}
+/* stop the page behind a sheet from scrolling with it */
+body.sheet-open{overflow:hidden;position:fixed;width:100%}
+/* inputs: 16px stops iOS zooming in on focus */
+input,select,textarea{font-size:16px}
 </style>
 </head>
 <body>
@@ -2258,8 +2275,8 @@ function openSheet(t,body,act){
   $('#sheet').innerHTML=`<div class="shead"><button class="sa" onclick="closeSheet()">Cancel</button>
    <div class="st">${esc(t)}</div>${act?`<button class="sa r" id="_sact">${esc(act)}</button>`:'<span class="sa"></span>'}</div>
    <div class="sbody">${body}</div>`;
-  $('#sbg').classList.add('open')}
-const closeSheet=()=>$('#sbg').classList.remove('open');
+  $('#sbg').classList.add('open');lockScroll(true);liftFormbar()}
+const closeSheet=()=>{$('#sbg').classList.remove('open');lockScroll(false)};
 
 /* ============ FULLSCREEN VIEWER (replaces blocked window.open) ============ */
 function openViewer(title,html,dlName,dlHtml){
@@ -2310,6 +2327,60 @@ const chev='<svg class="chev" viewBox="0 0 8 13"><path d="M1.5 1.5L6.5 6.5l-5 5"
 function navbar(back,action){return `<div class="navbar">${back?`<button class="backbtn" onclick="${back.on}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>${esc(back.label)}</button>`
     :`<button class="menubtn" onclick="toggleDrawer()"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Menu</button>`}
   <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}<button class="iconbtn themeIcon" onclick="toggleTheme()"></button></div></div>`}
+
+/* The action bar is written inside the scrolling body by each sheet, so lift it
+   out to sit alongside it — that makes it a genuine footer instead of a sticky
+   element that drifts a few pixels as you scroll. */
+function liftFormbar(){
+  try{
+    const sheet=document.querySelector('#sheet');
+    if(!sheet)return;
+    const body=sheet.querySelector('.sbody');
+    if(!body)return;
+    const bar=body.querySelector('.formbar');
+    if(bar)sheet.appendChild(bar);
+  }catch(e){}
+}
+
+/* ============ SMOOTH REPAINTS ============
+   Rebuilding innerHTML throws away the focused input, which is what makes the
+   keyboard flicker shut mid-typing and the scroll jump. This keeps both. */
+function keepFocus(fn){
+  const a=document.activeElement;
+  const id=a&&a.id, tag=a&&a.tagName;
+  const isField = tag==='INPUT'||tag==='TEXTAREA';
+  const selS = isField?a.selectionStart:null, selE = isField?a.selectionEnd:null;
+  // remember where each scrollable area was
+  const body=document.querySelector('.sbody');
+  const bodyTop=body?body.scrollTop:0;
+  const winTop=window.scrollY;
+
+  fn();
+
+  if(id){
+    const el=document.getElementById(id);
+    if(el&&el!==document.activeElement){
+      try{
+        el.focus({preventScroll:true});
+        if(isField&&selS!=null&&el.setSelectionRange)el.setSelectionRange(selS,selE);
+      }catch(e){}
+    }
+  }
+  liftFormbar();
+  const nb=document.querySelector('.sbody');
+  if(nb&&bodyTop)nb.scrollTop=bodyTop;
+  if(winTop&&!body)window.scrollTo(0,winTop);
+}
+/* keep the page behind a sheet from scrolling underneath it */
+function lockScroll(on){
+  try{
+    if(on){ document.body.dataset.sy=String(window.scrollY); document.body.classList.add('sheet-open');
+            document.body.style.top=`-${window.scrollY}px`; }
+    else { const y=+(document.body.dataset.sy||0);
+           document.body.classList.remove('sheet-open'); document.body.style.top='';
+           window.scrollTo(0,y); }
+  }catch(e){}
+}
 
 function render(){
   ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
@@ -4167,7 +4238,7 @@ function viewManager(pid){
           <div class="rv" style="font-weight:700">${fplManagerGw(m,gw)}</div></div>`).join('')}</div>`:''}
       <div style="height:10px"></div>
     </div>`;
-  $('#sbg').classList.add('open');
+  $('#sbg').classList.add('open');lockScroll(true);liftFormbar();
 }
 
 /* ---------- mini league ---------- */
@@ -5565,7 +5636,8 @@ function board(){const S=season();
 
 let TAC='formations', TSEL=null, SPX='';
 /* repaint only the tactics body — full render() rebuilds the whole page and feels laggy */
-function paintTac(){
+function paintTac(){ return keepFocus(()=>_paintTac()); }
+function _paintTac(){
   const host=document.querySelector('#tacBody');
   if(!host){render();return}
   /* the tab buttons live outside #tacBody, so update their state too */
@@ -5979,7 +6051,7 @@ function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x
 function gameSheet(){
   $('#sheet').innerHTML=`<div class="shead"><span class="sa"></span><div class="st">${G.id?'Edit game':'New game'}</div><span class="sa"></span></div>
     <div class="sbody"><div id="gb"></div></div>`;
-  $('#sbg').classList.add('open');paintGame()}
+  $('#sbg').classList.add('open');lockScroll(true);liftFormbar();paintGame()}
 const sideOf=pid=>G.A.has(pid)?'A':G.B.has(pid)?'B':'';
 function setSide(pid,sd){
   G.A.delete(pid);G.B.delete(pid);
@@ -5987,7 +6059,8 @@ function setSide(pid,sd){
   paintGame()}
 const teamCount=sd=>G[sd].size+G['fill'+sd].length;
 const goalSum=sd=>[...G[sd]].reduce((t,p)=>t+(G.goals[p]||0),0);
-function paintGame(){
+function paintGame(){ return keepFocus(()=>_paintGame()); }
+function _paintGame(){
   const all=[...season().players].filter(p=>p.active!==false).sort((a,b)=>a.name.localeCompare(b.name));
   const q=(G.q||'').toLowerCase().trim();
   const cA=teamCount('A'),cB=teamCount('B');
@@ -6148,7 +6221,8 @@ function editPlayer(pid){if(!requireAdmin())return;const p=pid?player(pid):null;
       ps:p?p.ps||null:null,avail:p?p.avail||'ok':'ok',active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
   if(PE.club&&CLUB_BY[PE.club])PE.comp=CLUB_BY[PE.club].comp;
   openSheet(pid?'Edit player':'New player','<div id="peb"></div>','Save');$('#_sact').onclick=savePlayer;paintPE()}
-function paintPE(){
+function paintPE(){ return keepFocus(()=>_paintPE()); }
+function _paintPE(){
   const club=PE.club?CLUB_BY[PE.club]:null,sq=club?(club.sq[PE.pos||'MID']||[]):[];
   $('#peb').innerHTML=`
     <div class="lbl">Name</div><input value="${esc(PE.name)}" placeholder="e.g. Talal" oninput="PE.name=this.value">
@@ -6215,8 +6289,9 @@ async function removePlayer(pid){if(!requireAdmin())return;
 function manageTeams(){if(!requireAdmin())return;
   $('#sheet').innerHTML=`<div class="shead"><span class="sa"></span><div class="st">Teams</div><span class="sa"></span></div>
     <div class="sbody"><div id="tb"></div></div>`;
-  $('#sbg').classList.add('open');paintTeams()}
-function paintTeams(){
+  $('#sbg').classList.add('open');lockScroll(true);liftFormbar();paintTeams()}
+function paintTeams(){ return keepFocus(()=>_paintTeams()); }
+function _paintTeams(){
   const c=comp(),ts=teams(c);
   $('#tb').innerHTML=`
     <div class="note" style="padding:0 4px 12px">Cups and group stages are played by fixed teams. Build each team here, then draw.</div>
@@ -6241,8 +6316,9 @@ function editTeam(tid,isNew){if(!requireAdmin())return;
   $('#sheet').innerHTML=`<div class="shead"><button class="sa" onclick="manageTeams()">‹ Teams</button>
     <div class="st">${isNew?'New team':'Edit team'}</div><span class="sa"></span></div>
     <div class="sbody"><div id="etb"></div></div>`;
-  $('#sbg').classList.add('open');paintTE()}
-function paintTE(){
+  $('#sbg').classList.add('open');lockScroll(true);liftFormbar();paintTE()}
+function paintTE(){ return keepFocus(()=>_paintTE()); }
+function _paintTE(){
   const c=comp(),t=team(c,TE.id);if(!t){manageTeams();return}
   const q=(TE.q||'').toLowerCase().trim();
   const all=[...season().players].filter(p=>p.active!==false).sort((a,b)=>a.name.localeCompare(b.name));
