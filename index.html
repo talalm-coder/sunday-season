@@ -1394,6 +1394,59 @@ input,select,textarea{font-size:16px}
 .sky-h{position:relative;padding-left:14px}
 .sky-h:before{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);
   width:5px;height:70%;background:#fff;border-radius:3px}
+
+/* ---- squad numbers ---- */
+.shirt-pick{display:flex;align-items:center;gap:12px;width:100%;background:var(--fill);border:none;
+  border-radius:12px;padding:11px 13px;margin-bottom:14px;cursor:pointer;text-align:left;font-size:14.5px;color:var(--label)}
+.shirt-big{flex:0 0 44px;height:44px;border-radius:11px;background:var(--label);color:var(--bg);
+  display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;font-variant-numeric:tabular-nums}
+.shirt-pick .chev{margin-left:auto;color:var(--label3);font-size:19px}
+.shirtno{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;padding:0 4px;
+  border-radius:5px;background:var(--fill2);color:var(--label2);font-size:10.5px;font-weight:800;
+  font-variant-numeric:tabular-nums;margin-right:6px}
+.shirtno.onCard{background:rgba(255,255,255,.18);color:#fff;font-size:12px;height:22px;min-width:24px}
+/* ---- ratings ---- */
+.rpill{display:inline-flex;align-items:center;justify-content:center;min-width:34px;height:21px;padding:0 6px;
+  border-radius:6px;font-size:12px;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.rpill.lg{min-width:46px;height:30px;font-size:16px;border-radius:8px}
+.r-elite{background:#0A7D2C}.r-great{background:#30A14E}.r-good{background:#6E9E3E}
+.r-ok{background:#A0863C}.r-poor{background:#B3401B}
+/* ---- trophy cabinet ---- */
+.cab{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:9px}
+.cab-i{border-radius:13px;padding:12px 8px;text-align:center;box-shadow:var(--shadow);border:1px solid transparent}
+.cab-i.gold{background:linear-gradient(160deg,#FFF6D8,#F4C048 60%,#C9A227);border-color:#E0B53C;color:#3B2D04}
+.cab-i.silver{background:linear-gradient(160deg,#FBFCFD,#D6DCE4 60%,#AEB6C0);border-color:#C6CDD6;color:#2A3038}
+.cab-i.bronze{background:linear-gradient(160deg,#F7E2CE,#D69A62 60%,#A9713F);border-color:#C98F55;color:#3A2311}
+.cab-e{font-size:26px;line-height:1}
+.cab-t{font-size:12.5px;font-weight:800;margin-top:5px;letter-spacing:-.01em}
+.cab-s{font-size:10.5px;opacity:.78;margin-top:2px;line-height:1.3}
+/* ---- press room ---- */
+.press{display:grid;gap:10px}
+.press-c{display:flex;gap:11px;background:var(--card);border-radius:14px;padding:13px;box-shadow:var(--shadow);
+  border-left:4px solid var(--pc)}
+.press-av{flex:0 0 40px;height:40px;border-radius:50%;background:color-mix(in srgb,var(--pc) 18%,transparent);
+  display:flex;align-items:center;justify-content:center;font-size:20px}
+.press-b{flex:1;min-width:0}
+.press-n{font-size:13px;font-weight:800;color:var(--pc)}
+.press-r{font-size:10.5px;color:var(--label3);margin-bottom:5px}
+.press-q{font-size:14px;line-height:1.55;color:var(--label)}
+/* ---- build-up ---- */
+.bu{background:linear-gradient(140deg,#10233F,#0A1526);border-radius:15px;padding:14px;box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.08)}
+.bu-t{font-size:10px;font-weight:900;letter-spacing:.16em;color:#7FB3FF}
+.bu-h{font-size:19px;font-weight:800;color:#fff;margin:4px 0 10px}
+.bu-r{display:flex;align-items:center;gap:9px;padding:7px 0;border-top:1px solid rgba(255,255,255,.08)}
+.bu-r:first-of-type{border-top:none}
+.bu-lab{flex:0 0 76px;font-size:10.5px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.05em}
+.bu-v{flex:1;font-size:14px;color:#fff;font-weight:600}
+.bu-form{display:flex;gap:3px}
+.bu-form i{width:15px;height:15px;border-radius:4px;font-style:normal;font-size:9px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;color:#fff}
+.bu-form i.W{background:#30D158}.bu-form i.D{background:#8D9BB5}.bu-form i.L{background:#FF453A}
+.totw-r{position:absolute;top:-4px;left:-4px;min-width:24px;height:17px;border-radius:5px;
+  font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;
+  font-variant-numeric:tabular-nums;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.totw-p{position:relative}
 </style>
 </head>
 <body>
@@ -2864,7 +2917,7 @@ function vSquad(){
     <div class="wrap">${cloudBanner()}<button class="btn pri full" data-admin style="margin-bottom:16px" onclick="editPlayer(null)">Add player</button>
       ${list.length?`<div class="card">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);
         return `<div class="row tap" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
-        ${avatar(p,40)}<div class="rt"><div class="r1">${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
+        ${avatar(p,40)}<div class="rt"><div class="r1">${shirtBadge(p)}${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
         <div class="r2">${r?`⭐ ${esc(r)} · `:''}${m.P} games · ${m.pts} pts</div></div>
         ${p.ps&&PS_BY[p.ps]?`<span class="squadps" title="${esc(PS_BY[p.ps].name)}">${psDiamond(p.ps,30)}</span>`:''}${chev}</div>`}).join('')}</div>`
       :`<div class="empty"><div class="ee">👥</div><h3>No players yet</h3><p>Add your regulars — more can be added at the venue.</p></div>`}
@@ -2896,7 +2949,7 @@ function vPlayer(pid){
           <div class="fut-flag">${p.nation||''}</div>
         </div>
       </div>
-      <div class="fut-name">${esc(p.name)}</div>
+      <div class="fut-name">${shirtBadge(p,'onCard')}${esc(p.name)}</div>
       ${r?`<div class="fut-like">plays like <b>${esc(r)}</b></div>`:''}
       ${(p.avail&&p.avail!=='ok')?`<div style="position:relative;z-index:1;text-align:center;margin-bottom:10px">
         <span class="avpill big" style="--ac:${availOf(p).col}">${availOf(p).icon} ${availOf(p).label}</span></div>`:''}
@@ -2957,6 +3010,7 @@ function vPlayer(pid){
           <div class="r2">${fdate(g.date)}</div></div>${chev}</div>`}).join('')
       :'<div class="row"><div class="rt"><div class="r2">No games yet</div></div></div>'}</div>
     ${lifetimeBlock(pid)}
+    ${trophyBlock(pid)}
     ${pbBlock(pid)}
     ${seasonLine(pid)}
     <div class="card" style="margin-top:14px">
@@ -4871,6 +4925,221 @@ function setHaptics(on){
   render();
 }
 
+/* ============ MATCH RATINGS (out of 10) ============
+   Built from what we actually record: the result, the margin, goals, and how
+   much the team let in. Deliberately generous at the top so a hat-trick in a
+   win reads like a 9, and floored at 4.0 so nobody gets humiliated. */
+function ratingFor(pid,g){
+  if(!g)return null;
+  const onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
+  if(!onA&&!onB)return null;
+  const pos=(g.pos&&g.pos[pid])||(player(pid)||{}).pos||'MID';
+  const goals=(g.goals||{})[pid]||0;
+  const gf=onA?(g.scoreA||0):(g.scoreB||0);
+  const ga=onA?(g.scoreB||0):(g.scoreA||0);
+  const won=(onA&&g.result==='A')||(onB&&g.result==='B');
+  const drew=g.result==='D';
+  let r=6.0;
+  r += won?1.2 : drew?0.3 : -0.7;
+  const margin=gf-ga;
+  r += Math.max(-1,Math.min(1,margin*0.18));
+  const gw={ATT:0.85,MID:1.0,DEF:1.25,GK:1.4}[pos]||1.0;
+  r += goals*gw;
+  if(goals>=3)r+=0.4;
+  const dw={GK:1,DEF:1,MID:0.6,ATT:0.3}[pos]??0.6;
+  if(ga===0)r+=1.6*dw; else if(ga===1)r+=1.0*dw; else if(ga===2)r+=0.5*dw;
+  else if(ga>=6)r-=0.9*dw; else if(ga>=5)r-=0.5*dw;
+  if(gf===0&&(pos==='ATT'))r-=0.4;
+  return Math.max(4.0,Math.min(10,Math.round(r*10)/10));
+}
+function ratingClass(r){ return r>=8.5?'r-elite':r>=7.5?'r-great':r>=6.5?'r-good':r>=5.5?'r-ok':'r-poor' }
+function ratingPill(r,size){
+  if(r==null)return '';
+  return `<span class="rpill ${ratingClass(r)} ${size==='lg'?'lg':''}">${r.toFixed(1)}</span>`;
+}
+function seasonRating(pid){
+  const rs=allGames().map(g=>ratingFor(pid,g)).filter(x=>x!=null);
+  if(!rs.length)return null;
+  return Math.round(rs.reduce((a,b)=>a+b,0)/rs.length*10)/10;
+}
+function matchRatings(g){
+  const ids=[...(g.teamA||[]),...(g.teamB||[])];
+  return ids.map(id=>({id,name:(player(id)||{}).name||'—',r:ratingFor(id,g)}))
+            .filter(x=>x.r!=null).sort((a,b)=>b.r-a.r);
+}
+
+/* ============ SQUAD NUMBERS ============ */
+const shirtOf=p=>(p&&p.num)||null;
+function shirtTaken(num,exceptId){
+  return season().players.some(p=>p.id!==exceptId&&String(p.num||'')===String(num));
+}
+function shirtBadge(p,cls){
+  const n=shirtOf(p);
+  return n?`<span class="shirtno ${cls||''}">${n}</span>`:'';
+}
+
+/* ============ PLAYER OF THE MONTH ============ */
+function monthsPlayed(){
+  const seen=new Set();
+  allGames().forEach(g=>{ if(g.date)seen.add(String(g.date).slice(0,7)); });
+  return [...seen].sort();
+}
+function potmFor(ym){
+  const gs=allGames().filter(g=>String(g.date||'').slice(0,7)===ym);
+  if(!gs.length)return null;
+  const tally={};
+  gs.forEach(g=>{
+    [...(g.teamA||[]),...(g.teamB||[])].forEach(id=>{
+      const r=ratingFor(id,g); if(r==null)return;
+      if(!tally[id])tally[id]={id,P:0,sum:0,G:0,W:0};
+      tally[id].P++; tally[id].sum+=r;
+      tally[id].G+=(g.goals||{})[id]||0;
+      const onA=(g.teamA||[]).includes(id);
+      if((onA&&g.result==='A')||(!onA&&g.result==='B'))tally[id].W++;
+    });
+  });
+  const rows=Object.values(tally).filter(x=>x.P>=2)
+    .map(x=>({...x,avg:x.sum/x.P,score:x.sum/x.P + x.G*0.12 + x.W*0.1}))
+    .sort((a,b)=>b.score-a.score);
+  if(!rows.length)return null;
+  const w=rows[0];
+  return {ym,id:w.id,name:(player(w.id)||{}).name||'—',avg:Math.round(w.avg*10)/10,
+          P:w.P,G:w.G,W:w.W,games:gs.length};
+}
+function potmHistory(){ return monthsPlayed().map(potmFor).filter(Boolean) }
+function ymLabel(ym){
+  const [y,m]=ym.split('-');
+  return ['January','February','March','April','May','June','July','August',
+          'September','October','November','December'][(+m)-1]+' '+y;
+}
+
+/* ============ TROPHY CABINET ============ */
+function trophiesFor(pid){
+  const out=[], st=statsAll(), me=st.find(x=>x.id===pid);
+  if(!me)return out;
+  const live=st.filter(x=>x.P>0);
+  const top=(arr,f)=>arr.slice().sort(f)[0];
+  // league leader
+  const leader=top(live,(a,b)=>b.pts-a.pts||b.GD-a.GD);
+  if(leader&&leader.id===pid&&me.P>2)out.push({e:'🏆',t:'Top of the league',s:'Leading on points right now',k:'gold'});
+  // golden boot
+  const boot=top(live,(a,b)=>b.G-a.G);
+  if(boot&&boot.id===pid&&me.G>0)out.push({e:'👟',t:'Golden Boot',s:`${me.G} goal${me.G===1?'':'s'} this season`,k:'gold'});
+  // golden defence
+  const dfs=live.filter(x=>['DEF','GK'].includes(((player(x.id)||{}).pos))&&x.P>=3);
+  const glove=top(dfs,(a,b)=>(a.GA/a.P)-(b.GA/b.P));
+  if(glove&&glove.id===pid)out.push({e:'🧤',t:'Golden Defence',s:`${(me.GA/Math.max(me.P,1)).toFixed(1)} conceded a game`,k:'silver'});
+  // player of the month wins
+  const poms=potmHistory().filter(x=>x.id===pid);
+  poms.forEach(x=>out.push({e:'⭐',t:'Player of the Month',s:ymLabel(x.ym)+` · ${x.avg} avg`,k:'gold'}));
+  // appearance milestones
+  const life=lifetime().find(x=>x.name===(player(pid)||{}).name);
+  const totalP=life?life.P:me.P;
+  [[100,'💯','Centurion','100 appearances'],[50,'🎽','Fifty Club','50 appearances']].forEach(([n,e,t,s])=>{
+    if(totalP>=n)out.push({e,t,s,k:'bronze'});
+  });
+  // hall of fame: won a previous season
+  (DB.seasons||[]).forEach(sn=>{
+    if(sn.id===CUR)return;
+    try{
+      const sm=seasonSummary(sn);
+      if(sm&&sm.champ&&sm.champ.name===(player(pid)||{}).name)
+        out.push({e:'🥇',t:'Champion',s:sn.name,k:'gold'});
+    }catch(e){}
+  });
+  return out;
+}
+function trophyBlock(pid){
+  const t=trophiesFor(pid);
+  if(!t.length)return '';
+  return `<div class="sechead">Trophy cabinet</div>
+    <div class="cab">${t.map(x=>`
+      <div class="cab-i ${x.k}">
+        <div class="cab-e">${x.e}</div>
+        <div class="cab-t">${esc(x.t)}</div>
+        <div class="cab-s">${esc(x.s)}</div>
+      </div>`).join('')}</div>`;
+}
+
+/* ============ PRESS ROOM ============
+   Four original pundits rather than real broadcasters — same archetypes you
+   know from the studio, but nobody real gets words put in their mouth. */
+const PUNDITS=[
+  {id:'carra', n:'Carragher',  r:'Never plays, watches every week', e:'🧱', c:'#E4002B'},
+  {id:'nev',   n:'Neville',    r:'Runs the touchline analysis',      e:'📐', c:'#6A1B9A'},
+  {id:'micah', n:'Sturridge',  r:'Turns up for the laughs',          e:'😄', c:'#FF9500'},
+  {id:'henry', n:'Henry',      r:'Too classy to get his boots on',   e:'🎩', c:'#0A84FF'},
+  {id:'klopp', n:'Klopp',      r:'Manages from the sideline',        e:'🤯', c:'#D62828'},
+  {id:'pep',   n:'Pep',        r:'Has opinions about shape',         e:'🧠', c:'#00897B'},
+];
+function pressRoom(g){
+  if(!g)return [];
+  const rs=matchRatings(g);
+  const top=rs[0];
+  const total=(g.scoreA||0)+(g.scoreB||0), margin=Math.abs((g.scoreA||0)-(g.scoreB||0));
+  const drew=g.result==='D';
+  const conc=Math.max(g.scoreA||0,g.scoreB||0);
+  const scorers=Object.entries(g.goals||{}).map(([id,n])=>({id,n,name:(player(id)||{}).name||'—'}))
+    .sort((a,b)=>b.n-a.n);
+  const hat=scorers.find(x=>x.n>=3);
+  const nm=x=>esc(x&&x.name?x.name.split(' ')[0]:'—');
+
+  const lines={
+    carra: conc>=6
+      ? `Six or more conceded. I'd not sleep after that. You can pass it about all you like, somebody has to actually want to defend.`
+      : conc<=1
+        ? `Now that I enjoyed. One goal in the whole game, everybody doing their job, nobody wandering off. Proper football.`
+        : `Decent enough, but the space between the lines was there all afternoon. Tighten that and it's a different game.`,
+    nev: total>=9
+      ? `${total} goals. Both sides pushed so high there was nothing behind them — the moment you turn it over you're in.`
+      : drew
+        ? `A draw is the honest result. Neither side found the spare man anywhere, so it just kept resetting.`
+        : `The winner came from the overload. Get an extra man wide and everything else follows.`,
+    micah: hat
+      ? `${nm(hat)} with three! I'd be insufferable. Absolutely insufferable. He'll be telling that story till Christmas.`
+      : margin>=4
+        ? `That was a hiding. I'd be pretending my phone died on the walk back to the car.`
+        : top ? `${nm(top)} was the difference and everybody out there knows it. Look at the faces.` : `Good watch, that.`,
+    henry: top
+      ? `${nm(top)}. A ${top.r.toFixed(1)} from me. Not the loudest player on the pitch, but everything good went through him.`
+      : `There is always one player who makes it look simple. Find him and you have found the game.`,
+    klopp: margin>=4
+      ? `Boys, this is not a disaster, this is information! We go again next Sunday and we run more. Simple.`
+      : drew
+        ? `A draw? I hate a draw. But I love the effort — the legs were there right to the end.`
+        : `This is what I want to see! Full throttle, no passengers. Fantastic.`,
+    pep: total>=9
+      ? `Nobody wants the ball. Everybody wants to run. If you keep it for ten seconds you rest, but nobody keeps it.`
+      : `The shape was good in the first half. Then somebody chases, the line breaks, and the whole structure goes.`,
+  };
+  // rotate which four speak, seeded by the game so it changes week to week but never flickers
+  /* Shuffle the running order from several parts of the game so consecutive
+     weeks genuinely differ, while staying identical on every re-render. */
+  const key=[g.id,g.date,g.round,g.scoreA,g.scoreB,g.result].join('~');
+  const order=PUNDITS
+    .map((p,i)=>({p,k:seedRand(key+'#'+p.id+i)}))
+    .sort((a,b)=>a.k-b.k)
+    .map(x=>x.p);
+  return order.slice(0,4).map(p=>({p,q:lines[p.id]||`Enjoyed that one.`}));
+}
+
+/* ============ PRE-MATCH BUILD-UP ============ */
+function buildUp(){
+  const st=statsAll().filter(x=>x.P>=2);
+  if(st.length<4)return null;
+  const form=st.map(x=>{
+    const last=x.seq.slice(-4);
+    return {id:x.id,name:(player(x.id)||{}).name||'—',
+            pts:last.reduce((t,s)=>t+(s.r==='W'?3:s.r==='D'?1:0),0),
+            n:last.length,seq:last.map(s=>s.r)};
+  }).filter(x=>x.n>=2).sort((a,b)=>b.pts-a.pts);
+  const hot=form.slice(0,3), cold=form.slice(-2).reverse();
+  const rivals=(typeof rivalries==='function')?(rivalries()||[]).slice(0,2):[];
+  const table=st.slice().sort((a,b)=>b.pts-a.pts||b.GD-a.GD);
+  const gap=table.length>1?table[0].pts-table[1].pts:0;
+  return {hot,cold,rivals,leader:table[0],second:table[1],gap};
+}
+
 /* ============ SKY SPORTS ============
    A broadcast-styled read of the season: the award races, man of the match,
    a deadline-day price ticker, and Monday-Night-Football style analysis. */
@@ -5050,6 +5319,13 @@ function vMatch(gid){
         <div style="font-size:19px;flex:0 0 26px">⚽</div>
         <div class="rt"><div class="r1" style="font-size:15px">${esc(x.name)}</div>
           <div class="r2">Team ${x.onA?'A':'B'}${x.n>1?` · ${x.n} goals`:''}</div></div></div>`).join('')}</div>`:''}
+    ${(function(){const rs=matchRatings(g); if(!rs.length)return '';
+      return `<div class="sechead">Player ratings</div>
+      <div class="card">${rs.map((x,i)=>`
+        <div class="row tap" onclick="openPlayer('${x.id}')">
+          <div class="rt"><div class="r1">${shirtBadge(player(x.id))}${esc(x.name)}${i===0?' <span style="font-size:11px;color:var(--label3)">· star man</span>':''}</div></div>
+          <div class="rv">${ratingPill(x.r)}</div></div>`).join('')}</div>`})()}
+
     <div class="sechead">Line-ups</div>
     <div class="mc-teams">
       <div class="mc-col"><div class="mc-h a">Team A · ${a}</div>${side(g.teamA,g.fillA,'A')}</div>
@@ -5085,7 +5361,13 @@ function totwBlock(){
   const cell=x=>x?`<div class="totw-p ${t.star&&x.p.id===t.star.p.id?'star':''}" onclick="openPlayer('${x.p.id}')">
       ${t.star&&x.p.id===t.star.p.id?'<span class="totw-star">★</span>':''}
       ${avatar(x.p,38)}<span class="totw-n">${esc(x.p.name.split(' ')[0])}</span>
-      <span class="totw-pts">${x.pts}</span></div>`:'';
+      <span class="totw-pts">${x.pts}</span>
+      ${(function(){const gs=allGames().filter(y=>gwOf(y)===t.gw);
+        const rr=gs.map(y=>ratingFor(x.p.id,y)).filter(v=>v!=null);
+        if(!rr.length)return '';
+        const av=Math.round(rr.reduce((a,b)=>a+b,0)/rr.length*10)/10;
+        return `<span class="totw-r ${ratingClass(av)}">${av.toFixed(1)}</span>`})()}
+      </div>`:'';
   const row=arr=>`<div class="totw-row">${arr.map(cell).join('')}</div>`;
   return `<div class="sechead">⭐ Team of the Week <span style="text-transform:none;font-weight:500;color:var(--label3)">GW${t.gw}</span></div>
     <div class="totw">
@@ -5457,6 +5739,65 @@ function vSky(){
         </div>
         <button class="sky-motm-go" onclick="openMatch('${last.id}')">Match centre ›</button>
       </div></div>`:''}
+
+    ${(function(){const b=buildUp(); if(!b)return '';
+      const seq=f=>`<span class="bu-form">${f.seq.map(r=>`<i class="${r}">${r}</i>`).join('')}</span>`;
+      return `<div class="bu" style="margin-bottom:14px">
+        <div class="bu-t">BUILD-UP · NEXT SUNDAY</div>
+        <div class="bu-h">${b.gap===0?'Level at the top':`${esc((player(b.leader.id)||{}).name||'')} leads by ${b.gap}`}</div>
+        ${b.hot.length?`<div class="bu-r"><span class="bu-lab">In form</span>
+          <span class="bu-v">${esc(b.hot[0].name)}</span>${seq(b.hot[0])}</div>`:''}
+        ${b.hot[1]?`<div class="bu-r"><span class="bu-lab">Also hot</span>
+          <span class="bu-v">${esc(b.hot[1].name)}</span>${seq(b.hot[1])}</div>`:''}
+        ${b.cold[0]?`<div class="bu-r"><span class="bu-lab">Out of sorts</span>
+          <span class="bu-v">${esc(b.cold[0].name)}</span>${seq(b.cold[0])}</div>`:''}
+        ${b.second?`<div class="bu-r"><span class="bu-lab">Key battle</span>
+          <span class="bu-v">${esc((player(b.leader.id)||{}).name||'')} v ${esc((player(b.second.id)||{}).name||'')}</span></div>`:''}
+      </div>`})()}
+
+    ${(function(){const rs=last?matchRatings(last):[]; if(!rs.length)return '';
+      return `<div class="sky-h">Player ratings</div>
+      <div class="sky-card">
+        <div class="sky-cap"><span class="sky-em">⭐</span>
+          <div><b>${esc(last.round||fdate(last.date))}</b><i>${last.scoreA}–${last.scoreB} · out of 10</i></div></div>
+        ${rs.map((x,i)=>`<div class="sky-row ${i===0?'lead':''}" onclick="openPlayer('${x.id}')">
+          <span class="sky-pos">${i+1}</span>
+          <span class="sky-av">${avatar(p(x.id),26)}</span>
+          <span class="sky-nm">${shirtBadge(p(x.id))}${esc(x.name)}</span>
+          <span class="sky-val">${ratingPill(x.r)}</span></div>`).join('')}
+      </div>`})()}
+
+    ${(function(){const pr=last?pressRoom(last):[]; if(!pr.length)return '';
+      return `<div class="sky-h mnf">The press room</div>
+      <div class="press">${pr.map(x=>`
+        <div class="press-c" style="--pc:${x.p.c}">
+          <div class="press-av">${x.p.e}</div>
+          <div class="press-b">
+            <div class="press-n">${esc(x.p.n)}</div>
+            <div class="press-r">${esc(x.p.r)}</div>
+            <div class="press-q">“${esc(x.q)}”</div>
+          </div></div>`).join('')}</div>`})()}
+
+    ${(function(){const h=potmHistory(); if(!h.length)return '';
+      const w=h[h.length-1], past=h.slice(0,-1).reverse();
+      return `<div class="sky-h">Player of the Month</div>
+      <div class="sky-motm" style="margin-bottom:12px">
+        <div class="sky-motm-tag">${esc(ymLabel(w.ym)).toUpperCase()}</div>
+        <div class="sky-motm-b">
+          <div class="sky-motm-av">${avatar(p(w.id),58)}</div>
+          <div class="sky-motm-t"><b>${esc(w.name)}</b>
+            <span>${w.avg} average from ${w.P} game${w.P===1?'':'s'} · ${w.G} goal${w.G===1?'':'s'}</span>
+            <i>${w.W} win${w.W===1?'':'s'} that month</i></div>
+          <button class="sky-motm-go" onclick="openPlayer('${w.id}')">Profile ›</button>
+        </div></div>
+      ${past.length?`<div class="sky-card">
+        <div class="sky-cap"><span class="sky-em">🗓️</span><div><b>Previous winners</b><i>Every month so far</i></div></div>
+        ${past.map(x=>`<div class="sky-row" onclick="openPlayer('${x.id}')">
+          <span class="sky-nm" style="flex:0 0 96px;color:var(--label3);font-size:12.5px">${esc(ymLabel(x.ym))}</span>
+          <span class="sky-av">${avatar(p(x.id),24)}</span>
+          <span class="sky-nm">${esc(x.name)}</span>
+          <span class="sky-val">${x.avg}</span></div>`).join('')}
+      </div>`:''}`})()}
 
     <div class="sky-h">The races</div>
     ${awards.map(podium).join('')}
@@ -6758,6 +7099,7 @@ async function deleteGame(){if(!requireAdmin())return;
 let PE=null;
 function editPlayer(pid){if(!requireAdmin())return;const p=pid?player(pid):null;
   PE={id:pid,name:p?p.name:'',pos:p?p.pos:null,nation:p?p.nation||'':'',club:p?p.club:null,star:p?p.star:null,
+      num:p?p.num||null:null,
       ps:p?p.ps||null:null,avail:p?p.avail||'ok':'ok',active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
   if(PE.club&&CLUB_BY[PE.club])PE.comp=CLUB_BY[PE.club].comp;
   openSheet(pid?'Edit player':'New player','<div id="peb"></div>','Save');$('#_sact').onclick=savePlayer;paintPE()}
@@ -6766,6 +7108,11 @@ function _paintPE(){
   const club=PE.club?CLUB_BY[PE.club]:null,sq=club?(club.sq[PE.pos||'MID']||[]):[];
   $('#peb').innerHTML=`
     <div class="lbl">Name</div><input value="${esc(PE.name)}" placeholder="e.g. Talal" oninput="PE.name=this.value">
+    <div class="lbl">Squad number</div>
+    <button class="pick shirt-pick" onclick="setShirt()">
+      <span class="shirt-big">${PE.num?PE.num:'—'}</span>
+      <span>${PE.num?`Wearing number ${PE.num}`:'Tap to give them a number'}</span>
+      <span class="chev">›</span></button>
     <div class="lbl">Position</div>
     <div class="seg">${['GK','DEF','MID','ATT'].map(x=>`<button class="${PE.pos===x?'on':''}" onclick="setPos('${x}')">${x}</button>`).join('')}</div>
     <div class="lbl">Flag <span style="text-transform:none;font-weight:400">(optional)</span></div>
@@ -6812,11 +7159,26 @@ function pickClub(s){PE.club=PE.club===s?null:s;const c=PE.club?CLUB_BY[PE.club]
   PE.star=c?((c.sq[PE.pos||'MID']||[])[0]||null):null;paintPE()}
 async function customStar(){const v=await askText('Road to Glory','Who do they play like?',PE.star||'','Set');
   if(v!==null){PE.star=v||null;paintPE()}}
+async function setShirt(){
+  const cur=PE.num||'';
+  const v=await askText('Squad number','Pick a number from 1 to 99',String(cur),'Set');
+  if(v===null)return;
+  const t=String(v).trim();
+  if(!t){ PE.num=null; paintPE(); return; }
+  const n=parseInt(t,10);
+  if(isNaN(n)||n<1||n>99){toast('Pick a number between 1 and 99');return}
+  if(shirtTaken(n,PE.id)){
+    const who=season().players.find(p=>String(p.num||'')===String(n));
+    toast(`${who?who.name:'Someone'} already wears ${n}`); return;
+  }
+  PE.num=n; paintPE();
+}
 async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim();if(!n){toast('Enter a name');return}
   /* A position change no longer breaks anyone's FPL team — squads that are
      already confirmed simply carry on with their new shape. */
-  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:PE.active});
-  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,avail:PE.avail,active:true});
+  PE.num=PE.num||null;
+  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:PE.active});
+  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:true});
   logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
 async function removePlayer(pid){if(!requireAdmin())return;
   snapshot('removing a player');const p=player(pid);if(!p)return;
