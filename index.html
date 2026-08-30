@@ -38,7 +38,11 @@
   --nav-bg:rgba(28,28,30,.82);
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%}
+/* The area behind the home indicator shows the <html> background on iOS, so it
+   has to match — otherwise a white strip sits under the app in dark mode. */
+html{background:var(--bg);transition:background .35s cubic-bezier(.4,0,.2,1)}
+html,body{height:100%;min-height:100svh}
+@supports (height:100dvh){ html,body{min-height:100dvh} }
 body{background:var(--bg);color:var(--label);
   font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Inter',system-ui,sans-serif;
   -webkit-font-smoothing:antialiased;letter-spacing:-.01em;overscroll-behavior-y:none;
@@ -1669,6 +1673,18 @@ table.cm .cg-corner{position:sticky;left:0;background:var(--card);z-index:2}
   border-radius:14px;padding:14px;margin:10px 0}
 .sb-bust b{display:block;font-size:15.5px}
 .sb-bust span{display:block;font-size:13px;color:var(--label2);margin-top:3px;line-height:1.5}
+
+/* fill the full screen including the safe areas */
+#splash{height:100svh;min-height:100%}
+@supports (height:100dvh){ #splash{height:100dvh} }
+.side{min-height:100svh}
+@supports (height:100dvh){ .side{min-height:100dvh} }
+/* the drawer and page should paint behind the home indicator, not stop short */
+.main{min-height:100svh;background:var(--bg)}
+@supports (height:100dvh){ .main{min-height:100dvh} }
+body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:env(safe-area-inset-bottom,0px);
+  background:var(--bg);z-index:1;pointer-events:none}
+body.drawer::after{background:var(--card)}
 </style>
 </head>
 <body>
@@ -2717,13 +2733,13 @@ const NAV=[
  ['squad','Squad','👥','M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16.5 7.2a3.5 3.5 0 0 1 0 6.6M18 20a6.5 6.5 0 0 0-1.6-4.3'],
  ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
  ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
+ ['bets','Betting','🎰','M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v3a2 2 0 0 0 0 2v3a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-3a2 2 0 0 0 0-2zM10 6v12'],
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
  ['sky','Sky Sports','📺','M4 17a5 5 0 0 1 .6-9.96A6 6 0 0 1 17 6.5 4.5 4.5 0 0 1 18 17zM9 21l3-3 3 3'],
  ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
  ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
  ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
  ['comps','Competitions','🏆','M6 3h12v4a6 6 0 0 1-12 0V3zM4 5H2v1.5A3 3 0 0 0 5 9.5M20 5h2v1.5a3 3 0 0 1-3 3M9 21h6M12 17v4'],
- ['bets','Betting','🎰','M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v3a2 2 0 0 0 0 2v3a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-3a2 2 0 0 0 0-2zM10 6v12'],
  ['admin','Admin','🔐','M12 15v3M7 10V7a5 5 0 0 1 10 0v3M5.5 10h13a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5v-8A1.5 1.5 0 0 1 5.5 10z']];
 const TABS=['home','league','squad','tactics','admin'];
 let VIEW='home';
@@ -6453,34 +6469,50 @@ async function cancelBet(id){
   haptic('light'); render(); toast('Bet cancelled, stake returned');
 }
 /* settle everything riding on a gameweek once its games are in */
-function settleBets(gw){
-  const b=bets(), games=gamesInGw(gw);
-  if(!games.length)return 0;
+/* Settle every open bet whose gameweek now has games logged. Working from the
+   bets rather than from one gameweek means nothing is ever stranded if a game
+   is logged under a different round number than the bet expected. */
+function settleBets(){
+  const b=bets(), played=playedGws();
+  if(!played.length)return 0;
+  const latest=played[played.length-1];
   let done=0;
   b.open=b.open.filter(bet=>{
-    if(bet.gw!==gw)return true;
+    const gw=bet.gw;
+    let games=gamesInGw(gw);
+    /* the bet was for a week that never materialised under that number —
+       once a later week has been played, settle it against the newest one */
+    if(!games.length){
+      if(gw>latest)return true;            // still in the future, leave it riding
+      games=gamesInGw(latest);
+      if(!games.length)return true;
+    }
     const legs=bet.legs||[{pid:bet.pid,k:bet.k,odds:bet.odds}];
     let odds=1, allIn=true, anyPlayed=false;
     for(const leg of legs){
       const g=games.find(x=>[...(x.teamA||[]),...(x.teamB||[])].includes(leg.pid));
-      if(!g)continue;                                   // that player sat out: leg voids at 1.00
+      if(!g)continue;                       // that player sat out: leg voids at 1.00
       anyPlayed=true;
       const hit=marketResult(leg.pid,g,leg.k);
       if(hit===false){allIn=false;break}
       if(hit===true)odds*=leg.odds;
     }
-    if(!anyPlayed){                                     // nobody played — full refund
+    if(!anyPlayed){                         // nobody on the slip played — full refund
       b.wallets[bet.by]=wallet(bet.by)+bet.stake;
       b.settled.unshift({...bet,res:'void',ret:bet.stake,when:Date.now()});
       done++; return false;
     }
     const ret=allIn?Math.round(bet.stake*odds):0;
     if(ret)b.wallets[bet.by]=wallet(bet.by)+ret;
-    b.settled.unshift({...bet,res:allIn?'won':'lost',ret,settledOdds:Math.round(odds*100)/100,when:Date.now()});
+    b.settled.unshift({...bet,res:allIn?'won':'lost',ret,
+      settledOdds:Math.round(odds*100)/100,voided:legs.length-legsPlayed(legs,games),when:Date.now()});
     done++; return false;
   });
   b.settled=b.settled.slice(0,200);
   return done;
+}
+function legsPlayed(legs,games){
+  return legs.filter(l=>games.some(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(l.pid))).length;
 }
 /* the best single return anyone has landed */
 function biggestWins(n){
@@ -8272,7 +8304,7 @@ async function saveGame(){if(!requireAdmin())return;
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
-  try{ const gw=gwOf(g); if(gw)settleBets(gw) }catch(e){}
+  try{ settleBets() }catch(e){}
   const _ups=levelUps(_lvlBefore);
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
   if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
