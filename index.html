@@ -119,6 +119,15 @@ body.drawer .drawer-bg{opacity:1;pointer-events:auto}
 .row .rv{font-size:16px;color:var(--label2);font-variant-numeric:tabular-nums}
 .chev{width:8px;height:13px;flex:0 0 8px;stroke:var(--label3);fill:none;stroke-width:2.4;stroke-linecap:round}
 .grid{display:grid;gap:14px}
+/* Two columns only when there is room — forcing them at every width pushed
+   the Home page off screen on smaller phones. */
+.grid.g2{grid-template-columns:1fr;gap:12px}
+.grid.g2>*{min-width:0}
+@media(min-width:560px){ .grid.g2{grid-template-columns:1fr 1fr;gap:10px} }
+/* Compare is always side by side — that is the whole point of it */
+.grid.cmp2{grid-template-columns:1fr 1fr;gap:8px}
+.grid.cmp2>*{min-width:0;padding-left:8px;padding-right:8px}
+.grid.cmp2 select{width:100%;min-width:0;max-width:100%}
 @media(min-width:760px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:repeat(3,1fr)}}
 
 /* ---------- STAT TILES ---------- */
@@ -1370,7 +1379,7 @@ input,select,textarea{font-size:16px}
 .stk-rangebar button{flex:1;background:var(--fill2);border:none;border-radius:8px;padding:6px 0;
   font-size:11.5px;font-weight:700;color:var(--label2);cursor:pointer}
 .stk-rangebar button.on{background:var(--tint);color:#fff}
-.stk-chart{width:100%;height:150px;display:block}
+.stk-chart{width:100%;height:170px;display:block;overflow:visible}
 .stk-facts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0}
 .stk-facts>div{background:var(--card);border-radius:9px;padding:8px 4px;text-align:center}
 .stk-facts b{display:block;font-size:13.5px;font-weight:800}
@@ -1447,9 +1456,238 @@ input,select,textarea{font-size:16px}
   font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;
   font-variant-numeric:tabular-nums;box-shadow:0 1px 4px rgba(0,0,0,.3)}
 .totw-p{position:relative}
+
+/* ================= AWARDS ================= */
+.aw-hero{background:linear-gradient(135deg,#F4C048,#C9A227 55%,#8A6E13);border-radius:16px;padding:14px;
+  margin-bottom:14px;box-shadow:0 10px 26px rgba(201,162,39,.3)}
+.aw-hero-t{font-size:10px;font-weight:900;letter-spacing:.14em;color:rgba(59,45,4,.72)}
+.aw-hero-b{display:flex;align-items:center;gap:13px;margin-top:9px}
+.aw-hero-b b{display:block;font-size:22px;font-weight:900;color:#3B2D04;letter-spacing:-.02em}
+.aw-hero-b span{display:block;font-size:13px;color:rgba(59,45,4,.75);margin-top:2px}
+.aw-card{background:var(--card);border-radius:15px;box-shadow:var(--shadow);margin-bottom:12px;overflow:hidden}
+.aw-cap{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:.5px solid var(--sep)}
+.aw-em{font-size:23px}
+.aw-cap b{display:block;font-size:15.5px;font-weight:800}
+.aw-cap i{display:block;font-style:normal;font-size:11.5px;color:var(--label3);margin-top:1px}
+.aw-pod{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:6px;padding:14px 10px 16px}
+.aw-slot{text-align:center;cursor:pointer;padding:8px 4px;border-radius:12px}
+.aw-slot:active{background:var(--fill)}
+.aw-slot.empty{visibility:hidden}
+.aw-slot .av{margin:0 auto}
+.aw-medal{font-size:20px;margin-bottom:4px}
+.aw-slot.p1{background:color-mix(in srgb,#F4C048 14%,transparent);padding-top:12px;padding-bottom:20px}
+.aw-n{font-size:13px;font-weight:700;margin-top:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aw-slot.p1 .aw-n{font-size:14.5px;font-weight:800}
+.aw-v{font-size:11px;color:var(--label3);margin-top:2px}
+/* ================= GAMES ================= */
+.g-hero{background:linear-gradient(140deg,#1B2A4A,#0D1524);border-radius:16px;padding:22px 16px;text-align:center;
+  box-shadow:var(--shadow)}
+.g-hero.alt{background:linear-gradient(140deg,#2B1240,#160A22)}
+.g-hero-e{font-size:44px}
+.g-hero-t{font-size:25px;font-weight:900;color:#fff;letter-spacing:-.03em;margin-top:6px}
+.g-hero-s{font-size:13.5px;color:rgba(255,255,255,.62);margin-top:6px;line-height:1.5}
+.g-bar{height:5px;border-radius:5px;background:var(--fill2);overflow:hidden;margin-bottom:9px}
+.g-bar-f{height:100%;background:var(--tint);transition:width .3s cubic-bezier(.32,.72,0,1)}
+.g-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--label3);margin-bottom:14px}
+.g-q{font-size:20px;font-weight:800;line-height:1.35;letter-spacing:-.02em;margin-bottom:16px}
+.g-opts{display:grid;gap:9px}
+.g-opt{background:var(--card);border:1.5px solid var(--sep);border-radius:13px;padding:14px;font-size:15.5px;
+  font-weight:600;color:var(--label);text-align:left;cursor:pointer;transition:transform .1s,background .18s}
+.g-opt:active{transform:scale(.985)}
+.g-opt.right{background:color-mix(in srgb,var(--green) 18%,var(--card));border-color:var(--green);color:var(--green)}
+.g-opt.wrong{background:color-mix(in srgb,var(--red) 16%,var(--card));border-color:var(--red);color:var(--red)}
+.g-opt.dim{opacity:.45}
+.g-result{text-align:center;padding:26px 14px;background:var(--card);border-radius:16px;box-shadow:var(--shadow)}
+.g-res-e{font-size:52px}
+.g-res-b{font-size:40px;font-weight:900;letter-spacing:-.04em;margin-top:6px}
+.g-res-s{font-size:14.5px;color:var(--label2);margin-top:4px}
+.g-clues{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:4px}
+.g-clue{display:flex;justify-content:space-between;padding:12px 14px;border-bottom:.5px solid var(--sep);
+  animation:in .25s ease}
+.g-clue:last-child{border-bottom:none}
+.g-clue span{color:var(--label2);font-size:14px}
+.g-clue b{font-size:15px;font-weight:800}
+
+/* ---- Who Am I ---- */
+.wai{background:linear-gradient(150deg,#2B1240,#160A22);border-radius:16px;padding:18px 16px;box-shadow:var(--shadow)}
+.wai-t{font-size:11px;font-weight:900;letter-spacing:.16em;color:#C084FC;text-transform:uppercase}
+.wai-clubs{display:flex;flex-wrap:wrap;gap:7px;margin-top:11px}
+.wai-c{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;
+  border-radius:20px;padding:6px 12px;font-size:14px;font-weight:600}
+.wai-hint{margin-top:12px;font-size:13.5px;color:rgba(255,255,255,.7);line-height:1.5}
+.wai-in{width:100%;margin-top:12px;background:var(--card);border:1.5px solid var(--sep);border-radius:13px;
+  padding:14px;font-size:17px;font-weight:600;color:var(--label)}
+.wai-in:focus{border-color:var(--tint);outline:none}
+.wai-res{margin-top:12px;border-radius:13px;padding:15px;text-align:center;font-size:16px}
+.wai-res.ok{background:color-mix(in srgb,var(--green) 16%,var(--card));color:var(--green)}
+.wai-res.no{background:color-mix(in srgb,var(--red) 14%,var(--card));color:var(--red)}
+
+/* ================= SPLASH ================= */
+#splash{position:fixed;inset:0;z-index:9999;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:14px;background:linear-gradient(165deg,#1E7F45,#12652F 55%,#0A4A22);
+  transition:opacity .38s ease,visibility .38s}
+#splash.gone{opacity:0;visibility:hidden;pointer-events:none}
+.sp-badge{animation:spPop .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes spPop{from{transform:scale(.72);opacity:0}to{transform:scale(1);opacity:1}}
+.sp-name{color:#fff;font-size:20px;font-weight:800;letter-spacing:-.02em;opacity:.94}
+.sp-dots{display:flex;gap:6px}
+.sp-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.55);
+  animation:spD 1s ease-in-out infinite}
+.sp-dots i:nth-child(2){animation-delay:.15s}
+.sp-dots i:nth-child(3){animation-delay:.3s}
+@keyframes spD{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+@media(prefers-reduced-motion:reduce){.sp-badge,.sp-dots i{animation:none}}
+/* ================= SKELETON ================= */
+.skel{background:var(--card);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.skel-r{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:.5px solid var(--sep)}
+.skel-r:last-child{border-bottom:none}
+.sk{background:linear-gradient(90deg,var(--fill) 25%,var(--fill2) 37%,var(--fill) 63%);
+  background-size:400% 100%;animation:shimmer 1.3s ease-in-out infinite;border-radius:6px}
+.sk.circle{border-radius:50%;flex:0 0 auto}
+@keyframes shimmer{0%{background-position:100% 0}100%{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){.sk{animation:none}}
+/* ================= SEASON TINT ================= */
+body[data-season="1"]{--seasonA:#0A84FF;--seasonB:#5E5CE6}
+body[data-season="2"]{--seasonA:#FF9500;--seasonB:#FF375F}
+body[data-season="3"]{--seasonA:#30D158;--seasonB:#00C7BE}
+body[data-season="4"]{--seasonA:#BF5AF2;--seasonB:#FF2D55}
+body[data-season="5"]{--seasonA:#FFD60A;--seasonB:#FF9F0A}
+/* the season tint now shows as a thin rule under the title, so the heading
+   itself stays solid black and the emoji renders properly */
+.largetitle{color:var(--label)}
+.subtitle{position:relative}
+
+/* ================= BETTING (Sky Bet look) ================= */
+.sb-banner{display:flex;align-items:center;justify-content:space-between;background:#0B1B33;
+  border-radius:11px;padding:9px 13px;margin-bottom:12px}
+.sb-banner span{font-size:9.5px;font-weight:900;letter-spacing:.13em;color:#7FB3FF}
+.sb-banner b{font-size:14px;font-weight:800;color:#fff}
+.sb-pick{margin-bottom:12px}
+.sb-lab{font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--label3);
+  text-transform:uppercase;margin-bottom:7px}
+.sb-scroll{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
+.sb-scroll::-webkit-scrollbar{display:none}
+.sb-chip{flex:0 0 auto;display:flex;align-items:center;gap:6px;background:var(--card);border:1.5px solid var(--sep);
+  border-radius:22px;padding:5px 12px 5px 5px;font-size:13.5px;font-weight:600;color:var(--label);cursor:pointer}
+.sb-chip.on{border-color:#1B7A3E;background:color-mix(in srgb,#1B7A3E 12%,var(--card))}
+.sb-head{display:flex;align-items:center;gap:12px;background:linear-gradient(100deg,#0B1B33,#12294A);
+  border-radius:13px;padding:12px 14px;margin-bottom:10px}
+.sb-h-t b{display:flex;align-items:center;color:#fff;font-size:18px;font-weight:800}
+.sb-h-t span{display:block;color:rgba(255,255,255,.6);font-size:12.5px;margin-top:2px}
+.sb-list{background:var(--card);border-radius:13px;box-shadow:var(--shadow);overflow:hidden}
+.sb-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+  padding:12px 13px;background:none;border:none;border-bottom:.5px solid var(--sep);cursor:pointer;text-align:left}
+.sb-row:last-child{border-bottom:none}
+.sb-row:active{background:var(--fill)}
+.sb-row.on{background:color-mix(in srgb,#1B7A3E 10%,transparent)}
+.sb-m b{display:block;font-size:14.5px;font-weight:700;color:var(--label)}
+.sb-m i{display:block;font-style:normal;font-size:11.5px;color:var(--label3);margin-top:1px}
+.sb-o{flex:0 0 auto;min-width:58px;text-align:center;background:#1B7A3E;color:#fff;border-radius:8px;
+  padding:8px 6px;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}
+.sb-row.on .sb-o{background:#0F5C2C;box-shadow:0 0 0 2px rgba(27,122,62,.35)}
+.sb-wallet{display:grid;grid-template-columns:repeat(3,1fr);background:var(--card);border-radius:13px;
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:6px}
+.sb-wallet>div{padding:11px 6px;text-align:center;border-right:1px solid var(--sep)}
+.sb-wallet>div:last-child{border-right:none}
+.sb-wallet b{display:block;font-size:18px;font-weight:800;color:var(--tint)}
+.sb-wallet span{font-size:9.5px;font-weight:700;color:var(--label3);letter-spacing:.05em;text-transform:uppercase}
+.sb-x{background:var(--fill);border:none;border-radius:18px;padding:6px 11px;font-size:12px;
+  font-weight:700;color:var(--red);cursor:pointer;flex:0 0 auto}
+.sb-res{font-size:13px;font-weight:800;padding:3px 9px;border-radius:7px}
+.sb-res.won{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
+.sb-res.lost{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+.sb-res.void{background:var(--fill2);color:var(--label3)}
+/* the slip that slides up when you pick a price */
+.sb-slip{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--card);
+  border-top:.5px solid var(--sep);box-shadow:0 -10px 26px rgba(0,0,0,.2);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));animation:up .28s cubic-bezier(.32,.72,0,1)}
+.sb-slip-t{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--label2)}
+.sb-slip-t b{color:var(--label)}
+.sb-slip-t span{margin-left:auto;background:#1B7A3E;color:#fff;border-radius:7px;padding:4px 9px;
+  font-weight:800;font-variant-numeric:tabular-nums}
+.sb-stake{display:flex;gap:7px;margin:10px 0}
+.sb-stake button{flex:1;background:var(--fill);border:none;border-radius:9px;padding:9px 0;
+  font-size:14px;font-weight:700;color:var(--label2);cursor:pointer}
+.sb-stake button.on{background:var(--label);color:var(--bg)}
+.sb-slip-b{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sb-slip-b div{font-size:13.5px;color:var(--label2)}
+.sb-slip-b b{font-size:17px;color:var(--label);font-weight:800}
+@media(min-width:900px){.sb-slip{left:auto;right:24px;bottom:24px;width:380px;border-radius:16px;border:1px solid var(--sep)}}
+
+/* ---- chemistry matrix ---- */
+.cm-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px;font-size:11.5px;color:var(--label3)}
+.cm-sw{width:15px;height:15px;border-radius:4px;display:inline-block}
+.cm-sw.cm-none{background:var(--fill2)}
+.cm-legend i{font-style:normal;margin-right:8px}
+.cm-wrap{padding:4px}
+table.cm{border-collapse:separate;border-spacing:2px}
+table.cm .cg-h{min-width:38px;text-align:center;font-size:9.5px;font-weight:800;color:var(--label3);padding:4px 2px}
+table.cm .cg-h .cg-av{display:block;margin:0 auto 2px}
+table.cm .cg-n{position:sticky;left:0;z-index:2;background:var(--card);text-align:left;padding:4px 8px 4px 4px;
+  white-space:nowrap;display:flex;align-items:center;gap:6px}
+table.cm .cg-n b{font-size:12.5px;font-weight:700}
+table.cm .cg-n i{font-style:normal;font-size:10px;color:var(--label3);margin-left:auto;
+  background:var(--fill);border-radius:5px;padding:1px 5px}
+table.cm .cg-c{width:38px;height:34px;text-align:center;font-size:11.5px;font-weight:800;color:#fff;
+  border-radius:6px;cursor:pointer;font-variant-numeric:tabular-nums}
+table.cm .cg-c.hot{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.5)}
+table.cm .cg-x{background:var(--fill2);border-radius:6px}
+table.cm .cg-e{background:var(--fill);border-radius:6px}
+table.cm .cg-corner{position:sticky;left:0;background:var(--card);z-index:2}
+
+.sb-grp{font-size:10.5px;font-weight:900;letter-spacing:.11em;color:var(--label3);
+  text-transform:uppercase;margin:14px 2px 7px}
+.sb-pnl{display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-radius:13px;
+  box-shadow:var(--shadow);overflow:hidden;margin:6px 0 4px}
+.sb-pnl>div{padding:10px 4px;text-align:center;border-right:1px solid var(--sep)}
+.sb-pnl>div:last-child{border-right:none}
+.sb-pnl b{display:block;font-size:15.5px;font-weight:800}
+.sb-pnl span{font-size:9px;font-weight:700;color:var(--label3);letter-spacing:.04em;text-transform:uppercase}
+.sb-wallet b.up{color:var(--green)} .sb-wallet b.dn{color:var(--red)}
+
+.sb-slip-h{display:flex;align-items:center;gap:9px;margin-bottom:9px}
+.sb-slip-h b{font-size:15px}
+.sb-slip-odds{background:#1B7A3E;color:#fff;border-radius:7px;padding:4px 10px;font-weight:800;
+  font-variant-numeric:tabular-nums;font-size:15px}
+.sb-clear{margin-left:auto;background:none;border:none;color:var(--red);font-size:12.5px;font-weight:700;cursor:pointer}
+.sb-picks{max-height:132px;overflow-y:auto;margin-bottom:9px}
+.sb-pk{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:.5px solid var(--sep);font-size:13px}
+.sb-pk:last-child{border-bottom:none}
+.sb-pk span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--label2)}
+.sb-pk b{font-variant-numeric:tabular-nums}
+.sb-pk button{background:none;border:none;color:var(--label3);font-size:14px;cursor:pointer;padding:0 2px}
+.sb-tip{font-size:11.5px;color:var(--label3);text-align:center;margin-top:8px}
+.sb-legs{display:flex;flex-direction:column;gap:2px;margin:3px 0 2px}
+.sb-legs span{font-size:11.5px;color:var(--label3)}
+.sb-legs i{font-style:normal;font-weight:700;color:var(--label2)}
+
+.sb-signin{background:var(--card);border-radius:16px;padding:26px 18px;text-align:center;box-shadow:var(--shadow)}
+.sb-si-e{font-size:42px}
+.sb-si-t{font-size:21px;font-weight:800;margin-top:8px;letter-spacing:-.02em}
+.sb-si-s{font-size:13.5px;color:var(--label2);margin-top:7px;line-height:1.55}
+.sb-bust{background:color-mix(in srgb,var(--red) 10%,var(--card));border:1px solid color-mix(in srgb,var(--red) 32%,transparent);
+  border-radius:14px;padding:14px;margin:10px 0}
+.sb-bust b{display:block;font-size:15.5px}
+.sb-bust span{display:block;font-size:13px;color:var(--label2);margin-top:3px;line-height:1.5}
 </style>
 </head>
 <body>
+<div id="slipMount"></div>
+<div id="splash" aria-hidden="true">
+  <div class="sp-badge">
+    <svg viewBox="0 0 180 180" width="96" height="96">
+      <rect width="180" height="180" rx="40" fill="rgba(255,255,255,.08)"/>
+      <text x="78" y="128" font-family="-apple-system,'SF Pro Display',Helvetica,sans-serif"
+        font-size="132" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="-4">S</text>
+      <g transform="translate(132,110)">
+        <circle r="17" fill="#fff"/>
+        <path d="M0,-9 L8.6,-2.8 L5.3,7.3 L-5.3,7.3 L-8.6,-2.8 Z" fill="#0A4A22"/>
+      </g>
+    </svg>
+  </div>
+  <div class="sp-name">Sunday Season</div>
+  <div class="sp-dots"><i></i><i></i><i></i></div>
+</div>
 <div class="shell">
   <div class="drawer-bg" id="drawerBg"></div>
   <aside class="side" id="side">
@@ -2485,6 +2723,7 @@ const NAV=[
  ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
  ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
  ['comps','Competitions','🏆','M6 3h12v4a6 6 0 0 1-12 0V3zM4 5H2v1.5A3 3 0 0 0 5 9.5M20 5h2v1.5a3 3 0 0 1-3 3M9 21h6M12 17v4'],
+ ['bets','Betting','🎰','M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v3a2 2 0 0 0 0 2v3a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-3a2 2 0 0 0 0-2zM10 6v12'],
  ['admin','Admin','🔐','M12 15v3M7 10V7a5 5 0 0 1 10 0v3M5.5 10h13a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5v-8A1.5 1.5 0 0 1 5.5 10z']];
 const TABS=['home','league','squad','tactics','admin'];
 let VIEW='home';
@@ -2560,9 +2799,10 @@ function lockScroll(on){
   }catch(e){}
 }
 
-function render(){
-  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
+function render(){ try{applySeasonTint()}catch(e){}
+  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
+  try{paintSlip()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
 
 /* ============ HOME — Premier-League-app style ============ */
@@ -2614,11 +2854,15 @@ function vHome(){
       </div>
 
       <div class="grid g2">
-        <div><div class="sechead">🧤 Clean sheets</div><div class="card">
-          ${cleans.length?cleans.map(x=>`<div class="row tap" onclick="openPlayer('${x.id}')">${avatar(x,30)}
-            <div class="rt"><div class="r1" style="font-size:15px">${esc(x.name)}</div><div class="r2">${x.cpg.toFixed(1)} conceded/game</div></div>
-            <div class="rv" style="font-weight:700;color:var(--label)">${x.cs}</div></div>`).join('')
-          :'<div class="row"><div class="rt"><div class="r2">No clean sheets yet</div></div></div>'}</div></div>
+        <div><div class="sechead">🧱 Best defence</div><div class="card">
+          ${(function(){const back=statsAll().filter(x=>x.P>=2)
+              .sort((a,b)=>(a.GA/a.P)-(b.GA/b.P)).slice(0,5);
+            return back.length?back.map(x=>`<div class="row tap" onclick="openPlayer('${x.id}')">${avatar(x,30)}
+              <div class="rt"><div class="r1" style="font-size:15px">${shirtBadge(player(x.id))}${esc(x.name)}</div>
+                <div class="r2">${x.cs} shut-out${x.cs===1?'':'s'} · ${x.P} games</div></div>
+              <div class="rv" style="font-weight:700;color:var(--label)">${(x.GA/x.P).toFixed(1)}</div></div>`).join('')
+            :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'})()}</div>
+          </div>
         <div><div class="sechead">🎮 Career leaders <button class="act" onclick="go('career')">See all</button></div><div class="card">
           ${carTop.map(({x,c})=>`<div class="row tap" onclick="openCareer('${x.id}')">
             <div class="lvbadge" style="width:38px;height:38px;flex:0 0 38px;border-radius:12px"><div class="le" style="font-size:16px">${c.lvl.e}</div><div class="ln" style="font-size:7px">LV${c.lvl.n}</div></div>
@@ -2641,8 +2885,9 @@ function vHome(){
 
       ${potsRace()}
       ${closingIn()}
+      ${fplHomeBlock()}
       ${(function(){const cd=countdowns(); if(!cd.length)return '';
-        return `<div class="sechead">⏳ Milestone countdown</div>
+        return `<div class="sechead">🔜 Next milestones</div>
           <div class="card">${cd.map(o=>`<div class="row tap" onclick="openPlayer('${o.id}')">
             <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
             <div class="rt"><div class="r1" style="font-size:15px">${esc(o.name)}</div>
@@ -2693,7 +2938,7 @@ function closingIn(){
   out.sort((a,b)=>a.v-b.v);
   const seen=new Set(),list=[];
   out.forEach(o=>{if(list.length<5&&!seen.has(o.id+o.t)){seen.add(o.id+o.t);list.push(o)}});
-  return `<div class="sechead">🎯 Closing in</div>
+  return `<div class="sechead">⏳ Almost there</div>\n    <div class="note" style="padding:0 4px 8px;font-size:12px">A few games or goals away from the next milestone</div>
     <div class="card">${list.map(o=>`<div class="row tap" onclick="openCareer('${o.id}')">
       <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
       <div class="rt"><div class="r1" style="font-size:15px">${esc(o.name)}</div>
@@ -3137,7 +3382,7 @@ function chalRow(c){return `<div class="chal ${c.done?'done':'locked'}">
    Denis's profile → his Career → back lands you on Denis's profile again. */
 let BACKSTACK=[];
 const NAV_LABEL={home:'Home',league:'League',fixtures:'Fixtures',squad:'Squad',tactics:'Tactics',
-  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',stats:'Stats',compare:'Compare',history:'Hall of Fame',
+  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',bets:'Betting',stats:'Stats',compare:'Compare',history:'Hall of Fame',
   comps:'Competitions',admin:'Admin',player:'Player',pcareer:'Career',match:'Match',seasonView:'Season'};
 function viewSnap(){
   return {v:VIEW, pid:app()._pid, gid:app()._gid, sid:app()._sid,
@@ -3834,7 +4079,7 @@ let FTAB='team', FSORT2='total', FPOS='ALL', FPICK=null;
 function vFpl(){
   $('#navMount').innerHTML=navbar();
   const f=fpl(), me=fplMine(), locked=fplLocked();
-  const tabs=[['team','My Team'],['market','Market'],['stocks','Analytics'],['league','League'],['rules','Rules']];
+  const tabs=[['team','My Team'],['market','Market'],['stocks','Stocks'],['league','League'],['rules','Rules']];
   let body='';
   if(!me) body=fplJoin();
   else if(FTAB==='team') body=fplMyTeam(me,locked);
@@ -3929,7 +4174,7 @@ function fplJoin(){
   return `<div class="card pad" style="text-align:center">
       <div style="font-size:44px">🕹️</div>
       <div style="font-size:19px;font-weight:800;margin:6px 0 4px">Join the mini league</div>
-      <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b>, then pick your ${FPL_RULES.squadSize}.</div>
+      <div class="note" style="padding:0 0 14px">Joining is optional. <b>Ask your admin for your code</b>, then pick your ${FPL_RULES.squadSize}. The same code signs you into the betting.</div>
       <input id="fplCode" placeholder="e.g. TALAL-7K2M" style="text-align:center;text-transform:uppercase;letter-spacing:.1em;font-weight:700"
         onkeydown="if(event.key==='Enter')fplLogin($('#fplCode').value)">
       <button class="btn pri full" style="margin-top:10px" onclick="fplLogin($('#fplCode').value)">Continue</button>
@@ -3942,7 +4187,24 @@ function fplJoin(){
         <div class="rv" style="font-family:ui-monospace,monospace;font-weight:700;font-size:13px">${m.code}</div></div>`).join('')}</div>
       <div class="note" data-admin>Send each person their code — it's how they claim their team.</div>`:''}`;
 }
-function fplReset(){ FDRAFT=null; FSWAP=null; FPICK=null; FTAB='team'; }
+function fplReset(){ FDRAFT=null; FSWAP=null; FPICK=null; FTAB='team'; BSLIP=[]; }
+/* the same code unlocks the fantasy game and the betting, so signing in from
+   either place signs you into both */
+async function signIn(code){
+  const t=String(code||'').trim().toUpperCase();
+  if(!t){toast('Enter your code');return false}
+  const m=fplManager(t);
+  if(!m){toast('That code was not recognised');return false}
+  fplReset(); fplRemember(m.code);
+  haptic('success'); render();
+  toast(`Welcome, ${m.name}`);
+  return true;
+}
+async function askSignIn(){
+  const v=await askText('Enter your code','Same code as Sunday FPL — ask your admin if you do not have it','','Sign in');
+  if(v===null)return;
+  await signIn(v);
+}
 function fplLogin(code){
   const m=fplManager(code);
   if(!m){toast('That code was not recognised');return}
@@ -4400,27 +4662,41 @@ function priceChart(pid,range){
   const back=spans[range]||9999;
   const from=Math.max(0,lastGw-back);
   const c=all.filter(p=>p.gw>=from);
-  if(c.length<2)return `<div class="note" style="padding:24px;text-align:center">Not enough history yet — prices move once games are logged.</div>`;
-  const W=320,H=150,pad=8,padL=30;
-  const vs=c.map(p=>p.v), lo=Math.min(...vs), hi=Math.max(...vs), rng=(hi-lo)||1;
-  const x=i=>padL+(i/(c.length-1))*(W-padL-pad);
-  const y=v=>H-22-((v-lo)/rng)*(H-32);
+  if(c.length<2)return `<div class="note" style="padding:22px;text-align:center">Not enough history yet — prices move once games are logged.</div>`;
+  const W=340,H=170,padT=12,padB=26,padL=34,padR=10;
+  const vs=c.map(p=>p.v);
+  let lo=Math.min(...vs), hi=Math.max(...vs);
+  const pad=Math.max(0.2,(hi-lo)*0.18); lo=Math.max(0,lo-pad); hi=hi+pad;   // breathing room
+  const rng=(hi-lo)||1;
+  const x=i=>padL+(i/(c.length-1))*(W-padL-padR);
+  const y=v=>H-padB-((v-lo)/rng)*(H-padT-padB);
   const up=c[c.length-1].v>=c[0].v, col=up?'#30D158':'#FF453A';
-  const d=c.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)},${y(p.v).toFixed(1)}`).join('');
-  const area=`${d}L${x(c.length-1).toFixed(1)},${H-22}L${x(0).toFixed(1)},${H-22}Z`;
+  /* smooth the line so it reads like a chart, not a saw */
+  const d=c.map((p,i)=>{
+    const px=x(i),py=y(p.v);
+    if(!i)return `M${px.toFixed(1)},${py.toFixed(1)}`;
+    const qx=x(i-1),qy=y(c[i-1].v),mx=(qx+px)/2;
+    return `C${mx.toFixed(1)},${qy.toFixed(1)} ${mx.toFixed(1)},${py.toFixed(1)} ${px.toFixed(1)},${py.toFixed(1)}`;
+  }).join('');
+  const area=`${d}L${x(c.length-1).toFixed(1)},${H-padB}L${x(0).toFixed(1)},${H-padB}Z`;
   const anchors=c.map((p,i)=>({...p,i})).filter(p=>p.real);
-  return `<svg viewBox="0 0 ${W} ${H}" class="stk-chart" preserveAspectRatio="none">
+  const ticks=[0,.25,.5,.75,1].map(f=>lo+rng*f);
+  const lastPt=c[c.length-1];
+  return `<svg viewBox="0 0 ${W} ${H}" class="stk-chart">
     <defs><linearGradient id="cg${pid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="${col}" stop-opacity=".3"/>
+      <stop offset="0" stop-color="${col}" stop-opacity=".28"/>
       <stop offset="1" stop-color="${col}" stop-opacity="0"/></linearGradient></defs>
-    ${[0,.5,1].map(f=>{const v=lo+rng*f;return `
-      <line x1="${padL}" y1="${y(v)}" x2="${W-pad}" y2="${y(v)}" stroke="var(--sep)" stroke-width=".6"/>
-      <text x="2" y="${y(v)+3}" font-size="8" fill="var(--label3)">£${v.toFixed(1)}</text>`}).join('')}
+    ${ticks.map(v=>`
+      <line x1="${padL}" y1="${y(v).toFixed(1)}" x2="${W-padR}" y2="${y(v).toFixed(1)}"
+        stroke="var(--sep)" stroke-width=".7" stroke-dasharray="2 3"/>
+      <text x="${padL-5}" y="${(y(v)+3).toFixed(1)}" font-size="8.5" fill="var(--label3)" text-anchor="end">${v.toFixed(1)}</text>`).join('')}
     <path d="${area}" fill="url(#cg${pid})"/>
-    <path d="${d}" fill="none" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>
-    ${anchors.map(a=>`<circle cx="${x(a.i).toFixed(1)}" cy="${y(a.v).toFixed(1)}" r="2.2" fill="${col}"/>`).join('')}
-    <text x="${padL}" y="${H-6}" font-size="8" fill="var(--label3)">GW${Math.ceil(from)||1}</text>
-    <text x="${W-pad}" y="${H-6}" font-size="8" fill="var(--label3)" text-anchor="end">GW${lastGw}</text>
+    <path d="${d}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>
+    ${anchors.map(a2=>`<circle cx="${x(a2.i).toFixed(1)}" cy="${y(a2.v).toFixed(1)}" r="2" fill="var(--card)" stroke="${col}" stroke-width="1.4"/>`).join('')}
+    <circle cx="${x(c.length-1).toFixed(1)}" cy="${y(lastPt.v).toFixed(1)}" r="4.5" fill="${col}"/>
+    <circle cx="${x(c.length-1).toFixed(1)}" cy="${y(lastPt.v).toFixed(1)}" r="8" fill="${col}" opacity=".18"/>
+    <text x="${padL}" y="${H-8}" font-size="9" fill="var(--label3)">GW${Math.max(1,Math.ceil(from))}</text>
+    <text x="${W-padR}" y="${H-8}" font-size="9" fill="var(--label3)" text-anchor="end">GW${lastGw}</text>
   </svg>`;
 }
 function marketIndex(){
@@ -5075,52 +5351,46 @@ const PUNDITS=[
 function pressRoom(g){
   if(!g)return [];
   const rs=matchRatings(g);
-  const top=rs[0];
+  if(rs.length<2)return [];
+  const nm=x=>esc(x&&x.name?String(x.name).split(' ')[0]:'—');
+  const top=rs[0], second=rs[1], worst=rs[rs.length-1];
   const total=(g.scoreA||0)+(g.scoreB||0), margin=Math.abs((g.scoreA||0)-(g.scoreB||0));
-  const drew=g.result==='D';
-  const conc=Math.max(g.scoreA||0,g.scoreB||0);
+  const drew=g.result==='D', conc=Math.max(g.scoreA||0,g.scoreB||0);
   const scorers=Object.entries(g.goals||{}).map(([id,n])=>({id,n,name:(player(id)||{}).name||'—'}))
     .sort((a,b)=>b.n-a.n);
   const hat=scorers.find(x=>x.n>=3);
-  const nm=x=>esc(x&&x.name?x.name.split(' ')[0]:'—');
+  const sc1=scorers[0], sc2=scorers[1];
+  const bestDef=rs.find(x=>['DEF','GK'].includes(((g.pos&&g.pos[x.id])||(player(x.id)||{}).pos)));
 
+  /* every line names at least one player, most name two or three */
   const lines={
     carra: conc>=6
-      ? `Six or more conceded. I'd not sleep after that. You can pass it about all you like, somebody has to actually want to defend.`
-      : conc<=1
-        ? `Now that I enjoyed. One goal in the whole game, everybody doing their job, nobody wandering off. Proper football.`
-        : `Decent enough, but the space between the lines was there all afternoon. Tighten that and it's a different game.`,
-    nev: total>=9
-      ? `${total} goals. Both sides pushed so high there was nothing behind them — the moment you turn it over you're in.`
-      : drew
-        ? `A draw is the honest result. Neither side found the spare man anywhere, so it just kept resetting.`
-        : `The winner came from the overload. Get an extra man wide and everything else follows.`,
+      ? `${nm(worst)} and the rest of that back line, I'd have had them in on Monday. ${nm(top)} was the only one who looked like he wanted it.`
+      : bestDef
+        ? `${nm(bestDef)} was outstanding. Him and ${nm(top)} between them dragged that team through it — that's what defending looks like.`
+        : `${nm(top)} and ${nm(second)} did the ugly work. Nobody talks about it, but that's why they won.`,
+    nev: sc2
+      ? `Look at where ${nm(sc1)} and ${nm(sc2)} were picking it up. Both goals came from the same overload, and nobody adjusted.`
+      : `${nm(top)} kept finding the spare man. ${nm(second)} read it every time, and that's the whole game in one movement.`,
     micah: hat
-      ? `${nm(hat)} with three! I'd be insufferable. Absolutely insufferable. He'll be telling that story till Christmas.`
+      ? `${nm(hat)} with three! And ${nm(second)} still thinks he was the best player out there. He's told me twice already.`
       : margin>=4
-        ? `That was a hiding. I'd be pretending my phone died on the walk back to the car.`
-        : top ? `${nm(top)} was the difference and everybody out there knows it. Look at the faces.` : `Good watch, that.`,
-    henry: top
-      ? `${nm(top)}. A ${top.r.toFixed(1)} from me. Not the loudest player on the pitch, but everything good went through him.`
-      : `There is always one player who makes it look simple. Find him and you have found the game.`,
+        ? `${nm(worst)} will not want to talk about that one. ${nm(top)} on the other hand will not stop talking about it.`
+        : `${nm(top)} and ${nm(second)} were brilliant. ${nm(worst)}, mate, we've all had those days.`,
+    henry: `${nm(top)}. A ${top.r.toFixed(1)} from me${second?`, ${nm(second)} just behind on ${second.r.toFixed(1)}`:''}. Quiet, efficient, always in the right place.`,
     klopp: margin>=4
-      ? `Boys, this is not a disaster, this is information! We go again next Sunday and we run more. Simple.`
+      ? `Boys, this is information, not a disaster! ${nm(worst)} keeps his head up, ${nm(top)} shows him how — next Sunday we go again.`
       : drew
-        ? `A draw? I hate a draw. But I love the effort — the legs were there right to the end.`
-        : `This is what I want to see! Full throttle, no passengers. Fantastic.`,
+        ? `A draw I hate, but the effort! ${nm(top)} and ${nm(second)} ran until the end. That I love.`
+        : `${nm(top)}! Full throttle, no passengers. ${nm(second)} the same. Fantastic.`,
     pep: total>=9
-      ? `Nobody wants the ball. Everybody wants to run. If you keep it for ten seconds you rest, but nobody keeps it.`
-      : `The shape was good in the first half. Then somebody chases, the line breaks, and the whole structure goes.`,
+      ? `Nobody wants the ball. ${nm(top)} keeps it, everybody else runs. If ${nm(second)} holds it for ten seconds the whole team rests.`
+      : `The shape was good while ${nm(top)} stayed central. Then ${nm(worst)} chases, the line breaks, and everything opens.`,
   };
-  // rotate which four speak, seeded by the game so it changes week to week but never flickers
-  /* Shuffle the running order from several parts of the game so consecutive
-     weeks genuinely differ, while staying identical on every re-render. */
   const key=[g.id,g.date,g.round,g.scoreA,g.scoreB,g.result].join('~');
-  const order=PUNDITS
-    .map((p,i)=>({p,k:seedRand(key+'#'+p.id+i)}))
-    .sort((a,b)=>a.k-b.k)
-    .map(x=>x.p);
-  return order.slice(0,4).map(p=>({p,q:lines[p.id]||`Enjoyed that one.`}));
+  const order=PUNDITS.map((p,i)=>({p,k:seedRand(key+'#'+p.id+i)})).sort((a,b)=>a.k-b.k).map(x=>x.p);
+  const howMany = seedRand(key+'|n')<0.45 ? 1 : 2;      // one or two on the panel
+  return order.slice(0,howMany).map(p=>({p,q:lines[p.id]}));
 }
 
 /* ============ PRE-MATCH BUILD-UP ============ */
@@ -5138,6 +5408,44 @@ function buildUp(){
   const table=st.slice().sort((a,b)=>b.pts-a.pts||b.GD-a.GD);
   const gap=table.length>1?table[0].pts-table[1].pts:0;
   return {hot,cold,rivals,leader:table[0],second:table[1],gap};
+}
+
+/* a short read on the fantasy game for the Home page */
+function fplHomeBlock(){
+  const f=fpl(), gws=playedGws();
+  const teams=fplTable();
+  if(!teams.length)return '';
+  const last=gws[gws.length-1];
+  const lead=teams[0], me=fplMine();
+  const mine=me&&me.teamName?teams.find(t=>t.m.pid===me.pid):null;
+  const gwBest=teams.slice().sort((a,b)=>fplManagerGw(b.m,last)-fplManagerGw(a.m,last))[0];
+  const movers=(f.ticker||[]).slice(0,3);
+  return `<div class="sechead">🕹️ Sunday FPL</div>
+    <div class="card">
+      <div class="row tap" onclick="go('fpl')">
+        <div style="font-size:21px;flex:0 0 26px">👑</div>
+        <div class="rt"><div class="r1">${esc(lead.m.teamName)} lead</div>
+          <div class="r2">${lead.total} points · ${esc(lead.m.name)}</div></div>
+        <div class="rv" style="font-weight:800">${lead.total}</div></div>
+      ${gwBest&&last?`<div class="row tap" onclick="go('fpl')">
+        <div style="font-size:21px;flex:0 0 26px">⚡</div>
+        <div class="rt"><div class="r1">Best of GW${last}</div>
+          <div class="r2">${esc(gwBest.m.teamName)}</div></div>
+        <div class="rv" style="font-weight:800">${fplManagerGw(gwBest.m,last)}</div></div>`:''}
+      ${mine?`<div class="row tap" onclick="go('fpl')">
+        <div style="font-size:21px;flex:0 0 26px">📍</div>
+        <div class="rt"><div class="r1">You are ${ordinal(teams.findIndex(t=>t.m.pid===me.pid)+1)}</div>
+          <div class="r2">${esc(mine.m.teamName)} · ${mine.total} points</div></div>
+        <div class="rv" style="font-weight:800">${mine.total}</div></div>`
+       :`<div class="row tap" onclick="go('fpl')">
+        <div style="font-size:21px;flex:0 0 26px">➕</div>
+        <div class="rt"><div class="r1">Not in the mini league yet</div>
+          <div class="r2">Ask the admin for your code</div></div>${chev}</div>`}
+      ${movers.length?`<div class="row tap" onclick="go('fpl');FTAB='stocks';render()">
+        <div style="font-size:21px;flex:0 0 26px">📈</div>
+        <div class="rt"><div class="r1">Prices on the move</div>
+          <div class="r2">${movers.map(t=>`${esc(t.name)} ${t.to>t.from?'▲':'▼'}`).join(' · ')}</div></div>${chev}</div>`:''}
+    </div>`;
 }
 
 /* ============ SKY SPORTS ============
@@ -5774,7 +6082,6 @@ function vSky(){
           <div class="press-av">${x.p.e}</div>
           <div class="press-b">
             <div class="press-n">${esc(x.p.n)}</div>
-            <div class="press-r">${esc(x.p.r)}</div>
             <div class="press-q">“${esc(x.q)}”</div>
           </div></div>`).join('')}</div>`})()}
 
@@ -5821,6 +6128,820 @@ function vSky(){
         </div>`).join('')}</div>`:''}
     <div style="height:20px"></div>
   </div></div>`;
+}
+
+/* ============ AWARDS ============ */
+function vAwards(){
+  $('#navMount').innerHTML=navbar();
+  const g=allGames(), p=id=>player(id)||{name:'—'};
+  if(!g.length){app().innerHTML=`<div class="view active"><div class="largetitle">Awards</div>
+    <div class="wrap">${cloudBanner()}<div class="empty"><div class="ee">🏆</div><h3>No silverware yet</h3>
+    <p>Log a few games and the races begin.</p></div></div></div>`;return}
+  const races=skyAwards(), imp=mostImproved(), hist=potmHistory();
+  const cur=hist[hist.length-1];
+  const podium=a=>`<div class="aw-card">
+    <div class="aw-cap"><span class="aw-em">${a.emoji}</span><div><b>${a.label}</b><i>${a.sub}</i></div></div>
+    <div class="aw-pod">${[1,0,2].map(i=>{const r=a.rows[i]; if(!r)return '<div class="aw-slot empty"></div>';
+      const place=i+1;
+      return `<div class="aw-slot p${place}" onclick="openPlayer('${r.id}')">
+        <div class="aw-medal">${place===1?'🥇':place===2?'🥈':'🥉'}</div>
+        ${avatar(p(r.id),place===1?46:38)}
+        <div class="aw-n">${esc(r.name)}</div>
+        <div class="aw-v">${esc(r.v)}</div>
+      </div>`}).join('')}</div></div>`;
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">Awards</div>
+    <div class="wrap">${cloudBanner()}
+      ${cur?`<div class="aw-hero">
+        <div class="aw-hero-t">PLAYER OF THE MONTH · ${esc(ymLabel(cur.ym)).toUpperCase()}</div>
+        <div class="aw-hero-b">${avatar(p(cur.id),64)}
+          <div><b>${esc(cur.name)}</b><span>${cur.avg} average · ${cur.G} goal${cur.G===1?'':'s'} · ${cur.W} win${cur.W===1?'':'s'}</span></div></div>
+      </div>`:''}
+      ${races.map(podium).join('')}
+      ${imp.length?`<div class="aw-card">
+        <div class="aw-cap"><span class="aw-em">📈</span><div><b>Most Improved</b><i>Biggest rise since the first half</i></div></div>
+        <div class="aw-pod">${[1,0,2].map(i=>{const r=imp[i]; if(!r)return '<div class="aw-slot empty"></div>';
+          const place=i+1;
+          return `<div class="aw-slot p${place}" onclick="openPlayer('${r.id}')">
+            <div class="aw-medal">${place===1?'🥇':place===2?'🥈':'🥉'}</div>
+            ${avatar(p(r.id),place===1?46:38)}
+            <div class="aw-n">${esc(r.name)}</div>
+            <div class="aw-v" style="color:var(--green)">+${r.delta.toFixed(2)} ppg</div></div>`}).join('')}</div>
+      </div>`:''}
+      ${hist.length>1?`<div class="sechead">Every Player of the Month</div>
+        <div class="card">${hist.slice().reverse().map(x=>`
+          <div class="row tap" onclick="openPlayer('${x.id}')">
+            <div style="flex:0 0 auto">${avatar(p(x.id),30)}</div>
+            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${esc(ymLabel(x.ym))}</div></div>
+            <div class="rv">${x.avg}</div></div>`).join('')}</div>`:''}
+      <div style="height:20px"></div>
+    </div></div>`;
+}
+
+/* ============ GAMES ============ */
+let GTAB='whoami', GQ=null, GSCORE=0, GIDX=0, GPICK=null, GDONE=false;
+let GUESS=null, GREVEAL=1, GUESSDONE=null, GSTREAK=0;
+
+/* a football knowledge bank plus questions built from your own season */
+const BALLQ=[
+ {q:'How many players are on the pitch per side in a full match?',a:'11',o:['9','10','11','12']},
+ {q:'How long is a standard match, not counting stoppages?',a:'90 minutes',o:['80 minutes','90 minutes','100 minutes','120 minutes']},
+ {q:'How many points does a win earn in most leagues?',a:'3',o:['1','2','3','4']},
+ {q:'What does a yellow card signal?',a:'A caution',o:['A caution','A sending off','A goal','A substitution']},
+ {q:'Two yellow cards in one game means what?',a:'A red card',o:['Nothing','A penalty','A red card','A free kick']},
+ {q:'From how far out is a penalty taken?',a:'12 yards',o:['8 yards','10 yards','12 yards','18 yards']},
+ {q:'What is three goals by one player called?',a:'A hat-trick',o:['A treble','A hat-trick','A brace','A triple']},
+ {q:'What is two goals by one player called?',a:'A brace',o:['A brace','A double','A pair','A duo']},
+ {q:'Who may handle the ball in open play?',a:'The goalkeeper',o:['The captain','The goalkeeper','The centre-back','Nobody']},
+ {q:'What restarts play when the ball crosses the touchline?',a:'A throw-in',o:['A corner','A goal kick','A throw-in','A drop ball']},
+ {q:'How often is the World Cup held?',a:'Every four years',o:['Every year','Every two years','Every three years','Every four years']},
+ {q:'What does a clean sheet mean?',a:'Conceding no goals',o:['Winning away','Scoring first','Conceding no goals','Playing the full game']},
+ {q:'What is the arc outside the penalty box called?',a:'The D',o:['The D','The arc','The bow','The crescent']},
+ {q:'Which body governs world football?',a:'FIFA',o:['UEFA','FIFA','CAF','AFC']},
+ {q:'What is a nutmeg?',a:'Playing the ball through an opponent\'s legs',o:['A backheel','Playing the ball through an opponent\'s legs','A diving header','A long throw']},
+ {q:'How many substitutions are usually allowed in a league match now?',a:'Five',o:['Three','Four','Five','Unlimited']},
+ {q:'What colour card means a player must leave the pitch?',a:'Red',o:['Yellow','Red','Blue','Black']},
+ {q:'How wide is a full-size goal?',a:'8 yards',o:['6 yards','7 yards','8 yards','10 yards']},
+ {q:'What is the technical name for the goalkeeper\'s area?',a:'The six-yard box',o:['The D','The six-yard box','The penalty spot','The corner arc']},
+ {q:'When does extra time normally happen?',a:'A knockout tie level after 90 minutes',o:['Any drawn game','A knockout tie level after 90 minutes','Only in finals','When the referee decides']},
+ {q:'How long is each half of extra time?',a:'15 minutes',o:['10 minutes','15 minutes','20 minutes','30 minutes']},
+ {q:'What is VAR short for?',a:'Video Assistant Referee',o:['Video Assistant Referee','Verified Action Review','Visual Angle Replay','Video Analysis Room']},
+ {q:'What happens if a defender handles the ball in their own box?',a:'A penalty',o:['A free kick','A penalty','A corner','A yellow card only']},
+ {q:'Which competition do European club champions contest?',a:'The Champions League',o:['The Europa League','The Champions League','The World Cup','The Super Cup']},
+ {q:'What is Europe\'s second-tier club competition?',a:'The Europa League',o:['The Conference League','The Europa League','The Super Cup','The Cup Winners Cup']},
+ {q:'How many teams are in the Premier League?',a:'20',o:['18','20','22','24']},
+ {q:'How many games does each Premier League team play in a season?',a:'38',o:['34','36','38','42']},
+ {q:'What is awarded when the ball goes out off a defender behind their own goal line?',a:'A corner',o:['A goal kick','A corner','A throw-in','A free kick']},
+ {q:'What is awarded when an attacker puts it behind the goal line?',a:'A goal kick',o:['A goal kick','A corner','A throw-in','A drop ball']},
+ {q:'What does a linesman raising the flag straight up usually mean?',a:'Offside',o:['Offside','A foul','A substitution','Handball']},
+ {q:'What is the maximum number of players a team can be reduced to before abandonment?',a:'Seven',o:['Five','Six','Seven','Eight']},
+ {q:'What is the name for scoring past your own goalkeeper?',a:'An own goal',o:['A backpass','An own goal','A deflection','A concession']},
+ {q:'What is it called when the ball is passed back and the keeper picks it up illegally?',a:'An indirect free kick',o:['A penalty','An indirect free kick','A corner','A yellow card']},
+ {q:'How many officials are typically on the pitch?',a:'Three',o:['One','Two','Three','Four']},
+ {q:'What shape is used to mark the centre of the pitch?',a:'A circle',o:['A square','A circle','A triangle','A diamond']},
+ {q:'What is a "false nine"?',a:'A striker who drops deep',o:['A defender who attacks','A striker who drops deep','A second keeper','A wide midfielder']},
+ {q:'What does "parking the bus" describe?',a:'Defending very deep with everyone behind the ball',o:['Attacking with everyone','Defending very deep with everyone behind the ball','Time wasting','A high press']},
+ {q:'What is "gegenpressing"?',a:'Winning the ball back immediately after losing it',o:['Sitting deep','Winning the ball back immediately after losing it','Playing long balls','Man marking']},
+ {q:'What is the offside rule primarily about?',a:'Position when the ball is played',o:['Position when the ball is played','Handball','Time wasting','Kick-off order']},
+ {q:'Can you be offside from a throw-in?',a:'No',o:['Yes','No','Only in the box','Only in extra time']},
+ {q:'Can you be offside in your own half?',a:'No',o:['Yes','No','Only from a corner','Only from a goal kick']},
+ {q:'What is a "tiki-taka" style built on?',a:'Short passing and movement',o:['Long balls','Short passing and movement','Counter attacking','Set pieces']},
+ {q:'How many players make up a 4-4-2 outfield?',a:'10',o:['9','10','11','12']},
+ {q:'What does a "double pivot" mean?',a:'Two holding midfielders',o:['Two strikers','Two holding midfielders','Two wingers','Two keepers']},
+ {q:'What is an "inverted winger"?',a:'A winger on the opposite side to their stronger foot',o:['A winger who defends','A winger on the opposite side to their stronger foot','A wing-back','A false nine']},
+ {q:'What is the golden goal rule?',a:'The first goal in extra time wins',o:['The first goal in extra time wins','A goal worth two','The last goal of a game','A penalty shootout goal']},
+ {q:'In a penalty shootout, how many kicks does each side take initially?',a:'Five',o:['Three','Four','Five','Six']},
+ {q:'What is a "clean sweep" of trophies in one season often called?',a:'The treble',o:['The double','The treble','The quadruple','The grand slam']},
+ {q:'What is the name of the trophy for the top scorer in a European league season?',a:'The Golden Boot',o:['The Golden Boot','The Golden Glove','The Ballon d\'Or','The Puskas Award']},
+ {q:'Which award goes to the best goalkeeper by clean sheets?',a:'The Golden Glove',o:['The Golden Boot','The Golden Glove','The Golden Ball','The Silver Boot']},
+ {q:'What does the Ballon d\'Or recognise?',a:'The best individual player',o:['The best team','The best individual player','The best goal','The best manager']},
+ {q:'How many players start a 5-a-side match per team?',a:'5',o:['4','5','6','7']},
+ {q:'In 7-a-side, how many outfield players does each team usually have?',a:'6',o:['5','6','7','8']},
+ {q:'What is the standard length of a full-size pitch, roughly?',a:'100-110 metres',o:['80-90 metres','100-110 metres','120-130 metres','140-150 metres']},
+ {q:'What is a "sitter"?',a:'An easy chance that should be scored',o:['A difficult shot','An easy chance that should be scored','A substitute','A defensive mistake']},
+ {q:'What does "on the volley" mean?',a:'Striking the ball before it bounces',o:['A header','Striking the ball before it bounces','A backheel','A tap-in']},
+ {q:'What is a "cross" in football?',a:'A pass from wide into the box',o:['A pass from wide into the box','A long shot','A tackle','A dribble']},
+ {q:'What is a "through ball"?',a:'A pass played into space behind the defence',o:['A pass backwards','A pass played into space behind the defence','A clearance','A goal kick']},
+ {q:'What does "man on!" mean when shouted?',a:'An opponent is closing you down',o:['You are offside','An opponent is closing you down','Pass it long','Shoot']},
+ {q:'What is a "brace of assists" more commonly called?',a:'Two assists',o:['Two assists','Two goals','Two saves','Two tackles']},
+ {q:'What is the penalty for a professional foul denying a clear goalscoring chance?',a:'Usually a red card',o:['A yellow card','Usually a red card','Nothing','A corner']},
+ {q:'What restarts a game after a goal?',a:'A kick-off',o:['A drop ball','A kick-off','A throw-in','A goal kick']},
+ {q:'Which team takes the kick-off after conceding?',a:'The team that conceded',o:['The team that scored','The team that conceded','The home team','The away team']},
+ {q:'What is added at the end of each half for delays?',a:'Stoppage time',o:['Extra time','Stoppage time','Golden time','Bonus time']},
+ {q:'What is a "derby"?',a:'A match between local rivals',o:['A cup final','A match between local rivals','A friendly','A play-off']},
+ {q:'What does "aggregate" mean over two legs?',a:'The combined score',o:['The combined score','The away score','The higher score','The first-leg score']},
+ {q:'What is a "wall" at a free kick?',a:'A line of defenders blocking the shot',o:['A line of defenders blocking the shot','The goal frame','The advertising boards','The penalty box line']},
+ {q:'What does a referee crossing their arms usually signal?',a:'No goal or no foul',o:['A goal','No goal or no foul','A penalty','Full time']},
+ {q:'Which position typically wears the number 1 shirt?',a:'Goalkeeper',o:['Goalkeeper','Striker','Captain','Right-back']},
+ {q:'What is a "sweeper"?',a:'A defender playing behind the back line',o:['A defender playing behind the back line','A holding midfielder','A second striker','A wing-back']},
+ {q:'What does "high line" mean?',a:'The defence pushes up the pitch',o:['The defence pushes up the pitch','A long clearance','A tall striker','A high cross']},
+ {q:'What is a "counter attack"?',a:'Attacking quickly after winning the ball',o:['Defending deep','Attacking quickly after winning the ball','Passing sideways','A set piece']},
+ {q:'What is the term for a player receiving the ball with their back to goal?',a:'Playing with their back to goal',o:['Playing with their back to goal','Overlapping','Pressing','Marking']},
+ {q:'What is an "overlap"?',a:'A full-back running beyond the winger',o:['A full-back running beyond the winger','Two players marking one','A double substitution','A backpass']},
+ {q:'What does "second ball" refer to?',a:'The loose ball after a header or clearance',o:['The loose ball after a header or clearance','A spare match ball','The second half kick-off','A rebound off the post']},
+ {q:'What is "game management"?',a:'Controlling the tempo to protect a result',o:['Controlling the tempo to protect a result','Choosing the team','Refereeing decisions','Substitution rules']},
+ {q:'What is a "target man"?',a:'A striker who holds the ball up',o:['A striker who holds the ball up','A defensive midfielder','A penalty taker','A set-piece specialist']},
+ {q:'What does "in behind" mean?',a:'Space behind the defensive line',o:['Space behind the defensive line','Behind the goal','The substitutes bench','The touchline']},
+ {q:'What is a "reducer"?',a:'An early hard tackle to unsettle an opponent',o:['An early hard tackle to unsettle an opponent','A substitution','A short corner','A defensive header']},
+ {q:'How many corners does it take to win a game?',a:'None, corners do not decide games',o:['Three','Five','Ten','None, corners do not decide games']},
+ {q:'What is a "poacher"?',a:'A striker who scores from close range',o:['A striker who scores from close range','A ball-winning midfielder','A dribbler','A keeper who rushes out']},
+];
+/* remember what has been asked so a session does not repeat itself */
+let GSEEN=[];
+function buildQuiz(){
+  let pool=BALLQ.filter(q=>!GSEEN.includes(q.q));
+  if(pool.length<8){ GSEEN=[]; pool=BALLQ; }          // seen them all, start over
+  const qs=pool.slice().sort(()=>0.5-Math.random()).slice(0,8)
+    .map(q=>({...q,o:[...new Set(q.o)].sort(()=>0.5-Math.random())}));
+  GSEEN=[...GSEEN,...qs.map(q=>q.q)];
+  return qs;
+}
+function startQuiz(){
+  GQ=buildQuiz(); GSCORE=0; GIDX=0; GPICK=null; GDONE=false;
+  if(!GQ.length){toast('Not enough games logged for that one yet');return}
+  haptic('light'); render();
+}
+function answerQuiz(opt){
+  if(!GQ||!GQ[GIDX]||GPICK!==null)return;
+  GPICK=opt;
+  const right=GQ[GIDX].a===opt;
+  if(right){GSCORE++;haptic('success')}else haptic('heavy');
+  render();
+  /* the quiz can be quit while this is pending, so re-check before touching it */
+  const token=GQ;
+  setTimeout(()=>{
+    if(!GQ||GQ!==token)return;
+    if(GIDX>=GQ.length-1){GDONE=true;postScore('quiz',GSCORE,`${GSEEN.length} questions seen`)}else{GIDX++;GPICK=null}
+    render();
+  },900);
+}
+function quitQuiz(){ GQ=null; GDONE=false; render(); }
+
+/* each season gets its own subtle palette, so screenshots age nicely */
+function applySeasonTint(){
+  try{
+    const list=(DB.seasons||[]);
+    const idx=Math.max(0,list.findIndex(x=>x.id===CUR));
+    document.body.dataset.season=String((idx%5)+1);
+  }catch(e){}
+}
+/* placeholder rows while the table is still coming back */
+function skeletonRows(n){
+  return `<div class="skel">${Array.from({length:n||5},()=>`
+    <div class="skel-r">
+      <div class="sk circle" style="width:30px;height:30px"></div>
+      <div style="flex:1"><div class="sk" style="height:12px;width:${45+Math.round(Math.random()*30)}%"></div>
+        <div class="sk" style="height:9px;width:32%;margin-top:6px"></div></div>
+      <div class="sk" style="height:14px;width:26px"></div>
+    </div>`).join('')}</div>`;
+}
+
+/* ============ BETTING ============
+   Play money only. Odds are priced from each player's own record, so a striker
+   who scores in most games is genuinely short. Markets are per player because
+   teams are not known until Sunday. */
+const BET_RULES={start:10000, min:10, max:2500, margin:0.90, bailout:1000};
+const usd=n=>'$'+Math.round(n).toLocaleString('en-US');
+const usdSigned=n=>(n>0?'+':n<0?'−':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
+function bets(){
+  const S=season();
+  if(!S.bets)S.bets={wallets:{},open:[],settled:[]};
+  if(!S.bets.wallets)S.bets.wallets={};
+  if(!S.bets.open)S.bets.open=[];
+  if(!S.bets.settled)S.bets.settled=[];
+  return S.bets;
+}
+function wallet(pid){
+  const b=bets();
+  if(b.wallets[pid]==null)b.wallets[pid]=BET_RULES.start;
+  return b.wallets[pid];
+}
+/* odds from a probability, with a small house margin so it is not a free lunch */
+function toOdds(p){
+  const q=Math.max(0.04,Math.min(0.94,p));
+  return Math.max(1.05,Math.round((1/q)*BET_RULES.margin*100)/100);
+}
+/* how often has this happened, softened toward a prior when there is little data */
+/* Blend a position-based opening price with what the player has actually done.
+   Early on the prior dominates, so week one is sensibly segmented by position.
+   After a handful of games the real record takes over almost entirely. */
+function rate(hits,games,prior){
+  const k=3;
+  return (hits + (prior??0.3)*k) / (games + k);
+}
+/* Opening prices before anyone has a record. Tuned to this league: roughly
+   5 goals against a side per game, so a clean sheet is genuinely rare and
+   conceding under 8 is close to routine. */
+const BET_PRIORS={
+  ATT:{g1:.58,g2:.26,g3:.09,g4:.03, win:.45, motm:.16},
+  MID:{g1:.38,g2:.13,g3:.04,g4:.012,win:.45, motm:.14},
+  DEF:{g1:.20,g2:.05,g3:.012,g4:.004,win:.45,motm:.12},
+  GK :{g1:.03,g2:.01,g3:.003,g4:.001,win:.45,motm:.10},
+};
+/* conceded ladder — the same for everyone, it is a team outcome */
+const CONCEDE_PRIOR={0:.04,1:.10,2:.22,3:.38,4:.55,5:.70,6:.82,7:.90};
+/* How strong is this player relative to the group? Keeps the best player's
+   prices short even before their own sample is large. */
+function formEdge(pid){
+  const st=statsAll().filter(x=>x.P>=2);
+  if(st.length<3)return 1;
+  const me=st.find(x=>x.id===pid);
+  if(!me)return 1;
+  const avg=st.reduce((t,x)=>t+x.ppg,0)/st.length;
+  if(!avg)return 1;
+  return Math.max(0.65,Math.min(1.5,me.ppg/avg));
+}
+function playerMarkets(pid){
+  const gs=allGames().filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(pid));
+  const n=gs.length;
+  const p=player(pid)||{};
+  const goals=g=>((g.goals||{})[pid]||0);
+  const conceded=g=>((g.teamA||[]).includes(pid)?(g.scoreB||0):(g.scoreA||0));
+  const won=g=>{const a=(g.teamA||[]).includes(pid);return (a&&g.result==='A')||(!a&&g.result==='B')};
+  const PR=BET_PRIORS[p.pos||'MID']||BET_PRIORS.MID;
+  const edge=formEdge(pid);
+  const M=[];
+  const add=(k,l,d,hits,prior,grp,scale)=>{
+    let pr=rate(hits,n,prior);
+    if(scale)pr=Math.max(0.01,Math.min(0.94,pr*edge));
+    M.push({k,l,d,grp,p:pr,pid,odds:toOdds(pr),n});
+  };
+  /* --- goals --- */
+  [[1,'To score','Any time'],[2,'To score 2 or more','A brace or better'],
+   [3,'To score a hat-trick','Three or more'],[4,'To score 4 or more','A big afternoon']]
+   .forEach(([t,l,d])=>add('g'+t,l,d,gs.filter(g=>goals(g)>=t).length,PR['g'+t],'Goals',true));
+  /* --- goals against, full ladder --- */
+  add('c0','Clean sheet','Their team concedes none',
+      gs.filter(g=>conceded(g)===0).length,CONCEDE_PRIOR[0],'Goals against');
+  for(let t=1;t<=7;t++){
+    add('c'+t,`Concede under ${t+1}`,`${t} or fewer against`,
+        gs.filter(g=>conceded(g)<=t).length,CONCEDE_PRIOR[t],'Goals against');
+  }
+  /* --- the rest --- */
+  add('win','To be on the winning side','Their team wins',gs.filter(won).length,PR.win,'Result');
+  add('motm','Top rating of the day','Highest rated on the pitch',
+      gs.filter(g=>{const r=matchRatings(g);return r.length&&r[0].id===pid}).length,PR.motm,'Result',true);
+  return M.map(m=>({...m,edge}));
+}
+function marketResult(pid,g,k){
+  const on=[...(g.teamA||[]),...(g.teamB||[])].includes(pid);
+  if(!on)return null;                                    // did not play, bet is void
+  const goals=(g.goals||{})[pid]||0;
+  const a=(g.teamA||[]).includes(pid);
+  const con=a?(g.scoreB||0):(g.scoreA||0);
+  const won=(a&&g.result==='A')||(!a&&g.result==='B');
+  if(k[0]==='g'&&/^\d$/.test(k[1]))return goals>=(+k[1]);
+  if(k[0]==='c'&&/^\d$/.test(k[1]))return con<=(+k[1]);
+  if(k==='win')return won;
+  if(k==='motm'){const r=matchRatings(g);return !!(r.length&&r[0].id===pid)}
+  return null;
+}
+function betLabel(k){
+  if(k==='win')return 'On the winning side';
+  if(k==='motm')return 'Top rating';
+  if(k[0]==='g')return k[1]==='1'?'To score':`To score ${k[1]}+`;
+  if(k[0]==='c')return k[1]==='0'?'Clean sheet':`Concede under ${(+k[1])+1}`;
+  return k;
+}
+const BET_LABEL=new Proxy({},{get:(t,k)=>betLabel(String(k))});
+async function placeBet(){
+  const me=fplMine();
+  if(!me){toast('Enter your code on the Sunday FPL tab first');return}
+  if(!BSLIP.length){toast('Pick something first');return}
+  const b=bets(), bal=wallet(me.pid);
+  const amt=Math.round(BSTAKE);
+  if(amt<BET_RULES.min){toast(`Minimum stake is ${usd(BET_RULES.min)}`);return}
+  if(amt>BET_RULES.max){toast(`Maximum stake is ${usd(BET_RULES.max)}`);return}
+  if(amt>bal){toast('Not enough in your balance');return}
+  const legs=BSLIP.map(x=>({pid:x.pid,k:x.k,odds:x.odds}));
+  const combined=Math.round(legs.reduce((t,x)=>t*x.odds,1)*100)/100;
+  b.wallets[me.pid]=bal-amt;
+  b.open.push({id:uid(),by:me.pid,legs,odds:combined,stake:amt,gw:fplNextGw(),at:Date.now(),
+               pid:legs[0].pid,k:legs[0].k});
+  BSLIP=[];
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success'); render();
+  toast(legs.length>1?`${legs.length}-fold · ${usd(amt)} at ${combined.toFixed(2)}`:`${usd(amt)} at ${combined.toFixed(2)}`);
+}
+async function cancelBet(id){
+  const b=bets(), i=b.open.findIndex(x=>x.id===id);
+  if(i<0)return;
+  const me=fplMine(); if(!me||b.open[i].by!==me.pid)return;
+  b.wallets[me.pid]=wallet(me.pid)+b.open[i].stake;
+  b.open.splice(i,1);
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('light'); render(); toast('Bet cancelled, stake returned');
+}
+/* settle everything riding on a gameweek once its games are in */
+function settleBets(gw){
+  const b=bets(), games=gamesInGw(gw);
+  if(!games.length)return 0;
+  let done=0;
+  b.open=b.open.filter(bet=>{
+    if(bet.gw!==gw)return true;
+    const legs=bet.legs||[{pid:bet.pid,k:bet.k,odds:bet.odds}];
+    let odds=1, allIn=true, anyPlayed=false;
+    for(const leg of legs){
+      const g=games.find(x=>[...(x.teamA||[]),...(x.teamB||[])].includes(leg.pid));
+      if(!g)continue;                                   // that player sat out: leg voids at 1.00
+      anyPlayed=true;
+      const hit=marketResult(leg.pid,g,leg.k);
+      if(hit===false){allIn=false;break}
+      if(hit===true)odds*=leg.odds;
+    }
+    if(!anyPlayed){                                     // nobody played — full refund
+      b.wallets[bet.by]=wallet(bet.by)+bet.stake;
+      b.settled.unshift({...bet,res:'void',ret:bet.stake,when:Date.now()});
+      done++; return false;
+    }
+    const ret=allIn?Math.round(bet.stake*odds):0;
+    if(ret)b.wallets[bet.by]=wallet(bet.by)+ret;
+    b.settled.unshift({...bet,res:allIn?'won':'lost',ret,settledOdds:Math.round(odds*100)/100,when:Date.now()});
+    done++; return false;
+  });
+  b.settled=b.settled.slice(0,200);
+  return done;
+}
+/* the best single return anyone has landed */
+function biggestWins(n){
+  return bets().settled.filter(x=>x.res==='won')
+    .sort((a,b)=>(b.ret-b.stake)-(a.ret-a.stake)).slice(0,n||5);
+}
+function betTitle(x){
+  const legs=x.legs||[{pid:x.pid,k:x.k}];
+  if(legs.length===1)return `${esc((player(legs[0].pid)||{}).name||'—')} · ${esc(betLabel(legs[0].k))}`;
+  const kind={2:'Double',3:'Treble',4:'Four-fold'}[legs.length]||`${legs.length}-fold`;
+  return `<b>${kind}</b> · ${legs.length} selections`;
+}
+function legLines(x){
+  const legs=x.legs||[];
+  if(legs.length<2)return '';
+  return `<div class="sb-legs">${legs.map(l=>
+    `<span>${esc((player(l.pid)||{}).name||'—')} — ${esc(betLabel(l.k))} <i>${l.odds.toFixed(2)}</i></span>`).join('')}</div>`;
+}
+function pnl(pid){
+  const h=bets().settled.filter(x=>x.by===pid&&x.res!=='void');
+  const staked=h.reduce((t,x)=>t+x.stake,0);
+  const back=h.reduce((t,x)=>t+(x.ret||0),0);
+  const won=h.filter(x=>x.res==='won').length;
+  const best=h.filter(x=>x.res==='won').sort((a,b)=>b.ret-a.ret)[0];
+  return {staked,back,profit:back-staked,won,played:h.length,
+          strike:h.length?Math.round(won/h.length*100):0,best};
+}
+/* Nobody sits out the season because they went bust — if you are broke with
+   nothing riding, you can take a top-up. It is counted, so everyone can see. */
+function isBroke(pid){
+  const b=bets();
+  return wallet(pid)<BET_RULES.min && !b.open.some(x=>x.by===pid);
+}
+async function takeBailout(){
+  const me=fplMine(); if(!me)return;
+  if(!isBroke(me.pid)){toast('You still have money to play with');return}
+  const b=bets();
+  if(!b.bailouts)b.bailouts={};
+  b.bailouts[me.pid]=(b.bailouts[me.pid]||0)+1;
+  b.wallets[me.pid]=wallet(me.pid)+BET_RULES.bailout;
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success'); render();
+  toast(`${usd(BET_RULES.bailout)} added — go steady this time`);
+}
+function bailoutCount(pid){ return (bets().bailouts||{})[pid]||0 }
+function betTable(){
+  const b=bets(), f=fpl();
+  return (f.managers||[]).map(m=>{
+    const open=b.open.filter(x=>x.by===m.pid).reduce((t,x)=>t+x.stake,0);
+    const hist=b.settled.filter(x=>x.by===m.pid);
+    const won=hist.filter(x=>x.res==='won').length;
+    return {m,bal:wallet(m.pid),open,won,played:hist.filter(x=>x.res!=='void').length,
+            total:wallet(m.pid)+open};
+  }).sort((a,b2)=>b2.total-a.total);
+}
+
+/* ============ MINI GAME LEADERBOARD ============
+   Stored on the season so everyone sees the same board, written through the
+   same path the fantasy game uses so it works without the admin PIN. */
+function miniBoard(){
+  const S=season();
+  if(!S.mini)S.mini={quiz:[],whoami:[]};
+  if(!S.mini.quiz)S.mini.quiz=[];
+  if(!S.mini.whoami)S.mini.whoami=[];
+  return S.mini;
+}
+function miniName(){
+  let n=null;
+  try{ n=localStorage.getItem('ss_mini_name') }catch(e){}
+  if(n)return n;
+  const me=fplMine();
+  return me?me.name:null;
+}
+async function askMiniName(){
+  const v=await askText('Your name','So the leaderboard knows who to credit',miniName()||'','Save');
+  if(v===null)return null;
+  const t=String(v).trim().slice(0,18);
+  if(!t)return null;
+  try{ localStorage.setItem('ss_mini_name',t) }catch(e){}
+  return t;
+}
+async function postScore(game,score,detail){
+  let who=miniName();
+  if(!who){ who=await askMiniName(); if(!who)return; }
+  const b=miniBoard(), list=b[game];
+  const prev=list.find(x=>x.name===who);
+  if(prev){
+    if(score<=prev.score)return;               // only keep a personal best
+    prev.score=score; prev.detail=detail; prev.when=Date.now();
+  } else list.push({name:who,score,detail,when:Date.now()});
+  b[game]=list.sort((a,b2)=>b2.score-a.score).slice(0,50);
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success');
+}
+function miniTable(game,label){
+  const rows=miniBoard()[game]||[];
+  if(!rows.length)return `<div class="note">No scores yet — be the first.</div>`;
+  const me=miniName();
+  return `<div class="card">${rows.slice(0,10).map((r,i)=>`
+    <div class="row ${r.name===me?'z-ucl':''}">
+      <div style="flex:0 0 26px;text-align:center;font-weight:800;color:${i<3?'var(--tint)':'var(--label3)'}">${i+1}</div>
+      <div class="rt"><div class="r1">${esc(r.name)}${r.name===me?' <span style="font-size:11px;color:var(--label3)">· you</span>':''}</div>
+        ${r.detail?`<div class="r2">${esc(r.detail)}</div>`:''}</div>
+      <div class="rv" style="font-weight:800">${r.score}</div></div>`).join('')}</div>`;
+}
+
+/* ---- Who Am I: guess the player from the clubs they played for ----
+   Career paths only, no dates — the fun is in recognising the route. */
+const CAREERS=[
+ {n:'James Milner',   c:['Leeds','Newcastle','Aston Villa','Manchester City','Liverpool','Brighton'],h:'Ran forever, played every position'},
+ {n:'Peter Crouch',   c:['Portsmouth','Aston Villa','Southampton','Liverpool','Tottenham','Stoke'],h:'Very tall, surprisingly good touch'},
+ {n:'Nicolas Anelka', c:['Arsenal','Real Madrid','Liverpool','Manchester City','Chelsea','West Brom'],h:'Nicknamed Le Sulk'},
+ {n:'Zlatan Ibrahimović',c:['Ajax','Juventus','Inter','Barcelona','Milan','PSG','Manchester United'],h:'Spoke about himself in the third person'},
+ {n:'Ashley Cole',    c:['Arsenal','Chelsea','Roma','LA Galaxy'],h:'England left-back, won a lot'},
+ {n:'Fernando Torres',c:['Atlético Madrid','Liverpool','Chelsea','Milan'],h:'El Niño'},
+ {n:'Robin van Persie',c:['Feyenoord','Arsenal','Manchester United','Fenerbahçe'],h:'Left-footed, flying header'},
+ {n:'Carlos Tévez',   c:['Boca Juniors','West Ham','Manchester United','Manchester City','Juventus'],h:'Crossed a Manchester divide'},
+ {n:'Didier Drogba',  c:['Marseille','Chelsea','Galatasaray','Montreal'],h:'Big man for big finals'},
+ {n:'Steven Gerrard', c:['Liverpool','LA Galaxy'],h:'One club, then a spell in California'},
+ {n:'Frank Lampard',  c:['West Ham','Chelsea','Manchester City','New York City'],h:'Midfielder who scored like a striker'},
+ {n:'Thierry Henry',  c:['Monaco','Juventus','Arsenal','Barcelona','New York Red Bulls'],h:'Cut in from the left'},
+ {n:'Cristiano Ronaldo',c:['Sporting CP','Manchester United','Real Madrid','Juventus','Manchester United','Al Nassr'],h:'Went back once'},
+ {n:'Luis Suárez',    c:['Ajax','Liverpool','Barcelona','Atlético Madrid','Inter Miami'],h:'Uruguayan, never stopped scoring'},
+ {n:'Gareth Bale',    c:['Southampton','Tottenham','Real Madrid','Tottenham','LAFC'],h:'Golf, Madrid, Wales'},
+ {n:'Kevin De Bruyne',c:['Genk','Chelsea','Wolfsburg','Manchester City'],h:'Left England, came back better'},
+ {n:'Mohamed Salah',  c:['Basel','Chelsea','Roma','Liverpool'],h:'Same story, different ending'},
+ {n:'Romelu Lukaku',  c:['Anderlecht','Chelsea','Everton','Manchester United','Inter','Chelsea','Roma','Napoli'],h:'Has moved a lot'},
+ {n:'Jack Grealish',  c:['Aston Villa','Manchester City','Everton'],h:'Socks round the ankles'},
+ {n:'Harry Kane',     c:['Tottenham','Bayern München'],h:'Spurs, then Bavaria'},
+ {n:'Andrea Pirlo',   c:['Brescia','Inter','Milan','Juventus','New York City'],h:'Never seemed to run'},
+ {n:'Xabi Alonso',    c:['Real Sociedad','Liverpool','Real Madrid','Bayern München'],h:'Passed it beautifully, now manages'},
+ {n:'Claude Makélélé',c:['Nantes','Celta Vigo','Real Madrid','Chelsea','PSG'],h:'A role is named after him'},
+ {n:'Patrick Vieira', c:['Cannes','Milan','Arsenal','Juventus','Inter','Manchester City'],h:'Arsenal captain, then management'},
+ {n:'Wayne Rooney',   c:['Everton','Manchester United','Everton','DC United','Derby'],h:'Overhead kick in a derby'},
+ {n:'Michael Owen',   c:['Liverpool','Real Madrid','Newcastle','Manchester United','Stoke'],h:'Won a Ballon d\'Or young'},
+ {n:'David Beckham',  c:['Manchester United','Real Madrid','LA Galaxy','Milan','PSG'],h:'Right foot, famous delivery'},
+ {n:'Sol Campbell',   c:['Tottenham','Arsenal','Portsmouth','Notts County','Newcastle'],h:'A move that upset a lot of people'},
+ {n:'Robert Lewandowski',c:['Lech Poznań','Borussia Dortmund','Bayern München','Barcelona'],h:'Five goals in nine minutes'},
+ {n:'Antonio Rüdiger',c:['Stuttgart','Roma','Chelsea','Real Madrid'],h:'German centre-half, big smile'},
+ {n:'Toni Kroos',     c:['Bayern München','Bayer Leverkusen','Bayern München','Real Madrid'],h:'Never misplaced a pass'},
+ {n:'Ángel Di María', c:['Benfica','Real Madrid','Manchester United','PSG','Juventus','Benfica'],h:'One difficult season in England'},
+ {n:'Alexis Sánchez', c:['Udinese','Barcelona','Arsenal','Manchester United','Inter','Marseille'],h:'The piano video'},
+ {n:'Yaya Touré',     c:['Monaco','Barcelona','Manchester City','Olympiacos'],h:'Birthday cake controversy'},
+ {n:'Rio Ferdinand',  c:['West Ham','Leeds','Manchester United','QPR'],h:'A record fee for a defender'},
+ {n:'Joe Hart',       c:['Shrewsbury','Manchester City','Torino','West Ham','Burnley','Celtic'],h:'England keeper, loud'},
+ {n:'Danny Welbeck',  c:['Manchester United','Arsenal','Watford','Brighton'],h:'Grew up at Old Trafford'},
+ {n:'Emmanuel Adebayor',c:['Monaco','Arsenal','Manchester City','Real Madrid','Tottenham','Crystal Palace'],h:'A celebration that caused trouble'},
+ {n:'Kyle Walker',    c:['Sheffield United','Tottenham','Manchester City','Milan'],h:'Genuinely fast full-back'},
+ {n:'Raheem Sterling',c:['Liverpool','Manchester City','Chelsea','Arsenal'],h:'Moved between three London and northern giants'},
+ {n:'Jesse Lingard',  c:['Manchester United','West Ham','Nottingham Forest','Seoul'],h:'A celebration involving a phone'},
+ {n:'Christian Eriksen',c:['Ajax','Tottenham','Inter','Brentford','Manchester United'],h:'Came back after a scare'},
+ {n:'Édouard Mendy',  c:['Rennes','Chelsea','Al Ahli'],h:'Won the Champions League as a keeper'},
+ {n:'Riyad Mahrez',   c:['Le Havre','Leicester','Manchester City','Al Ahli'],h:'Part of a famous title win'},
+ {n:'N\'Golo Kanté',  c:['Caen','Leicester','Chelsea','Al Ittihad'],h:'Won the league two years running with different clubs'},
+ {n:'Jamie Vardy',    c:['Fleetwood','Leicester'],h:'Came from non-league'},
+ {n:'Virgil van Dijk',c:['Groningen','Celtic','Southampton','Liverpool'],h:'Scotland to Merseyside'},
+ {n:'Andrew Robertson',c:['Queen\'s Park','Dundee United','Hull','Liverpool'],h:'Rejected as a teenager'},
+ {n:'Declan Rice',    c:['West Ham','Arsenal'],h:'Two London clubs, big fee'},
+ {n:'Ilkay Gündoğan', c:['Nürnberg','Borussia Dortmund','Manchester City','Barcelona','Manchester City'],h:'Captained a treble win'},
+];
+let GTYPED='', GSOLVED=0, GTRIES=0;
+function startGuess(){
+  const pool=CAREERS.filter(c=>!GSEENP.includes(c.n));
+  const use=pool.length?pool:(GSEENP=[],CAREERS);
+  const pick=use[Math.floor(Math.random()*use.length)];
+  GSEENP=[...GSEENP,pick.n];
+  GUESS={n:pick.n,clubs:pick.c,hint:pick.h};
+  GREVEAL=0; GUESSDONE=null; GTYPED=''; haptic('light'); render();
+}
+let GSEENP=[];
+function revealMore(){ if(!GUESS)return; GREVEAL=1; haptic('light'); render(); }
+/* forgiving matching — surnames, accents and spacing all count */
+function normName(x){
+  return String(x||'').toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-z ]/g,'').replace(/\s+/g,' ').trim();
+}
+function guessMatches(typed,answer){
+  const t=normName(typed), a=normName(answer);
+  if(!t)return false;
+  if(t===a)return true;
+  const parts=a.split(' ');
+  const surname=parts[parts.length-1];
+  if(t===surname)return true;
+  if(parts.length>2&&t===parts.slice(1).join(' '))return true;   // "van dijk"
+  return false;
+}
+async function submitTyped(){
+  if(!GUESS||GUESSDONE)return;
+  const right=guessMatches(GTYPED,GUESS.n);
+  GTRIES++;
+  if(right){
+    GSTREAK++; GSOLVED++; haptic('success');
+    GUESSDONE={right:true};
+    await postScore('whoami',GSTREAK,`best streak · ${GSOLVED} solved`);
+  } else {
+    GSTREAK=0; haptic('heavy'); GUESSDONE={right:false};
+  }
+  render();
+}
+function giveUpGuess(){ if(!GUESS)return; GSTREAK=0; GUESSDONE={right:false,gave:true}; render(); }
+
+let BTAB='markets', BSLIP=[], BSTAKE=100, BPLAYER=null;
+const BET_MAXLEGS=4;
+const slipOdds=()=>BSLIP.reduce((t,x)=>t*x.odds,1);
+function inSlip(pid,k){ return BSLIP.some(x=>x.pid===pid&&x.k===k) }
+function clearSlip(){ BSLIP=[]; render() }
+async function customStake(){
+  const me=fplMine(); if(!me)return;
+  const v=await askText('Stake',`Between ${usd(BET_RULES.min)} and ${usd(Math.min(BET_RULES.max,wallet(me.pid)))}`,String(BSTAKE),'Set');
+  if(v===null)return;
+  const n=Math.round(Number(String(v).replace(/[^0-9]/g,'')));
+  if(!n||n<BET_RULES.min){toast(`Minimum stake is ${usd(BET_RULES.min)}`);return}
+  BSTAKE=Math.min(n,BET_RULES.max,wallet(me.pid)); render();
+}
+function maxStake(){
+  const me=fplMine(); if(!me)return;
+  BSTAKE=Math.max(BET_RULES.min,Math.min(BET_RULES.max,wallet(me.pid)));
+  haptic('light'); render();
+}
+function pickBet(pid,k){
+  const at=BSLIP.findIndex(x=>x.pid===pid&&x.k===k);
+  if(at>=0){ BSLIP.splice(at,1); haptic('light'); render(); return }
+  /* one market per player per slip — you cannot back both sides of the same thing */
+  if(BSLIP.some(x=>x.pid===pid)){ toast('One pick per player on a slip'); return }
+  if(BSLIP.length>=BET_MAXLEGS){ toast(`Up to ${BET_MAXLEGS} selections`); return }
+  const m=playerMarkets(pid).find(x=>x.k===k);
+  if(!m)return;
+  BSLIP.push({pid,k,odds:m.odds,l:m.l});
+  haptic('light'); render();
+}
+/* The slip lives outside the main container: .main uses will-change:transform,
+   which would otherwise make position:fixed resolve against it instead of the
+   viewport, leaving the slip stranded at the bottom of the page. */
+function paintSlip(){
+  const el=$('#slipMount'); if(!el)return;
+  if(VIEW!=='bets'||!BSLIP.length){el.innerHTML='';return}
+  el.innerHTML=`<div class="sb-slip">
+      <div class="sb-slip-h">
+        <b>${BSLIP.length===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[BSLIP.length])}</b>
+        <span class="sb-slip-odds">${slipOdds().toFixed(2)}</span>
+        <button class="sb-clear" onclick="clearSlip()">Clear</button>
+      </div>
+      <div class="sb-picks">${BSLIP.map(x=>`
+        <div class="sb-pk"><span>${esc((player(x.pid)||{}).name||'')} — ${esc(x.l)}</span>
+          <b>${x.odds.toFixed(2)}</b>
+          <button onclick="pickBet('${x.pid}','${x.k}')">✕</button></div>`).join('')}</div>
+      <div class="sb-stake">
+        ${[50,100,250,500].map(v=>`<button class="${BSTAKE===v?'on':''}" onclick="BSTAKE=${v};render()">${usd(v)}</button>`).join('')}
+        <button onclick="customStake()">Custom</button>
+        <button onclick="maxStake()">Max</button>
+      </div>
+      <div class="sb-slip-b">
+        <div>Returns <b>${usd(BSTAKE*slipOdds())}</b></div>
+        <button class="btn pri" onclick="placeBet()">Place ${usd(BSTAKE)}</button>
+      </div>
+      ${BSLIP.length<BET_MAXLEGS?`<div class="sb-tip">Add up to ${BET_MAXLEGS} selections — the odds multiply.</div>`:''}
+    </div>`;
+}
+
+function vBets(){
+  $('#navMount').innerHTML=navbar();
+  const me=fplMine(), b=bets();
+  const players=season().players.filter(p=>p.active!==false&&p.pos!=='GK');
+  if(!players.length){app().innerHTML=`<div class="view active"><div class="largetitle">Betting</div>
+    <div class="wrap">${cloudBanner()}<div class="empty"><div class="ee">🎰</div><h3>No markets yet</h3>
+    <p>Add the squad and the book opens.</p></div></div></div>`;return}
+
+  const tabs=[['markets','Markets'],['slips','My bets'],['board','Leaderboard']];
+  let body='';
+
+  if(BTAB==='markets'){
+    const sel=BPLAYER&&players.find(p=>p.id===BPLAYER)?BPLAYER:players[0].id;
+    const mk=playerMarkets(sel);
+    const p=player(sel);
+    body=`
+      <div class="sb-pick">
+        <div class="sb-lab">Choose a player</div>
+        <div class="sb-scroll">${players.map(x=>`
+          <button class="sb-chip ${x.id===sel?'on':''}" onclick="BPLAYER='${x.id}';BPICK=null;render()">
+            ${avatar(x,22)}<span>${esc(x.name.split(' ')[0])}</span></button>`).join('')}</div>
+      </div>
+      <div class="sb-head">
+        <div class="sb-h-av">${avatar(p,44)}</div>
+        <div class="sb-h-t"><b>${shirtBadge(p)}${esc(p.name)}</b>
+          <span>${p.pos} · ${mk[0].n} game${mk[0].n===1?'':'s'} of form</span></div>
+      </div>
+      ${['Goals','Goals against','Result'].map(grp=>{
+        const rows=mk.filter(m=>m.grp===grp); if(!rows.length)return '';
+        return `<div class="sb-grp">${grp}</div>
+        <div class="sb-list">${rows.map(m=>{
+          const on=inSlip(m.pid,m.k);
+          return `<button class="sb-row ${on?'on':''}" onclick="pickBet('${m.pid}','${m.k}')">
+            <span class="sb-m"><b>${esc(m.l)}</b><i>${esc(m.d)}</i></span>
+            <span class="sb-o">${m.odds.toFixed(2)}</span></button>`}).join('')}</div>`}).join('')}
+      <div class="note">Odds come from this player's own record. With few games the price sits nearer the opening line for their position.</div>`;
+  } else if(BTAB==='slips'){
+    const mine=me?b.open.filter(x=>x.by===me.pid):[];
+    const past=me?b.settled.filter(x=>x.by===me.pid).slice(0,20):[];
+    body=!me?`<div class="sb-signin">
+      <div class="sb-si-e">🔑</div>
+      <div class="sb-si-t">Enter your code</div>
+      <div class="sb-si-s">Same as your Sunday FPL code — ask your admin if you do not have one.
+        Signing in here signs you into the fantasy game too.</div>
+      <button class="btn pri full" style="margin-top:14px" onclick="askSignIn()">Enter your code</button>
+    </div>`
+    :(function(){
+      const P=pnl(me.pid);
+      const mine=b.open.filter(x=>x.by===me.pid);
+      const past=b.settled.filter(x=>x.by===me.pid);
+      const riding=mine.reduce((t,x)=>t+x.stake,0);
+      return `<div class="sb-wallet">
+        <div><b>${usd(wallet(me.pid))}</b><span>Balance</span></div>
+        <div><b>${usd(riding)}</b><span>Riding</span></div>
+        <div><b class="${P.profit>0?'up':P.profit<0?'dn':''}">${usdSigned(P.profit)}</b><span>Profit</span></div>
+      </div>
+      <div class="sb-pnl">
+        <div><b>${P.played}</b><span>Settled</span></div>
+        <div><b>${P.won}</b><span>Won</span></div>
+        <div><b>${P.strike}%</b><span>Strike rate</span></div>
+        <div><b>${usd(P.staked)}</b><span>Staked</span></div>
+      </div>
+      ${P.best?`<div class="note">🏅 Your biggest win: <b>${usdSigned(P.best.ret-P.best.stake)}</b> from ${usd(P.best.stake)} at ${P.best.odds.toFixed(2)}</div>`:''}
+      ${isBroke(me.pid)?`<div class="sb-bust">
+        <b>You're out of money.</b>
+        <span>Take a ${usd(BET_RULES.bailout)} top-up and go again${bailoutCount(me.pid)?` · ${bailoutCount(me.pid)} taken so far`:''}.</span>
+        <button class="btn pri full" style="margin-top:10px" onclick="takeBailout()">Top up ${usd(BET_RULES.bailout)}</button>
+      </div>`:''}
+      <div class="sechead">Open bets</div>
+      ${mine.length?`<div class="card">${mine.map(x=>`
+        <div class="row"><div class="rt">
+          <div class="r1">${betTitle(x)}</div>
+          ${legLines(x)}
+          <div class="r2">${usd(x.stake)} at ${x.odds.toFixed(2)} · GW${x.gw} · returns ${usd(x.stake*x.odds)}</div></div>
+          <button class="sb-x" onclick="cancelBet('${x.id}')">Cancel</button></div>`).join('')}</div>`
+        :`<div class="note">Nothing riding on this week yet.</div>`}
+      ${past.length?`<div class="sechead">Previous bets</div>
+        <div class="card">${past.slice(0,40).map(x=>`
+          <div class="row"><div class="rt">
+            <div class="r1">${betTitle(x)}</div>
+            ${legLines(x)}
+            <div class="r2">${usd(x.stake)} at ${x.odds.toFixed(2)} · GW${x.gw}</div></div>
+            <div class="rv"><span class="sb-res ${x.res}">${x.res==='won'?usdSigned(x.ret-x.stake):x.res==='void'?'void':usdSigned(-x.stake)}</span></div></div>`).join('')}</div>`
+        :`<div class="note">No settled bets yet.</div>`}`;
+    })();
+  } else {
+    const t=betTable();
+    body=t.length?`<div class="card">${t.map((r,i)=>`
+      <div class="row ${me&&r.m.pid===me.pid?'z-ucl':''}">
+        <div style="flex:0 0 24px;text-align:center;font-weight:800;color:${i<3?'var(--tint)':'var(--label3)'}">${i+1}</div>
+        <div class="rt"><div class="r1">${esc(r.m.name)}</div>
+          <div class="r2">${(function(){const P=pnl(r.m.pid),bo=bailoutCount(r.m.pid);
+            return `${P.won} of ${P.played} · ${usdSigned(P.profit)}${bo?` · ${bo} top-up${bo===1?'':'s'}`:''}`})()}${r.open?` · ${usd(r.open)} riding`:''}</div></div>
+        <div class="rv" style="font-weight:800">${usd(r.total)}</div></div>`).join('')}</div>
+      <div class="note">Everyone starts on ${usd(BET_RULES.start)}. Shown is balance plus anything still riding.</div>
+      ${(function(){const w=biggestWins(5); if(!w.length)return '';
+        return `<div class="sechead">🏅 Biggest wins</div>
+        <div class="card">${w.map((x,i)=>{
+          const who=(fpl().managers.find(m=>m.pid===x.by)||{}).name||'—';
+          return `<div class="row">
+            <div style="flex:0 0 24px;text-align:center;font-size:17px">${['🥇','🥈','🥉','·','·'][i]}</div>
+            <div class="rt"><div class="r1">${esc(who)}</div>
+              <div class="r2">${betTitle(x).replace(/<[^>]+>/g,'')} · ${usd(x.stake)} at ${x.odds.toFixed(2)}</div></div>
+            <div class="rv"><span class="sb-res won">${usdSigned(x.ret-x.stake)}</span></div></div>`}).join('')}</div>`})()}`
+      :`<div class="note">No wallets yet.</div>`;
+  }
+
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">Betting</div>
+    <div class="wrap">${cloudBanner()}
+      <div class="sb-banner">
+        <span>WALLET</span>
+        <b>${me?usd(wallet(me.pid)):'Not signed in'}</b>
+      </div>
+      <div class="seg" style="margin-bottom:14px">${tabs.map(([k,l])=>
+        `<button class="${BTAB===k?'on':''}" onclick="BTAB='${k}';render()">${l}</button>`).join('')}</div>
+      ${body}
+      <div style="height:${BSLIP.length?'230px':'20px'}"></div>
+    </div>
+    </div>`;
+}
+
+function vGames(){
+  $('#navMount').innerHTML=navbar();
+  const tabs=[['whoami','Who Am I?'],['board','Leaderboard']];
+  let body='';
+  if(GTAB==='board'){
+    body=`<div class="sechead">🕵️ Who Am I?</div>
+      <div class="note" style="padding:0 4px 8px">Longest streak</div>
+      ${miniTable('whoami')}
+      <div class="row tap card" style="margin-top:14px" onclick="askMiniName().then(()=>render())">
+        <div class="rt"><div class="r1">Playing as ${esc(miniName()||'nobody yet')}</div>
+          <div class="r2">Tap to change the name on the board</div></div>${chev}</div>`;
+  } else if(false){
+    if(!GQ){
+      body=`<div class="g-hero">
+        <div class="g-hero-e">🧠</div>
+        <div class="g-hero-t">Ball Knowledge</div>
+        <div class="g-hero-s">Eight questions from a bank of ${BALLQ.length}. No repeats until you've seen them all.</div>
+        <button class="btn pri full" style="margin-top:16px" onclick="startQuiz()">Start quiz</button>
+      </div>`;
+    } else if(GDONE){
+      const pct=Math.round(GSCORE/GQ.length*100);
+      body=`<div class="g-result">
+        <div class="g-res-e">${pct>=88?'🏆':pct>=63?'👏':pct>=38?'🙂':'😬'}</div>
+        <div class="g-res-b">${GSCORE} / ${GQ.length}</div>
+        <div class="g-res-s">${pct>=88?'Elite. Genuinely.':pct>=63?'Solid. You know your stuff.':pct>=38?'Room to grow.':'Stick to playing.'}</div>
+        <div class="note" style="margin-top:10px">${GSEEN.length} of ${BALLQ.length} questions seen</div>
+        <button class="btn pri full" style="margin-top:12px" onclick="startQuiz()">Another eight</button>
+        <button class="btn sec full" style="margin-top:8px" onclick="GTAB='board';render()">See the leaderboard</button>
+      </div>`;
+    } else {
+      const q=GQ[GIDX];
+      body=`<div class="g-bar"><div class="g-bar-f" style="width:${(GIDX/GQ.length)*100}%"></div></div>
+      <div class="g-meta"><span>Question ${GIDX+1} of ${GQ.length}</span><span>${GSCORE} correct</span></div>
+      <div class="g-q">${esc(q.q)}</div>
+      <div class="g-opts">${q.o.map(o=>{
+        const state=GPICK===null?'':o===q.a?'right':(o===GPICK?'wrong':'dim');
+        return `<button class="g-opt ${state}" onclick="answerQuiz(this.dataset.o)" data-o="${esc(o)}">${esc(o)}</button>`}).join('')}</div>
+      <button class="btn sec full" style="margin-top:14px" onclick="quitQuiz()">Give up</button>`;
+    }
+  } else {
+    if(!GUESS){
+      body=`<div class="g-hero alt">
+        <div class="g-hero-e">🕵️</div>
+        <div class="g-hero-t">Who Am I?</div>
+        <div class="g-hero-s">Every club he played for, all at once. Type the name — surname is enough.</div>
+        <button class="btn pri full" style="margin-top:16px" onclick="startGuess()">Start</button>
+      </div>
+      ${GSTREAK?`<div class="note">🔥 Current streak: <b>${GSTREAK}</b></div>`:''}`;
+    } else {
+      body=`<div class="wai">
+        <div class="wai-t">I played for</div>
+        <div class="wai-clubs">${GUESS.clubs.map(c=>`<span class="wai-c">${esc(c)}</span>`).join('')}</div>
+        ${GREVEAL?`<div class="wai-hint">💡 ${esc(GUESS.hint)}</div>`:''}
+      </div>
+      ${!GUESSDONE?`
+        <input id="waiIn" class="wai-in" placeholder="Who am I?" autocomplete="off" autocapitalize="words"
+          value="${esc(GTYPED)}" oninput="GTYPED=this.value"
+          onkeydown="if(event.key==='Enter'){event.preventDefault();submitTyped()}">
+        <button class="btn pri full" style="margin-top:9px" onclick="submitTyped()">Guess</button>
+        <div class="btnrow" style="margin-top:8px">
+          ${!GREVEAL?`<button class="btn sec" onclick="revealMore()">Give me a clue</button>`:''}
+          <button class="btn sec" onclick="giveUpGuess()">Give up</button>
+        </div>`
+      :`<div class="wai-res ${GUESSDONE.right?'ok':'no'}">
+          ${GUESSDONE.right?`✅ <b>${esc(GUESS.n)}</b> — streak ${GSTREAK}`:`❌ It was <b>${esc(GUESS.n)}</b>`}
+        </div>
+        <button class="btn pri full" style="margin-top:10px" onclick="startGuess()">Next player</button>
+        <button class="btn sec full" style="margin-top:8px" onclick="GTAB='board';render()">Leaderboard</button>`}
+      ${GSTREAK?`<div class="note" style="text-align:center">🔥 Streak <b>${GSTREAK}</b> · ${GSOLVED} solved</div>`:''}`;
+    }
+  }
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">Mini Game</div>
+    <div class="wrap">${cloudBanner()}
+      <div class="seg" style="margin-bottom:14px">${tabs.map(([k,l])=>
+        `<button class="${GTAB===k?'on':''}" onclick="GTAB='${k}';render()">${l}</button>`).join('')}</div>
+      ${body}
+      <div style="height:20px"></div>
+    </div></div>`;
 }
 
 function vHistory(){
@@ -6075,16 +7196,33 @@ function statChem(){
       ${worst.length?`<div><div class="sechead">Struggle together</div>
         <div class="card">${worst.map(p=>chemRow(p)).join('')}</div></div>`:''}
     </div>
-    <div class="sechead">Chemistry grid</div>
-    <div class="card"><div class="tw"><table class="chemgrid">
-      <thead><tr><td></td>${roster.map(p=>`<td class="cg-h">${esc(p.name.slice(0,3))}</td>`).join('')}</tr></thead>
-      <tbody>${roster.map(r=>`<tr><td class="cg-n">${esc(r.name)}</td>
-        ${roster.map(c=>{ if(r.id===c.id)return '<td class="cg-x"></td>';
+    <div class="sechead">Chemistry matrix</div>
+    <div class="cm-legend">
+      <span class="cm-sw" style="background:${chemColor(20)}"></span><i>poor</i>
+      <span class="cm-sw" style="background:${chemColor(50)}"></span><i>even</i>
+      <span class="cm-sw" style="background:${chemColor(80)}"></span><i>strong</i>
+      <span class="cm-sw cm-none"></span><i>never together</i>
+    </div>
+    <div class="card cm-wrap"><div class="tw"><table class="chemgrid cm">
+      <thead><tr><td class="cg-corner"></td>${roster.map(p=>`
+        <td class="cg-h" title="${esc(p.name)}">
+          <span class="cg-av">${avatar(p,20)}</span>
+          <span>${esc(p.name.slice(0,3))}</span></td>`).join('')}</tr></thead>
+      <tbody>${roster.map(r=>{
+        const mine=roster.map(c=>r.id===c.id?null:find(r.id,c.id)).filter(Boolean);
+        const avg=mine.length?Math.round(mine.reduce((t,x)=>t+x.chem,0)/mine.length):null;
+        return `<tr>
+        <td class="cg-n"><span class="cg-av">${avatar(r,20)}</span><b>${esc(r.name.split(' ')[0])}</b>
+          ${avg!=null?`<i>${avg}</i>`:''}</td>
+        ${roster.map(c=>{
+          if(r.id===c.id)return '<td class="cg-x"></td>';
           const pr=find(r.id,c.id);
-          return pr?`<td class="cg-c" style="background:${chemColor(pr.chem)}"
-            onclick="toast('${esc(r.name)} + ${esc(c.name)}: ${pr.W}W-${pr.D}D-${pr.L}L in ${pr.P} — chem ${pr.chem}')">${pr.chem}</td>`
-            :'<td class="cg-e">–</td>'}).join('')}</tr>`).join('')}</tbody></table></div></div>
-    <div class="scrollhint">← swipe the grid sideways →</div>
+          if(!pr)return '<td class="cg-e"></td>';
+          const strong=pr.chem>=65||pr.chem<=35;
+          return `<td class="cg-c ${strong?'hot':''}" style="background:${chemColor(pr.chem)}"
+            onclick="toast('${esc(r.name)} + ${esc(c.name)}: ${pr.W}W-${pr.D}D-${pr.L}L in ${pr.P} — chem ${pr.chem}')">${pr.chem}</td>`;
+        }).join('')}</tr>`}).join('')}</tbody></table></div></div>
+    <div class="scrollhint">← swipe the matrix sideways →</div>
     <div class="note">Chemistry is points-per-game when two players are on the same team, scaled to 100. Tap a square for the record. Only pairs with ${CHEMMIN}+ games together are shown.</div>`;
 }
 function chemRow(p){
@@ -6253,7 +7391,7 @@ function vCompare(){
   app().innerHTML=`<div class="view active">
     <div class="largetitle">Compare</div><div class="subtitle">Head to head</div>
     <div class="wrap">${cloudBanner()}
-      <div class="grid g2" style="margin-bottom:12px">
+      <div class="grid cmp2" style="margin-bottom:12px">
         ${[[a,'CA','var(--tint)'],[b,'CB','var(--blue)']].map(([x,v,col])=>`<div class="card pad" style="text-align:center">
           <div style="display:flex;justify-content:center;margin-bottom:9px">${avatar(x,48)}</div>
           <select onchange="${v}=this.value;render()" style="background:var(--fill);font-size:15px;text-align:center">
@@ -6497,7 +7635,39 @@ const FORMATIONS=[
  {id:'2131',name:'2-1-3',tag:'Wide press',
   d:'Two at the back, a holding man, three across the front. Squeezes the pitch and wins the ball high.',
   best:'When your front three are your fittest players',watch:'Very demanding — legs go in the last third of the game',
-  slots:[[50,90,'GK'],[34,74,'DEF'],[66,74,'DEF'],[50,52,'MID'],[22,24,'ATT'],[50,18,'ATT'],[78,24,'ATT']]}
+  slots:[[50,90,'GK'],[34,74,'DEF'],[66,74,'DEF'],[50,52,'MID'],[22,24,'ATT'],[50,18,'ATT'],[78,24,'ATT']]},
+ /* ---- other team sizes: whiteboard only, for visualising a different game ---- */
+ {id:'6_212',name:'2-1-2',tag:'6-a-side',size:6,wb:true,
+  d:'Two at the back, an anchor, two up top. The standard shape when you are a man short.',
+  best:'6-a-side',watch:'The anchor covers a lot of ground',
+  slots:[[50,90,'GK'],[33,70,'DEF'],[67,70,'DEF'],[50,48,'MID'],[33,22,'ATT'],[67,22,'ATT']]},
+ {id:'6_221',name:'2-2-1',tag:'6-a-side',size:6,wb:true,
+  d:'A flat two in front of a flat two, with a lone striker. Tidy and hard to pull apart.',
+  best:'6-a-side',watch:'The striker can get lonely',
+  slots:[[50,90,'GK'],[33,70,'DEF'],[67,70,'DEF'],[33,45,'MID'],[67,45,'MID'],[50,20,'ATT']]},
+ {id:'9_332',name:'3-3-2',tag:'9-a-side',size:9,wb:true,
+  d:'A back three, three across the middle, two up front. The classic 9-a-side shape.',
+  best:'9-a-side',watch:'The wide midfielders have to cover the full flank',
+  slots:[[50,92,'GK'],[25,74,'DEF'],[50,76,'DEF'],[75,74,'DEF'],[22,48,'MID'],[50,50,'MID'],[78,48,'MID'],[36,22,'ATT'],[64,22,'ATT']]},
+ {id:'9_341',name:'3-4-1',tag:'9-a-side',size:9,wb:true,
+  d:'A back three with a packed midfield behind one striker. Control the middle and squeeze.',
+  best:'9-a-side',watch:'One up top means the midfield must join in',
+  slots:[[50,92,'GK'],[25,74,'DEF'],[50,76,'DEF'],[75,74,'DEF'],[18,52,'MID'],[40,48,'MID'],[60,48,'MID'],[82,52,'MID'],[50,20,'ATT']]},
+ {id:'11_442',name:'4-4-2',tag:'11-a-side',size:11,wb:true,
+  d:'The oldest shape in the book. Two banks of four, two strikers, everyone knows their job.',
+  best:'11-a-side',watch:'Can get overrun in central midfield',
+  slots:[[50,93,'GK'],[18,76,'DEF'],[39,78,'DEF'],[61,78,'DEF'],[82,76,'DEF'],
+         [18,50,'MID'],[39,52,'MID'],[61,52,'MID'],[82,50,'MID'],[40,22,'ATT'],[60,22,'ATT']]},
+ {id:'11_433',name:'4-3-3',tag:'11-a-side',size:11,wb:true,
+  d:'A back four, a midfield three, and a front three. Width high up and plenty of passing angles.',
+  best:'11-a-side',watch:'The full-backs have a lot of ground to cover',
+  slots:[[50,93,'GK'],[18,76,'DEF'],[39,78,'DEF'],[61,78,'DEF'],[82,76,'DEF'],
+         [30,54,'MID'],[50,58,'MID'],[70,54,'MID'],[20,24,'ATT'],[50,18,'ATT'],[80,24,'ATT']]},
+ {id:'11_4231',name:'4-2-3-1',tag:'11-a-side',size:11,wb:true,
+  d:'Two holders, three behind a striker. Solid base, creative freedom in front of it.',
+  best:'11-a-side',watch:'The lone striker needs support quickly',
+  slots:[[50,93,'GK'],[18,76,'DEF'],[39,78,'DEF'],[61,78,'DEF'],[82,76,'DEF'],
+         [38,58,'MID'],[62,58,'MID'],[20,36,'MID'],[50,34,'MID'],[80,36,'MID'],[50,16,'ATT']]}
 ];
 const TACTIP=[
  {e:'📐',t:'Keep the triangle',d:'In 7-a-side the pitch is small — always give the man on the ball two passing options at different angles. Flat lines are easy to defend.'},
@@ -6565,9 +7735,10 @@ function miniPitch(f){
   return `<div class="fmini">${f.slots.map(([x,y,pos])=>`<div class="fdot" style="left:${x}%;top:${y}%;color:${col[pos]||'#1F7A44'}">${pos==='GK'?'G':''}</div>`).join('')}</div>`;
 }
 function tacFormations(){
+  const FORMS=FORMATIONS.filter(f=>!f.wb);
   const cur=board().fid;
   const f=fmById(cur);
-  return `<div class="tacgrid">${FORMATIONS.map(x=>`<div class="formcard ${x.id===cur?'on':''}" onclick="setFormation('${x.id}')">
+  return `<div class="tacgrid">${FORMS.map(x=>`<div class="formcard ${x.id===cur?'on':''}" onclick="setFormation('${x.id}')">
       ${miniPitch(x)}
       <div class="ftop"><span class="fn">${x.name}</span><span class="ftag">${esc(x.tag)}</span></div></div>`).join('')}</div>
     <div class="sechead">${f.name} · ${esc(f.tag)}</div>
@@ -6579,6 +7750,10 @@ function tacFormations(){
       </div>
       <button class="btn pri full" style="margin-top:14px" onclick="TAC='board';paintTac()">Set this up on the whiteboard →</button>
     </div>`;
+}
+function setBoardSize(n){
+  const first=FORMATIONS.find(x=>(x.size||7)===n);
+  if(first)setFormation(first.id);
 }
 async function setFormation(id){
   const b=board(); b.fid=id; b.A={}; b.B={};
@@ -6599,6 +7774,17 @@ function tacBoard(){
         <button class="${side==='A'?'on':''}" onclick="setBoardSide('A')">Team A</button>
         <button class="${side==='B'?'on':''}" onclick="setBoardSide('B')">Team B</button>
       </div>
+      <div class="lbl">Team size</div>
+      <div class="seg" style="margin-bottom:10px">
+        ${[[7,'7-a-side'],[6,'6'],[9,'9'],[11,'11']].map(([n,l])=>{
+          const on=(f.size||7)===n;
+          return `<button class="${on?'on':''}" onclick="setBoardSize(${n})">${l}</button>`}).join('')}
+      </div>
+      <div class="lbl">Shape</div>
+      <select style="width:100%;margin-bottom:10px" onchange="setFormation(this.value)">
+        ${FORMATIONS.filter(x=>(x.size||7)===(f.size||7)).map(x=>
+          `<option value="${x.id}" ${x.id===f.id?'selected':''}>${x.name}${x.wb?'':' · '+esc(x.tag)}</option>`).join('')}
+      </select>
       <div class="note" style="padding:0 0 4px">Tap a player below, then tap a shirt on the pitch to place them. Drag any shirt to fine-tune the position.${isAdmin()?'':' <b>This is your own board</b> — plan and propose freely, it won\'t change anyone else\'s.'}</div>
     </div>
     <div class="pitch" id="pitch" style="aspect-ratio:${window.innerWidth<640?'3/4':'4/3'}">
@@ -7086,6 +8272,7 @@ async function saveGame(){if(!requireAdmin())return;
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
+  try{ const gw=gwOf(g); if(gw)settleBets(gw) }catch(e){}
   const _ups=levelUps(_lvlBefore);
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
   if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
@@ -7346,6 +8533,7 @@ async function renameSeason(){if(!requireAdmin())return;const n=await askText('R
 async function wipeSeason(){if(!requireAdmin())return;
   snapshot('clearing all games');if(!await askConfirm('Clear all games?','Players stay. Every game is deleted.','Clear',true))return;
   season().games=[];logEntry('delete','Cleared all games');fplResync();WIPE_OK=true;await save();WIPE_OK=false;render();toast('Games cleared')}
+async function _retintAfterSwitch(){applySeasonTint()}
 async function switchSeason(id){if(!requireAdmin())return;CUR=id;COMP=season().comps[0].id;await save();go('home')}
 async function deleteSeason(id){
   if(!requireAdmin())return;
@@ -7602,6 +8790,10 @@ document.addEventListener('keydown',e=>{
   window.addEventListener('hashchange',()=>{try{fplAutoLogin();render()}catch(e){}});
   initHaptics();
   buildNav();go('home');initGestures();
+  applySeasonTint();
+  /* the splash covers the first paint, then fades */
+  setTimeout(()=>{const sp=$('#splash'); if(sp)sp.classList.add('gone')},420);
+  setTimeout(()=>{const sp=$('#splash'); if(sp)sp.remove()},900);
   if(!supaConfigured && Store.tier()==='memory')setTimeout(()=>toast('⚠️ This browser blocks saving — back up before closing'),1400);
   if(supaConfigured && !supa)setTimeout(()=>toast('⚠️ Could not reach the shared database — check your setup'),1400);
 })();
