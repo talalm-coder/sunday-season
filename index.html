@@ -1685,6 +1685,159 @@ table.cm .cg-corner{position:sticky;left:0;background:var(--card);z-index:2}
 body::after{content:"";position:fixed;left:0;right:0;bottom:0;height:env(safe-area-inset-bottom,0px);
   background:var(--bg);z-index:1;pointer-events:none}
 body.drawer::after{background:var(--card)}
+
+/* ================= SHOP ================= */
+.wal{display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(120deg,#10233F,#0A1526);border-radius:14px;padding:13px 15px;margin-bottom:6px}
+.wal-l{font-size:9.5px;font-weight:900;letter-spacing:.14em;color:#7FB3FF}
+.wal-v{font-size:26px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1.1}
+.wal-r{display:flex;gap:16px;text-align:right}
+.wal-r b{display:block;font-size:14px;font-weight:800;color:#fff}
+.wal-r span{font-size:9.5px;color:rgba(255,255,255,.45);letter-spacing:.05em;text-transform:uppercase}
+.wal-note{font-size:11.5px;color:var(--label3);padding:0 4px 10px;line-height:1.5}
+.row.boot-on{background:color-mix(in srgb,var(--green) 9%,transparent)}
+.sp-bar{height:7px;border-radius:5px;background:var(--fill2);overflow:hidden;margin-top:10px}
+.sp-bar div{height:100%;border-radius:5px;transition:width .4s cubic-bezier(.32,.72,0,1)}
+.sh-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sh-item{background:var(--card);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;border:1.5px solid transparent}
+.sh-item.on{border-color:var(--tint)}
+.sh-sw{height:66px;position:relative}
+.sh-eq{position:absolute;top:6px;left:6px;background:var(--tint);color:#fff;font-size:8.5px;
+  font-weight:900;letter-spacing:.06em;padding:2px 6px;border-radius:12px}
+.sh-b{padding:9px 10px}
+.sh-n{font-size:13.5px;font-weight:700}
+.sh-d{font-size:11px;color:var(--label3);margin-top:1px;line-height:1.35;min-height:29px}
+.sh-p{display:flex;align-items:center;justify-content:space-between;margin-top:6px;gap:6px}
+.sh-price{font-size:13px;font-weight:800;color:var(--tint)}
+.sh-price.no{color:var(--label3)}
+.sh-owned{font-size:11px;font-weight:700;color:var(--green)}
+.sh-buy{background:var(--tint);color:#fff;border:none;border-radius:16px;padding:5px 12px;
+  font-size:11.5px;font-weight:800;cursor:pointer}
+.sh-buy:disabled{background:var(--fill2);color:var(--label3)}
+.sh-buy.sec{background:var(--fill2);color:var(--label2)}
+
+/* cosmetics applied to the real player card */
+.fut.cf-carbon{border:2px solid #3a3a3c;box-shadow:0 0 0 1px #1c1c1e inset,0 14px 40px rgba(0,0,0,.4)}
+.fut.cf-chrome{border:2px solid transparent;background-clip:padding-box;
+  box-shadow:0 0 0 2px #c7ced6,0 14px 40px rgba(0,0,0,.34)}
+.fut.cf-emerald{box-shadow:0 0 0 2px #1DB954,0 14px 40px rgba(29,185,84,.28)}
+.fut.cf-ruby{box-shadow:0 0 0 2px #E63946,0 14px 40px rgba(230,57,70,.28)}
+.fut.cf-gold{box-shadow:0 0 0 2.5px #F4C048,0 14px 44px rgba(244,192,72,.36)}
+.fut.cf-obsidian{box-shadow:0 0 0 2px #7b5cff,0 14px 44px rgba(123,92,255,.3)}
+.fut.cf-aurora{box-shadow:0 0 0 3px transparent,0 14px 44px rgba(0,198,255,.3);
+  background-image:linear-gradient(115deg,rgba(0,198,255,.35),rgba(123,47,247,.3),rgba(0,255,163,.3)),
+    linear-gradient(168deg,#22242C,#0D0E12)}
+.fut.cf-holo{box-shadow:0 0 0 3px transparent,0 16px 46px rgba(0,0,0,.35);
+  background-image:linear-gradient(115deg,rgba(255,154,158,.5),rgba(161,196,253,.45),rgba(194,255,216,.45),rgba(251,194,235,.5)),
+    linear-gradient(168deg,#22242C,#0D0E12)}
+.fut.cb-night{background-image:radial-gradient(70% 45% at 50% 0,rgba(120,180,255,.3),transparent 60%),linear-gradient(160deg,#0B1B33,#132B4D)}
+.fut.cb-stands{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 3px,transparent 3px 8px),linear-gradient(160deg,#2b2b30,#16161a)}
+.fut.cb-retro{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 3px,transparent 3px 6px),linear-gradient(160deg,#1a2b1a,#0d160d)}
+.fut.cb-smoke{background-image:radial-gradient(60% 70% at 30% 30%,rgba(255,255,255,.22),transparent 62%),linear-gradient(160deg,#3a3a40,#141416)}
+.fut.cb-sunset{background-image:linear-gradient(160deg,rgba(255,149,0,.55),rgba(255,55,95,.4) 55%,rgba(0,0,0,.9))}
+
+/* ---- one palette per style, used by the swatch, the frame and the background ---- */
+.sw-f_base,.sw-b_base{background:linear-gradient(150deg,#3A3A3C,#1C1C1E)}
+.sw-f_chrome,.sw-b_chrome{background:linear-gradient(120deg,#f5f7fa,#b8c6d0 45%,#e9eef3 60%,#8f9ba5)}
+.sw-f_refract,.sw-b_refract{background:linear-gradient(115deg,#ff9a9e,#a1c4fd,#c2ffd8,#fbc2eb)}
+.sw-f_emerald,.sw-b_emerald{background:linear-gradient(150deg,#0f5132,#1DB954 55%,#0b3d26)}
+.sw-f_ruby,.sw-b_ruby{background:linear-gradient(150deg,#6b0f1a,#E63946 55%,#4a0a12)}
+.sw-f_gold,.sw-b_gold{background:linear-gradient(150deg,#FFF6D8,#F4C048 55%,#C9A227)}
+.sw-f_obsid,.sw-b_obsid{background:linear-gradient(150deg,#14101c,#2b1e3d 55%,#0a0710)}
+.sw-f_logo,.sw-b_logo{background:conic-gradient(from 210deg,#00c6ff,#7b2ff7,#00ffa3,#ff3cac,#00c6ff)}
+.sw-f_atomic,.sw-b_atomic{background:repeating-conic-gradient(from 0deg,#00c6ff 0 12deg,#7b2ff7 12deg 24deg,#00ffa3 24deg 36deg)}
+.sw-f_super,.sw-b_super{background:linear-gradient(115deg,#FFF6D8,#F4C048,#fbc2eb,#a1c4fd,#F4C048)}
+.sw-r_thin{background:linear-gradient(120deg,#8E8E93,#C7C7CC)}
+.sw-r_chrome{background:linear-gradient(120deg,#f5f7fa,#b8c6d0 50%,#8f9ba5)}
+.sw-r_laurel{background:linear-gradient(150deg,#F4C048,#8A6E13)}
+.sw-r_flame{background:linear-gradient(150deg,#FF9500,#FF375F)}
+.sw-t_midnight{background:linear-gradient(150deg,#0B1B33,#050A14)}
+.sw-t_terrace{background:linear-gradient(150deg,#C8A98A,#6B4F3A)}
+.sw-t_news{background:linear-gradient(150deg,#fff,#d8d8d8);color:#111}
+.sw-t_teletext{background:repeating-linear-gradient(90deg,#000 0 10px,#008 10px 20px,#0a0 20px 30px)}
+.sw-t_arcade{background:linear-gradient(150deg,#FFD60A,#FF375F 60%,#5E5CE6)}
+/* ---- frames on the real card ---- */
+.fut.cf-base{box-shadow:0 0 0 2px #3a3a3c,0 14px 40px rgba(0,0,0,.34)}
+.fut.cf-chrome{box-shadow:0 0 0 2.5px #c7ced6,0 14px 40px rgba(0,0,0,.34)}
+.fut.cf-refract{box-shadow:0 0 0 3px #a1c4fd,0 14px 44px rgba(161,196,253,.3)}
+.fut.cf-emerald{box-shadow:0 0 0 2.5px #1DB954,0 14px 40px rgba(29,185,84,.28)}
+.fut.cf-ruby{box-shadow:0 0 0 2.5px #E63946,0 14px 40px rgba(230,57,70,.28)}
+.fut.cf-gold{box-shadow:0 0 0 3px #F4C048,0 14px 44px rgba(244,192,72,.36)}
+.fut.cf-obsid{box-shadow:0 0 0 2.5px #7b5cff,0 14px 44px rgba(123,92,255,.3)}
+.fut.cf-logo{box-shadow:0 0 0 3px #7b2ff7,0 16px 46px rgba(123,47,247,.32)}
+.fut.cf-atomic{box-shadow:0 0 0 3px #00ffa3,0 16px 46px rgba(0,255,163,.28)}
+.fut.cf-super{box-shadow:0 0 0 3.5px #F4C048,0 0 0 6px rgba(251,194,235,.5),0 18px 50px rgba(244,192,72,.4)}
+/* ---- matching backgrounds ---- */
+.fut.cb-base{background-image:linear-gradient(160deg,#2b2b30,#141416)}
+.fut.cb-chrome{background-image:linear-gradient(120deg,rgba(245,247,250,.25),rgba(143,155,165,.35)),linear-gradient(160deg,#2b2f36,#12151a)}
+.fut.cb-refract{background-image:linear-gradient(115deg,rgba(255,154,158,.42),rgba(161,196,253,.4),rgba(194,255,216,.4),rgba(251,194,235,.42)),linear-gradient(168deg,#22242C,#0D0E12)}
+.fut.cb-emerald{background-image:linear-gradient(160deg,rgba(29,185,84,.4),rgba(11,61,38,.85))}
+.fut.cb-ruby{background-image:linear-gradient(160deg,rgba(230,57,70,.4),rgba(74,10,18,.9))}
+.fut.cb-gold{background-image:linear-gradient(160deg,rgba(244,192,72,.45),rgba(138,110,19,.85))}
+.fut.cb-obsid{background-image:linear-gradient(160deg,rgba(43,30,61,.85),rgba(10,7,16,.95))}
+.fut.cb-logo{background-image:conic-gradient(from 210deg at 70% 20%,rgba(0,198,255,.4),rgba(123,47,247,.35),rgba(0,255,163,.35),rgba(255,60,172,.4),rgba(0,198,255,.4)),linear-gradient(168deg,#22242C,#0D0E12)}
+.fut.cb-atomic{background-image:repeating-conic-gradient(from 0deg at 60% 10%,rgba(0,198,255,.3) 0 12deg,rgba(123,47,247,.28) 12deg 24deg,rgba(0,255,163,.28) 24deg 36deg),linear-gradient(168deg,#1d1f27,#0b0c10)}
+.fut.cb-super{background-image:linear-gradient(115deg,rgba(255,246,216,.5),rgba(244,192,72,.5),rgba(251,194,235,.45),rgba(161,196,253,.45)),linear-gradient(168deg,#2a2410,#0D0E12)}
+/* ---- purchased app themes ---- */
+body[data-shop="midnight"]{--bg:#050A14;--card:#0E1626;--label:#EAF0FA;--label2:#B7C4D8;--label3:#7A8AA3;--sep:rgba(255,255,255,.12);--fill:#ffffff12;--fill2:#ffffff1f}
+body[data-shop="terrace"]{--bg:#EFE6DA;--card:#FFFBF5;--label:#2A2118;--label2:#5A4B3B;--label3:#8D7B67;--sep:rgba(90,75,59,.18);--fill:#8d7b6714;--fill2:#8d7b6722}
+body[data-shop="news"]{--bg:#F4F2EC;--card:#FFFFFF;--label:#111;--label2:#333;--label3:#777;--sep:rgba(0,0,0,.22);--fill:#00000010;--fill2:#0000001c}
+body[data-shop="news"] .largetitle,body[data-shop="news"] .sechead{font-family:Georgia,'Times New Roman',serif}
+body[data-shop="teletext"]{--bg:#000;--card:#000080;--label:#fff;--label2:#0f0;--label3:#ff0;--sep:rgba(255,255,255,.3);--fill:#ffffff14;--fill2:#ffffff26}
+body[data-shop="teletext"] *{font-family:'Courier New',monospace!important;letter-spacing:0}
+body[data-shop="arcade"]{--bg:#0B0620;--card:#170F35;--label:#FFD60A;--label2:#FF6BD6;--label3:#8B7FD1;--sep:rgba(255,214,10,.25);--fill:#ffd60a14;--fill2:#ffd60a24}
+
+.sw-s_base{background:linear-gradient(150deg,#3A3A3C,#1C1C1E)}
+.sw-s_chrome{background:linear-gradient(120deg,#f5f7fa,#b8c6d0 45%,#e9eef3 60%,#8f9ba5)}
+.sw-s_refract{background:linear-gradient(115deg,#ff9a9e,#a1c4fd,#c2ffd8,#fbc2eb)}
+.sw-s_emerald{background:linear-gradient(150deg,#0f5132,#1DB954 55%,#0b3d26)}
+.sw-s_ruby{background:linear-gradient(150deg,#6b0f1a,#E63946 55%,#4a0a12)}
+.sw-s_gold{background:linear-gradient(150deg,#FFF6D8,#F4C048 55%,#C9A227)}
+.sw-s_obsid{background:linear-gradient(150deg,#14101c,#2b1e3d 55%,#0a0710)}
+.sw-s_logo{background:conic-gradient(from 210deg,#00c6ff,#7b2ff7,#00ffa3,#ff3cac,#00c6ff)}
+.sw-s_atomic{background:repeating-conic-gradient(from 0deg,#00c6ff 0 12deg,#7b2ff7 12deg 24deg,#00ffa3 24deg 36deg)}
+.sw-s_super{background:linear-gradient(115deg,#FFF6D8,#F4C048,#fbc2eb,#a1c4fd,#F4C048)}
+
+/* ---- event banner ---- */
+.evb{display:flex;align-items:center;gap:12px;border-radius:14px;padding:12px 14px;margin-bottom:14px;color:#fff}
+.evb-e{font-size:26px}
+.evb-t b{display:block;font-size:15px;font-weight:800}
+.evb-t span{display:block;font-size:12.5px;opacity:.78;margin-top:1px}
+.evb-halloween{background:linear-gradient(110deg,#FF6B00,#4A1D6E)}
+.evb-xmas{background:linear-gradient(110deg,#C8102E,#0B6E3F)}
+.evb-newyear{background:linear-gradient(110deg,#1c1c1e,#5E5CE6)}
+.evb-finale{background:linear-gradient(110deg,#F4C048,#8A6E13);color:#3B2D04}
+.evb-retro{background:repeating-linear-gradient(90deg,#000 0 10px,#008 10px 20px)}
+body[data-event="halloween"]{--tint:#FF6B00}
+body[data-event="xmas"]{--tint:#C8102E}
+body[data-event="finale"]{--tint:#C9A227}
+body[data-event="retro"]{--bg:#000;--card:#000080;--label:#fff;--label2:#0f0;--label3:#ff0;--sep:rgba(255,255,255,.3)}
+body[data-event="retro"] *{font-family:'Courier New',monospace!important}
+/* ---- awards night ---- */
+.awn{position:fixed;inset:0;z-index:200;background:radial-gradient(120% 80% at 50% 0,#2a1c00,#0b0b0d 72%);
+  display:flex;align-items:center;justify-content:center;padding:24px;animation:in .3s ease;cursor:pointer}
+.awn-in{text-align:center;color:#fff;max-width:420px}
+.awn-k{font-size:10px;font-weight:900;letter-spacing:.2em;color:#F4C048}
+.awn-e{font-size:64px;margin:18px 0 4px;animation:spPop .5s cubic-bezier(.34,1.56,.64,1)}
+.awn-a{font-size:14px;color:rgba(255,255,255,.6)}
+.awn-w{font-size:38px;font-weight:900;letter-spacing:-.035em;margin-top:4px;line-height:1.05}
+.awn-d{font-size:14px;color:rgba(255,255,255,.7);margin-top:7px}
+.awn-dots{display:flex;gap:6px;justify-content:center;margin-top:24px}
+.awn-dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.22)}
+.awn-dots i.on{background:#F4C048}
+.awn-tap{font-size:12px;color:rgba(255,255,255,.4);margin-top:18px}
+
+.moment[class*="cb-"]{background-image:none}
+.moment.cb-chrome{background:linear-gradient(120deg,#2b2f36,#12151a)}
+.moment.cb-refract{background:linear-gradient(115deg,rgba(255,154,158,.35),rgba(161,196,253,.35),rgba(194,255,216,.32)),linear-gradient(168deg,#22242C,#0D0E12)}
+.moment.cb-emerald{background:linear-gradient(160deg,#0f5132,#08301d)}
+.moment.cb-ruby{background:linear-gradient(160deg,#6b0f1a,#380810)}
+.moment.cb-gold{background:linear-gradient(160deg,#5c4a10,#241c04)}
+.moment.cb-obsid{background:linear-gradient(160deg,#2b1e3d,#0a0710)}
+.moment.cb-logo{background:conic-gradient(from 210deg at 70% 20%,rgba(0,198,255,.3),rgba(123,47,247,.3),rgba(0,255,163,.28),rgba(255,60,172,.3)),linear-gradient(168deg,#22242C,#0D0E12)}
+.moment.cb-atomic{background:repeating-conic-gradient(from 0deg at 60% 10%,rgba(0,198,255,.24) 0 12deg,rgba(123,47,247,.22) 12deg 24deg,rgba(0,255,163,.22) 24deg 36deg),linear-gradient(168deg,#1d1f27,#0b0c10)}
+.moment.cb-super{background:linear-gradient(115deg,rgba(244,192,72,.4),rgba(251,194,235,.35),rgba(161,196,253,.35)),linear-gradient(168deg,#2a2410,#0D0E12)}
+.moment.cb-base{background:linear-gradient(160deg,#2b2b30,#141416)}
 </style>
 </head>
 <body>
@@ -2503,15 +2656,19 @@ const XP={app:10,win:25,draw:12,goal:20,hat:60,streak:15,
      keeps paying well down the scale. Weighted by position the same way the
      FPL side is, so defenders are actually rewarded for defending. */
   defend:[70,58,49,41,34,28,22,16],
-  defendW:{GK:1, DEF:1, MID:0.7, ATT:0.45}};
+  defendW:{GK:1.2,DEF:1.0,MID:0.7,ATT:0.45}};
 const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Number'],['⚡','First Appearance'],['🎯','Squad Player'],
 ['🔁','Rotation Option'],['🧩','Regular Starter'],['🛠️','Ever Present'],['📈','Breakout Season'],['💪','Proven Performer'],
 ['🔥','In Form'],['💥','Match Winner'],['⭐','Standout Season'],['🧠','Big Game Player'],['💎','Star Man'],
 ['🎖️','Fan Favourite'],['🏹','Consistent Threat'],['🧲','Difference Maker'],['👑','Club Captain'],['🚀','Talisman'],
 ['🌍','Household Name'],['🏅','Cult Hero'],['⚔️','Big Occasion King'],['📯','Record Breaker'],['🏆','Title Winner'],
-['🐉','Club Legend'],['🕊️','Hall of Fame'],['✨','All-Time Great'],['🌌','Immortal'],['🥇','Ballon d\'Or']];
+['🐉','Club Legend'],['🕊️','Hall of Fame'],['✨','All-Time Great'],['🌌','Immortal'],['🎼','Maestro'],
+['🗿','Monument'],['🌠','Generational'],['🦁','Force of Nature'],['🏛️','Untouchable'],['⚜️','Golden Era'],
+['🪐','Beyond the Game'],['🔱','Mythical'],['🥇','Ballon d\'Or'],['💫','Icon'],['👑','Legend']];
 
-const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round((20*i + 0.98*Math.pow(i,2.74))/5)*5}));
+/* Ballon d'Or is level 38 and reachable in one strong season from any position.
+   Icon and Legend sit above it for people who keep going year after year. */
+const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round(12800*Math.pow(i/39,2.1)/5)*5}));
 function xpOf(m){let x=m.P*XP.app+m.W*XP.win+m.D*XP.draw+m.G*XP.goal;
   m.seq.forEach(s=>{if(s.goals>=3)x+=XP.hat;
     const w=XP.defendW[m.pos||'MID']??0.7;
@@ -2524,6 +2681,10 @@ function levelOf(xp){let c=LEVELS[0],nx=LEVELS[1];
 
 /* ============ 32 CHALLENGES ============ */
 function best(seq,f){let b=0,c=0;seq.forEach(s=>{c=f(s)?c+1:0;b=Math.max(b,c)});return b}
+/* Goal challenges hugely outnumber defensive ones, which pushed attackers far
+   ahead on XP. These multipliers level the ladder without removing anything:
+   the same challenges exist, they are just worth different amounts by group. */
+const CH_W={Goals:0.42,Scoring:0.42,Defending:1.6,Winning:1.2,Team:1.3,Milestones:1.25,Appearances:1.2};
 const CH=[
  {id:'a1',g:'Appearances',e:'👟',n:'First Steps',d:'Play your first game',x:40,f:m=>[Math.min(m.P,1),1]},
  {id:'a5',g:'Appearances',e:'📋',n:'Settling In',d:'Play 5 games',x:70,f:m=>[Math.min(m.P,5),5]},
@@ -2550,8 +2711,8 @@ const CH=[
  {id:'unb6',g:'Winning',e:'🪄',n:'Invincible',d:'Go 6 games unbeaten',x:300,f:m=>[Math.min(best(m.seq,s=>s.r!=='L'),6),6]},
  {id:'unb10',g:'Winning',e:'🧿',n:'The Arsenal Run',d:'Go 10 games unbeaten',x:550,f:m=>[Math.min(best(m.seq,s=>s.r!=='L'),10),10]},
  {id:'cs1',g:'Defending',e:'🧤',n:'Shut Out',d:'Keep a clean sheet',x:120,f:m=>[Math.min(m.cs,1),1]},
- {id:'cs4',g:'Defending',e:'🧱',n:'The Van Dijk Wall',d:'Keep 3 clean sheets',x:280,f:m=>[Math.min(m.cs,3),3]},
- {id:'cs10',g:'Defending',e:'🏰',n:'Fortress',d:'Keep 6 clean sheets',x:460,f:m=>[Math.min(m.cs,6),6]},
+ {id:'cs4',g:'Defending',e:'🧱',n:'The Wall',d:'Keep 2 clean sheets',x:280,f:m=>[Math.min(m.cs,2),2]},
+ {id:'cs10',g:'Defending',e:'🏰',n:'Fortress',d:'Keep 4 clean sheets',x:460,f:m=>[Math.min(m.cs,4),4]},
  {id:'p30',g:'Milestones',e:'📊',n:'Thirty Points',d:'Reach 30 points',x:180,f:m=>[Math.min(m.pts,30),30]},
  {id:'p60',g:'Milestones',e:'💯',n:'Sixty Points',d:'Reach 60 points',x:340,f:m=>[Math.min(m.pts,60),60]},
  {id:'idx75',g:'Milestones',e:'💎',n:'Elite Rating',d:'Reach a POTY index of 75',x:400,f:m=>[Math.min(m.index,75),75]},
@@ -2563,7 +2724,7 @@ const CH=[
  {id:'g20',g:'Scoring',e:'🎯',n:'Twenty Club',d:'Score 20 goals',x:400,f:m=>[Math.min(m.G,20),20]},
  {id:'gpg1',g:'Scoring',e:'⚡',n:'A Goal A Game',d:'Average a goal per game (min 8 games)',x:480,
    f:m=>[m.P>=8?Math.min(Math.round(m.gpg*100),100):0,100]},
- {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 9 clean sheets',x:640,f:m=>[Math.min(m.cs,9),9]},
+ {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 6 clean sheets',x:640,f:m=>[Math.min(m.cs,6),6]},
  {id:'gd25',g:'Milestones',e:'📈',n:'On The Right Side',d:'Reach +20 goal difference',x:360,
    f:m=>[Math.min(Math.max(m.GD,0),20),20]},
  {id:'p100',g:'Milestones',e:'🏆',n:'Seventy Five',d:'Reach 75 points',x:600,f:m=>[Math.min(m.pts,75),75]},
@@ -2572,14 +2733,14 @@ const CH=[
    f:m=>[m.P>=10?Math.min(Math.round(m.ppg*100),200):0,200]},
 
  /* ---- built for defenders, keepers and midfielders ---- */
- {id:'cs3row',g:'Defending',e:'🚫',n:'Locked Down',d:'Concede 2 or fewer in 4 straight games',x:320,
-   f:m=>[Math.min(best(m.seq,s=>s.ga<=2),4),4]},
- {id:'tight',g:'Defending',e:'🔒',n:'Tight At The Back',d:'Concede under 1.5 per game (min 8 games)',x:380,
-   f:m=>[m.P>=8?Math.min(Math.round((3-Math.min(m.cpg,3))/1.5*100),100):0,100]},
- {id:'cs8',g:'Defending',e:'🥶',n:'Back-to-Back Blanks',d:'Keep 2 clean sheets in a row',x:340,
-   f:m=>[Math.min(best(m.seq,s=>s.ga===0),2),2]},
- {id:'solid',g:'Defending',e:'🏗️',n:'Foundations',d:'Win 6 games conceding 2 or fewer',x:420,
-   f:m=>[Math.min(m.seq.filter(s=>s.ga<=2&&s.r==='W').length,6),6]},
+ {id:'cs3row',g:'Defending',e:'🚫',n:'Locked Down',d:'Concede 4 or fewer in 4 straight games',x:320,
+   f:m=>[Math.min(best(m.seq,s=>s.ga<=4),4),4]},
+ {id:'tight',g:'Defending',e:'🔒',n:'Tight At The Back',d:'Concede under 4 per game (min 8 games)',x:380,
+   f:m=>[m.P>=8?Math.min(Math.round((5-Math.min(m.cpg,5))/1.5*100),100):0,100]},
+ {id:'cs8',g:'Defending',e:'🥶',n:'Back-to-Back',d:'Concede 2 or fewer in 2 straight games',x:340,
+   f:m=>[Math.min(best(m.seq,s=>s.ga<=2),2),2]},
+ {id:'solid',g:'Defending',e:'🏗️',n:'Foundations',d:'Win 6 games conceding 4 or fewer',x:420,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=4&&s.r==='W').length,6),6]},
 
  {id:'chem5',g:'Team',e:'🤝',n:'Perfect Partner',d:'Win 5 games alongside the same team-mate',x:330,
    f:m=>{const b=chemPairs(1).filter(p=>p.a===m.id||p.b===m.id).sort((x,y)=>y.W-x.W)[0];
@@ -2601,16 +2762,16 @@ const CH=[
    f:m=>[Math.min(Math.min(m.G,5)+Math.min(m.cs,3),8),8]},
 
  /* ---- rewarding defenders properly ---- */
- {id:'tight10',g:'Defending',e:'🔩',n:'Hard To Beat',d:'Play 10 games conceding 3 or fewer',x:360,
-   f:m=>[Math.min(m.seq.filter(s=>s.ga<=3).length,10),10]},
- {id:'tight20',g:'Defending',e:'⛓️',n:'Miserly',d:'Play 18 games conceding 4 or fewer',x:560,
-   f:m=>[Math.min(m.seq.filter(s=>s.ga<=4).length,18),18]},
- {id:'cpg1',g:'Defending',e:'📉',n:'Under Four A Game',d:'Concede under 4 per game (min 8 games)',x:520,
-   f:m=>[m.P>=8?Math.min(Math.round((6-Math.min(m.cpg,6))/2*100),100):0,100]},
- {id:'wall5',g:'Defending',e:'🧊',n:'Ice Cold',d:'Keep 3 clean sheets in a row',x:600,
-   f:m=>[Math.min(best(m.seq,s=>s.ga===0),3),3]},
- {id:'gaunder',g:'Defending',e:'🥅',n:'Rearguard',d:'Average under 4.5 conceded (min 10 games)',x:400,
-   f:m=>[m.P>=10?Math.min(Math.round((6-Math.min(m.cpg,6))/1.5*100),100):0,100]},
+ {id:'tight10',g:'Defending',e:'🔩',n:'Hard To Beat',d:'Play 10 games conceding 5 or fewer',x:360,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=5).length,10),10]},
+ {id:'tight20',g:'Defending',e:'⛓️',n:'Miserly',d:'Play 18 games conceding 6 or fewer',x:560,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=6).length,18),18]},
+ {id:'cpg1',g:'Defending',e:'📉',n:'Under Six A Game',d:'Concede under 6 per game (min 8 games)',x:520,
+   f:m=>[m.P>=8?Math.min(Math.round((7-Math.min(m.cpg,7))/1*100),100):0,100]},
+ {id:'wall5',g:'Defending',e:'🧊',n:'Ice Cold',d:'Concede 3 or fewer in 3 straight games',x:600,
+   f:m=>[Math.min(best(m.seq,s=>s.ga<=3),3),3]},
+ {id:'gaunder',g:'Defending',e:'🥅',n:'Rearguard',d:'Average under 5.5 conceded (min 10 games)',x:400,
+   f:m=>[m.P>=10?Math.min(Math.round((7-Math.min(m.cpg,7))/1.5*100),100):0,100]},
  {id:'defgoal',g:'Defending',e:'🎯',n:'Up For A Corner',d:'Score 3 goals as a defender',x:340,
    f:m=>[(m.pos==='DEF'||m.pos==='GK')?Math.min(m.G,3):0,3]},
 
@@ -2623,7 +2784,7 @@ const CH=[
    f:m=>[Math.min(Math.max(0,...m.seq.map(s=>s.goals||0)),5),5]},
  {id:'scorerun8',g:'Scoring',e:'🌋',n:'On Fire',d:'Score in 8 games running',x:700,
    f:m=>[Math.min(best(m.seq,s=>(s.goals||0)>0),8),8]},
- {id:'cs20',g:'Defending',e:'🏔️',n:'The Great Wall',d:'Keep 12 clean sheets',x:760,f:m=>[Math.min(m.cs,12),12]},
+ {id:'cs20',g:'Defending',e:'🏔️',n:'The Great Wall',d:'Keep 8 clean sheets',x:760,f:m=>[Math.min(m.cs,8),8]},
  {id:'csrate',g:'Defending',e:'📐',n:'One In Four',d:'Keep a clean sheet in a quarter of your games (min 10)',x:600,
    f:m=>[m.P>=10?Math.min(Math.round(m.cs/m.P*100),25):0,25]},
  {id:'gd40',g:'Defending',e:'🛡️',n:'Immovable',d:'Reach +25 goal difference',x:560,
@@ -2639,6 +2800,8 @@ const CH=[
  {id:'engine',g:'Team',e:'⚙️',n:'The Engine',d:'Play 15 games and average 2+ points',x:540,
    f:m=>[m.P>=15?Math.min(Math.round(m.ppg*100),200):0,200]},
 ];
+CH.forEach(c=>{ c.x=Math.round(c.x*(CH_W[c.g]??1)/5)*5 });
+
 const chalFor=m=>CH.map(c=>{const [cur,tot]=c.f(m);return{...c,cur,tot,done:cur>=tot,pct:Math.min(100,Math.round(cur/tot*100))}});
 function careerOf(pid){const m=statsAll().find(x=>x.id===pid);if(!m)return null;
   const base=xpOf(m),ch=chalFor(m),bonus=ch.filter(c=>c.done).reduce((s,c)=>s+c.x,0),xp=base+bonus;
@@ -2734,6 +2897,7 @@ const NAV=[
  ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
  ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
  ['bets','Betting','🎰','M4 8a2 2 0 0 0 2-2h12a2 2 0 0 0 2 2v3a2 2 0 0 0 0 2v3a2 2 0 0 0-2 2H6a2 2 0 0 0-2-2v-3a2 2 0 0 0 0-2zM10 6v12'],
+ ['shop','Shop','🛒','M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0'],
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
  ['sky','Sky Sports','📺','M4 17a5 5 0 0 1 .6-9.96A6 6 0 0 1 17 6.5 4.5 4.5 0 0 1 18 17zM9 21l3-3 3 3'],
  ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
@@ -2816,9 +2980,11 @@ function lockScroll(on){
 }
 
 function render(){ try{applySeasonTint()}catch(e){}
-  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
+  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,shop:vShop,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
-  try{paintSlip()}catch(e){}
+  try{ if(!paintAwards())paintSlip() }catch(e){}
+  try{applyShopTheme()}catch(e){}
+  try{applyEvent()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
 
 /* ============ HOME — Premier-League-app style ============ */
@@ -2899,6 +3065,7 @@ function vHome(){
         <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
         <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
 
+      ${eventBanner()}
       ${potsRace()}
       ${closingIn()}
       ${fplHomeBlock()}
@@ -3196,7 +3363,7 @@ function vPlayer(pid){
   app().innerHTML=`<div class="view active"><div class="wrap" style="padding-top:8px">
 
     <!-- player card -->
-    <div class="fut" style="--futc:${cardTone(p)};--futa:${pscol}">
+    <div class="fut ${cosmClass(pid)}" style="--futc:${cardTone(p)};--futa:${pscol}">
       <div class="fut-sheen"></div>
       <div class="fut-top">
         <div class="fut-side">
@@ -3241,7 +3408,7 @@ function vPlayer(pid){
             <div style="font-size:11.5px;color:var(--label3);margin-top:5px">${car.lvl.next?`${(car.lvl.next.xp-car.xp).toLocaleString()} XP to ${car.lvl.next.t}`:'Maxed out — a true great'}</div>
           </div>${chev}</div>
         <button class="lvltoggle" onclick="LVLOPEN=(LVLOPEN==='${pid}'?'':'${pid}');render()">
-          ${LVLOPEN===pid?'Hide all levels ▲':'See all 30 levels ▼'}</button>
+          ${LVLOPEN===pid?'Hide all levels ▲':`See all ${LEVELS.length} levels ▼`}</button>
         ${LVLOPEN===pid?`<div class="lvllist">${LEVELS.slice().reverse().map(L=>{
           const reached=car.lvl.n>=L.n, cur=car.lvl.n===L.n;
           return `<div class="lvlrow ${cur?'cur':''} ${reached?'':'locked'}">
@@ -3283,6 +3450,54 @@ function vPlayer(pid){
     </div></div></div>`}
 
 /* ============ CAREER ============ */
+/* what you are earning right now, shown where the level actually lives */
+function wagesBlock(){
+  const me=fplMine();
+  if(!me)return `<div class="note">Enter your code on the Sunday FPL tab to see your wages here.</div>`;
+  const c=careerOf(me.pid); if(!c)return '';
+  const boot=bootFor(me.pid);
+  const base=weeklyWage(me.pid), bonus=boot?boot.bonus:0;
+  const gws=playedGws(), last=gws[gws.length-1];
+  const lastPay=last?wagesForGw(me.pid,last):0;
+  const nx=c.lvl.next;
+  const nextWage=nx?(WAGE.base+nx.n*WAGE.perLevel)+bonus:null;
+  const sp=sponsorProgress(me.pid);
+  return `<div class="sechead">💰 Your earnings</div>
+    <div class="wal" style="margin-bottom:6px">
+      <div><div class="wal-l">WEEKLY WAGE</div><div class="wal-v">${usd(base+bonus)}</div></div>
+      <div class="wal-r">
+        <div><b>${usd(wagesEarned(me.pid))}</b><span>this season</span></div>
+        <div><b>${usd(wallet(me.pid))}</b><span>wallet</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="row"><div class="rt"><div class="r1">Base wage at Level ${c.lvl.n}</div>
+        <div class="r2">${usd(WAGE.base)} plus ${usd(WAGE.perLevel)} a level</div></div>
+        <div class="rv">${usd(base)}</div></div>
+      ${boot?`<div class="row"><div class="rt"><div class="r1">${esc(boot.n)} boot deal</div>
+        <div class="r2">On top of your wage</div></div>
+        <div class="rv" style="color:var(--green)">+${usd(bonus)}</div></div>`
+      :`<div class="row tap" onclick="go('shop')"><div class="rt"><div class="r1">No boot deal signed</div>
+        <div class="r2">Sign one in the Shop for more a week</div></div>${chev}</div>`}
+      <div class="row"><div class="rt"><div class="r1">Appearance fee</div>
+        <div class="r2">Every game you play</div></div><div class="rv">${usd(WAGE.appearance)}</div></div>
+      <div class="row"><div class="rt"><div class="r1">Win bonus</div>
+        <div class="r2">Draws pay ${usd(WAGE.draw)}</div></div><div class="rv">${usd(WAGE.win)}</div></div>
+      <div class="row"><div class="rt"><div class="r1">Goal bonus</div>
+        <div class="r2">Every goal you score</div></div><div class="rv">${usd(WAGE.goal)}</div></div>
+      ${last?`<div class="row"><div class="rt"><div class="r1">Last gameweek</div>
+        <div class="r2">GW${last} total</div></div>
+        <div class="rv" style="color:var(--green)">+${usd(lastPay)}</div></div>`:''}
+      ${nextWage?`<div class="row"><div class="rt"><div class="r1">At Level ${nx.n} — ${esc(nx.t)}</div>
+        <div class="r2">Your wage rises to</div></div>
+        <div class="rv" style="color:var(--tint)">${usd(nextWage)}</div></div>`:''}
+      ${sp?`<div class="row tap" onclick="go('shop')"><div class="rt"><div class="r1">${esc(sp.n)} sponsor</div>
+        <div class="r2">${sp.done?'Target met — pays at season end':`${sp.have} of ${sp.need}`}</div></div>
+        <div class="rv" style="color:${sp.done?'var(--green)':'var(--label2)'}">${usd(sp.pay)}</div></div>`:''}
+    </div>
+    <div class="note">Wages are paid automatically when a game is logged, into the same wallet you bet and shop with.</div>`;
+}
+
 function vCareer(){
   const st=statsAll().filter(x=>x.P>0);
   const board=st.map(m=>({m,c:careerOf(m.id)})).sort((a,b)=>b.c.xp-a.c.xp);
@@ -3294,7 +3509,8 @@ function vCareer(){
     ${!board.length?`<div class="empty"><div class="ee">🎮</div><h3>Career starts here</h3>
       <p>Log a game and everyone starts earning XP, climbing levels and unlocking challenges.</p>
       <button class="btn pri" onclick="newGame()">Log a game</button></div>`
-    :`${levelLadder(board)}
+    :`${wagesBlock()}
+      ${levelLadder(board)}
       <div class="sechead">Leaderboard</div>
       <div class="card">${board.map(({m,c},i)=>`<div class="row tap" onclick="openCareer('${m.id}')">
         <div style="width:22px;color:var(--label2);font-size:14px">${i+1}</div>
@@ -3317,13 +3533,13 @@ function vCareer(){
         <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}`}
     </div></div>`}
 let LADOPEN=false;
-/* the 30 levels, shown up top so everyone can see what they're climbing towards */
+/* every level, shown up top so people can see what they are climbing towards */
 function levelLadder(board){
   const me=board[0];
   const reached={};
   board.forEach(({m,c})=>{ for(let i=1;i<=c.lvl.n;i++)reached[i]=(reached[i]||0)+1 });
   const show=LADOPEN?LEVELS.slice().reverse():LEVELS.slice(-6).reverse();
-  return `<div class="sechead">🪜 The 30 levels</div>
+  return `<div class="sechead">🪜 The ${LEVELS.length} levels</div>
     <div class="card ladder">
       <div class="lad-top">
         <div class="lad-t"><b>Academy Prospect</b> → <b>Ballon d'Or</b></div>
@@ -3336,7 +3552,7 @@ function levelLadder(board){
           <div class="lad-i"><div class="lad-n">${esc(L.t)}</div>
             <div class="lad-x">LV${L.n} · ${L.xp.toLocaleString()} XP</div></div>
           <div class="lad-c">${n?`${n} there`:'—'}</div></div>`}).join('')}</div>
-      <button class="lvltoggle" onclick="LADOPEN=!LADOPEN;render()">${LADOPEN?'Show fewer ▲':'See all 30 levels ▼'}</button>
+      <button class="lvltoggle" onclick="LADOPEN=!LADOPEN;render()">${LADOPEN?'Show fewer ▲':`See all ${LEVELS.length} levels ▼`}</button>
     </div>`;
 }
 let MSG='All';
@@ -3398,7 +3614,7 @@ function chalRow(c){return `<div class="chal ${c.done?'done':'locked'}">
    Denis's profile → his Career → back lands you on Denis's profile again. */
 let BACKSTACK=[];
 const NAV_LABEL={home:'Home',league:'League',fixtures:'Fixtures',squad:'Squad',tactics:'Tactics',
-  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',bets:'Betting',stats:'Stats',compare:'Compare',history:'Hall of Fame',
+  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',bets:'Betting',shop:'Shop',stats:'Stats',compare:'Compare',history:'Hall of Fame',
   comps:'Competitions',admin:'Admin',player:'Player',pcareer:'Career',match:'Match',seasonView:'Season'};
 function viewSnap(){
   return {v:VIEW, pid:app()._pid, gid:app()._gid, sid:app()._sid,
@@ -3736,6 +3952,19 @@ const CARD_TONE={ATT:'#8E2140', MID:'#1B5E7A', DEF:'#1D4E7C', GK:'#7A5A14'};
 /* The card takes the player's club colour so each one feels like their team.
    Very light club colours (Real Madrid, Spurs) are swapped for their accent so
    the card never washes out. */
+/* the frame and background a player has equipped, as CSS classes */
+/* the app theme a player has bought and equipped, applied to <body> */
+function applyShopTheme(){
+  const me=fplMine();
+  const t=me?equipped(me.pid,'theme'):null;
+  document.body.dataset.shop=t?t.replace('t_',''):'';
+}
+function cosmClass(pid){
+  const c=equipped(pid,'card');
+  if(!c)return '';
+  const st=c.replace('s_','');
+  return `cf-${st} cb-${st}`;              /* frame and background together */
+}
 function cardTone(p){
   const c=clubOf(p);
   if(!c)return CARD_TONE[(p&&p.pos)||'MID']||'#2B3A55';
@@ -3751,7 +3980,10 @@ function cardTone(p){
    Level 1 = 80, level 30 = 90. Everyone starts gold; 90 is the special card. */
 function ovrOf(pid){
   const car=careerOf(pid); if(!car)return null;
-  return Math.round(80+(car.lvl.n-1)*(10/29));
+  /* 80 at the bottom, 90 once you reach Ballon d'Or, and it stays there */
+  const bd=LEVELS.findIndex(l=>/Ballon/.test(l.t));
+  const top=bd>0?bd+1:LEVELS.length;
+  return Math.round(80+(Math.min(car.lvl.n,top)-1)*(10/(top-1)));
 }
 function ovrTier(o){
   if(o>=90)return {k:'ballon',label:"Ballon d'Or"};
@@ -6332,6 +6564,420 @@ function skeletonRows(n){
     </div>`).join('')}</div>`;
 }
 
+/* ============ SEASON END ============ */
+function preflight(){
+  const S=season(), gs=allGames(), out=[];
+  const ok=(t,d)=>out.push({ok:true,t,d});
+  const bad=(t,d)=>out.push({ok:false,t,d});
+  const warn=(t,d)=>out.push({ok:null,t,d});
+  gs.length?ok(`${gs.length} games logged`,'The season has a record'):bad('No games logged','There is nothing to end');
+  const noRes=gs.filter(g=>!g.result);
+  noRes.length?bad(`${noRes.length} games without a result`,'Fix them before ending'):ok('Every game has a result','');
+  const mismatch=gs.filter(g=>{
+    const sum=Object.values(g.goals||{}).reduce((t,n)=>t+n,0);
+    return sum>((g.scoreA||0)+(g.scoreB||0));
+  });
+  mismatch.length?bad(`${mismatch.length} games with more scorers than goals`,'Check the scorelines'):ok('Scorers match the scorelines','');
+  const open=bets().open.length;
+  open?warn(`${open} open bet${open===1?'':'s'}`,'They will be voided and refunded'):ok('No open bets','');
+  const half=(fpl().managers||[]).filter(m=>m.teamName&&m.squad.length&&m.squad.length<FPL_RULES.squadSize);
+  half.length?warn(`${half.length} incomplete fantasy team${half.length===1?'':'s'}`,'They will score what they have'):ok('Fantasy teams are complete','');
+  let backup=null;
+  try{ backup=localStorage.getItem('ss_last_backup') }catch(e){}
+  const days=backup?Math.floor((Date.now()-(+backup))/86400000):null;
+  (days!==null&&days<=14)?ok(`Backup taken ${days===0?'today':days+' day'+(days===1?'':'s')+' ago'}`,'')
+    :warn('No recent backup','Download one from Admin first');
+  return out;
+}
+function seasonAwards(){
+  const st=statsAll().filter(x=>x.P>0), p=id=>(player(id)||{}).name||'—';
+  const out=[];
+  const table=[...st].sort((a,b)=>b.pts-a.pts||b.GD-a.GD);
+  if(table[0])out.push({e:'🏆',t:'Champion',who:p(table[0].id),id:table[0].id,
+    d:`${table[0].pts} points from ${table[0].P} games`});
+  const boot=[...st].sort((a,b)=>b.G-a.G)[0];
+  if(boot&&boot.G)out.push({e:'👟',t:'Golden Boot',who:p(boot.id),id:boot.id,d:`${boot.G} goals`});
+  const def=st.filter(x=>['DEF','GK'].includes((player(x.id)||{}).pos)&&x.P>=3)
+    .sort((a,b)=>(a.GA/a.P)-(b.GA/b.P))[0];
+  if(def)out.push({e:'🧤',t:'Golden Defence',who:p(def.id),id:def.id,
+    d:`${(def.GA/def.P).toFixed(1)} conceded a game`});
+  const mid=st.filter(x=>(player(x.id)||{}).pos==='MID'&&x.P>=3)
+    .sort((a,b)=>(b.pts+b.G*2)-(a.pts+a.G*2))[0];
+  if(mid)out.push({e:'🎩',t:'Golden Midfielder',who:p(mid.id),id:mid.id,d:`${mid.pts} points, ${mid.G} goals`});
+  const imp=mostImproved()[0];
+  if(imp)out.push({e:'📈',t:'Most Improved',who:imp.name,id:imp.id,d:`+${imp.delta.toFixed(2)} points a game`});
+  const bd=st.map(x=>({...x,xp:(careerOf(x.id)||{xp:0}).xp})).sort((a,b)=>b.xp-a.xp)[0];
+  if(bd)out.push({e:'🥇',t:"Ballon d'Or",who:p(bd.id),id:bd.id,
+    d:`${bd.xp.toLocaleString()} XP · ${(careerOf(bd.id)||{}).lvl.t}`});
+  const ft=fplTable();
+  if(ft.length)out.push({e:'🕹️',t:'Sunday FPL',who:ft[0].m.teamName||ft[0].m.name,id:ft[0].m.pid,
+    d:`${ft[0].total} points`});
+  const bt=betTable().filter(x=>pnl(x.m.pid).played>0)
+    .sort((a,b)=>pnl(b.m.pid).profit-pnl(a.m.pid).profit)[0];
+  if(bt)out.push({e:'🎰',t:'Best on the Betting',who:bt.m.name,id:bt.m.pid,
+    d:`${usdSigned(pnl(bt.m.pid).profit)} profit`});
+  return out;
+}
+let AWIDX=0, AWOPEN=false;
+function showAwards(){ AWIDX=0; AWOPEN=true; render(); }
+function awardsNext(){
+  const a=seasonAwards();
+  if(AWIDX>=a.length-1){AWOPEN=false;render();return}
+  AWIDX++; haptic('success'); render();
+}
+function paintAwards(){
+  const el=$('#slipMount'); if(!el)return false;
+  if(!AWOPEN)return false;
+  const a=seasonAwards();
+  if(!a.length){AWOPEN=false;return false}
+  const x=a[Math.min(AWIDX,a.length-1)];
+  el.innerHTML=`<div class="awn" onclick="awardsNext()">
+    <div class="awn-in">
+      <div class="awn-k">${esc(season().name||'Season')} · AWARDS NIGHT</div>
+      <div class="awn-e">${x.e}</div>
+      <div class="awn-a">${esc(x.t)}</div>
+      <div class="awn-w">${esc(x.who)}</div>
+      <div class="awn-d">${esc(x.d)}</div>
+      <div class="awn-dots">${a.map((_,i)=>`<i class="${i<=AWIDX?'on':''}"></i>`).join('')}</div>
+      <div class="awn-tap">${AWIDX>=a.length-1?'Tap to close':'Tap for the next award'}</div>
+    </div></div>`;
+  return true;
+}
+async function endSeason(){
+  if(!requireAdmin())return;
+  const checks=preflight();
+  const blockers=checks.filter(c=>c.ok===false);
+  const body=`<div class="card">${checks.map(c=>`
+      <div class="row"><div style="flex:0 0 24px;font-size:15px">${c.ok===true?'✅':c.ok===false?'❌':'⚠️'}</div>
+        <div class="rt"><div class="r1">${esc(c.t)}</div>${c.d?`<div class="r2">${esc(c.d)}</div>`:''}</div></div>`).join('')}</div>
+    ${blockers.length?`<div class="note" style="color:var(--red)">Fix the red items before you can end the season.</div>`
+      :`<div class="note">A full undo point is taken first, so this can be reversed.</div>`}`;
+  openSheet('End the season',body, blockers.length?null:'Continue');
+  if(blockers.length)return;
+  $('#_sact').onclick=async()=>{
+    closeSheet();
+    if(!await askConfirm('End the season?',
+      `This freezes ${season().name||'the season'} and starts the awards. Everything can be undone from the Undo panel.`,'Continue',false))return;
+    if(!await askConfirm('Are you certain?',
+      'Second and final check. The table, fantasy teams and betting all reset afterwards.','End the season',true))return;
+    await runEndSeason();
+  };
+}
+async function runEndSeason(){
+  try{ snapshot('Before ending the season') }catch(e){}
+  const S=season();
+  try{ payWages() }catch(e){}
+  const b=bets();
+  b.open.forEach(bet=>{ b.wallets[bet.by]=wallet(bet.by)+bet.stake;
+    b.settled.unshift({...bet,res:'void',ret:bet.stake,when:Date.now()}); });
+  b.open=[];
+  /* sponsors pay out where the target was met */
+  (fpl().managers||[]).forEach(m=>{
+    const sp=sponsorProgress(m.pid);
+    if(sp&&sp.done){ b.wallets[m.pid]=wallet(m.pid)+sp.pay; }
+  });
+  S.finished=true; S.endedAt=Date.now();
+  S.awards=seasonAwards().map(a=>({e:a.e,t:a.t,who:a.who,d:a.d}));
+  logEntry('season',`Ended season ${S.name||''}`);
+  await save(); haptic('success'); showAwards();
+}
+async function nextSeason(){
+  if(!requireAdmin())return;
+  const cur=season();
+  if(!cur.finished){ toast('End the current season first'); return }
+  const nm=await askText('New season','Give it a name, for example 27/28','','Create');
+  if(nm===null)return;
+  if(!await askConfirm('Start a new season?',
+    'Squad, shirt numbers, levels, trophies, moments and cosmetics all carry over. Points, the table, fantasy teams and betting reset.','Create',false))return;
+  try{ snapshot('Before starting a new season') }catch(e){}
+  const id=uid();
+  const players=cur.players.map(p=>({...p}));
+  DB.seasons.push({id,name:(String(nm).trim()||'New season'),players,games:[],
+    comps:[{id:uid(),name:'Sunday League',type:'league'}],
+    fpl:{managers:[],gw:1,locked:false,prices:{},ticker:[],league:'Sunday FPL Mini League'},
+    bets:{wallets:{},open:[],settled:[],paid:{},earned:{},spent:{},owned:(cur.bets||{}).owned||{},
+          equip:(cur.bets||{}).equip||{},boots:(cur.bets||{}).boots||{},sponsors:{},bailouts:{}}});
+  CUR=id;
+  await save(); render();
+  toast('New season created — the squad carried over');
+}
+
+/* ============ MOMENTS ============
+   Derived from the games, so they cannot drift out of step with the record.
+   Only the people who played that day own one. */
+function moments(){
+  const gs=allGames(); const out=[]; 
+  let seenHat=false, seenTen=false, bestBy={}, scoredBy={};
+  gs.forEach((g,idx)=>{
+    const played=[...(g.teamA||[]),...(g.teamB||[])];
+    const total=(g.scoreA||0)+(g.scoreB||0);
+    const add=(id,e,t,line)=>out.push({id:`${g.id}|${id}`,gid:g.id,e,t,line,
+      date:g.date,round:g.round,score:`${g.scoreA}–${g.scoreB}`,owners:played.slice()});
+    if(idx===0)add('first','🌅','The First Sunday',
+      `Where it started. ${g.scoreA}–${g.scoreB}, and nobody knew what they were beginning.`);
+    Object.entries(g.goals||{}).forEach(([pid,n])=>{
+      const nm=(player(pid)||{}).name||'someone';
+      if(n>=3&&!seenHat){seenHat=true;add('hat','⚡','First Hat-Trick of the Season',
+        `${nm} took the ball home. Three goals and no arguments.`)}
+      if(n>=4)add('four_'+pid,'🎯',`${nm} scored four`,
+        `Four in one afternoon. The kind of day people bring up years later.`);
+      if(!scoredBy[pid]){scoredBy[pid]=true;
+        if(idx>0)add('debut_'+pid,'🥅',`${nm}'s first goal`,`Off the mark at last.`)}
+    });
+    if(total>=10&&!seenTen){seenTen=true;add('ten','🔥','The Ten Goal Game',
+      `${total} goals in one game. Defending was optional and everybody enjoyed it.`)}
+    if(Math.abs((g.scoreA||0)-(g.scoreB||0))>=6)add('rout','💥','The Rout',
+      `${g.scoreA}–${g.scoreB}. Somebody had a very quiet drive home.`);
+    if((g.scoreA||0)===(g.scoreB||0)&&total>=12)add('epic','🤯','The One That Would Not End',
+      `${g.scoreA}–${g.scoreB}. Two teams that refused to stop scoring or defending.`);
+    if(idx===gs.length-1&&gs.length>=10)add('decider','🏆','The Final Sunday',
+      `The last game of the season, and the table settled for good.`);
+  });
+  return out.map((m,i)=>({...m,serial:i+1}));
+}
+function momentsFor(pid){ return moments().filter(m=>m.owners.includes(pid)) }
+function momentCard(m,pid){
+  const n=m.owners.indexOf(pid);
+  return `<div class="moment ${pid?cosmClass(pid):''}">
+    <div class="mtag">MOMENT · UNREPEATABLE</div>
+    <div class="mtitle">${m.e} ${esc(m.t)}</div>
+    <div class="mline">${esc(m.line)}</div>
+    <div class="mfoot"><span>${esc(fdate(m.date))}${m.round?' · '+esc(m.round):''} · ${m.score}</span>
+      <span class="serial">${pid&&n>=0?`#${String(n+1).padStart(3,'0')} / ${m.owners.length}`:`${m.owners.length} owners`}</span></div>
+  </div>`;
+}
+
+/* ============ SEASONAL EVENTS ============
+   Purely date-driven, so it turns itself on and off. */
+const EVENTS=[
+  {id:'halloween',n:'Halloween',e:'🎃',from:'10-25',to:'11-01',
+   line:'Spooky season. Score and the lights flicker.'},
+  {id:'xmas',     n:'Christmas', e:'🎄',from:'12-01',to:'12-31',
+   line:'Sunday football in December. The best kind.'},
+  {id:'newyear',  n:'New Year',  e:'🎆',from:'12-31',to:'01-02',
+   line:'New year, same excuses.'},
+  {id:'finale',   n:'Season Finale',e:'🏆',from:'05-15',to:'05-31',
+   line:'The run-in. Everything is decided from here.'},
+];
+function mmdd(d){ return String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') }
+function activeEvent(){
+  if(typeof EVENT_FORCE!=='undefined'&&EVENT_FORCE)
+    return EVENTS.find(x=>x.id===EVENT_FORCE)||retroToday();
+  const t=mmdd(new Date());
+  const hit=EVENTS.find(e=>e.from<=e.to ? (t>=e.from&&t<=e.to) : (t>=e.from||t<=e.to));
+  return hit||retroToday();
+}
+/* one retro day a month, picked deterministically from the month itself */
+function retroToday(){
+  const d=new Date();
+  const day=1+Math.floor(seedRand('retro|'+d.getFullYear()+'|'+d.getMonth())*27);
+  if(d.getDate()!==day)return null;
+  return {id:'retro',n:'Retro Day',e:'📺',line:'One day a month the app goes back to 1974.',retro:true};
+}
+let EVENT_FORCE=null;
+function applyEvent(){
+  const ev=activeEvent();
+  document.body.dataset.event=ev?ev.id:'';
+  return ev;
+}
+function eventBanner(){
+  const ev=activeEvent(); if(!ev)return '';
+  return `<div class="evb evb-${ev.id}">
+    <div class="evb-e">${ev.e}</div>
+    <div class="evb-t"><b>${esc(ev.n)}</b><span>${esc(ev.line)}</span></div>
+  </div>`;
+}
+
+/* ============ SHOP & WAGES ============
+   One wallet. Wages are earned by playing and rise with your career level; the
+   same balance funds bets and cosmetics. The split is shown so people can see
+   how much they earned honestly versus how much came from gambling. */
+const WAGE={base:150, perLevel:20, appearance:150, win:250, draw:100, goal:300};
+function weeklyWage(pid){
+  const c=careerOf(pid);
+  const lvl=c?c.lvl.n:1;
+  return WAGE.base + lvl*WAGE.perLevel;
+}
+/* what a player earned in one gameweek — deterministic, so it can be replayed */
+function wagesForGw(pid,gw){
+  const gs=gamesInGw(gw).filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(pid));
+  if(!gs.length)return 0;
+  let t=weeklyWage(pid);
+  gs.forEach(g=>{
+    t+=WAGE.appearance;
+    const a=(g.teamA||[]).includes(pid);
+    const won=(a&&g.result==='A')||(!a&&g.result==='B');
+    if(won)t+=WAGE.win; else if(g.result==='D')t+=WAGE.draw;
+    t+=((g.goals||{})[pid]||0)*WAGE.goal;
+  });
+  return t;
+}
+/* pay everyone for any gameweek they have not been paid for yet */
+function payWages(){
+  const b=bets(), f=fpl();
+  if(!b.paid)b.paid={};
+  if(!b.earned)b.earned={};
+  let total=0;
+  playedGws().forEach(gw=>{
+    (f.managers||[]).forEach(m=>{
+      const key=m.pid+'|'+gw;
+      if(b.paid[key])return;
+      const amt=wagesForGw(m.pid,gw);
+      if(!amt){b.paid[key]=0;return}
+      b.paid[key]=amt;
+      b.earned[m.pid]=(b.earned[m.pid]||0)+amt;
+      b.wallets[m.pid]=wallet(m.pid)+amt;
+      total+=amt;
+    });
+  });
+  return total;
+}
+function wagesEarned(pid){ return (bets().earned||{})[pid]||0 }
+function spentInShop(pid){ return (bets().spent||{})[pid]||0 }
+/* net profit or loss from betting alone, so the wallet can show its make-up */
+function bettingNet(pid){
+  const h=bets().settled.filter(x=>x.by===pid&&x.res!=='void');
+  return h.reduce((t,x)=>t+((x.ret||0)-x.stake),0);
+}
+
+/* ---- what you can buy ---- */
+/* One family of styles, borrowed from trading-card finishes. Each is sold as a
+   card frame and as a background, so a Refractor frame and a Refractor
+   background match. */
+const STYLES=[
+  {id:'base',   n:'Base',        d:'Clean matte finish',              f:2500,  b:2000},
+  {id:'chrome', n:'Chrome',      d:'Brushed metal, mirror edge',      f:5000,  b:4000},
+  {id:'refract',n:'Refractor',   d:'The classic rainbow shimmer',     f:7500,  b:6000},
+  {id:'emerald',n:'Emerald',     d:'Deep green with a jewelled sheen',f:9000,  b:7000},
+  {id:'ruby',   n:'Ruby',        d:'Blood red, cut like a stone',     f:9000,  b:7000},
+  {id:'gold',   n:'Gold',        d:'Heavy, obvious, unmistakable',    f:12000, b:9500},
+  {id:'obsid',  n:'Obsidian',    d:'Black glass with a violet edge',  f:14000, b:11000},
+  {id:'logo',   n:'Logofractor', d:'Refracted through the crest',     f:18000, b:14000},
+  {id:'atomic', n:'Atomic',      d:'Fractured light, no two alike',   f:22000, b:17000},
+  {id:'super',  n:'Superfractor',d:'One of one. The rarest finish',   f:30000, b:24000},
+];
+const SHOP={
+  card: STYLES.map(x=>({id:'s_'+x.id,n:x.n,p:x.f+x.b,d:x.d,style:x.id})),
+  border:[
+    {id:'r_thin',   n:'Hairline', p:3000,  d:'A fine ring around your crest'},
+    {id:'r_chrome', n:'Chrome',   p:5500,  d:'Matches the Chrome finish'},
+    {id:'r_laurel', n:'Laurel',   p:9000,  d:'Champion wreath'},
+    {id:'r_flame',  n:'Flame',    p:13000, d:'Burns while you are on a streak'},
+  ],
+  theme:[
+    {id:'t_midnight',n:'Midnight',  p:6000,  d:'Deep navy across the whole app'},
+    {id:'t_terrace', n:'Terrace',   p:8000,  d:'Warm concrete and paint'},
+    {id:'t_news',    n:'Newsprint', p:10000, d:'Black, white and serif type'},
+    {id:'t_teletext',n:'Teletext',  p:14000, d:'Blocky 1970s broadcast colours'},
+    {id:'t_arcade',  n:'Arcade',    p:18000, d:'Pixel edges and neon'},
+  ],
+};
+const SHOP_CAT=[['card','Card styles','Wraps your whole player card — frame and background'],
+  ['border','Badge borders','Rings your club crest'],
+  ['theme','App themes','Changes the whole app for you only']];
+const SHOP_BY=(()=>{const o={};Object.values(SHOP).flat().forEach(x=>o[x.id]=x);return o})();
+
+/* ---- boot deals, unlocked by what you have actually done ---- */
+const BOOTS=[
+  {id:'tiempo', n:'Tiempo',     e:'👟', bonus:0,   d:'Entry deal',
+   need:c=>c.lvl.n>=3, needTxt:'Reach Level 3'},
+  {id:'f50',    n:'F50',        e:'⚡', bonus:60,  d:'+$60 a week',
+   need:(c,st)=>c.lvl.n>=8||st.P>=6, needTxt:'Level 8 or 6 games'},
+  {id:'phantom',n:'Phantom',    e:'👻', bonus:110, d:'+$110 a week',
+   need:(c,st)=>c.lvl.n>=14||st.P>=12, needTxt:'Level 14 or 12 games'},
+  {id:'predator',n:'Predator',  e:'🦖', bonus:180, d:'+$180 a week',
+   need:(c,st)=>c.lvl.n>=20||st.cs>=5||st.W>=10, needTxt:'Level 20, 5 shut-outs or 10 wins'},
+  {id:'hyper',  n:'Hypervenom', e:'🔺', bonus:260, d:'+$260 a week',
+   need:(c,st)=>c.lvl.n>=27||st.G>=15, needTxt:'Level 27 or 15 goals'},
+  {id:'merc',   n:'Mercurial',  e:'👑', bonus:400, d:'+$400 a week',
+   need:c=>c.lvl.n>=34, needTxt:'Reach Level 34'},
+];
+function bootFor(pid){
+  const b=bets();
+  const id=(b.boots||{})[pid];
+  return BOOTS.find(x=>x.id===id)||null;
+}
+function bootUnlocked(pid,boot){
+  const c=careerOf(pid), st=statsAll().find(x=>x.id===pid)||{P:0,G:0,cs:0};
+  try{ return !!boot.need(c,st) }catch(e){ return false }
+}
+async function signBoot(id){
+  const me=fplMine(); if(!me)return;
+  const boot=BOOTS.find(x=>x.id===id); if(!boot)return;
+  if(!bootUnlocked(me.pid,boot)){toast('Not unlocked yet');return}
+  const b=bets(); if(!b.boots)b.boots={};
+  b.boots[me.pid]=id;
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success'); render(); toast(`Signed with ${boot.n}`);
+}
+
+/* ---- season sponsors, one per player, reachable from any position ---- */
+function sponsorOffers(pid){
+  const p=player(pid)||{}, pos=p.pos||'MID';
+  const goalTarget = pos==='ATT'?18 : pos==='MID'?10 : 5;
+  return [
+    {id:'steady', n:'Steady',  pay:6000,  d:`Play 15 games this season`,
+     f:st=>[Math.min(st.P,15),15]},
+    {id:'shift',  n:'Grafter', pay:14000, d:`Win 10 games`,
+     f:st=>[Math.min(st.W,10),10]},
+    {id:'sharp',  n:'Sharp',   pay:22000, d:`Score ${goalTarget} goals`,
+     f:st=>[Math.min(st.G,goalTarget),goalTarget]},
+    {id:'wall',   n:'The Wall',pay:22000, d:`Average under 4.5 conceded (min 10 games)`,
+     f:st=>[st.P>=10?Math.min(Math.round((6-Math.min(st.cpg,6))/1.5*100),100):0,100]},
+    {id:'allin',  n:'All in',  pay:45000, d:`Finish in the top three`,
+     f:st=>{const t=statsAll().filter(x=>x.P>0).sort((a,b)=>b.pts-a.pts);
+            const i=t.findIndex(x=>x.id===pid); return [i>=0&&i<3?1:0,1]}},
+  ];
+}
+function sponsorOf(pid){
+  const id=(bets().sponsors||{})[pid];
+  return id?sponsorOffers(pid).find(x=>x.id===id)||null:null;
+}
+function sponsorProgress(pid){
+  const sp=sponsorOf(pid); if(!sp)return null;
+  const st=statsAll().find(x=>x.id===pid)||{P:0,W:0,G:0,cpg:9};
+  const [have,need]=sp.f(st);
+  return {...sp,have,need,pct:Math.min(100,Math.round(have/need*100)),done:have>=need};
+}
+async function signSponsor(id){
+  const me=fplMine(); if(!me)return;
+  const b=bets(); if(!b.sponsors)b.sponsors={};
+  if(b.sponsors[me.pid]){toast('You already have a sponsor this season');return}
+  const sp=sponsorOffers(me.pid).find(x=>x.id===id); if(!sp)return;
+  if(!await askConfirm(`Sign with ${sp.n}?`,
+     `${sp.d} — pays ${usd(sp.pay)} at the end of the season. One sponsor a season, and you cannot change it.`,'Sign',false))return;
+  b.sponsors[me.pid]=id;
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success'); render(); toast(`Signed with ${sp.n}`);
+}
+
+/* ---- buying ---- */
+function owns(pid,item){ return ((bets().owned||{})[pid]||[]).includes(item) }
+function equipped(pid,cat){ return ((bets().equip||{})[pid]||{})[cat]||null }
+async function buyItem(id,cat){
+  const me=fplMine(); if(!me){toast('Enter your code first');return}
+  const it=SHOP_BY[id]; if(!it)return;
+  const b=bets();
+  if(owns(me.pid,id)){ equipItem(id,cat); return }
+  if(wallet(me.pid)<it.p){toast(`You need ${usd(it.p-wallet(me.pid))} more`);return}
+  if(!await askConfirm(`Buy ${it.n}?`,`${usd(it.p)} from your wallet. ${it.d}.`,'Buy',false))return;
+  b.wallets[me.pid]=wallet(me.pid)-it.p;
+  if(!b.owned)b.owned={}; if(!b.owned[me.pid])b.owned[me.pid]=[];
+  b.owned[me.pid].push(id);
+  if(!b.spent)b.spent={}; b.spent[me.pid]=(b.spent[me.pid]||0)+it.p;
+  if(!b.equip)b.equip={}; if(!b.equip[me.pid])b.equip[me.pid]={};
+  b.equip[me.pid][cat]=id;
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success'); render(); toast(`${it.n} bought and equipped`);
+}
+async function equipItem(id,cat){
+  const me=fplMine(); if(!me)return;
+  const b=bets(); if(!b.equip)b.equip={}; if(!b.equip[me.pid])b.equip[me.pid]={};
+  b.equip[me.pid][cat]=(b.equip[me.pid][cat]===id)?null:id;
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('light'); render();
+}
+
 /* ============ BETTING ============
    Play money only. Odds are priced from each player's own record, so a striker
    who scores in most games is genuinely short. Markets are per player because
@@ -6564,9 +7210,10 @@ function betTable(){
     const open=b.open.filter(x=>x.by===m.pid).reduce((t,x)=>t+x.stake,0);
     const hist=b.settled.filter(x=>x.by===m.pid);
     const won=hist.filter(x=>x.res==='won').length;
-    return {m,bal:wallet(m.pid),open,won,played:hist.filter(x=>x.res!=='void').length,
+    const P=pnl(m.pid);
+    return {m,bal:wallet(m.pid),open,won,played:P.played,profit:P.profit,
             total:wallet(m.pid)+open};
-  }).sort((a,b2)=>b2.total-a.total);
+  }).sort((a,b2)=>b2.profit-a.profit||b2.total-a.total);
 }
 
 /* ============ MINI GAME LEADERBOARD ============
@@ -6773,6 +7420,143 @@ function paintSlip(){
     </div>`;
 }
 
+let SHTAB='card';
+function vShop(){
+  $('#navMount').innerHTML=navbar();
+  const me=fplMine();
+  if(!me){ app().innerHTML=`<div class="view active"><div class="largetitle">Shop</div>
+    <div class="wrap">${cloudBanner()}
+      <div class="sb-signin"><div class="sb-si-e">🔑</div>
+        <div class="sb-si-t">Enter your code</div>
+        <div class="sb-si-s">Same code as Sunday FPL and Betting — one sign-in covers all three.</div>
+        <button class="btn pri full" style="margin-top:14px" onclick="askSignIn()">Enter your code</button>
+      </div></div></div>`; return; }
+
+  const bal=wallet(me.pid), earned=wagesEarned(me.pid), spent=spentInShop(me.pid), net=bettingNet(me.pid);
+  const boot=bootFor(me.pid), sp=sponsorProgress(me.pid);
+  const c=careerOf(me.pid);
+  const wage=weeklyWage(me.pid)+(boot?boot.bonus:0);
+
+  const tile=(cat,it)=>{
+    const own=owns(me.pid,it.id), on=equipped(me.pid,cat)===it.id;
+    const afford=bal>=it.p;
+    return `<div class="sh-item ${on?'on':''}">
+      <div class="sh-sw sw-${it.id}">${on?'<span class="sh-eq">EQUIPPED</span>':''}</div>
+      <div class="sh-b">
+        <div class="sh-n">${esc(it.n)}</div>
+        <div class="sh-d">${esc(it.d)}</div>
+        <div class="sh-p">
+          ${own?`<span class="sh-owned">Owned</span>
+                 <button class="sh-buy ${on?'sec':''}" onclick="equipItem('${it.id}','${cat}')">${on?'Remove':'Equip'}</button>`
+               :`<span class="sh-price ${afford?'':'no'}">${usd(it.p)}</span>
+                 <button class="sh-buy" ${afford?'':'disabled'} onclick="buyItem('${it.id}','${cat}')">Buy</button>`}
+        </div>
+      </div></div>`;
+  };
+
+  const cat=SHOP_CAT.find(x=>x[0]===SHTAB)||SHOP_CAT[0];
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">Shop</div>
+    <div class="wrap">${cloudBanner()}
+
+      <div class="wal">
+        <div><div class="wal-l">WALLET</div><div class="wal-v">${usd(bal)}</div></div>
+        <div class="wal-r">
+          <div><b>${usd(earned)}</b><span>wages</span></div>
+          <div><b class="${net>=0?'up':'dn'}">${usdSigned(net)}</b><span>betting</span></div>
+          <div><b>${usd(spent)}</b><span>spent</span></div>
+        </div>
+      </div>
+      <div class="wal-note">Wages, winnings and losses all share one balance. ${usd(wage)} a week at Level ${c?c.lvl.n:1}${boot?` including your ${esc(boot.n)} deal`:''}.</div>
+
+      <div class="sechead">Cosmetics</div>
+      <div class="seg" style="margin-bottom:12px">${SHOP_CAT.map(([k,l])=>
+        `<button class="${SHTAB===k?'on':''}" onclick="SHTAB='${k}';render()">${l.split(' ')[0]}</button>`).join('')}</div>
+      <div class="note" style="padding:0 4px 10px">${esc(cat[2])}</div>
+      <div class="sh-grid">${(SHOP[SHTAB]||[]).map(it=>tile(SHTAB,it)).join('')}</div>
+      <div class="note">Nothing here changes points, ratings or odds. It only changes how your card looks.</div>
+      <div class="sechead">Boot deal</div>
+      <div class="card">${BOOTS.map(x=>{
+        const un=bootUnlocked(me.pid,x), on=boot&&boot.id===x.id;
+        return `<div class="row ${un?'tap':''} ${on?'boot-on':''}" onclick="${un?`signBoot('${x.id}')`:''}">
+          <div style="font-size:21px;flex:0 0 28px">${x.e}</div>
+          <div class="rt"><div class="r1">${x.n}</div>
+            <div class="r2">${un?x.d:'🔒 '+x.needTxt}</div></div>
+          <div class="rv" style="font-size:12px;color:${on?'var(--green)':un?'var(--tint)':'var(--label3)'}">
+            ${on?'Signed':un?'Sign':'Locked'}</div></div>`}).join('')}</div>
+
+      <div class="sechead">Season sponsor</div>
+      ${sp?`<div class="card pad">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div style="font-size:22px">🤝</div>
+            <div style="flex:1"><div style="font-size:15.5px;font-weight:800">${esc(sp.n)}</div>
+              <div style="font-size:12.5px;color:var(--label3)">${esc(sp.d)}</div></div>
+            <div style="font-weight:800;color:${sp.done?'var(--green)':'var(--label2)'}">${usd(sp.pay)}</div></div>
+          <div class="sp-bar"><div style="width:${sp.pct}%;background:${sp.done?'var(--green)':'var(--tint)'}"></div></div>
+          <div style="font-size:12px;color:var(--label3);margin-top:6px">
+            ${sp.done?'✅ Target met — pays out at the end of the season':`${sp.have} of ${sp.need} · ${sp.pct}%`}</div>
+        </div>`
+      :`<div class="card">${sponsorOffers(me.pid).map(x=>`
+          <div class="row tap" onclick="signSponsor('${x.id}')">
+            <div class="rt"><div class="r1">${esc(x.n)} — ${usd(x.pay)}</div>
+              <div class="r2">${esc(x.d)}</div></div>
+            <div class="rv" style="font-size:12px;color:var(--tint)">Sign</div></div>`).join('')}</div>
+        <div class="note">One a season, and you cannot change it. Every position has a target it can reach.</div>`}
+
+      <div style="height:20px"></div>
+    </div></div>`;
+}
+
+/* ---------- MOMENTS, inside the Hall of Fame ---------- */
+function histMoments(){
+  const ms=moments(), me=fplMine();
+  if(!ms.length)return `<div class="empty"><div class="ee">✨</div><h3>No moments yet</h3>
+    <p>These write themselves when something rare happens — a first goal, a hat-trick, a ten-goal game.</p></div>`;
+  const mine=me?momentsFor(me.pid):[];
+  return `${mine.length?`<div class="sechead">Yours · ${mine.length}</div>
+      ${momentCard(mine[mine.length-1],me.pid)}<div style="height:14px"></div>`:''}
+    <div class="sechead">Every moment</div>
+    <div class="card">${ms.slice().reverse().map(m=>`
+      <div class="row tap" onclick="openMoment('${esc(m.id)}')">
+        <div style="font-size:20px;flex:0 0 26px">${m.e}</div>
+        <div class="rt"><div class="r1">${esc(m.t)}</div>
+          <div class="r2">${esc(fdate(m.date))} · ${m.owners.length} ${m.owners.length===1?'person was':'people were'} there</div></div>
+        ${chev}</div>`).join('')}</div>
+    <div class="note">Only the people who played that day own the moment. Your card style applies to it.</div>`;
+}
+/* ---------- FIRSTS, appended to the Records tab ---------- */
+function histFirsts(){
+  const gs=allTimeGames?allTimeGames():allGames();
+  if(!gs.length)return '';
+  const rows=[];
+  const g0=gs[0];
+  rows.push(['🌅','First ever game',`${fdate(g0.date)} · ${g0.scoreA}–${g0.scoreB}`]);
+  const fg=gs.find(g=>Object.keys(g.goals||{}).length);
+  if(fg){const pid=Object.keys(fg.goals)[0];
+    rows.push(['⚽','First ever goal',`${(player(pid)||{}).name||'—'} · ${fdate(fg.date)}`])}
+  const fh=gs.find(g=>Object.values(g.goals||{}).some(n=>n>=3));
+  if(fh){const pid=Object.entries(fh.goals).find(([,n])=>n>=3)[0];
+    rows.push(['⚡','First hat-trick',`${(player(pid)||{}).name||'—'} · ${fdate(fh.date)}`])}
+  const fc=gs.find(g=>g.scoreA===0||g.scoreB===0);
+  if(fc)rows.push(['🧤','First shut-out',`${fdate(fc.date)} · ${fc.scoreA}–${fc.scoreB}`]);
+  const fd=gs.find(g=>g.result==='D');
+  if(fd)rows.push(['🤝','First draw',`${fdate(fd.date)} · ${fd.scoreA}–${fd.scoreB}`]);
+  return `<div class="sechead">Firsts</div>
+    <div class="card">${rows.map(([e,t,d])=>`
+      <div class="row"><div style="font-size:20px;flex:0 0 26px">${e}</div>
+        <div class="rt"><div class="r1">${t}</div><div class="r2">${esc(d)}</div></div></div>`).join('')}</div>`;
+}
+
+function openMoment(id){
+  const m=moments().find(x=>x.id===id); if(!m)return;
+  const me=fplMine();
+  openSheet('Moment',`${momentCard(m,me?me.pid:null)}
+    <div class="sechead">Who was there</div>
+    <div class="card">${m.owners.map((pid,i)=>`
+      <div class="row"><div style="flex:0 0 26px;text-align:center;color:var(--label3);font-size:12px">#${String(i+1).padStart(3,'0')}</div>
+        <div class="rt"><div class="r1">${esc((player(pid)||{}).name||'—')}</div></div></div>`).join('')}</div>`);
+}
+
 function vBets(){
   $('#navMount').innerHTML=navbar();
   const me=fplMine(), b=bets();
@@ -6865,9 +7649,9 @@ function vBets(){
         <div style="flex:0 0 24px;text-align:center;font-weight:800;color:${i<3?'var(--tint)':'var(--label3)'}">${i+1}</div>
         <div class="rt"><div class="r1">${esc(r.m.name)}</div>
           <div class="r2">${(function(){const P=pnl(r.m.pid),bo=bailoutCount(r.m.pid);
-            return `${P.won} of ${P.played} · ${usdSigned(P.profit)}${bo?` · ${bo} top-up${bo===1?'':'s'}`:''}`})()}${r.open?` · ${usd(r.open)} riding`:''}</div></div>
-        <div class="rv" style="font-weight:800">${usd(r.total)}</div></div>`).join('')}</div>
-      <div class="note">Everyone starts on ${usd(BET_RULES.start)}. Shown is balance plus anything still riding.</div>
+            return `${P.won} of ${P.played} won · wallet ${usd(r.total)}${bo?` · ${bo} top-up${bo===1?'':'s'}`:''}`})()}${r.open?` · ${usd(r.open)} riding`:''}</div></div>
+        <div class="rv" style="font-weight:800;color:${r.profit>0?'var(--green)':r.profit<0?'var(--red)':'var(--label2)'}">${usdSigned(r.profit)}</div></div>`).join('')}</div>
+      <div class="note">Ranked by profit from betting alone, so buying things in the shop does not push you down the table. Everyone starts on ${usd(BET_RULES.start)}.</div>
       ${(function(){const w=biggestWins(5); if(!w.length)return '';
         return `<div class="sechead">🏅 Biggest wins</div>
         <div class="card">${w.map((x,i)=>{
@@ -6978,9 +7762,10 @@ function vGames(){
 
 function vHistory(){
   $('#navMount').innerHTML=navbar();
-  const tabs=[['records','Records'],['fame','Champions'],['rivals','Rivalries'],['improve','Risers']];
+  const tabs=[['records','Records'],['moments','Moments'],['fame','Champions'],['rivals','Rivalries'],['improve','Risers']];
   let body='';
   if(HMODE==='records')body=histRecords();
+  else if(HMODE==='moments')body=histMoments();
   else if(HMODE==='fame')body=histFame();
   else if(HMODE==='rivals')body=histRivals();
   else body=histImproved();
@@ -7034,6 +7819,7 @@ function histRecords(){
       <td class="c">${x.D}</td><td class="c">${x.L}</td><td class="c">${x.G}</td><td class="c">${x.cs}</td>
       <td class="c">${Math.round(x.wr*100)}%</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
   <div class="note">Every game from every season, matched on player name.</div>
+  ${histFirsts()}
   ${seasonCompare()}`;
 }
 
@@ -8082,6 +8868,20 @@ function vLeague(){
         <p>Log a game and the table builds itself.</p><button class="btn pri" onclick="newGame()">Log a game</button></div>`}
 
       <div class="sechead">Seasons</div>
+      <div class="card" style="margin-bottom:12px">
+        ${S.finished?`
+          <div class="row"><div style="font-size:19px;flex:0 0 26px">🏁</div>
+            <div class="rt"><div class="r1">${esc(S.name)} is finished</div>
+              <div class="r2">Frozen. Start the next one when you are ready.</div></div></div>
+          <div class="row tap" onclick="showAwards()"><div style="font-size:19px;flex:0 0 26px">🏆</div>
+            <div class="rt"><div class="r1">Replay awards night</div></div>${chev}</div>
+          <div class="row tap" onclick="nextSeason()"><div style="font-size:19px;flex:0 0 26px">✨</div>
+            <div class="rt"><div class="r1" style="color:var(--tint)">Start a new season</div>
+              <div class="r2">Squad, levels, trophies and cosmetics carry over</div></div>${chev}</div>`
+        :`<div class="row tap" onclick="endSeason()"><div style="font-size:19px;flex:0 0 26px">🏁</div>
+            <div class="rt"><div class="r1">End season ${esc(S.name)}</div>
+              <div class="r2">Runs the checks, then the awards ceremony</div></div>${chev}</div>`}
+      </div>
       <div class="card">
         <div class="row"><div class="rt"><div class="r1">${esc(S.name)}</div>
           <div class="r2">Current · ${g.length} games${tbl.length?` · leader ${esc(tbl[0].name)}`:''}</div></div>
@@ -8304,7 +9104,7 @@ async function saveGame(){if(!requireAdmin())return;
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
-  try{ settleBets() }catch(e){}
+  try{ payWages(); settleBets() }catch(e){}
   const _ups=levelUps(_lvlBefore);
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
   if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
