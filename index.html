@@ -2918,7 +2918,6 @@ function downloadFile(name,content,type){
 const NAV=[
  ['home','Home','🏠','M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5'],
  ['league','League','📊','M4 20V9M10 20V4M16 20v-8M2 20h20'],
- ['fixtures','Fixtures','📅','M8 2v3M16 2v3M3.5 9h17M5 5h14a1.5 1.5 0 0 1 1.5 1.5v13A1.5 1.5 0 0 1 19 21H5a1.5 1.5 0 0 1-1.5-1.5v-13A1.5 1.5 0 0 1 5 5z'],
  ['squad','Squad','👥','M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16.5 7.2a3.5 3.5 0 0 1 0 6.6M18 20a6.5 6.5 0 0 0-1.6-4.3'],
  ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
  ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
@@ -2927,9 +2926,7 @@ const NAV=[
  ['stats','Stats','📈','M3 3v18h18M7 15l3.5-4 3 2.5L20 7'],
  ['sky','Sky Sports','📺','M4 17a5 5 0 0 1 .6-9.96A6 6 0 0 1 17 6.5 4.5 4.5 0 0 1 18 17zM9 21l3-3 3 3'],
  ['tactics','Tactics','📋','M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM9 3v3h6V3M12 10v7M9 13h6'],
- ['compare','Compare','⚖️','M12 3v18M6 8l-3.5 4L6 16M18 8l3.5 4L18 16'],
  ['history','Hall of Fame','🏛️','M4 4h13a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zM8 8h8M8 12h8M8 16h5'],
- ['comps','Competitions','🏆','M6 3h12v4a6 6 0 0 1-12 0V3zM4 5H2v1.5A3 3 0 0 0 5 9.5M20 5h2v1.5a3 3 0 0 1-3 3M9 21h6M12 17v4'],
  ['admin','Admin','🔐','M12 15v3M7 10V7a5 5 0 0 1 10 0v3M5.5 10h13a1.5 1.5 0 0 1 1.5 1.5v8a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 19.5v-8A1.5 1.5 0 0 1 5.5 10z']];
 const TABS=['home','league','squad','tactics','admin'];
 let VIEW='home';
@@ -3010,6 +3007,7 @@ function render(){ try{applySeasonTint()}catch(e){}
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
   try{ if(!paintAwards())paintSlip() }catch(e){}
   try{paintFab()}catch(e){}
+  try{ if(VIEW==='league'&&LMODE==='fixtures')focusFixtureSearch() }catch(e){}
   try{injectStyleCSS();applyShopTheme();syncThemeColour()}catch(e){}
   try{applyEvent()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
@@ -3167,17 +3165,14 @@ function gameRow(g){
     <div class="rv" style="font-weight:700;color:var(--label)">${g.scoreA??0}–${g.scoreB??0}</div>${chev}</div>`}
 
 /* ============ COMPETITIONS ============ */
-function vComps(){
+function vComps(){ LMODE='comps'; go('league'); }
+function compsBody(){
   const c=comp();
-  $('#navMount').innerHTML=navbar();
   let body='';
   if(c.type==='league')body=lgBlock(c);
   else if(c.type==='knockout')body=koBlock(c);
   else body=grBlock(c);
-  app().innerHTML=`<div class="view active">
-    <div class="largetitle">${c.icon} ${esc(c.name)}</div>
-    <div class="subtitle">${CT[c.type].label}</div>
-    <div class="wrap">${cloudBanner()}
+  return `<div class="sechead">${c.icon} ${esc(c.name)} <span style="text-transform:none;font-weight:500;color:var(--label3)">· ${CT[c.type].label}</span></div>
       <div class="chips" style="margin-bottom:16px">
         ${comps().map(x=>`<button class="${x.id===COMP?'on':''}" onclick="COMP='${x.id}';render()">${x.icon} ${esc(x.name)}</button>`).join('')}
         <button data-admin onclick="newComp()">+ New</button></div>
@@ -3189,7 +3184,7 @@ function vComps(){
         ${c.type!=='league'?`<div class="row tap" onclick="resetComp()"><div class="rt"><div class="r1" style="color:var(--red)">Reset draw &amp; results</div></div></div>`:''}
         ${comps().length>1?`<div class="row tap" onclick="deleteComp()"><div class="rt"><div class="r1" style="color:var(--red)">Delete competition</div></div></div>`:''}
       </div>
-    </div></div>`;
+    `;
 }
 function lgBlock(c){
   const st=statsFor(compGames(c.id)),m=movement(c.id),g=compGames(c.id);
@@ -3290,7 +3285,8 @@ const tile=(v,l,c,col)=>`<div class="tile"><div class="tv" style="color:${col||'
 /* ============ FIXTURES ============ */
 let FF='all';
 let FSORT='new', FPLAYER='all', FRESULT='all', FSEARCH='';
-function vFixtures(){
+function vFixtures(){ LMODE='fixtures'; go('league'); }
+function fixturesBody(){
   let g=allGames();
   if(FF!=='all')g=g.filter(x=>x.compId===FF);
   if(FPLAYER!=='all')g=g.filter(x=>(x.teamA||[]).includes(FPLAYER)||(x.teamB||[]).includes(FPLAYER));
@@ -3320,11 +3316,7 @@ function vFixtures(){
   const roster=[...season().players].filter(p=>p.active!==false).sort((a,b)=>a.name.localeCompare(b.name));
   const active=(FF!=='all')+(FPLAYER!=='all')+(FRESULT!=='all')+(q?1:0);
   const tot=allGames().length;
-  $('#navMount').innerHTML=navbar();
-  app().innerHTML=`<div class="view active">
-    <div class="largetitle">Fixtures</div>
-    <div class="subtitle">${g.length===tot?`${tot} games logged`:`${g.length} of ${tot} games`}</div>
-    <div class="wrap">${cloudBanner()}
+  return `
       <button class="btn pri full" data-admin style="margin-bottom:14px" onclick="newGame()">Log a game</button>
       <input class="search" placeholder="Search a player or round…" value="${esc(FSEARCH)}" id="fxq"
         oninput="FSEARCH=this.value;render()" style="margin-bottom:10px">
@@ -3357,7 +3349,9 @@ function vFixtures(){
       :`<div class="empty"><div class="ee">🔍</div><h3>${tot?'No games match':'No fixtures yet'}</h3>
         <p>${tot?'Try clearing a filter or searching something else.':'Every game you log appears here, newest first.'}</p>
         ${tot?'<button class="btn pri" onclick="clearFilters()">Clear filters</button>':''}</div>`}
-    </div></div>`;
+    `;
+}
+function focusFixtureSearch(){
   const el=$('#fxq');if(el&&FSEARCH){el.focus();el.setSelectionRange(el.value.length,el.value.length)}
 }
 function clearFilters(){FF='all';FPLAYER='all';FRESULT='all';FSEARCH='';FSORT='new';render()}
@@ -8220,9 +8214,9 @@ function vStats(){
     <div class="subtitle">${st.length} player${st.length===1?'':'s'} · ${total} game${total===1?'':'s'}</div>
     <div class="wrap">${cloudBanner()}
       <div class="seg" style="margin-bottom:12px">
-        ${[['table','Table'],['leaders','Leaders'],['splits','Splits'],['chem','Chemistry']].map(([k,l])=>`<button class="${SMODE===k?'on':''}" onclick="SMODE='${k}';render()">${l}</button>`).join('')}
+        ${[['table','Table'],['leaders','Leaders'],['splits','Splits'],['chem','Chemistry'],['compare','Compare']].map(([k,l])=>`<button class="${SMODE===k?'on':''}" onclick="SMODE='${k}';render()">${l}</button>`).join('')}
       </div>
-      ${SMODE==='chem'?'':`<div class="filterbar" style="margin-bottom:12px">
+      ${(SMODE==='chem'||SMODE==='compare')?'':`<div class="filterbar" style="margin-bottom:12px">
         <select class="fsel" onchange="SCOMP=this.value;render()">
           <option value="all" ${SCOMP==='all'?'selected':''}>All comps</option>
           ${comps().map(c=>`<option value="${c.id}" ${SCOMP===c.id?'selected':''}>${c.icon} ${esc(c.name)}</option>`).join('')}
@@ -8247,6 +8241,7 @@ function vStats(){
         <div class="note">App% share of games attended · CS clean sheets · GF/GA team goals for and against while on the pitch · PPG points per game · GD/G goal difference per game · Idx POTY index out of 100.</div>`
       : SMODE==='leaders'? statLeaders(st)
       : SMODE==='chem'? statChem()
+      : SMODE==='compare'? compareBody()
       : statSplits(st,total)}
     </div></div>`;
 }
@@ -8319,12 +8314,11 @@ function statSplits(st,total){
 
 /* ============ COMPARE ============ */
 let CA=null,CB=null,CMODE='overview';
-function vCompare(){
+function vCompare(){ SMODE='compare'; go('stats'); }
+function compareBody(){
   const st=statsAll().filter(x=>x.P>0).sort(tableSort);
-  $('#navMount').innerHTML=navbar();
-  if(st.length<2){app().innerHTML=`<div class="view active"><div class="largetitle">Compare</div>
-    <div class="wrap">${cloudBanner()}<div class="empty"><div class="ee">⚖️</div><h3>Need two players</h3>
-    <p>Once two players have games logged you can put them head to head.</p></div></div></div>`;return}
+  if(st.length<2){return `<div class="empty"><div class="ee">⚖️</div><h3>Need two players</h3>
+    <p>Once two players have games logged you can put them head to head.</p></div>`}
   if(!CA||!st.some(x=>x.id===CA))CA=st[0].id;
   if(!CB||!st.some(x=>x.id===CB)||CB===CA)CB=(st.find(x=>x.id!==CA)||st[0]).id;
   const a=st.find(x=>x.id===CA),b=st.find(x=>x.id===CB);
@@ -8338,9 +8332,7 @@ function vCompare(){
   let aw=0,bw=0;
   METS.forEach(([,k,,low])=>{const av=a[k],bv=b[k];if(av===bv)return;
     const aBetter=low?av<bv:av>bv; if(aBetter)aw++;else bw++});
-  app().innerHTML=`<div class="view active">
-    <div class="largetitle">Compare</div><div class="subtitle">Head to head</div>
-    <div class="wrap">${cloudBanner()}
+  return `
       <div class="grid cmp2" style="margin-bottom:12px">
         ${[[a,'CA','var(--tint)'],[b,'CB','var(--blue)']].map(([x,v,col])=>`<div class="card pad" style="text-align:center">
           <div style="display:flex;justify-content:center;margin-bottom:9px">${avatar(x,48)}</div>
@@ -8381,7 +8373,7 @@ function vCompare(){
           <div class="r2">${t.aw===t.bw?'Dead even':`${esc(t.aw>t.bw?a.name:b.name)} leads by ${Math.abs(t.aw-t.bw)}`}</div></div></div>`:''}
       </div>
       <div class="note">“Same team” counts games where they played together; “against each other” counts games on opposite sides.</div>`}
-    </div></div>`;
+    `;
 }
 function cmpForm(a,b){
   const spark=(m,col)=>{
@@ -8685,10 +8677,17 @@ function miniPitch(f){
   return `<div class="fmini">${f.slots.map(([x,y,pos])=>`<div class="fdot" style="left:${x}%;top:${y}%;color:${col[pos]||'#1F7A44'}">${pos==='GK'?'G':''}</div>`).join('')}</div>`;
 }
 function tacFormations(){
-  const FORMS=FORMATIONS.filter(f=>!f.wb);
+  /* the same team-size switch the whiteboard has, so every shape is browsable here */
   const cur=board().fid;
   const f=fmById(cur);
-  return `<div class="tacgrid">${FORMS.map(x=>`<div class="formcard ${x.id===cur?'on':''}" onclick="setFormation('${x.id}')">
+  const size=f.size||7;
+  const FORMS=FORMATIONS.filter(x=>(x.size||7)===size);
+  return `<div class="lbl">Team size</div>
+    <div class="seg" style="margin-bottom:12px">
+      ${[[6,'6-a-side'],[7,'7-a-side'],[9,'9-a-side'],[11,'11-a-side']].map(([n,l])=>
+        `<button class="${size===n?'on':''}" onclick="setBoardSize(${n})">${l}</button>`).join('')}
+    </div>
+    <div class="tacgrid">${FORMS.map(x=>`<div class="formcard ${x.id===cur?'on':''}" onclick="setFormation('${x.id}')">
       ${miniPitch(x)}
       <div class="ftop"><span class="fn">${x.name}</span><span class="ftag">${esc(x.tag)}</span></div></div>`).join('')}</div>
     <div class="sechead">${f.name} · ${esc(f.tag)}</div>
@@ -8972,6 +8971,7 @@ function leagueKey(total){
   return `<div class="lgkey">${items.map(([c,l,r])=>`<div class="lgkey-i">
     <span class="lgkey-d ${c}"></span><span class="lgkey-l">${l}</span><span class="lgkey-r">${r}</span></div>`).join('')}</div>`;
 }
+let LMODE='table';
 function vLeague(){
   const S=season(),lc=lgComp(),st=lgStats(),g=compGames(lc.id),m=movement(lc.id);
   const tbl=[...st].filter(x=>x.P>0).sort(tableSort);
@@ -8982,9 +8982,13 @@ function vLeague(){
     <div class="largetitle">League</div>
     <div class="subtitle">${esc(S.name)} · ${g.length} games · ${goals} goals</div>
     <div class="wrap">${cloudBanner()}
-      ${tbl.length?`<div class="tiles" style="margin-bottom:6px">
-          ${tile(g.length,'Games')}${tile(goals,'Goals')}${tile((goals/Math.max(1,g.length)).toFixed(1),'Per game')}${tile(tbl.length,'Players')}</div>
-        <div class="sechead">Table</div>
+      <div class="seg" style="margin-bottom:12px">
+        <button class="${LMODE==='table'?'on':''}" onclick="LMODE='table';render()">Table</button>
+        <button class="${LMODE==='fixtures'?'on':''}" onclick="LMODE='fixtures';render()">Fixtures</button>
+        <button class="${LMODE==='comps'?'on':''}" onclick="LMODE='comps';render()">Competitions</button>
+      </div>
+      ${LMODE==='comps'?compsBody():LMODE==='fixtures'?fixturesBody():`
+      ${tbl.length?`<div class="sechead">Table</div>
         <div class="card"><div class="tw"><table>
           <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
           <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
@@ -8998,6 +9002,20 @@ function vLeague(){
         <div class="note">Win 3 · Draw 1 · Loss 0 · GF/GA are your team's goals while you were on it.</div>`
       :`<div class="empty"><div class="ee">📋</div><h3>No league games yet</h3>
         <p>Log a game and the table builds itself.</p><button class="btn pri" onclick="newGame()">Log a game</button></div>`}
+
+      ${tbl.length?`<div class="sechead">Season so far</div>
+        <div class="tiles" style="margin-bottom:14px">
+          ${(function(){
+            const top=[...tbl].sort((a,b)=>b.G-a.G)[0];
+            const tight=[...tbl].filter(x=>x.P>=3).sort((a,b)=>(a.GA/a.P)-(b.GA/b.P))[0];
+            const big=g.slice().sort((a,b)=>Math.abs(b.scoreA-b.scoreB)-Math.abs(a.scoreA-a.scoreB))[0];
+            return tile(g.length,'Games','',null)
+              + tile((goals/Math.max(1,g.length)).toFixed(1),'Goals a game',`${goals} in total`,null)
+              + (top&&top.G?tile(top.G,'Top scorer',esc(top.name)+' · goals','var(--green)'):tile(goals,'Goals'))
+              + (tight?tile((tight.GA/tight.P).toFixed(1),'Fewest conceded',esc(tight.name)+' · per game','var(--tint)')
+                 :tile(big?`${big.scoreA}–${big.scoreB}`:'—','Biggest win'));
+          })()}
+        </div>`:''}
 
       <div class="sechead">Seasons</div>
       <div class="card" style="margin-bottom:12px">
@@ -9029,6 +9047,7 @@ function vLeague(){
           <div class="r2">Archive this one and begin fresh</div></div>${chev}</div>
         <div class="row tap" onclick="renameSeason()"><div class="rt"><div class="r1">Rename this season</div></div>${chev}</div>
       </div>
+      `}
     </div></div>`;
 }
 function openSeason(id){pushBack();app()._sid=id;VIEW='seasonView';
@@ -9733,7 +9752,7 @@ function exportWrapped(){
 /* The quick-add button only belongs on the screens where it does something:
    logging a game, or adding a player on the squad page. Everywhere else it was
    just floating over the content. */
-const FAB_VIEWS=['home','league','fixtures','squad','comps'];
+const FAB_VIEWS=['home','league','squad'];
 function paintFab(){
   const f=document.getElementById('fab'); if(!f)return;
   const show=FAB_VIEWS.includes(VIEW);
