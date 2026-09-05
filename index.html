@@ -2715,7 +2715,7 @@ const XP={ assist:12,app:10,win:25,draw:12,goal:20,hat:60,streak:15,
      keeps paying well down the scale. Weighted by position the same way the
      FPL side is, so defenders are actually rewarded for defending. */
   defend:[70,58,49,41,34,28,22,16],
-  defendW:{GK:1.2,DEF:1.0,MID:0.7,ATT:0.45}};
+  defendW:{GK:1.35,DEF:1.12,MID:0.7,ATT:0.45}};
 const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Number'],['⚡','First Appearance'],['🎯','Squad Player'],
 ['🔁','Rotation Option'],['🧩','Regular Starter'],['🛠️','Ever Present'],['📈','Breakout Season'],['💪','Proven Performer'],
 ['🔥','In Form'],['💥','Match Winner'],['⭐','Standout Season'],['🧠','Big Game Player'],['💎','Star Man'],
@@ -2743,7 +2743,7 @@ function best(seq,f){let b=0,c=0;seq.forEach(s=>{c=f(s)?c+1:0;b=Math.max(b,c)});
 /* Goal challenges hugely outnumber defensive ones, which pushed attackers far
    ahead on XP. These multipliers level the ladder without removing anything:
    the same challenges exist, they are just worth different amounts by group. */
-const CH_W={Goals:0.42,Scoring:0.42,Assists:1.0,Defending:1.6,Winning:1.2,Team:1.3,Milestones:1.25,Appearances:1.2};
+const CH_W={Goals:0.42,Scoring:0.42,Assists:1.0,Defending:2.2,Winning:1.2,Team:1.3,Milestones:1.25,Appearances:1.2};
 const CH=[
  {id:'a1',g:'Appearances',e:'👟',n:'First Steps',d:'Play your first game',x:40,f:m=>[Math.min(m.P,1),1]},
  {id:'a5',g:'Appearances',e:'📋',n:'Settling In',d:'Play 5 games',x:70,f:m=>[Math.min(m.P,5),5]},
@@ -4140,11 +4140,24 @@ const BASE_PRICES={
   Slade:5, 'Soroush S':5,
   Rayan:4, Noah:4, Dylan:4, Yousef:4, Joshua:4
 };
+/* Match a squad name to the price list without being fussy about case, spacing
+   or extra names — "hassan  raza" and "Raza" both find the same entry. */
+const _norm=x=>String(x||'').toLowerCase().replace(/\s+/g,' ').trim();
+const BASE_BY_NORM=(()=>{const o={};Object.entries(BASE_PRICES).forEach(([k,v])=>o[_norm(k)]=v);return o})();
 function basePrice(pid){
   const p=player(pid); if(!p)return FPL_RULES.startPrice;
-  const byName=BASE_PRICES[(p.name||'').trim()];
-  if(byName!=null)return byName;
-  if(p.basePrice!=null)return p.basePrice;
+  if(p.basePrice!=null)return p.basePrice;          /* an explicit override always wins */
+  const n=_norm(p.name);
+  if(BASE_BY_NORM[n]!=null)return BASE_BY_NORM[n];
+  /* try the surname, then any listed name contained in theirs */
+  const parts=n.split(' ');
+  const last=parts[parts.length-1];
+  if(BASE_BY_NORM[last]!=null)return BASE_BY_NORM[last];
+  const hit=Object.keys(BASE_BY_NORM).find(k=>{
+    const kp=k.split(' ');
+    return parts.includes(k)||kp.every(w=>parts.includes(w));
+  });
+  if(hit)return BASE_BY_NORM[hit];
   return FPL_RULES.startPrice;
 }
 function priceBand(pid){
@@ -7928,6 +7941,9 @@ function autoFill(keep){
 async function migratePrices(){
   const f=fpl();
   if(f.migrated===MIGRATION_KEY)return false;
+  /* wipe any price map saved under the old rules and rebuild from the new list */
+  f.prices={};
+  try{ recalcPrices() }catch(e){}
   let touched=0;
   (f.managers||[]).forEach(m=>{
     if(!m.teamName||!(m.squad||[]).length)return;
@@ -8124,7 +8140,7 @@ function vBets(){
         <div class="sb-h-t"><b>${shirtBadge(p)}${esc(p.name)}</b>
           <span>${p.pos} · ${mk[0].n} game${mk[0].n===1?'':'s'} of form</span></div>
       </div>
-      ${['Goals','Goals against','Result'].map(grp=>{
+      ${['Goals','Assists','Goals against','Result'].map(grp=>{
         const rows=mk.filter(m=>m.grp===grp); if(!rows.length)return '';
         return `<div class="sb-grp">${grp}</div>
         <div class="sb-list">${rows.map(m=>{
@@ -10231,7 +10247,9 @@ document.addEventListener('keydown',e=>{
   /* Prices are fully derived from the games, so recompute once at boot. This
      self-heals any map saved under older rules and guarantees the stocks chart
      and the market always agree. */
-  try{ if(season()&&season().games&&season().games.length)recalcPrices(); }catch(e){}
+  /* Always rebuild, even with no games yet — otherwise a price map saved under
+     the old flat-£10m rules survives untouched until the first game is logged. */
+  try{ if(season())recalcPrices(); }catch(e){}
   /* one-off: move everyone onto the bespoke price list */
   try{ migratePrices().then(n=>{ if(n){ render();
         toast(`⚠️ ${n} team${n===1?' was':'s were'} auto-filled after the price update`) } }) }catch(e){}
