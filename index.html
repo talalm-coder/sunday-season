@@ -1864,6 +1864,37 @@ body[data-event="retro"] *{font-family:'Courier New',monospace!important}
 .sw-t_mono{background:linear-gradient(150deg,#fff,#111);color:#fff}
 body[data-shop="mono"]{--bg:#F5F5F5;--card:#fff;--label:#000;--label2:#333;--label3:#888;--tint:#000;--sep:rgba(0,0,0,.2);--fill:#00000010;--fill2:#0000001c}
 .fut{position:relative}
+
+/* ---- gameweek history ---- */
+.gwbar{display:flex;gap:7px;overflow-x:auto;padding:2px 2px 12px;-webkit-overflow-scrolling:touch}
+.gwbar::-webkit-scrollbar{display:none}
+.gwbar button{flex:0 0 auto;border:none;background:var(--fill2);color:var(--label2);border-radius:20px;
+  padding:7px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.gwbar button.on{background:var(--tint);color:var(--tint-ink)}
+.bdown{background:var(--fill);padding:8px 14px 10px;border-bottom:.5px solid var(--sep)}
+.bd-r{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:3px 0;color:var(--label2)}
+.bd-r b{font-variant-numeric:tabular-nums;font-weight:700;color:var(--label)}
+.bd-r b.dn{color:var(--red)}
+.bd-r.tot{border-top:.5px solid var(--sep);margin-top:5px;padding-top:6px;font-weight:800;color:var(--label)}
+.bd-r.tot b{font-size:15px}
+
+.revbar{display:flex;align-items:center;gap:11px;background:linear-gradient(120deg,#FF9500,#FF6B00);
+  border-radius:14px;padding:12px 14px;margin-bottom:14px;color:#fff}
+.rev-e{font-size:22px}
+.rev-t{flex:1;min-width:0}
+.rev-t b{display:block;font-size:14.5px;font-weight:800}
+.rev-t span{display:block;font-size:12px;opacity:.9;margin-top:2px;line-height:1.4}
+.revbar button{flex:0 0 auto;border:none;background:rgba(255,255,255,.22);color:#fff;border-radius:20px;
+  padding:8px 14px;font-size:13px;font-weight:800;cursor:pointer}
+.mc-a{margin-left:3px;font-size:11px;opacity:.9}
+
+.gwpager{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:11px;border-top:1px solid rgba(255,255,255,.16)}
+.gwpager button{flex:0 0 auto;width:34px;height:34px;border:none;border-radius:50%;background:rgba(255,255,255,.18);
+  color:#fff;font-size:19px;font-weight:800;cursor:pointer;line-height:1}
+.gwpager button:disabled{opacity:.28}
+.gwp-mid{flex:1;text-align:center;color:#fff}
+.gwp-mid b{display:block;font-size:14px;font-weight:800}
+.gwp-mid span{display:block;font-size:11.5px;opacity:.72;margin-top:1px}
 </style>
 </head>
 <body>
@@ -2645,14 +2676,16 @@ function groupTable(c,gid){
 /* ============ PLAYER STATS (league + overall) ============ */
 function statsFor(games,upto){
   const S=season(),list=upto==null?games:games.slice(0,upto+1),m={};
-  S.players.forEach(p=>m[p.id]={...p,P:0,W:0,D:0,L:0,G:0,GF:0,GA:0,pts:0,seq:[]});
+  S.players.forEach(p=>m[p.id]={...p,P:0,W:0,D:0,L:0,G:0,A:0,GF:0,GA:0,pts:0,seq:[]});
   list.forEach(g=>{const a=g.scoreA??0,b=g.scoreB??0;
     [['A',g.teamA,a,b],['B',g.teamB,b,a]].forEach(([sd,tm,gf,ga])=>(tm||[]).forEach(pid=>{
       const x=m[pid];if(!x)return;x.P++;x.GF+=gf;x.GA+=ga;x.G+=(g.goals&&g.goals[pid])||0;
+      x.A+=(g.assists&&g.assists[pid])||0;
       let r;if(g.result==='D'){x.D++;x.pts++;r='D'}else if(g.result===sd){x.W++;x.pts+=3;r='W'}else{x.L++;r='L'}
-      x.seq.push({r,gf,ga,goals:(g.goals&&g.goals[pid])||0,gid:g.id,date:g.date})}))});
+      x.seq.push({r,gf,ga,goals:(g.goals&&g.goals[pid])||0,assists:(g.assists&&g.assists[pid])||0,gid:g.id,date:g.date})}))});
   const arr=Object.values(m);
   arr.forEach(x=>{x.GD=x.GF-x.GA;x.ppg=x.P?x.pts/x.P:0;x.gpg=x.P?x.G/x.P:0;x.cpg=x.P?x.GA/x.P:0;
+    x.apg=x.P?x.A/x.P:0;x.GA_=x.G+x.A;
     x.wr=x.P?x.W/x.P:0;x.app=list.length?x.P/list.length:0;x.cs=x.seq.filter(s=>s.ga===0).length;
     const l5=x.seq.slice(-5);x.last5=l5.map(v=>v.r);
     x.form=l5.length?l5.reduce((s,v)=>s+(v.r==='W'?3:v.r==='D'?1:0),0)/l5.length:0;
@@ -2676,7 +2709,7 @@ function movement(cid){const g=compGames(cid);if(g.length<2)return{};
   pv.forEach(x=>pm[x.id]=x.rank);const o={};now.forEach(x=>o[x.id]=pm[x.id]===undefined?0:pm[x.id]-x.rank);return o}
 
 /* ============ CAREER: 30 LEVELS ============ */
-const XP={app:10,win:25,draw:12,goal:20,hat:60,streak:15,
+const XP={ assist:12,app:10,win:25,draw:12,goal:20,hat:60,streak:15,
   /* Defensive XP by goals conceded [0,1,2,3,4,5,6,7+]. In 7-a-side a clean
      sheet is rare and four or five conceded is an ordinary game, so the ladder
      keeps paying well down the scale. Weighted by position the same way the
@@ -2695,7 +2728,7 @@ const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Numb
 /* Ballon d'Or is level 38 and reachable in one strong season from any position.
    Icon and Legend sit above it for people who keep going year after year. */
 const LEVELS=LVN.map(([e,t],i)=>({n:i+1,e,t,xp:i===0?0:Math.round(12800*Math.pow(i/39,2.1)/5)*5}));
-function xpOf(m){let x=m.P*XP.app+m.W*XP.win+m.D*XP.draw+m.G*XP.goal;
+function xpOf(m){let x=m.P*XP.app+m.W*XP.win+m.D*XP.draw+m.G*XP.goal+(m.A||0)*XP.assist;
   m.seq.forEach(s=>{if(s.goals>=3)x+=XP.hat;
     const w=XP.defendW[m.pos||'MID']??0.7;
     x+=Math.round(XP.defend[Math.min(s.ga??0,XP.defend.length-1)]*w);});
@@ -2710,7 +2743,7 @@ function best(seq,f){let b=0,c=0;seq.forEach(s=>{c=f(s)?c+1:0;b=Math.max(b,c)});
 /* Goal challenges hugely outnumber defensive ones, which pushed attackers far
    ahead on XP. These multipliers level the ladder without removing anything:
    the same challenges exist, they are just worth different amounts by group. */
-const CH_W={Goals:0.42,Scoring:0.42,Defending:1.6,Winning:1.2,Team:1.3,Milestones:1.25,Appearances:1.2};
+const CH_W={Goals:0.42,Scoring:0.42,Assists:1.0,Defending:1.6,Winning:1.2,Team:1.3,Milestones:1.25,Appearances:1.2};
 const CH=[
  {id:'a1',g:'Appearances',e:'👟',n:'First Steps',d:'Play your first game',x:40,f:m=>[Math.min(m.P,1),1]},
  {id:'a5',g:'Appearances',e:'📋',n:'Settling In',d:'Play 5 games',x:70,f:m=>[Math.min(m.P,5),5]},
@@ -2825,6 +2858,23 @@ const CH=[
    f:m=>[Math.min(m.seq.filter(s=>s.r!=='L').length,18),18]},
  {id:'engine',g:'Team',e:'⚙️',n:'The Engine',d:'Play 15 games and average 2+ points',x:540,
    f:m=>[m.P>=15?Math.min(Math.round(m.ppg*100),200):0,200]},
+ /* ---- creating for others ---- */
+ {id:'as1',g:'Assists',e:'🅰️',n:'The Provider',d:'Set up your first goal',x:60,
+   f:m=>[Math.min(m.A||0,1),1]},
+ {id:'as5',g:'Assists',e:'🎯',n:'Playmaker',d:'Set up 5 goals',x:110,
+   f:m=>[Math.min(m.A||0,5),5]},
+ {id:'as12',g:'Assists',e:'🪄',n:'The Magician',d:'Set up 12 goals',x:220,
+   f:m=>[Math.min(m.A||0,12),12]},
+ {id:'as25',g:'Assists',e:'👁️',n:'Vision',d:'Set up 25 goals',x:520,
+   f:m=>[Math.min(m.A||0,25),25]},
+ {id:'as2game',g:'Assists',e:'🎁',n:'Two In A Game',d:'Set up 2 goals in one game',x:180,
+   f:m=>[m.seq.some(s=>(s.assists||0)>=2)?1:0,1]},
+ {id:'ga1',g:'Assists',e:'⚡',n:'Involved',d:'Score and assist in the same game',x:200,
+   f:m=>[m.seq.some(s=>s.goals>0&&(s.assists||0)>0)?1:0,1]},
+ {id:'ga20',g:'Assists',e:'💫',n:'Twenty Involvements',d:'20 goals and assists combined',x:340,
+   f:m=>[Math.min((m.G||0)+(m.A||0),20),20]},
+ {id:'ga40',g:'Assists',e:'🌟',n:'Forty Involvements',d:'40 goals and assists combined',x:640,
+   f:m=>[Math.min((m.G||0)+(m.A||0),40),40]},
 ];
 CH.forEach(c=>{ c.x=Math.round(c.x*(CH_W[c.g]??1)/5)*5 });
 
@@ -3003,7 +3053,7 @@ function lockScroll(on){
 }
 
 function render(){ try{applySeasonTint()}catch(e){}
-  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,shop:vShop,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
+  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,shop:vShop,gws:vGameweeks,pgw:vPlayerGw,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
   try{ if(!paintAwards())paintSlip() }catch(e){}
   try{paintFab()}catch(e){}
@@ -3090,6 +3140,7 @@ function vHome(){
         <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
         <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
 
+      ${reviewBanner()}
       ${eventBanner()}
       ${potsRace()}
       ${closingIn()}
@@ -3197,7 +3248,7 @@ function lgBlock(c){
     <div class="sechead">Table</div>
     <div class="card"><div class="tw"><table>
       <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
-      <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
+      <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">🅰️</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
       <tbody>${rows.map((x,i)=>`<tr class="${zoneOf(i,rows.length)}" onclick="openPlayer('${x.id}')">
         <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
         <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}</span></span></td>
@@ -3404,8 +3455,8 @@ function vPlayer(pid){
       ${(p.avail&&p.avail!=='ok')?`<div style="position:relative;z-index:1;text-align:center;margin-bottom:10px">
         <span class="avpill big" style="--ac:${availOf(p).col}">${availOf(p).icon} ${availOf(p).label}</span></div>`:''}
       <div class="fut-stats">
-        ${[['POINTS',m?m.pts:0],['GOALS',m?m.G:0],['WIN RATE',m?Math.round(m.wr*100)+'%':'0%'],
-           ['PLAYED',m?m.P:0],['CLEAN SHEETS',m?m.cs:0],['RATING',m&&m.P?m.index:'—']].map(([l,v])=>`
+        ${[['POINTS',m?m.pts:0],['GOALS',m?m.G:0],['ASSISTS',m?(m.A||0):0],
+           ['PLAYED',m?m.P:0],['WIN RATE',m?Math.round(m.wr*100)+'%':'0%'],['CLEAN SHEETS',m?m.cs:0]].map(([l,v])=>`
           <div class="fut-st"><b>${v}</b><span>${l}</span></div>`).join('')}
       </div>
     </div>
@@ -3549,7 +3600,7 @@ function vCareer(){
       <div class="sechead">How XP works</div>
       <div class="card pad"><div class="note" style="padding:0;line-height:1.8">
         🎮 <b>+${XP.app}</b> an appearance · <b>+${XP.win}</b> a win · <b>+${XP.draw}</b> a draw<br>
-        ⚽ <b>+${XP.goal}</b> a goal · <b>+${XP.hat}</b> hat-trick bonus<br>
+        ⚽ <b>+${XP.goal}</b> a goal · 🅰️ <b>+${XP.assist}</b> an assist · <b>+${XP.hat}</b> hat-trick bonus<br>
         🔥 <b>+${XP.streak}</b> per win once you're past a 2-game winning streak<br>
         🧤 <b>Defending</b> — XP for how few your team conceded (a defender gets the full amount, a midfielder 70%, an attacker 45%):<br>
         ${XP.defend.map((v,i)=>`${i===0?'clean sheet':i===XP.defend.length-1?'7+':i}&nbsp;<b>+${v}</b>`).join(' · ')}<br>
@@ -3647,7 +3698,7 @@ function chalRow(c){return `<div class="chal ${c.done?'done':'locked'}">
    Denis's profile → his Career → back lands you on Denis's profile again. */
 let BACKSTACK=[];
 const NAV_LABEL={home:'Home',league:'League',fixtures:'Fixtures',squad:'Squad',tactics:'Tactics',
-  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',bets:'Betting',shop:'Shop',stats:'Stats',compare:'Compare',history:'Hall of Fame',
+  career:'Career',fpl:'Sunday FPL',sky:'Sky Sports',bets:'Betting',shop:'Shop',gws:'Gameweeks',pgw:'Player',stats:'Stats',compare:'Compare',history:'Hall of Fame',
   comps:'Competitions',admin:'Admin',player:'Player',pcareer:'Career',match:'Match',seasonView:'Season'};
 function viewSnap(){
   return {v:VIEW, pid:app()._pid, gid:app()._gid, sid:app()._sid,
@@ -4058,22 +4109,49 @@ function ovrBadge(pid,size){
    Teams lock the moment the first game of a gameweek is logged.
    ============================================================ */
 const FPL_RULES={
-  played:2, win:3, draw:1,
+  played:2, win:3, draw:1, assist:3,
   goal:{GK:6,DEF:6,MID:5,ATT:4},
-  /* Defenders are rewarded for how little the team conceded, not just for a
-     clean sheet — [0,1,2,3,4,5+] goals against. */
+  /* Paid on goals let in, indexed 0..8+. Calibrated for 7-a-side, where about
+     five a side is a normal Sunday — so it still pays at realistic scorelines
+     instead of only rewarding clean sheets. Nothing goes blank until 8+. */
   defence:{
-    GK :[10,7,5,3,2,1,0],
-    DEF:[10,7,5,3,2,1,0],
-    MID:[ 4,3,2,1,0,0,0],
-    ATT:[ 2,1,1,0,0,0,0]
+    GK :[8,7,6,5,4,3,2,1,0],
+    DEF:[8,7,6,5,4,3,2,1,0],
+    MID:[4,4,3,3,2,2,1,1,0],
+    ATT:[2,2,2,1,1,1,1,1,0]
   },
   hatTrick:3,
-  budget:52, startPrice:10, minPrice:6, maxPrice:16, chips:3,
-  transfersPerWeek:3, squadSize:5,
-  slots:['DEF','MID','ATT'],        // at least one of each, five in total
-  eligible:['DEF','MID','ATT']      // outfield only — no keepers
+  budget:50, startPrice:8, chips:3,
+  /* Prices move relative to each player's own starting price, so a £4m player
+     can never become a £14m one. */
+  floorPct:0.6, ceilPct:1.5, minPrice:3, maxPrice:20,
+  /* how far above or below the average of those who played, over 3 gameweeks */
+  moveBig:24, moveMid:16, moveSmall:10,
+  transfersPerWeek:2, transferBank:5, squadSize:5,
+  slots:['DEF','MID','ATT'],
+  eligible:['DEF','MID','ATT']
 };
+/* Opening prices for this squad. Anyone not listed starts at startPrice. */
+const BASE_PRICES={
+  Talal:14, Ziyad:14, Anas:14, Raza:10, Seb:8, Basil:8, Zach:8,
+  Sourena:14, Jean:14, JR:14, Firas:10, Willem:10, Jordan:10,
+  Wael:6, 'Soroush M':6, Koen:4,
+  Denis:7, Liam:7, Nader:7, Purva:6, Luca:6, Ronak:6,
+  Slade:5, 'Soroush S':5,
+  Rayan:4, Noah:4, Dylan:4, Yousef:4, Joshua:4
+};
+function basePrice(pid){
+  const p=player(pid); if(!p)return FPL_RULES.startPrice;
+  const byName=BASE_PRICES[(p.name||'').trim()];
+  if(byName!=null)return byName;
+  if(p.basePrice!=null)return p.basePrice;
+  return FPL_RULES.startPrice;
+}
+function priceBand(pid){
+  const b=basePrice(pid);
+  return {lo:Math.max(FPL_RULES.minPrice,Math.round(b*FPL_RULES.floorPct*10)/10),
+          hi:Math.min(FPL_RULES.maxPrice,Math.round(b*FPL_RULES.ceilPct*10)/10)};
+}
 function fpl(){
   const S=season();
   if(!S.fpl)S.fpl={managers:[],gw:1,locked:false,prices:{},ticker:[],league:'Sunday FPL Mini League'};
@@ -4149,7 +4227,7 @@ const fplMine=()=>{
 /* ---------- prices ---------- */
 function fplPrice(pid){
   const f=fpl();
-  if(f.prices[pid]==null)f.prices[pid]=FPL_RULES.startPrice;
+  if(f.prices[pid]==null)f.prices[pid]=basePrice(pid);
   return f.prices[pid];
 }
 /* Prices are RECOMPUTED from scratch off the games that actually exist, rather
@@ -4162,22 +4240,31 @@ function walkPrices(){
   const S=season(), gws=playedGws();
   const live=S.players.filter(p=>p.active!==false);
   const price={}, hist={};
-  live.forEach(p=>{ price[p.id]=FPL_RULES.startPrice; hist[p.id]=[{gw:0,v:FPL_RULES.startPrice}]; });
+  live.forEach(p=>{ const b=basePrice(p.id); price[p.id]=b; hist[p.id]=[{gw:0,v:b}]; });
   let moves=[];
   gws.forEach((gw,idx)=>{
     const win=gws.slice(Math.max(0,idx-2),idx+1);
     const pts={}; live.forEach(p=>pts[p.id]=win.reduce((t,g)=>t+fplPlayerGw(p.id,g),0));
-    const vals=live.map(p=>pts[p.id]);
+    /* Only players who actually turned out in this window are judged, and they
+       are judged against each other. Including the people who did not play
+       dragged the average down so far that simply showing up looked elite and
+       everybody rose every week. Anyone absent holds their price. */
+    const appeared=new Set();
+    win.forEach(g=>gamesInGw(g).forEach(x=>
+      [...(x.teamA||[]),...(x.teamB||[])].forEach(pid=>appeared.add(pid))));
+    const vals=live.filter(p=>appeared.has(p.id)).map(p=>pts[p.id]);
     const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
     const stepMoves=[];
     live.forEach(p=>{
+      if(!appeared.has(p.id)){ hist[p.id].push({gw,v:price[p.id]}); return }
       const diff=pts[p.id]-avg;
       let d=0;
-      if(diff>=12)d=0.5; else if(diff>=7)d=0.3; else if(diff>=3)d=0.2;
-      else if(diff<=-12)d=-0.5; else if(diff<=-7)d=-0.3; else if(diff<=-3)d=-0.2;
+      if(diff>=FPL_RULES.moveBig)d=0.5; else if(diff>=FPL_RULES.moveMid)d=0.3; else if(diff>=FPL_RULES.moveSmall)d=0.2;
+      else if(diff<=-FPL_RULES.moveBig)d=-0.5; else if(diff<=-FPL_RULES.moveMid)d=-0.3; else if(diff<=-FPL_RULES.moveSmall)d=-0.2;
       if(d){
         const was=price[p.id];
-        const now=Math.max(FPL_RULES.minPrice,Math.min(FPL_RULES.maxPrice,Math.round((was+d)*10)/10));
+        const bd=priceBand(p.id);
+        const now=Math.max(bd.lo,Math.min(bd.hi,Math.round((was+d)*10)/10));
         if(now!==was){ price[p.id]=now; stepMoves.push({pid:p.id,name:p.name,from:was,to:now}); }
       }
       hist[p.id].push({gw,v:price[p.id]});
@@ -4206,13 +4293,35 @@ function fplGamePoints(pid,g){
   const sd=onA?'A':'B';
   const ga=onA?(g.scoreB??0):(g.scoreA??0);
   const goals=(g.goals&&g.goals[pid])||0;
+  const asts=(g.assists&&g.assists[pid])||0;
   let pts=FPL_RULES.played;
   if(g.result==='D')pts+=FPL_RULES.draw; else if(g.result===sd)pts+=FPL_RULES.win;
   pts+=goals*(FPL_RULES.goal[pos]||FPL_RULES.goal.MID);
+  pts+=asts*FPL_RULES.assist;
   const dl=FPL_RULES.defence[pos]||FPL_RULES.defence.MID;
   pts+=dl[Math.min(ga??0,dl.length-1)];
   if(goals>=3)pts+=FPL_RULES.hatTrick;
   return pts;
+}
+/* the same sum as fplGamePoints, itemised — used by the gameweek history */
+function fplBreakdown(pid,g){
+  const p=player(pid); if(!p||!g)return null;
+  const onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
+  if(!onA&&!onB)return null;
+  const pos=(g.pos&&g.pos[pid])||p.pos||'MID';
+  const sd=onA?'A':'B';
+  const ga=onA?(g.scoreB??0):(g.scoreA??0);
+  const goals=(g.goals&&g.goals[pid])||0, asts=(g.assists&&g.assists[pid])||0;
+  const rows=[{k:'Played',v:FPL_RULES.played}];
+  if(g.result==='D')rows.push({k:'Draw',v:FPL_RULES.draw});
+  else if(g.result===sd)rows.push({k:'Win',v:FPL_RULES.win});
+  else rows.push({k:'Lost',v:0});
+  if(goals)rows.push({k:`${goals} goal${goals>1?'s':''}`,v:goals*(FPL_RULES.goal[pos]||5)});
+  if(asts)rows.push({k:`${asts} assist${asts>1?'s':''}`,v:asts*FPL_RULES.assist});
+  const dl=FPL_RULES.defence[pos]||FPL_RULES.defence.MID;
+  rows.push({k:`Conceded ${ga}`,v:dl[Math.min(ga??0,dl.length-1)]});
+  if(goals>=3)rows.push({k:'Hat-trick bonus',v:FPL_RULES.hatTrick});
+  return {pos,rows,total:rows.reduce((t,r)=>t+r.v,0)};
 }
 const gamesInGw=gw=>allGames().filter(g=>gwOf(g)===gw);
 const gwOf=g=>{
@@ -4348,11 +4457,24 @@ function weekKey(d){
   return t.getFullYear()+'-W'+String(wk).padStart(2,'0');
 }
 const preSeason=()=>playedGws().length===0;   // nothing logged yet = free rein
+/* Transfers accrue weekly and BANK if you don't use them, up to a ceiling.
+   With prices moving every week, being stuck on a fixed weekly allowance meant
+   one bad run could leave you unable to react. Banking gives you room to wait. */
 function transfersLeft(m){
   if(preSeason())return Infinity;
-  const k=weekKey();
-  const used=(m.transfers&&m.transfers[k])||0;
-  return Math.max(0,FPL_RULES.transfersPerWeek-used);
+  const gws=playedGws().length;
+  const earned=FPL_RULES.transfersPerWeek*(gws+1);            /* week one included */
+  const used=Object.values(m.transfers||{}).reduce((t,n)=>t+n,0);
+  /* the bank caps how far ahead you can save, not the lifetime total */
+  const banked=Math.min(FPL_RULES.transferBank,earned-used);
+  return Math.max(0,banked);
+}
+function transferInfo(m){
+  const gws=playedGws().length;
+  return {left:transfersLeft(m),perWeek:FPL_RULES.transfersPerWeek,
+          bank:FPL_RULES.transferBank,
+          used:Object.values(m.transfers||{}).reduce((t,n)=>t+n,0),
+          earned:FPL_RULES.transfersPerWeek*(gws+1)};
 }
 function useTransfer(m,n){
   if(preSeason())return;
@@ -4392,7 +4514,7 @@ function fplRules(compact){
     <div class="card pad">
       <div class="fr-steps">
         <div class="fr-s"><span class="fr-n">1</span><div><b>Pick five outfield players</b><br>Any mix of defenders, midfielders and attackers, with at least one of each. Keepers are not included.</div></div>
-        <div class="fr-s"><span class="fr-n">2</span><div><b>Stay within £${R.budget}m</b><br>Everyone starts at £${R.startPrice}m, so you can afford anyone at first — but prices move with form.</div></div>
+        <div class="fr-s"><span class="fr-n">2</span><div><b>Stay within £${R.budget}m</b><br>Every player has their own price, from £4m to £14m. Prices move with form, so what your squad is worth changes week to week.</div></div>
         <div class="fr-s"><span class="fr-n">3</span><div><b>Name a captain</b><br>They score double. Pick whoever you fancy that week.</div></div>
         <div class="fr-s"><span class="fr-n">4</span><div><b>Confirm your team</b><br>Nothing saves until you press Confirm. You'll be told if anything's missing.</div></div>
       </div>
@@ -4407,6 +4529,7 @@ function fplRules(compact){
         ${row('Goal — attacker',`+${R.goal.ATT}`)}
         ${row('Goal — midfielder',`+${R.goal.MID}`)}
         ${row('Goal — defender',`+${R.goal.DEF}`)}
+        ${row('Assist — any position',`+${R.assist}`)}
         ${row('Hat-trick bonus',`+${R.hatTrick}`)}
         ${row('Captain','×2')}
         ${row("Didn't play",'0')}
@@ -4417,21 +4540,44 @@ function fplRules(compact){
     <div class="card pad">
       <div class="note" style="padding:0 0 10px">Defenders earn on how little their team conceded, not just on a clean sheet.</div>
       <div class="tw"><table>
-        <thead><tr><td>Conceded</td><td class="c">DEF</td><td class="c">MID</td><td class="c">ATT</td></tr></thead>
-        <tbody>${['Clean sheet','1 goal','2 goals','3 goals','4 goals','5 goals','6+'].map((l,i)=>`
-          <tr><td class="nm">${l}</td>
-            <td class="c" style="font-weight:800;color:${R.defence.DEF[i]?'var(--tint)':'var(--label3)'}">+${R.defence.DEF[i]}</td>
-            <td class="c">${R.defence.MID[i]?'+'+R.defence.MID[i]:'–'}</td>
-            <td class="c">${R.defence.ATT[i]?'+'+R.defence.ATT[i]:'–'}</td></tr>`).join('')}</tbody>
+        <thead><tr><td>Conceded</td><td class="c">GK/DEF</td><td class="c">MID</td><td class="c">ATT</td></tr></thead>
+        <tbody>${R.defence.DEF.map((v,i)=>`
+          <tr><td class="nm">${i===0?'Clean sheet':(i>=8?'8 or more':i+' goal'+(i>1?'s':''))}</td>
+            <td class="c" style="font-weight:800;color:${v?'var(--tint)':'var(--label3)'}">${v?'+'+v:'0'}</td>
+            <td class="c">${R.defence.MID[i]?'+'+R.defence.MID[i]:'0'}</td>
+            <td class="c">${R.defence.ATT[i]?'+'+R.defence.ATT[i]:'0'}</td></tr>`).join('')}</tbody>
       </table></div>
-      <div class="note" style="padding:10px 0 0">A defender in a 1–0 win takes ${R.played+R.win+R.defence.DEF[0]} points before doing anything else.</div>
+      <div class="note" style="padding:10px 0 0">Scaled for 7-a-side, where about five a side is a normal Sunday — so it still pays at real scorelines. Only 8 or more conceded scores nothing.</div>
+    </div>
+
+    <div class="sechead">How prices move</div>
+    <div class="card pad">
+      <div class="note" style="padding:0 0 10px">After every gameweek each player's points over their <b>last three games</b> are compared with the average of <b>everyone who actually played</b>. Do better than the others who turned up and you go up; worse and you come down. <b>If you didn't play, your price doesn't move</b> — you can't be judged on a game you missed.</div>
+      <div class="tw"><table>
+        <thead><tr><td>Versus the average</td><td class="c">Price move</td></tr></thead>
+        <tbody>
+          <tr><td class="nm">${R.moveBig} points or more above</td><td class="c" style="color:var(--green);font-weight:800">+£0.5m</td></tr>
+          <tr><td class="nm">${R.moveMid} or more above</td><td class="c" style="color:var(--green);font-weight:800">+£0.3m</td></tr>
+          <tr><td class="nm">${R.moveSmall} or more above</td><td class="c" style="color:var(--green);font-weight:800">+£0.2m</td></tr>
+          <tr><td class="nm">Within ${R.moveSmall} either way</td><td class="c" style="color:var(--label3)">no change</td></tr>
+          <tr><td class="nm">${R.moveSmall} or more below</td><td class="c" style="color:var(--red);font-weight:800">−£0.2m</td></tr>
+          <tr><td class="nm">${R.moveMid} or more below</td><td class="c" style="color:var(--red);font-weight:800">−£0.3m</td></tr>
+          <tr><td class="nm">${R.moveBig} or more below</td><td class="c" style="color:var(--red);font-weight:800">−£0.5m</td></tr>
+        </tbody>
+      </table></div>
+      <div class="note" style="padding:10px 0 0">
+        A player can never drift more than <b>60% below or 50% above</b> the price they started at, so a £4m player can reach £6m but never £14m.<br><br>
+        <b>Rises don't cost you your team.</b> Your squad counts against the budget at the price you <b>paid</b>, not today's price — so a player getting more expensive can never push you over the limit or block a transfer. Only new signings cost the current price.<br><br>
+        Prices are recalculated from the games themselves every time the app loads, so they always match what actually happened.
+      </div>
     </div>
 
     <div class="sechead">Transfers &amp; deadlines</div>
     <div class="card pad">
       <div class="note" style="padding:0;line-height:1.75">
         📅 <b>No deadline to miss.</b> Change your team whenever you like. Whatever you have confirmed when the admin logs the next game is the team that scores for it — later changes only count from the following game.<br><br>
-        🔁 <b>${R.transfersPerWeek} transfers a week</b>, resetting every Monday. They do not roll over. Building your first team is free, and transfers are <b>unlimited until the first game is logged</b>.<br><br>
+        🔁 <b>${R.transfersPerWeek} transfers a gameweek</b>, and <b>they roll over</b> — save them up to a maximum of <b>${R.transferBank} in the bank</b>. Building your first team is free, and transfers are <b>unlimited until the first game is logged</b>.<br><br>
+        Banking matters because prices move every week. If someone in your squad goes cold you can hold, save up, and make two or three changes at once rather than being forced into a rushed swap.<br><br>
         💷 <b>Prices move every gameweek</b> based on how a player is scoring compared with everyone else. Range £${R.minPrice}m–£${R.maxPrice}m.
       </div>
     </div>
@@ -4503,6 +4649,39 @@ function fplLogin(code){
 function fplLogout(){ fplForget(); fplReset(); render(); toast('Signed out'); }
 
 /* ---------- my team ---------- */
+/* A left/right gameweek pager on My Team, the way FPL does it. */
+let TEAMGW=null;
+function teamGw(){ const g=playedGws(); return TEAMGW&&g.includes(TEAMGW)?TEAMGW:(g[g.length-1]||null) }
+function stepTeamGw(d){
+  const g=playedGws(), i=g.indexOf(teamGw());
+  const n=g[Math.max(0,Math.min(g.length-1,i+d))];
+  if(n){ TEAMGW=n; TEAMOPEN=null; render() }
+}
+let TEAMOPEN=null;
+/* how each of your players did in that gameweek, with a tappable breakdown */
+function gwSquadCard(m,gw){
+  const lines=gwLines(m,gw);
+  if(!lines.length)return '';
+  const tot=lines.reduce((t,l)=>t+l.total,0);
+  return `<div class="sechead">Gameweek ${gw} points</div>
+    <div class="card">${lines.map(l=>`
+      <div class="row tap" onclick="TEAMOPEN=TEAMOPEN==='${l.pid}'?null:'${l.pid}';render()">
+        <div class="rt"><div class="r1">${esc(l.name)}${l.isCap?` <span class="pill" style="background:var(--tint-soft);color:var(--tint)">C${l.mult===3?'³':''}</span>`:''}
+          ${l.pos?`<span class="pill ${l.pos}">${l.pos}</span>`:''}</div>
+          <div class="r2">${l.played?(l.isCap?`${l.raw} × ${l.mult}`:'played'):'did not play'}</div></div>
+        <div class="rv" style="font-weight:800;color:${l.total>0?'var(--label)':'var(--label3)'}">${l.total}</div></div>
+      ${TEAMOPEN===l.pid?`<div class="bdown">${l.rows.length?l.rows.map(r=>
+          `<div class="bd-r"><span>${esc(r.k)}</span><b>${r.v>0?'+':''}${r.v}</b></div>`).join('')
+        :'<div class="bd-r"><span>Did not play</span><b>0</b></div>'}
+        ${l.isCap?`<div class="bd-r"><span>Captain ×${l.mult}</span><b>+${l.total-l.raw}</b></div>`:''}
+        <div class="bd-r tot"><span>Total</span><b>${l.total}</b></div></div>`:''}`).join('')}
+      <div class="row"><div class="rt"><div class="r1" style="font-weight:800">Gameweek total</div>
+        <div class="r2">${runningTo(m,gw)} for the season so far</div></div>
+        <div class="rv" style="font-weight:900;font-size:18px">${tot}</div></div>
+    </div>
+    <div class="note">Tap any player to see where their points came from. Use ‹ › above to look back at earlier gameweeks.</div>`;
+}
+
 function fplMyTeam(m,locked){
   const st=fplStats();
   if(!m.teamName){
@@ -4572,8 +4751,14 @@ function fplMyTeam(m,locked){
       <div class="fh-row">
         <div class="fh-team"><div class="fh-tn">${esc(m.teamName)}</div>
           <div class="fh-mn">${esc(m.name)}${rank?` · ${ordinal(rank)}`:''}</div></div>
-        <div class="fh-gw"><b>${gwPts}</b><span>${last?`GW${last}`:'points'}</span></div>
+        <div class="fh-gw"><b>${gws.length?gwTotal(m,teamGw()):gwPts}</b><span>${teamGw()?`GW${teamGw()}`:'points'}</span></div>
       </div>
+      ${gws.length?`<div class="gwpager">
+        <button ${gws.indexOf(teamGw())<=0?'disabled':''} onclick="stepTeamGw(-1)">‹</button>
+        <div class="gwp-mid"><b>Gameweek ${teamGw()}</b>
+          <span>${gamesInGw(teamGw()).map(g=>`${g.scoreA}–${g.scoreB}`).join(' · ')||'not played'}</span></div>
+        <button ${gws.indexOf(teamGw())>=gws.length-1?'disabled':''} onclick="stepTeamGw(1)">›</button>
+      </div>`:''}
       <div class="fh-stats">
         <div><b>${total}</b><span>Total</span></div>
         <div><b>${sh.DEF}-${sh.MID}-${sh.ATT}</b><span>Shape</span></div>
@@ -4588,6 +4773,7 @@ function fplMyTeam(m,locked){
       <div class="fp-lines"></div>
       <div class="fp-rows">${line('ATT')}${flexLine()}${line('MID')}${line('DEF')}</div>
     </div>
+    ${gws.length?gwSquadCard(m,teamGw()):''}
 
     ${need>0?`<button class="btn pri full" style="margin-top:10px" onclick="fplSwap()">
       + Add ${need} more player${need===1?'':'s'} <span style="opacity:.7">(${d.squad.length}/${FPL_RULES.squadSize})</span></button>`:''}
@@ -4695,7 +4881,18 @@ function draftDirty(m){
   const a=[...d.squad].sort().join(','), b=[...(m.squad||[])].sort().join(',');
   return a!==b || d.captain!==m.captain;
 }
-function draftSpend(m){ return draftOf(m).squad.reduce((t,x)=>t+fplPrice(x),0) }
+/* What a squad costs against the budget. Players you already own are valued at
+   the price you PAID; only new signings cost today's price. Without this a rise
+   in your own players' value could put you over budget and block all transfers. */
+function paidPrice(m,pid){
+  const bought=(m.bought||{})[pid];
+  return bought!=null?bought:fplPrice(pid);
+}
+function draftSpend(m){
+  const d=draftOf(m), owned=new Set(m.squad||[]);
+  return d.squad.reduce((t,x)=>t+(owned.has(x)?paidPrice(m,x):fplPrice(x)),0);
+}
+function squadValue(m){ return (m.squad||[]).reduce((t,x)=>t+fplPrice(x),0) }
 function draftChanges(m){
   const d=draftOf(m), out=(m.squad||[]).filter(x=>!d.squad.includes(x));
   const inn=d.squad.filter(x=>!(m.squad||[]).includes(x));
@@ -4785,7 +4982,12 @@ async function confirmDraft(){
        `${names}\n\nYou'll have ${transfersLeft(m)-ch.count} left this month.`,'Confirm',false))return;
     useTransfer(m,ch.count);
   }
+  /* lock in what each new player cost, so later price rises can't break the budget */
+  if(!m.bought)m.bought={};
+  d.squad.forEach(pid=>{ if(m.bought[pid]==null)m.bought[pid]=fplPrice(pid) });
+  Object.keys(m.bought).forEach(pid=>{ if(!d.squad.includes(pid))delete m.bought[pid] });
   m.squad=[...d.squad]; m.captain=d.captain;
+  m.needsReview=false;                       /* migration prompt clears once they confirm */
   if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; }
   FDRAFT=null;
   await fplSave();
@@ -5887,9 +6089,9 @@ function vMatch(gid){
   const side=(list,fills,sd)=>{
     const ids=(list||[]).filter(p=>player(p));
     return `<div class="mc-side">
-      ${ids.map(pid=>{const p=player(pid),n=(g.goals&&g.goals[pid])||0;
+      ${ids.map(pid=>{const p=player(pid),n=(g.goals&&g.goals[pid])||0,as=(g.assists&&g.assists[pid])||0;
         return `<div class="mc-p" onclick="openPlayer('${pid}')">${avatar(p,26)}
-          <span>${esc(p.name)}</span>${n?`<b>${'⚽'.repeat(Math.min(n,3))}${n>3?' ×'+n:''}</b>`:''}</div>`}).join('')}
+          <span>${esc(p.name)}</span>${n?`<b>${'⚽'.repeat(Math.min(n,3))}${n>3?' ×'+n:''}</b>`:''}${as?`<b class="mc-a">${'🅰️'.repeat(Math.min(as,3))}${as>3?' ×'+as:''}</b>`:''}</div>`}).join('')}
       ${(fills||[]).map(n=>`<div class="mc-p guest"><span class="mc-g">👤</span><span>${esc(n)}</span></div>`).join('')}
     </div>`;
   };
@@ -5980,7 +6182,7 @@ function totwBlock(){
 /* ============ RADAR CHART (Compare) ============ */
 function radarChart(a,b){
   const axes=[
-    ['Points','pts'],['Goals','G'],['Win %','wr'],
+    ['Points','pts'],['Goals','G'],['Assists','A'],['Win %','wr'],
     ['Clean sheets','cs'],['Form','form'],['Games','P']
   ];
   const all=statsAll().filter(x=>x.P>0);
@@ -6091,8 +6293,8 @@ function lifetimeBlock(pid){
     <div class="card pad">
       <div class="note" style="padding:0 0 10px">Across ${life.seasons} seasons</div>
       <div class="tiles">
-        ${tile(life.P,'Games')}${tile(life.G,'Goals')}${tile(life.pts,'Points')}
-        ${tile(life.W,'Wins')}${tile(life.cs,'Clean sheets')}${tile(Math.round(life.wr*100)+'%','Win rate')}
+        ${tile(life.P,'Games')}${tile(life.G,'Goals')}${tile(life.A||0,'Assists')}
+        ${tile(life.pts,'Points')}${tile(life.W,'Wins')}${tile(life.cs,'Clean sheets')}
       </div></div>`;
 }
 
@@ -6262,8 +6464,9 @@ function lifetime(){
         (team||[]).forEach(pid=>{
           const p=byId[pid]; if(!p)return;
           const k=p.name.trim().toLowerCase();
-          const e=m[k]=m[k]||{name:p.name,P:0,W:0,D:0,L:0,G:0,GF:0,GA:0,cs:0,pts:0,seasons:new Set(),seq:[]};
+          const e=m[k]=m[k]||{name:p.name,P:0,W:0,D:0,L:0,G:0,A:0,GF:0,GA:0,cs:0,pts:0,seasons:new Set(),seq:[]};
           e.P++; e.GF+=gf??0; e.GA+=ga??0; e.G+=(g.goals&&g.goals[pid])||0;
+          e.A+=(g.assists&&g.assists[pid])||0;
           if((ga??0)===0)e.cs++;
           e.seasons.add(s.id);
           if(g.result==='D'){e.D++;e.pts++;e.seq.push('D')}
@@ -7141,10 +7344,10 @@ function rate(hits,games,prior){
    5 goals against a side per game, so a clean sheet is genuinely rare and
    conceding under 8 is close to routine. */
 const BET_PRIORS={
-  ATT:{g1:.58,g2:.26,g3:.09,g4:.03, win:.45, motm:.16},
-  MID:{g1:.38,g2:.13,g3:.04,g4:.012,win:.45, motm:.14},
-  DEF:{g1:.20,g2:.05,g3:.012,g4:.004,win:.45,motm:.12},
-  GK :{g1:.03,g2:.01,g3:.003,g4:.001,win:.45,motm:.10},
+  ATT:{g1:.58,g2:.26,g3:.09,g4:.03, win:.45, motm:.16, a1:.30,a2:.09},
+  MID:{g1:.38,g2:.13,g3:.04,g4:.012,win:.45, motm:.14, a1:.42,a2:.14},
+  DEF:{g1:.20,g2:.05,g3:.012,g4:.004,win:.45,motm:.12, a1:.26,a2:.07},
+  GK :{g1:.03,g2:.01,g3:.003,g4:.001,win:.45,motm:.10, a1:.06,a2:.01},
 };
 /* conceded ladder — the same for everyone, it is a team outcome */
 const CONCEDE_PRIOR={0:.04,1:.10,2:.22,3:.38,4:.55,5:.70,6:.82,7:.90};
@@ -7178,6 +7381,13 @@ function playerMarkets(pid){
   [[1,'To score','Any time'],[2,'To score 2 or more','A brace or better'],
    [3,'To score a hat-trick','Three or more'],[4,'To score 4 or more','A big afternoon']]
    .forEach(([t,l,d])=>add('g'+t,l,d,gs.filter(g=>goals(g)>=t).length,PR['g'+t],'Goals',true));
+  /* --- assists --- */
+  const asts=g=>((g.assists||{})[pid]||0);
+  [[1,'To assist','Set one up'],[2,'To assist 2 or more','Two or more']]
+    .forEach(([t,l,d])=>add('a'+t,l,d,gs.filter(g=>asts(g)>=t).length,PR['a'+t],'Assists',true));
+  add('ga','Goal or assist','Involved in a goal',
+      gs.filter(g=>goals(g)>0||asts(g)>0).length,
+      Math.min(0.9,(PR.g1||0)+(PR.a1||0)*0.7),'Assists',true);
   /* --- goals against, full ladder --- */
   add('c0','Clean sheet','Their team concedes none',
       gs.filter(g=>conceded(g)===0).length,CONCEDE_PRIOR[0],'Goals against');
@@ -7198,6 +7408,9 @@ function marketResult(pid,g,k){
   const a=(g.teamA||[]).includes(pid);
   const con=a?(g.scoreB||0):(g.scoreA||0);
   const won=(a&&g.result==='A')||(!a&&g.result==='B');
+  const asts=(g.assists||{})[pid]||0;
+  if(k==='ga')return goals>0||asts>0;
+  if(k[0]==='a'&&/^\d$/.test(k[1]))return asts>=(+k[1]);
   if(k[0]==='g'&&/^\d$/.test(k[1]))return goals>=(+k[1]);
   if(k[0]==='c'&&/^\d$/.test(k[1]))return con<=(+k[1]);
   if(k==='win')return won;
@@ -7207,6 +7420,8 @@ function marketResult(pid,g,k){
 function betLabel(k){
   if(k==='win')return 'On the winning side';
   if(k==='motm')return 'Top rating';
+  if(k==='ga')return 'Goal or assist';
+  if(k[0]==='a'&&/^\d$/.test(k[1]))return k[1]==='1'?'To assist':`To assist ${k[1]}+`;
   if(k[0]==='g')return k[1]==='1'?'To score':`To score ${k[1]}+`;
   if(k[0]==='c')return k[1]==='0'?'Clean sheet':`Concede under ${(+k[1])+1}`;
   return k;
@@ -7683,6 +7898,205 @@ function openMoment(id){
         <div class="rt"><div class="r1">${esc((player(pid)||{}).name||'—')}</div></div></div>`).join('')}</div>`);
 }
 
+/* ============ PRICE MIGRATION ============
+   Everyone picked when all 29 players were the same price. With bespoke prices
+   most squads no longer fit the budget, so each team keeps its two dearest
+   players and the rest is auto-filled with the cheapest legal combination.
+   Runs once, and flags every team so people know to review it. */
+const MIGRATION_KEY='prices_v2';
+function autoFill(keep){
+  const pool=season().players.filter(p=>p.active!==false&&FPL_RULES.eligible.includes(p.pos||'MID'))
+    .map(p=>({id:p.id,pos:p.pos||'MID',price:fplPrice(p.id)}))
+    .filter(p=>!keep.includes(p.id))
+    .sort((a,b)=>a.price-b.price);
+  const squad=[...keep];
+  const have=()=>new Set(squad.map(x=>(player(x)||{}).pos||'MID'));
+  /* cover the required positions first, cheapest available */
+  FPL_RULES.slots.forEach(pos=>{
+    if(squad.length>=FPL_RULES.squadSize)return;
+    if(have().has(pos))return;
+    const pick=pool.find(p=>p.pos===pos&&!squad.includes(p.id));
+    if(pick)squad.push(pick.id);
+  });
+  /* then fill up with whatever is cheapest */
+  for(const p of pool){
+    if(squad.length>=FPL_RULES.squadSize)break;
+    if(!squad.includes(p.id))squad.push(p.id);
+  }
+  return squad.slice(0,FPL_RULES.squadSize);
+}
+async function migratePrices(){
+  const f=fpl();
+  if(f.migrated===MIGRATION_KEY)return false;
+  let touched=0;
+  (f.managers||[]).forEach(m=>{
+    if(!m.teamName||!(m.squad||[]).length)return;
+    const cost=(m.squad||[]).reduce((t,x)=>t+fplPrice(x),0);
+    if(cost<=FPL_RULES.budget){
+      /* already legal — just record what they now "paid" */
+      m.bought={}; m.squad.forEach(pid=>m.bought[pid]=fplPrice(pid));
+      return;
+    }
+    const keep=[...m.squad].sort((a,b)=>fplPrice(b)-fplPrice(a)).slice(0,2);
+    const next=autoFill(keep);
+    m.squad=next;
+    if(!next.includes(m.captain))m.captain=keep[0]||next[0];
+    m.bought={}; next.forEach(pid=>m.bought[pid]=fplPrice(pid));
+    m.needsReview=true;
+    touched++;
+  });
+  f.migrated=MIGRATION_KEY;
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  return touched;
+}
+function reviewBanner(){
+  const me=fplMine();
+  if(!me||!me.needsReview)return '';
+  return `<div class="revbar">
+    <div class="rev-e">⚠️</div>
+    <div class="rev-t"><b>Your team was auto-filled</b>
+      <span>Prices changed in the latest update, so we kept your two most expensive players and filled the rest. Please review it before Sunday.</span></div>
+    <button onclick="go('fpl');FTAB='team';render()">Review</button>
+  </div>`;
+}
+
+/* ============ GAMEWEEK HISTORY ============
+   Read-only. Everything is recomputed from the games and the squad snapshots,
+   so it can never disagree with the league table. */
+let HGW=null, HWHO=null, HOPEN=null;
+function histGw(){ const g=playedGws(); return HGW&&g.includes(HGW)?HGW:(g[g.length-1]||null) }
+/* the squad a manager actually had in a given gameweek */
+function squadInGw(m,gw){
+  const snap=(m.history||[]).find(h=>h.gw===gw);
+  return snap?{squad:snap.squad||[],captain:snap.captain}:{squad:m.squad||[],captain:m.captain};
+}
+function gwLines(m,gw){
+  const {squad,captain}=squadInGw(m,gw);
+  const mult=((m.tcGws||[]).includes(gw))?3:2;
+  return squad.map(pid=>{
+    const gs=gamesInGw(gw);
+    const parts=gs.map(g=>fplBreakdown(pid,g)).filter(Boolean);
+    const raw=parts.reduce((t,b)=>t+b.total,0);
+    const isCap=pid===captain;
+    return {pid,name:(player(pid)||{}).name||'—',pos:(player(pid)||{}).pos||'',
+            played:parts.length>0,raw,isCap,mult:isCap?mult:1,
+            total:isCap?raw*mult:raw,rows:parts.length?parts[0].rows:[],parts};
+  });
+}
+function gwTotal(m,gw){ return gwLines(m,gw).reduce((t,l)=>t+l.total,0) }
+function runningTo(m,gw){ return playedGws().filter(x=>x<=gw).reduce((t,x)=>t+gwTotal(m,x),0) }
+
+function vGameweeks(){
+  $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"});
+  const gws=playedGws(), gw=histGw();
+  const ms=(fpl().managers||[]).filter(m=>m.teamName&&(m.squad||[]).length);
+  if(!gws.length||!ms.length){
+    app().innerHTML=`<div class="view active"><div class="largetitle">Gameweeks</div>
+      <div class="wrap">${cloudBanner()}<div class="empty"><div class="ee">📅</div><h3>Nothing to show yet</h3>
+      <p>Once a gameweek has been played the full breakdown appears here.</p></div></div></div>`;return}
+  const board=ms.map(m=>({m,gwPts:gwTotal(m,gw),tot:runningTo(m,gw)})).sort((a,b)=>b.gwPts-a.gwPts);
+  const who=HWHO&&ms.some(m=>m.pid===HWHO)?ms.find(m=>m.pid===HWHO):null;
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">Gameweeks</div>
+    <div class="subtitle">GW${gw} · ${gamesInGw(gw).length} game${gamesInGw(gw).length===1?'':'s'}</div>
+    <div class="wrap">${cloudBanner()}
+      <div class="gwbar">${gws.map(n=>`<button class="${n===gw?'on':''}" onclick="HGW=${n};HWHO=null;HOPEN=null;render()">GW${n}</button>`).join('')}</div>
+
+      ${who?managerGwCard(who,gw):`
+        <div class="sechead">Gameweek ${gw}</div>
+        <div class="card">${board.map((r,i)=>`
+          <div class="row tap" onclick="HWHO='${r.m.pid}';HOPEN=null;render()">
+            <div class="pos" style="flex:0 0 26px;text-align:center;font-weight:800;color:var(--label3)">${i+1}</div>
+            <div class="rt"><div class="r1">${esc(r.m.teamName||r.m.name)}</div>
+              <div class="r2">${esc(r.m.name)} · ${r.tot} total</div></div>
+            <div class="rv" style="font-weight:800">${r.gwPts}</div>${chev}</div>`).join('')}</div>
+        <div class="note">Tap a manager to see how every point was earned.</div>
+
+        <div class="sechead">Who won each gameweek</div>
+      <div class="card">${gws.slice().reverse().map(n=>{
+        const rank=ms.map(m=>({m,p:gwTotal(m,n)})).sort((a,b)=>b.p-a.p);
+        const top=rank[0], tied=rank.filter(r=>r.p===top.p).length;
+        return `<div class="row tap" onclick="HGW=${n};HWHO=null;HOPEN=null;render()">
+          <div style="flex:0 0 30px;font-size:12px;font-weight:800;color:var(--label3)">GW${n}</div>
+          <div class="rt"><div class="r1">${tied>1?`${tied} tied on ${top.p}`:esc(top.m.teamName||top.m.name)}</div>
+            <div class="r2">${gamesInGw(n).map(g=>`${g.scoreA}–${g.scoreB}`).join(' · ')}</div></div>
+          <div class="rv" style="font-weight:800">${top.p}</div></div>`}).join('')}</div>
+
+      <div class="sechead">Best players in GW${gw}</div>
+        <div class="card">${(function(){
+          const rows=season().players.map(p=>{
+            const parts=gamesInGw(gw).map(g=>fplBreakdown(p.id,g)).filter(Boolean);
+            return parts.length?{p,pts:parts.reduce((t,b)=>t+b.total,0)}:null;
+          }).filter(Boolean).sort((a,b)=>b.pts-a.pts).slice(0,8);
+          return rows.map(r=>`<div class="row tap" onclick="openPlayerGw('${r.p.id}',${gw})">
+            <div class="rt"><div class="r1">${esc(r.p.name)}${r.p.pos?` <span class="pill ${r.p.pos}">${r.p.pos}</span>`:''}</div>
+              <div class="r2">${usdless(fplPrice(r.p.id))} · ${(r.pts/Math.max(0.1,fplPrice(r.p.id))).toFixed(1)} per £m</div></div>
+            <div class="rv" style="font-weight:800">${r.pts}</div>${chev}</div>`).join('')})()}</div>`}
+      <div style="height:20px"></div>
+    </div></div>`;
+}
+const usdless=v=>`£${(+v).toFixed(1)}m`;
+function managerGwCard(m,gw){
+  const lines=gwLines(m,gw), tot=lines.reduce((t,l)=>t+l.total,0);
+  return `<button class="crosslink" onclick="HWHO=null;HOPEN=null;render()">← everyone</button>
+    <div class="sechead">${esc(m.teamName||m.name)} · GW${gw}</div>
+    <div class="card">${lines.map(l=>`
+      <div class="row tap" onclick="HOPEN=HOPEN==='${l.pid}'?null:'${l.pid}';render()">
+        <div class="rt"><div class="r1">${esc(l.name)}${l.isCap?` <span class="pill" style="background:var(--tint-soft);color:var(--tint)">C${l.mult===3?'³':''}</span>`:''}
+          ${l.pos?`<span class="pill ${l.pos}">${l.pos}</span>`:''}</div>
+          <div class="r2">${l.played?(l.isCap?`${l.raw} × ${l.mult}`:'played'):'did not play'}</div></div>
+        <div class="rv" style="font-weight:800;color:${l.total>0?'var(--label)':'var(--label3)'}">${l.total}</div></div>
+      ${HOPEN===l.pid?`<div class="bdown">${l.rows.length?l.rows.map(r=>
+          `<div class="bd-r"><span>${esc(r.k)}</span><b class="${r.v<0?'dn':''}">${r.v>0?'+':''}${r.v}</b></div>`).join('')
+        :'<div class="bd-r"><span>Did not play</span><b>0</b></div>'}
+        ${l.isCap?`<div class="bd-r"><span>Captain ×${l.mult}</span><b>+${l.total-l.raw}</b></div>`:''}
+        <div class="bd-r tot"><span>Total</span><b>${l.total}</b></div></div>`:''}`).join('')}
+      <div class="row"><div class="rt"><div class="r1" style="font-weight:800">Gameweek total</div>
+        <div class="r2">${runningTo(m,gw)} for the season so far</div></div>
+        <div class="rv" style="font-weight:900;font-size:18px">${tot}</div></div>
+    </div>
+    <div class="note">Tap any player to see where the points came from.</div>`;
+}
+/* one player, every gameweek */
+function openPlayerGw(pid,gw){ HWHO=null; HOPEN=null; PGW=pid; pushBack(); go('pgw') }
+let PGW=null;
+function vPlayerGw(){
+  const pid=PGW, p=player(pid);
+  if(!p){go('gws');return}
+  $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"});
+  const gws=playedGws();
+  const rows=gws.map(gw=>{
+    const parts=gamesInGw(gw).map(g=>fplBreakdown(pid,g)).filter(Boolean);
+    return {gw,parts,pts:parts.reduce((t,b)=>t+b.total,0),played:parts.length>0};
+  });
+  const total=rows.reduce((t,r)=>t+r.pts,0);
+  const pr=fplPrice(pid), base=basePrice(pid), band=priceBand(pid);
+  const owned=(fpl().managers||[]).filter(m=>(m.squad||[]).includes(pid)).length;
+  app().innerHTML=`<div class="view active">
+    <div class="largetitle">${esc(p.name)}</div>
+    <div class="subtitle">${p.pos||''} · ${usdless(pr)} · ${total} points</div>
+    <div class="wrap">${cloudBanner()}
+      <div class="tiles" style="margin-bottom:14px">
+        ${tile(total,'Points')}
+        ${tile(usdless(pr),'Price',`from ${usdless(base)}`)}
+        ${tile((total/Math.max(0.1,pr)).toFixed(1),'Per £m')}
+        ${tile(owned,'Picked by',`of ${(fpl().managers||[]).filter(m=>m.teamName).length}`)}
+      </div>
+      <div class="sechead">Every gameweek</div>
+      <div class="card">${rows.slice().reverse().map(r=>`
+        <div class="row tap" onclick="HOPEN=HOPEN==='g${r.gw}'?null:'g${r.gw}';render()">
+          <div class="rt"><div class="r1">Gameweek ${r.gw}</div>
+            <div class="r2">${r.played?gamesInGw(r.gw).map(g=>`${g.scoreA}–${g.scoreB}`).join(' · '):'did not play'}</div></div>
+          <div class="rv" style="font-weight:800;color:${r.pts>0?'var(--label)':'var(--label3)'}">${r.pts}</div></div>
+        ${HOPEN==='g'+r.gw?`<div class="bdown">${r.parts.length?r.parts[0].rows.map(x=>
+            `<div class="bd-r"><span>${esc(x.k)}</span><b>${x.v>0?'+':''}${x.v}</b></div>`).join('')
+          :'<div class="bd-r"><span>Did not play</span><b>0</b></div>'}
+          <div class="bd-r tot"><span>Total</span><b>${r.pts}</b></div></div>`:''}`).join('')}</div>
+      <div class="note">Price can move between ${usdless(band.lo)} and ${usdless(band.hi)} — 60% to 150% of the ${usdless(base)} it started at.</div>
+      <div style="height:20px"></div>
+    </div></div>`;
+}
+
 function vBets(){
   $('#navMount').innerHTML=navbar();
   const me=fplMine(), b=bets();
@@ -7920,6 +8334,12 @@ function histRecords(){
     if(!high||tot>high.tot)high={tot,a,b,date:g.date,season:s.name};
   });
   const mostApps=top('P'), mostG=top('G'), mostPts=top('pts'), mostCS=top('cs');
+  const mostA=top('A');
+  const mostGA=[...lt].map(x=>({...x,GA_:(x.G||0)+(x.A||0)})).filter(x=>x.GA_>0).sort((p,q)=>q.GA_-p.GA_)[0];
+  let bestA=null;
+  games.forEach(({g})=>Object.entries(g.assists||{}).forEach(([pid,n])=>{
+    if(!bestA||n>bestA.v)bestA={v:n,n:(player(pid)||{}).name||'—',date:g.date};
+  }));
   const bestWR=[...lt].filter(x=>x.P>=10).sort((a,b)=>b.wr-a.wr)[0];
   const card=(icon,label,val,sub)=>val?`<div class="reccard">
     <div class="rec-i">${icon}</div>
@@ -7928,6 +8348,9 @@ function histRecords(){
   return `<div class="recgrid">
     ${card('🎖️','Most appearances',mostApps?mostApps.v:'—',mostApps?mostApps.n:'')}
     ${card('⚽','Most goals',mostG?mostG.v:'—',mostG?mostG.n:'')}
+    ${card('🅰️','Most assists',mostA?mostA.v:'—',mostA?mostA.n:'')}
+    ${card('🎯','Most goal involvements',mostGA?mostGA.GA_:'—',mostGA?mostGA.name:'')}
+    ${bestA?card('✨','Most assists in one game',bestA.v,`${bestA.n} · ${fdate(bestA.date)}`):''}
     ${card('🏆','Most points',mostPts?mostPts.v:'—',mostPts?mostPts.n:'')}
     ${card('🧤','Most clean sheets',mostCS?mostCS.v:'—',mostCS?mostCS.n:'')}
     ${card('🔥','Longest winning run',runW&&runW.v?runW.v+' games':'—',runW?runW.n:'')}
@@ -8198,7 +8621,7 @@ function statsPool(){
 }
 function vStats(){
   const {st,total}=statsPool();
-  const cols=[['name','Player'],['P','P'],['app','App%'],['W','W'],['D','D'],['L','L'],['G','⚽'],['cs','CS'],
+  const cols=[['name','Player'],['P','P'],['app','App%'],['W','W'],['D','D'],['L','L'],['G','⚽'],['A','🅰️'],['GA_','G+A'],['cs','CS'],
     ['GF','GF'],['GA','GA'],['GD','GD'],['ppg','PPG'],['gpg','G/G'],['cpg','C/G'],['gdpg','GD/G'],
     ['wr','Win%'],['form','Form'],['index','Idx'],['pts','Pts']];
   const s=[...st].sort((a,b)=>SORT.k==='name'?SORT.d*String(a.name).localeCompare(String(b.name)):SORT.d*((a[SORT.k]||0)-(b[SORT.k]||0)));
@@ -8267,6 +8690,8 @@ function statLeaders(st){
   const i0=x=>String(x), i1=x=>x.toFixed(1), i2=x=>x.toFixed(2), pc=x=>Math.round(x*100)+'%';
   return `<div class="grid g2">
     <div>${leadBlock('Goals','⚽',top('G'),i0)}
+      ${leadBlock('Assists','🅰️',top('A'),i0)}
+      ${leadBlock('Goals + assists','🎯',top('GA_'),i0)}
       ${leadBlock('Points','🏆',top('pts'),i0)}
       ${leadBlock('Wins','✅',top('W'),i0)}
       ${leadBlock('Clean sheets','🧤',top('cs'),i0)}
@@ -8991,13 +9416,13 @@ function vLeague(){
       ${tbl.length?`<div class="sechead">Table</div>
         <div class="card"><div class="tw"><table>
           <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
-          <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
+          <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">🅰️</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
           <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
             <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
             <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}${x.pos?` <span class="pill ${x.pos}">${x.pos}</span>`:''}</span></span></td>
             <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
             <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
-            <td class="c">${x.G}</td><td class="c">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
+            <td class="c">${x.G}</td><td class="c">${x.A||0}</td><td class="c">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
         ${leagueKey(tbl.length)}
         <div class="note">Win 3 · Draw 1 · Loss 0 · GF/GA are your team's goals while you were on it.</div>`
       :`<div class="empty"><div class="ee">📋</div><h3>No league games yet</h3>
@@ -9092,11 +9517,11 @@ function nextRound(cid){
 function newGame(){if(!requireAdmin())return;
   const cid=(comp().type==='league'?comp().id:lgComp().id);
   G={id:null,compId:cid,date:new Date().toISOString().slice(0,10),round:nextRound(cid),
-     A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},sa:0,sb:0,q:'',__sel:new Set()};
+     A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},assists:{},sa:0,sb:0,q:'',__sel:new Set()};
   gameSheet()}
 function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x.id===id);if(!g)return;
   G={id:g.id,compId:g.compId,date:g.date,round:g.round||'',A:new Set(g.teamA||[]),B:new Set(g.teamB||[]),
-     fillA:[...(g.fillA||[])],fillB:[...(g.fillB||[])],goals:{...(g.goals||{})},
+     fillA:[...(g.fillA||[])],fillB:[...(g.fillB||[])],goals:{...(g.goals||{})},assists:{...(g.assists||{})},
      sa:g.scoreA??0,sb:g.scoreB??0,q:'',__sel:new Set()};gameSheet()}
 function gameSheet(){
   $('#sheet').innerHTML=`<div class="shead"><span class="sa"></span><div class="st">${G.id?'Edit game':'New game'}</div><span class="sa"></span></div>
@@ -9189,6 +9614,14 @@ function _paintGame(){
         return `<div class="row"><div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'')}
           <span style="font-size:11px;font-weight:700;color:${G.A.has(pid)?'var(--tint)':'var(--blue)'}">${G.A.has(pid)?'A':'B'}</span></div></div>
           <div class="gstep"><button onclick="setGoal('${pid}',-1)">−</button><span class="gv">${n}</span><button onclick="setGoal('${pid}',1)">+</button></div></div>`}).join('')}</div>
+
+      <div class="lbl">Who assisted? <span style="text-transform:none;font-weight:400;color:var(--label3)">optional</span></div>
+      ${assistWarn()}
+      <div class="card">${[...G.A,...G.B].map(pid=>{const p=player(pid),n=(G.assists||{})[pid]||0;
+        return `<div class="row"><div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'')}
+          <span style="font-size:11px;font-weight:700;color:${G.A.has(pid)?'var(--tint)':'var(--blue)'}">${G.A.has(pid)?'A':'B'}</span></div></div>
+          <div class="gstep"><button onclick="setAssist('${pid}',-1)">−</button><span class="gv">${n}</span><button onclick="setAssist('${pid}',1)">+</button></div></div>`}).join('')}</div>
+      <div class="note">An assist is worth ${FPL_RULES.assist} points to anyone. Plenty of goals have no assist — a tackle, a rebound, a solo run — so leave it blank whenever there wasn't one.</div>
       <div class="note">Attributed: A ${gA} · B ${gB}${(G.fillA.length||G.fillB.length)?' (fillers\' goals go unattributed)':''}</div>`:''}
 
     ${(G.sa||G.sb||G.A.size||G.B.size)?`<div class="lbl">Match report</div>
@@ -9229,6 +9662,24 @@ function autoSplit(){
   const st=statsAll(),r=ids.map(id=>({id,v:(st.find(x=>x.id===id)||{}).ppg||0})).sort((a,b)=>b.v-a.v);
   G.A.clear();G.B.clear();r.forEach((x,i)=>{(i%4===0||i%4===3?G.A:G.B).add(x.id)});paintGame();toast('Split by form')}
 function setScore(sd,d){if(sd==='A')G.sa=Math.max(0,G.sa+d);else G.sb=Math.max(0,G.sb+d);paintGame()}
+/* a team can't assist more than it scored — warn rather than block */
+function assistSum(side){
+  return [...(side==='A'?G.A:G.B)].reduce((t,pid)=>t+((G.assists||{})[pid]||0),0);
+}
+/* Only flags the impossible case — more assists than goals. Fewer is normal and
+   never warned about, since plenty of goals are unassisted. */
+function assistWarn(){
+  const bad=[];
+  if(assistSum('A')>G.sa)bad.push(`A has ${assistSum('A')} assists but only scored ${G.sa}`);
+  if(assistSum('B')>G.sb)bad.push(`B has ${assistSum('B')} assists but only scored ${G.sb}`);
+  return bad.length?`<div class="warn">⚠️ ${bad.join(' · ')}. Fix it or save anyway.</div>`:'';
+}
+function setAssist(pid,d){
+  if(!G.assists)G.assists={};
+  G.assists[pid]=Math.max(0,(G.assists[pid]||0)+d);
+  if(!G.assists[pid])delete G.assists[pid];
+  paintGame();
+}
 function setGoal(pid,d){G.goals[pid]=Math.max(0,(G.goals[pid]||0)+d);if(!G.goals[pid])delete G.goals[pid];
   const sd=G.A.has(pid)?'A':'B',t=goalSum(sd);
   if(sd==='A'&&t>G.sa)G.sa=t;if(sd==='B'&&t>G.sb)G.sb=t;paintGame()}
@@ -9248,7 +9699,7 @@ async function saveGame(){if(!requireAdmin())return;
   const posSnap={}; [...G.A,...G.B].forEach(pid=>{const pl=player(pid); if(pl)posSnap[pid]=pl.pos||'MID'});
   const g={id:G.id||uid(),compId:G.compId,created:G.id?(S.games.find(x=>x.id===G.id)?.created||Date.now()):Date.now(),
     date:G.date,round:(G.round||'').trim(),teamA:[...G.A],teamB:[...G.B],fillA:[...G.fillA],fillB:[...G.fillB],
-    pos:posSnap,goals:{...G.goals},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D'};
+    pos:posSnap,goals:{...G.goals},assists:{...(G.assists||{})},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D'};
   if(G.id)S.games[S.games.findIndex(x=>x.id===G.id)]=g;else S.games.push(g);
   await save();closeSheet();
   const i=allGames().findIndex(x=>x.id===g.id),ms=feed().filter(e=>e.i===i);
@@ -9781,6 +10232,9 @@ document.addEventListener('keydown',e=>{
      self-heals any map saved under older rules and guarantees the stocks chart
      and the market always agree. */
   try{ if(season()&&season().games&&season().games.length)recalcPrices(); }catch(e){}
+  /* one-off: move everyone onto the bespoke price list */
+  try{ migratePrices().then(n=>{ if(n){ render();
+        toast(`⚠️ ${n} team${n===1?' was':'s were'} auto-filled after the price update`) } }) }catch(e){}
   try{fplAutoLogin()}catch(e){}
   /* also handle a personal link tapped while the app is already open (a hash
      change alone does not reload the page) */
