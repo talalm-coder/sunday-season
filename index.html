@@ -248,15 +248,23 @@ tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
 .fab svg{width:24px;height:24px;stroke:var(--tint-ink);stroke-width:2.6;fill:none;stroke-linecap:round}
 
 /* ---------- SHEET ---------- */
-.sbg{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);display:none;align-items:flex-end;justify-content:center}
+/* inset:0 alone leaves the sheet measured against the tall vh viewport on iOS,
+   which pushed the action bar under the browser chrome where it could not be
+   tapped. Pinning the height to the *visible* viewport fixes it. */
+.sbg{position:fixed;left:0;right:0;top:0;bottom:0;height:100vh;height:100dvh;
+  z-index:100;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);display:none;
+  align-items:flex-end;justify-content:center}
 .sbg.open{display:flex;animation:fade .25s}
 @keyframes fade{from{opacity:0}to{opacity:1}}
-.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92vh;border-radius:14px 14px 0 0;
+.sheet{background:var(--bg);width:100%;max-width:640px;
+  max-height:92vh;
+  max-height:calc(100dvh - env(safe-area-inset-top,0px) - 10px);
+  border-radius:14px 14px 0 0;
   animation:up .38s cubic-bezier(.32,.72,0,1);
   /* header stays put, only the middle scrolls, the action bar is pinned to the
      bottom — the old version scrolled everything which made the buttons drift */
   display:flex;flex-direction:column;overflow:hidden}
-@media(min-width:700px){.sbg{align-items:center}.sheet{border-radius:16px;max-height:88vh}}
+@media(min-width:700px){.sbg{align-items:center}.sheet{border-radius:16px;max-height:88vh;max-height:88dvh}}
 @keyframes up{from{transform:translateY(100%)}to{transform:none}}
 .shead{flex:0 0 auto;background:var(--nav-bg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-bottom:.5px solid var(--sep);padding:14px 16px;display:flex;align-items:center;gap:10px;z-index:5}
@@ -388,7 +396,7 @@ input.search{background:var(--fill);border-radius:11px;padding:11px 14px;font-si
 .warn{background:color-mix(in srgb,var(--orange) 15%,transparent);border:1px solid color-mix(in srgb,var(--orange) 35%,transparent);
   color:var(--label);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.45;margin-bottom:10px}
 /* A real footer: a sibling of the scrolling body, so it never moves. */
-.formbar{flex:0 0 auto;display:flex;gap:10px;
+.formbar{flex:0 0 auto;display:flex;gap:10px;position:relative;z-index:6;
   padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
   background:var(--bg);border-top:.5px solid var(--sep);
   box-shadow:0 -8px 20px -12px rgba(0,0,0,.28)}
@@ -438,7 +446,7 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
   thead td{padding:11px 5px}
   .tw{scrollbar-width:none}
   .tw::-webkit-scrollbar{display:none}
-  .sheet{max-height:94vh}
+  .sheet{max-height:94vh;max-height:calc(100dvh - env(safe-area-inset-top,0px) - 10px)}
   .sbody{padding:14px}
 }
 /* sticky player column so tables stay readable while scrolling sideways */
@@ -1895,6 +1903,19 @@ body[data-shop="mono"]{--bg:#F5F5F5;--card:#fff;--label:#000;--label2:#333;--lab
 .gwp-mid{flex:1;text-align:center;color:#fff}
 .gwp-mid b{display:block;font-size:14px;font-weight:800}
 .gwp-mid span{display:block;font-size:11.5px;opacity:.72;margin-top:1px}
+
+/* ---- log a game: one-tap A/B ---- */
+.pgrow{display:inline-flex;align-items:center;gap:0;background:var(--fill2);border-radius:20px;
+  margin:0 6px 7px 0;overflow:hidden;vertical-align:top}
+.pgrow.sel{background:color-mix(in srgb,var(--tint) 16%,transparent);box-shadow:inset 0 0 0 1.5px var(--tint)}
+.pgname{display:inline-flex;align-items:center;gap:6px;border:none;background:none;cursor:pointer;
+  padding:6px 4px 6px 8px;font-size:13.5px;font-weight:600;color:var(--label);max-width:9.5rem}
+.pgname span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pgname .tick{font-style:normal;color:var(--tint);font-weight:800;font-size:12px;margin-left:1px}
+.pgab{border:none;cursor:pointer;width:30px;align-self:stretch;font-size:12.5px;font-weight:800;color:#fff}
+.pgab.a{background:var(--tint)}
+.pgab.b{background:var(--blue)}
+.pgab:active{filter:brightness(.88)}
 </style>
 </head>
 <body>
@@ -1933,7 +1954,7 @@ body[data-shop="mono"]{--bg:#F5F5F5;--card:#fff;--label:#000;--label2:#333;--lab
 <div class="abg" id="abg"><div class="alert" id="alert"></div></div>
 <div class="toast" id="toast"></div>
 <script>
-const CLUBS=[{"name": "Arsenal", "short": "ARS", "comp": "PL", "c1": "#EF0107", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cannon", "sq": {"GK": ["David Raya", "Kepa Arrizabalaga"], "DEF": ["William Saliba", "Gabriel Magalhães", "Ben White"], "MID": ["Declan Rice", "Martin Ødegaard", "Mikel Merino"], "ATT": ["Bukayo Saka", "Kai Havertz", "Viktor Gyökeres"]}}, {"name": "Aston Villa", "short": "AVL", "comp": "PL", "c1": "#95BFE5", "c2": "#670E36", "acc": "#FFE600", "crest": "lion", "sq": {"GK": ["Emiliano Martínez", "Marco Bizot"], "DEF": ["Ezri Konsa", "Pau Torres", "Matty Cash"], "MID": ["Boubacar Kamara", "John McGinn", "Youri Tielemans"], "ATT": ["Ollie Watkins", "Donyell Malen", "Jadon Sancho"]}}, {"name": "Bournemouth", "short": "BOU", "comp": "PL", "c1": "#DA291C", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Đorđe Petrović", "Will Dennis"], "DEF": ["Illia Zabarnyi", "Bafodé Diakité", "Adam Smith"], "MID": ["Ryan Christie", "Alex Scott", "Tyler Adams"], "ATT": ["Antoine Semenyo", "Evanilson", "Justin Kluivert"]}}, {"name": "Brentford", "short": "BRE", "comp": "PL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FBB800", "crest": "vstripe", "sq": {"GK": ["Mark Flekken", "Hákon Valdimarsson"], "DEF": ["Nathan Collins", "Ethan Pinnock", "Aaron Hickey"], "MID": ["Christian Nørgaard", "Mikkel Damsgaard", "Vitaly Janelt"], "ATT": ["Bryan Mbeumo", "Yoane Wissa", "Kevin Schade"]}}, {"name": "Brighton", "short": "BHA", "comp": "PL", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFCD00", "crest": "vstripe", "sq": {"GK": ["Bart Verbruggen", "Jason Steele"], "DEF": ["Jan Paul van Hecke", "Lewis Dunk", "Pervis Estupiñán"], "MID": ["Carlos Baleba", "Kaoru Mitoma", "Yasin Ayari"], "ATT": ["João Pedro", "Danny Welbeck", "Georginio Rutter"]}}, {"name": "Burnley", "short": "BUR", "comp": "PL", "c1": "#6C1D45", "c2": "#87CEEB", "acc": "#87CEEB", "crest": "shield", "sq": {"GK": ["James Trafford", "Václav Hladký"], "DEF": ["Maxime Estève", "Jordan Beyer", "Connor Roberts"], "MID": ["Josh Cullen", "Josh Brownhill", "Hannibal Mejbri"], "ATT": ["Zian Flemming", "Lyle Foster", "Jaidon Anthony"]}}, {"name": "Chelsea", "short": "CHE", "comp": "PL", "c1": "#034694", "c2": "#FFFFFF", "acc": "#DBA111", "crest": "lion", "sq": {"GK": ["Robert Sánchez", "Filip Jörgensen"], "DEF": ["Levi Colwill", "Wesley Fofana", "Malo Gusto"], "MID": ["Moisés Caicedo", "Enzo Fernández", "Morgan Rogers"], "ATT": ["Cole Palmer", "Nicolas Jackson", "Pedro Neto"]}}, {"name": "Crystal Palace", "short": "CRY", "comp": "PL", "c1": "#1B458F", "c2": "#C4122E", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Dean Henderson", "Remi Matthews"], "DEF": ["Marc Guéhi", "Maxence Lacroix", "Tyrick Mitchell"], "MID": ["Adam Wharton", "Will Hughes", "Daichi Kamada"], "ATT": ["Eberechi Eze", "Jean-Philippe Mateta", "Ismaïla Sarr"]}}, {"name": "Everton", "short": "EVE", "comp": "PL", "c1": "#003399", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Jordan Pickford", "João Virgínia"], "DEF": ["Jarrad Branthwaite", "James Tarkowski", "Vitaliy Mykolenko"], "MID": ["Idrissa Gueye", "Abdoulaye Doucouré", "Tim Iroegbunam"], "ATT": ["Beto", "Dwight McNeil", "Iliman Ndiaye"]}}, {"name": "Fulham", "short": "FUL", "comp": "PL", "c1": "#FFFFFF", "c2": "#000000", "acc": "#CC0000", "crest": "halves", "sq": {"GK": ["Bernd Leno", "Benjamin Lecomte"], "DEF": ["Calvin Bassey", "Joachim Andersen", "Antonee Robinson"], "MID": ["Sasa Lukic", "Tom Cairney", "Emile Smith Rowe"], "ATT": ["Raúl Jiménez", "Alex Iwobi", "Rodrigo Muniz"]}}, {"name": "Leeds United", "short": "LEE", "comp": "PL", "c1": "#FFFFFF", "c2": "#1D428A", "acc": "#1D428A", "crest": "halves", "sq": {"GK": ["Illan Meslier", "Karl Darlow"], "DEF": ["Pascal Struijk", "Joe Rodon", "Junior Firpo"], "MID": ["Ethan Ampadu", "Brenden Aaronson", "Ao Tanaka"], "ATT": ["Daniel James", "Joël Piroe", "Willy Gnonto"]}}, {"name": "Liverpool", "short": "LIV", "comp": "PL", "c1": "#C8102E", "c2": "#00B2A9", "acc": "#F6EB61", "crest": "bird", "sq": {"GK": ["Alisson Becker", "Giorgi Mamardashvili"], "DEF": ["Virgil van Dijk", "Ibrahima Konaté", "Andy Robertson"], "MID": ["Alexis Mac Allister", "Ryan Gravenberch", "Dominik Szoboszlai"], "ATT": ["Mohamed Salah", "Luis Díaz", "Hugo Ekitiké"]}}, {"name": "Manchester City", "short": "MCI", "comp": "PL", "c1": "#6CABDD", "c2": "#1C2C5B", "acc": "#FFFFFF", "crest": "ship", "sq": {"GK": ["Ederson", "Stefan Ortega"], "DEF": ["Rúben Dias", "Joško Gvardiol", "Nathan Aké"], "MID": ["Rodri", "Elliot Anderson", "Bernardo Silva"], "ATT": ["Erling Haaland", "Phil Foden", "Savinho"]}}, {"name": "Manchester United", "short": "MUN", "comp": "PL", "c1": "#DA291C", "c2": "#FBE122", "acc": "#FBE122", "crest": "devil", "sq": {"GK": ["André Onana", "Altay Bayındır"], "DEF": ["Lisandro Martínez", "Matthijs de Ligt", "Diogo Dalot"], "MID": ["Bruno Fernandes", "Kobbie Mainoo", "Manuel Ugarte"], "ATT": ["Marcus Rashford", "Rasmus Højlund", "Amad Diallo"]}}, {"name": "Newcastle United", "short": "NEW", "comp": "PL", "c1": "#241F20", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Nick Pope", "Martin Dúbravka"], "DEF": ["Sven Botman", "Fabian Schär", "Kieran Trippier"], "MID": ["Bruno Guimarães", "Joelinton", "Joe Willock"], "ATT": ["Alexander Isak", "Anthony Elanga", "Harvey Barnes"]}}, {"name": "Nottingham Forest", "short": "NFO", "comp": "PL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Murillo", "Nikola Milenković", "Neco Williams"], "MID": ["Morgan Gibbs-White", "Ryan Yates", "Nicolás Domínguez"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Taiwo Awoniyi"]}}, {"name": "Sunderland", "short": "SUN", "comp": "PL", "c1": "#EB172B", "c2": "#FFFFFF", "acc": "#211E1F", "crest": "vstripe", "sq": {"GK": ["Anthony Patterson", "Simon Moore"], "DEF": ["Dan Ballard", "Luke O'Nien", "Trai Hume"], "MID": ["Jobe Bellingham", "Chris Rigg", "Dan Neil"], "ATT": ["Wilson Isidor", "Patrick Roberts", "Romaine Mundle"]}}, {"name": "Tottenham", "short": "TOT", "comp": "PL", "c1": "#132257", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cockerel", "sq": {"GK": ["Guglielmo Vicario", "Antonín Kinský"], "DEF": ["Cristian Romero", "Micky van de Ven", "Destiny Udogie"], "MID": ["Sandro Tonali", "James Maddison", "Pape Matar Sarr"], "ATT": ["Dominic Solanke", "Brennan Johnson", "Dejan Kulusevski"]}}, {"name": "West Ham", "short": "WHU", "comp": "PL", "c1": "#7A263A", "c2": "#1BB1E7", "acc": "#F3D459", "crest": "shield", "sq": {"GK": ["Alphonse Areola", "Łukasz Fabiański"], "DEF": ["Max Kilman", "Konstantinos Mavropanos", "Aaron Wan-Bissaka"], "MID": ["Lucas Paquetá", "Tomáš Souček", "Edson Álvarez"], "ATT": ["Jarrod Bowen", "Mohammed Kudus", "Niclas Füllkrug"]}}, {"name": "Wolves", "short": "WOL", "comp": "PL", "c1": "#FDB913", "c2": "#231F20", "acc": "#231F20", "crest": "wolf", "sq": {"GK": ["José Sá", "Sam Johnstone"], "DEF": ["Toti Gomes", "Yerson Mosquera", "Rayan Aït-Nouri"], "MID": ["João Gomes", "Mario Lemina", "André"], "ATT": ["Matheus Cunha", "Jørgen Strand Larsen", "Pablo Sarabia"]}}, {"name": "Real Madrid", "short": "RMA", "comp": "UCL", "c1": "#FFFFFF", "c2": "#00529F", "acc": "#FEBE10", "crest": "crown", "sq": {"GK": ["Thibaut Courtois", "Andriy Lunin"], "DEF": ["Antonio Rüdiger", "Éder Militão", "Trent Alexander-Arnold"], "MID": ["Jude Bellingham", "Federico Valverde", "Aurélien Tchouaméni"], "ATT": ["Kylian Mbappé", "Vinícius Júnior", "Rodrygo"]}}, {"name": "Barcelona", "short": "BAR", "comp": "UCL", "c1": "#A50044", "c2": "#004D98", "acc": "#FFCB05", "crest": "vstripe", "sq": {"GK": ["Marc-André ter Stegen", "Wojciech Szczęsny"], "DEF": ["Pau Cubarsí", "Iñigo Martínez", "Alejandro Balde"], "MID": ["Pedri", "Frenkie de Jong", "Gavi"], "ATT": ["Lamine Yamal", "Robert Lewandowski", "Anthony Gordon"]}}, {"name": "Atlético Madrid", "short": "ATM", "comp": "UCL", "c1": "#CB3524", "c2": "#FFFFFF", "acc": "#262E62", "crest": "vstripe", "sq": {"GK": ["Jan Oblak", "Juan Musso"], "DEF": ["José María Giménez", "Robin Le Normand", "Nahuel Molina"], "MID": ["Koke", "Rodrigo De Paul", "Pablo Barrios"], "ATT": ["Antoine Griezmann", "Julián Álvarez", "Alexander Sørloth"]}}, {"name": "Bayern München", "short": "BAY", "comp": "UCL", "c1": "#DC052D", "c2": "#0066B2", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Manuel Neuer", "Sven Ulreich"], "DEF": ["Dayot Upamecano", "Jonathan Tah", "Alphonso Davies"], "MID": ["Joshua Kimmich", "Jamal Musiala", "Leon Goretzka"], "ATT": ["Harry Kane", "Michael Olise", "Serge Gnabry"]}}, {"name": "Borussia Dortmund", "short": "DOR", "comp": "UCL", "c1": "#FDE100", "c2": "#000000", "acc": "#000000", "crest": "wall", "sq": {"GK": ["Gregor Kobel", "Alexander Meyer"], "DEF": ["Nico Schlotterbeck", "Waldemar Anton", "Julian Ryerson"], "MID": ["Pascal Groß", "Felix Nmecha", "Marcel Sabitzer"], "ATT": ["Serhou Guirassy", "Karim Adeyemi", "Maximilian Beier"]}}, {"name": "Bayer Leverkusen", "short": "LEV", "comp": "UCL", "c1": "#E32219", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Exequiel Palacios"], "ATT": ["Patrik Schick", "Jeremie Frimpong", "Nathan Tella"]}}, {"name": "RB Leipzig", "short": "RBL", "comp": "UCL", "c1": "#DD0741", "c2": "#001F47", "acc": "#FFFFFF", "crest": "bull", "sq": {"GK": ["Péter Gulácsi", "Maarten Vandevoordt"], "DEF": ["Willi Orbán", "Castello Lukeba", "David Raum"], "MID": ["Xaver Schlager", "Xavi Simons", "Nicolas Seiwald"], "ATT": ["Benjamin Šeško", "Loïs Openda", "Antonio Nusa"]}}, {"name": "Paris Saint-Germain", "short": "PSG", "comp": "UCL", "c1": "#004170", "c2": "#DA291C", "acc": "#DA291C", "crest": "tower", "sq": {"GK": ["Gianluigi Donnarumma", "Matvey Safonov"], "DEF": ["Marquinhos", "Willian Pacho", "Nuno Mendes"], "MID": ["Vitinha", "João Neves", "Fabián Ruiz"], "ATT": ["Ousmane Dembélé", "Bradley Barcola", "Désiré Doué"]}}, {"name": "Monaco", "short": "MON", "comp": "UCL", "c1": "#E31B23", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Philipp Köhn", "Radosław Majecki"], "DEF": ["Thilo Kehrer", "Wilfried Singo", "Caio Henrique"], "MID": ["Denis Zakaria", "Aleksandr Golovin", "Lamine Camara"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Marseille", "short": "MAR", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Geronimo Rulli", "Rubén Blanco"], "DEF": ["Leonardo Balerdi", "Derek Cornelius", "Quentin Merlin"], "MID": ["Adrien Rabiot", "Pierre-Emile Højbjerg", "Valentin Rongier"], "ATT": ["Mason Greenwood", "Amine Gouiri", "Jonathan Rowe"]}}, {"name": "Inter", "short": "INT", "comp": "UCL", "c1": "#0068A8", "c2": "#000000", "acc": "#FFFFFF", "crest": "snake", "sq": {"GK": ["Yann Sommer", "Josep Martínez"], "DEF": ["Alessandro Bastoni", "Francesco Acerbi", "Federico Dimarco"], "MID": ["Nicolò Barella", "Hakan Çalhanoğlu", "Henrikh Mkhitaryan"], "ATT": ["Lautaro Martínez", "Marcus Thuram", "Mehdi Taremi"]}}, {"name": "AC Milan", "short": "MIL", "comp": "UCL", "c1": "#FB090B", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Mike Maignan", "Marco Sportiello"], "DEF": ["Fikayo Tomori", "Malick Thiaw", "Theo Hernández"], "MID": ["Tijjani Reijnders", "Youssouf Fofana", "Ruben Loftus-Cheek"], "ATT": ["Rafael Leão", "Christian Pulisic", "Álvaro Morata"]}}, {"name": "Juventus", "short": "JUV", "comp": "UCL", "c1": "#000000", "c2": "#FFFFFF", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Michele Di Gregorio", "Mattia Perin"], "DEF": ["Gleison Bremer", "Federico Gatti", "Andrea Cambiaso"], "MID": ["Manuel Locatelli", "Khéphren Thuram", "Teun Koopmeiners"], "ATT": ["Dušan Vlahović", "Kenan Yıldız", "Francisco Conceição"]}}, {"name": "Napoli", "short": "NAP", "comp": "UCL", "c1": "#12A0D7", "c2": "#003C82", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Alex Meret", "Elia Caprile"], "DEF": ["Amir Rrahmani", "Alessandro Buongiorno", "Giovanni Di Lorenzo"], "MID": ["Stanislav Lobotka", "Scott McTominay", "André-Frank Zambo Anguissa"], "ATT": ["Romelu Lukaku", "Matteo Politano", "David Neres"]}}, {"name": "Atalanta", "short": "ATA", "comp": "UCL", "c1": "#1D71B8", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Marco Carnesecchi", "Juan Musso"], "DEF": ["Isak Hien", "Sead Kolašinac", "Matteo Ruggeri"], "MID": ["Éderson", "Marten de Roon", "Mario Pašalić"], "ATT": ["Ademola Lookman", "Charles De Ketelaere", "Mateo Retegui"]}}, {"name": "Benfica", "short": "BEN", "comp": "UCL", "c1": "#E00034", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Anatoliy Trubin", "Samuel Soares"], "DEF": ["Nicolás Otamendi", "António Silva", "Álvaro Carreras"], "MID": ["Orkun Kökçü", "Fredrik Aursnes", "Florentino Luís"], "ATT": ["Ángel Di María", "Vangelis Pavlidis", "Kerem Aktürkoğlu"]}}, {"name": "Porto", "short": "POR", "comp": "UCL", "c1": "#0F4C9A", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "dragon", "sq": {"GK": ["Diogo Costa", "Cláudio Ramos"], "DEF": ["Otávio", "Nehuén Pérez", "Wendell"], "MID": ["Alan Varela", "Stephen Eustáquio", "Nico González"], "ATT": ["Samu Aghehowa", "Pepê", "Rodrigo Mora"]}}, {"name": "Sporting CP", "short": "SPO", "comp": "UCL", "c1": "#008057", "c2": "#FFFFFF", "acc": "#FFD700", "crest": "lion", "sq": {"GK": ["Franco Israel", "Rui Silva"], "DEF": ["Gonçalo Inácio", "Ousmane Diomande", "Matheus Reis"], "MID": ["Morten Hjulmand", "Hidemasa Morita", "Pedro Gonçalves"], "ATT": ["Conrad Harder", "Geovany Quenda", "Francisco Trincão"]}}, {"name": "Ajax", "short": "AJA", "comp": "UCL", "c1": "#D2122E", "c2": "#FFFFFF", "acc": "#D2122E", "crest": "vstripe", "sq": {"GK": ["Remko Pasveer", "Jay Gorter"], "DEF": ["Jorrel Hato", "Youri Baas", "Anton Gaaei"], "MID": ["Kenneth Taylor", "Jordan Henderson", "Branco van den Boomen"], "ATT": ["Wout Weghorst", "Steven Bergwijn", "Mika Godts"]}}, {"name": "PSV", "short": "PSV", "comp": "UCL", "c1": "#ED1C24", "c2": "#FFFFFF", "acc": "#000000", "crest": "chevron", "sq": {"GK": ["Walter Benítez", "Nick Olij"], "DEF": ["Olivier Boscagli", "Ryan Flamingo", "Sergiño Dest"], "MID": ["Joey Veerman", "Jerdy Schouten", "Guus Til"], "ATT": ["Luuk de Jong", "Ismael Saibari", "Noa Lang"]}}, {"name": "Feyenoord", "short": "FEY", "comp": "UCL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#000000", "crest": "halves", "sq": {"GK": ["Timon Wellenreuther", "Justin Bijlow"], "DEF": ["Dávid Hancko", "Gijs Smal", "Bart Nieuwkoop"], "MID": ["Quinten Timber", "Mats Wieffer", "Antoni Milambo"], "ATT": ["Santiago Giménez", "Igor Paixão", "Ayase Ueda"]}}, {"name": "Celtic", "short": "CEL", "comp": "UCL", "c1": "#018749", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Kasper Schmeichel", "Viljami Sinisalo"], "DEF": ["Cameron Carter-Vickers", "Liam Scales", "Greg Taylor"], "MID": ["Callum McGregor", "Reo Hatate", "Matt O'Riley"], "ATT": ["Kyogo Furuhashi", "Daizen Maeda", "Nicolas Kühn"]}}, {"name": "Galatasaray", "short": "GAL", "comp": "UCL", "c1": "#A90432", "c2": "#FDB912", "acc": "#FDB912", "crest": "lion", "sq": {"GK": ["Fernando Muslera", "Günay Güvenç"], "DEF": ["Davinson Sánchez", "Abdülkerim Bardakcı", "Kaan Ayhan"], "MID": ["Lucas Torreira", "Gabriel Sara", "Kerem Demirbay"], "ATT": ["Mauro Icardi", "Dries Mertens", "Barış Alper Yılmaz"]}}, {"name": "Roma", "short": "ROM", "comp": "EL", "c1": "#8E1F2F", "c2": "#F0BC42", "acc": "#F0BC42", "crest": "wolf", "sq": {"GK": ["Mile Svilar", "Pierluigi Gollini"], "DEF": ["Gianluca Mancini", "Evan Ndicka", "Angeliño"], "MID": ["Bryan Cristante", "Manu Koné", "Lorenzo Pellegrini"], "ATT": ["Paulo Dybala", "Artem Dovbyk", "Matías Soulé"]}}, {"name": "Lazio", "short": "LAZ", "comp": "EL", "c1": "#87D8F7", "c2": "#0B1560", "acc": "#0B1560", "crest": "eagle", "sq": {"GK": ["Ivan Provedel", "Christos Mandas"], "DEF": ["Alessio Romagnoli", "Mario Gila", "Nuno Tavares"], "MID": ["Matteo Guendouzi", "Nicolò Rovella", "Mattia Zaccagni"], "ATT": ["Taty Castellanos", "Boulaye Dia", "Gustav Isaksen"]}}, {"name": "Fiorentina", "short": "FIO", "comp": "EL", "c1": "#592C82", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "lily", "sq": {"GK": ["David de Gea", "Pietro Terracciano"], "DEF": ["Pietro Comuzzo", "Luca Ranieri", "Dodô"], "MID": ["Rolando Mandragora", "Danilo Cataldi", "Nicolò Fagioli"], "ATT": ["Moise Kean", "Albert Guðmundsson", "Riccardo Sottil"]}}, {"name": "Real Betis", "short": "BET", "comp": "EL", "c1": "#00954C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Rui Silva", "Adrián"], "DEF": ["Diego Llorente", "Marc Bartra", "Romain Perraud"], "MID": ["Isco", "Johnny Cardoso", "Giovani Lo Celso"], "ATT": ["Vitor Roque", "Cédric Bakambu", "Abde Ezzalzouli"]}}, {"name": "Villarreal", "short": "VIL", "comp": "EL", "c1": "#FFE667", "c2": "#005187", "acc": "#005187", "crest": "submarine", "sq": {"GK": ["Diego Conde", "Luiz Júnior"], "DEF": ["Juan Foyth", "Logan Costa", "Sergi Cardona"], "MID": ["Dani Parejo", "Santi Comesaña", "Álex Baena"], "ATT": ["Ayoze Pérez", "Gerard Moreno", "Nicolas Pépé"]}}, {"name": "Real Sociedad", "short": "RSO", "comp": "EL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Álex Remiro", "Unai Marrero"], "DEF": ["Igor Zubeldia", "Jon Aramburu", "Aihen Muñoz"], "MID": ["Martín Zubimendi", "Brais Méndez", "Beñat Turrientes"], "ATT": ["Mikel Oyarzabal", "Takefusa Kubo", "Sheraldo Becker"]}}, {"name": "Athletic Club", "short": "ATH", "comp": "EL", "c1": "#EE2523", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Unai Simón", "Julen Agirrezabala"], "DEF": ["Dani Vivian", "Aitor Paredes", "Yuri Berchiche"], "MID": ["Mikel Jauregizar", "Oihan Sancet", "Beñat Prados"], "ATT": ["Nico Williams", "Iñaki Williams", "Gorka Guruzeta"]}}, {"name": "Eintracht Frankfurt", "short": "EIN", "comp": "EL", "c1": "#E1000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Kaua Santos", "Kevin Trapp"], "DEF": ["Robin Koch", "Arthur Theate", "Nathaniel Brown"], "MID": ["Ellyes Skhiri", "Mario Götze", "Hugo Larsson"], "ATT": ["Omar Marmoush", "Hugo Ekitiké", "Ansgar Knauff"]}}, {"name": "Stuttgart", "short": "STU", "comp": "EL", "c1": "#FFFFFF", "c2": "#E32219", "acc": "#E32219", "crest": "circle", "sq": {"GK": ["Alexander Nübel", "Fabian Bredlow"], "DEF": ["Jeff Chabot", "Anthony Rouault", "Maximilian Mittelstädt"], "MID": ["Angelo Stiller", "Atakan Karazor", "Enzo Millot"], "ATT": ["Deniz Undav", "Ermedin Demirović", "Chris Führich"]}}, {"name": "Olympique Lyon", "short": "LYO", "comp": "EL", "c1": "#FFFFFF", "c2": "#DA001A", "acc": "#0B387E", "crest": "sash", "sq": {"GK": ["Lucas Perri", "Rémy Descamps"], "DEF": ["Moussa Niakhaté", "Duje Ćaleta-Car", "Nicolás Tagliafico"], "MID": ["Corentin Tolisso", "Maxence Caqueret", "Nemanja Matić"], "ATT": ["Alexandre Lacazette", "Georges Mikautadze", "Malick Fofana"]}}, {"name": "Nice", "short": "NIC", "comp": "EL", "c1": "#E4000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Marcin Bułka", "Yehvann Diouf"], "DEF": ["Dante", "Jean-Clair Todibo", "Melvin Bard"], "MID": ["Morgan Sanson", "Pablo Rosario", "Hicham Boudaoui"], "ATT": ["Gaëtan Laborde", "Evann Guessand", "Jérémie Boga"]}}, {"name": "Fenerbahçe", "short": "FEN", "comp": "EL", "c1": "#FFED00", "c2": "#003DA5", "acc": "#003DA5", "crest": "hoops", "sq": {"GK": ["Dominik Livaković", "İrfan Can Eğribayat"], "DEF": ["Alexander Djiku", "Çağlar Söyüncü", "Jayden Oosterwolde"], "MID": ["Fred", "İsmail Yüksek", "Sebastian Szymański"], "ATT": ["Edin Džeko", "Youssef En-Nesyri", "Dušan Tadić"]}}, {"name": "Rangers", "short": "RAN", "comp": "EL", "c1": "#1B458F", "c2": "#FFFFFF", "acc": "#E4022D", "crest": "lion", "sq": {"GK": ["Jack Butland", "Liam Kelly"], "DEF": ["John Souttar", "Leon Balogun", "Ridvan Yilmaz"], "MID": ["Nicolas Raskin", "Connor Barron", "Tom Lawrence"], "ATT": ["Cyriel Dessers", "Vaclav Cerny", "Hamza Igamane"]}}, {"name": "Braga", "short": "BRA", "comp": "EL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Matheus", "Tiago Sá"], "DEF": ["Sikou Niakaté", "Paulo Oliveira", "Adrián Marín"], "MID": ["João Moutinho", "Rodrigo Zalazar", "Gabri Martínez"], "ATT": ["Simon Banza", "Ricardo Horta", "Bruma"]}}, {"name": "Panathinaikos", "short": "PAO", "comp": "UECL", "c1": "#00693E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Alberto Brignoli", "Bartłomiej Drągowski"], "DEF": ["Georgios Vagiannidis", "Ahmed Touba", "Filip Mladenović"], "MID": ["Adam Gnezda Čerin", "Rúben Pérez", "Tin Jedvaj"], "ATT": ["Fotis Ioannidis", "Tetê", "Andraž Šporar"]}}, {"name": "Anderlecht", "short": "AND", "comp": "UECL", "c1": "#4B2E83", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Colin Coosemans", "Maxime Dupé"], "DEF": ["Jan Vertonghen", "Zeno Debast", "Killian Sardella"], "MID": ["Yari Verschaeren", "Théo Leoni", "Mario Stroeykens"], "ATT": ["Kasper Dolberg", "Luis Vázquez", "Francis Amuzu"]}}, {"name": "Copenhagen", "short": "FCK", "comp": "UECL", "c1": "#12326D", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kamil Grabara", "Dominik Kotarski"], "DEF": ["Denis Vavro", "Gabriel Pereira", "Birger Meling"], "MID": ["Rasmus Falk", "Lukas Lerager", "Elias Achouri"], "ATT": ["Mohamed Elyounoussi", "Orri Óskarsson", "Viktor Dadason"]}}, {"name": "Rapid Vienna", "short": "RAP", "comp": "UECL", "c1": "#0C5C2E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Niklas Hedl", "Paul Gartler"], "DEF": ["Michael Sollbauer", "Leopold Querfeld", "Jonas Auer"], "MID": ["Matthias Seidl", "Nicolas Kühn", "Marco Grüll"], "ATT": ["Guido Burgstaller", "Ercan Kara", "Roman Kerschbaum"]}}, {"name": "Legia Warsaw", "short": "LEG", "comp": "UECL", "c1": "#046A38", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Kacper Tobiasz", "Gabriel Kobylak"], "DEF": ["Steve Kapuadi", "Radovan Pankov", "Patryk Kun"], "MID": ["Bartosz Kapustka", "Rafał Augustyniak", "Claude Gonçalves"], "ATT": ["Marc Gual", "Tomás Pekhart", "Ernest Muçi"]}}, {"name": "Crvena Zvezda", "short": "CZV", "comp": "UECL", "c1": "#E1001A", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "star", "sq": {"GK": ["Omri Glazer", "Ivan Guteša"], "DEF": ["Uroš Spajić", "Milan Rodić", "Nasser Djiga"], "MID": ["Timi Elšnik", "Hwang In-beom", "Mirko Ivanić"], "ATT": ["Cherif Ndiaye", "Silas", "Aleksandar Katai"]}}, {"name": "Slavia Prague", "short": "SLA", "comp": "UECL", "c1": "#D01317", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Jindřich Staněk", "Antonín Kinský"], "DEF": ["David Zima", "Igoh Ogbu", "David Douděra"], "MID": ["Oscar Dorley", "Christos Zafeiris", "Lukáš Provod"], "ATT": ["Mojmír Chytil", "Václav Jurečka", "Ivan Schranz"]}}, {"name": "Molde", "short": "MOL", "comp": "UECL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Jacob Karlstrøm", "Oliver Petersen"], "DEF": ["Martin Bjørnbak", "Valon Zumberi", "Eirik Haugan"], "MID": ["Fredrik Gulbrandsen", "Magnus Wolff Eikrem", "Mathias Løvik"], "ATT": ["Ola Brynhildsen", "Markus Kaasa", "Eirik Hestad"]}}, {"name": "Gent", "short": "GNT", "comp": "UECL", "c1": "#0B4EA2", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Davy Roef", "Paul Nardi"], "DEF": ["Ibrahim Kanaté", "Joseph Okumu", "Archie Brown"], "MID": ["Sven Kums", "Andrew Hjulsager", "Matisse Samoise"], "ATT": ["Hugo Cuypers", "Gift Orban", "Max Dean"]}}, {"name": "Heidenheim", "short": "HDH", "comp": "UECL", "c1": "#E30613", "c2": "#003DA5", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kevin Müller", "Diant Ramaj"], "DEF": ["Patrick Mainka", "Benedikt Gimber", "Omar Traoré"], "MID": ["Niklas Dorsch", "Jan Schöppner", "Lennard Maloney"], "ATT": ["Tim Kleindienst", "Marvin Pieringer", "Eren Dinkçi"]}}, {"name": "Nottingham Forest", "short": "NOT", "comp": "EL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Nikola Milenković", "Murillo", "Neco Williams"], "MID": ["Elliot Anderson", "Ryan Yates", "Morgan Gibbs-White"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Anthony Elanga"]}}, {"name": "Bayer Leverkusen", "short": "B04", "comp": "UCL", "c1": "#E32221", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Robert Andrich"], "ATT": ["Victor Boniface", "Patrik Schick", "Jeremie Frimpong"]}}, {"name": "Shakhtar Donetsk", "short": "SHK", "comp": "EL", "c1": "#FF5C00", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Dmytro Riznyk"], "DEF": ["Yukhym Konoplia", "Mykola Matviyenko", "Irakli Azarovi"], "MID": ["Heorhiy Sudakov", "Taras Stepanenko", "Dmytro Kryskiv"], "ATT": ["Danylo Sikan", "Kevin", "Eguinaldo"]}}, {"name": "Club Brugge", "short": "CLB", "comp": "UCL", "c1": "#0A50A1", "c2": "#000000", "acc": "#E30613", "crest": "halves", "sq": {"GK": ["Simon Mignolet"], "DEF": ["Brandon Mechele", "Joel Ordóñez", "Bjorn Meijer"], "MID": ["Hans Vanaken", "Raphael Onyedika", "Hugo Vetlesen"], "ATT": ["Ferran Jutglà", "Gustaf Nilsson", "Chemsdine Talbi"]}}, {"name": "Sevilla", "short": "SEV", "comp": "EL", "c1": "#D9143C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Ørjan Nyland"], "DEF": ["Loïc Badé", "Kike Salas", "Adrià Pedrosa"], "MID": ["Djibril Sow", "Saúl Ñíguez", "Lucas Ocampos"], "ATT": ["Dodi Lukébakio", "Isaac Romero", "Chidera Ejuke"]}}, {"name": "Marseille", "short": "OM", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Gerónimo Rulli"], "DEF": ["Leonardo Balerdi", "Chancel Mbemba", "Quentin Merlin"], "MID": ["Geoffrey Kondogbia", "Pierre-Emile Højbjerg", "Adrien Rabiot"], "ATT": ["Pierre-Emerick Aubameyang", "Mason Greenwood", "Luis Henrique"]}}, {"name": "Borussia M'gladbach", "short": "BMG", "comp": "WORLD", "c1": "#000000", "c2": "#FFFFFF", "acc": "#00A34A", "crest": "vstripe", "sq": {"GK": ["Jonas Omlin", "Moritz Nicolas"], "DEF": ["Ko Itakura", "Nico Elvedi", "Luca Netz"], "MID": ["Julian Weigl", "Rocco Reitz", "Florian Neuhaus"], "ATT": ["Tim Kleindienst", "Alassane Plea", "Franck Honorat"]}}, {"name": "Wolfsburg", "short": "WOB", "comp": "WORLD", "c1": "#65B32E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Kamil Grabara", "Niklas Klinger"], "DEF": ["Sebastiaan Bornauw", "Maxence Lacroix", "Ridle Baku"], "MID": ["Yannick Gerhardt", "Mattias Svanberg", "Lovro Majer"], "ATT": ["Jonas Wind", "Tiago Tomas", "Patrick Wimmer"]}}, {"name": "Freiburg", "short": "SCF", "comp": "WORLD", "c1": "#E2001A", "c2": "#FFFFFF", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Noah Atubolu", "Florian Müller"], "DEF": ["Matthias Ginter", "Philipp Lienhart", "Christian Günter"], "MID": ["Maximilian Eggestein", "Nicolas Höfler", "Ritsu Doan"], "ATT": ["Vincenzo Grifo", "Lucas Höler", "Michael Gregoritsch"]}}, {"name": "Union Berlin", "short": "FCU", "comp": "WORLD", "c1": "#EB1923", "c2": "#FFE500", "acc": "#FFE500", "crest": "halves", "sq": {"GK": ["Frederik Rönnow", "Alexander Schwolow"], "DEF": ["Danilho Doekhi", "Diogo Leite", "Robin Gosens"], "MID": ["Rani Khedira", "Janik Haberer", "Aljoscha Kemlein"], "ATT": ["Kevin Volland", "Benedict Hollerbach", "Andras Schäfer"]}}, {"name": "Werder Bremen", "short": "SVW", "comp": "WORLD", "c1": "#1D9053", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Michael Zetterer", "Jiri Pavlenka"], "DEF": ["Marco Friedl", "Amos Pieper", "Mitchell Weiser"], "MID": ["Leonardo Bittencourt", "Senne Lynen", "Romano Schmid"], "ATT": ["Marvin Ducksch", "Jens Stage", "Justin Njinmah"]}}, {"name": "Monaco", "short": "ASM", "comp": "WORLD", "c1": "#E51B22", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Philipp Köhn", "Radoslaw Majecki"], "DEF": ["Wilfried Singo", "Thilo Kehrer", "Caio Henrique"], "MID": ["Denis Zakaria", "Lamine Camara", "Aleksandr Golovin"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Lille", "short": "LIL", "comp": "WORLD", "c1": "#E01E13", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "halves", "sq": {"GK": ["Lucas Chevalier", "Vito Mannone"], "DEF": ["Bafodé Diakité", "Alexsandro", "Gabriel Gudmundsson"], "MID": ["Angel Gomes", "Benjamin André", "Ayyoub Bouaddi"], "ATT": ["Jonathan David", "Edon Zhegrova", "Matias Fernandez-Pardo"]}}, {"name": "Lens", "short": "RCL", "comp": "WORLD", "c1": "#FFD100", "c2": "#E30613", "acc": "#E30613", "crest": "hoops", "sq": {"GK": ["Brice Samba", "Hervé Koffi"], "DEF": ["Kevin Danso", "Facundo Medina", "Deiver Machado"], "MID": ["Salis Abdul Samed", "Neil El Aynaoui", "Andy Diouf"], "ATT": ["Elye Wahi", "Florian Sotoca", "Wesley Saïd"]}}, {"name": "Rennes", "short": "SRFC", "comp": "WORLD", "c1": "#E23122", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Steve Mandanda", "Brice Samba"], "DEF": ["Arthur Theate", "Warmed Omari", "Adrien Truffert"], "MID": ["Baptiste Santamaria", "Enzo Le Fée", "Benjamin Bourigeaud"], "ATT": ["Arnaud Kalimuendo", "Amine Gouiri", "Ludovic Blas"]}}, {"name": "Strasbourg", "short": "RCSA", "comp": "WORLD", "c1": "#009BDB", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Matz Sels", "Alaa Bellaarouch"], "DEF": ["Gerzino Nyamsi", "Abakar Sylla", "Guela Doué"], "MID": ["Habib Diarra", "Andrey Santos", "Dilane Bakwa"], "ATT": ["Emanuel Emegha", "Sebastian Nanasi", "Felix Lemarechal"]}}, {"name": "Valencia", "short": "VAL", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#F18E00", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Giorgi Mamardashvili", "Jaume Domenech"], "DEF": ["Mouctar Diakhaby", "Cristhian Mosquera", "José Gayà"], "MID": ["Pepelu", "Javi Guerra", "André Almeida"], "ATT": ["Hugo Duro", "Rafa Mir", "Diego López"]}}, {"name": "Girona", "short": "GIR", "comp": "WORLD", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Paulo Gazzaniga", "Juan Carlos"], "DEF": ["David López", "Daley Blind", "Miguel Gutiérrez"], "MID": ["Aleix Garcia", "Yangel Herrera", "Iván Martín"], "ATT": ["Artem Dovbyk", "Cristhian Stuani", "Viktor Tsygankov"]}}, {"name": "Osasuna", "short": "OSA", "comp": "WORLD", "c1": "#D91A21", "c2": "#0A2D6E", "acc": "#0A2D6E", "crest": "circle", "sq": {"GK": ["Sergio Herrera", "Aitor Fernández"], "DEF": ["David García", "Alejandro Catena", "Juan Cruz"], "MID": ["Lucas Torró", "Jon Moncayola", "Aimar Oroz"], "ATT": ["Ante Budimir", "Rubén García", "Chimy Ávila"]}}, {"name": "Rayo Vallecano", "short": "RAY", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#E30613", "acc": "#E30613", "crest": "sash", "sq": {"GK": ["Stole Dimitrievski", "Augusto Batalla"], "DEF": ["Florian Lejeune", "Abdul Mumin", "Pep Chavarría"], "MID": ["Óscar Valentín", "Unai López", "Isi Palazón"], "ATT": ["Raúl de Tomás", "Sergio Camello", "Randy Nteka"]}}, {"name": "Al Hilal", "short": "HIL", "comp": "WORLD", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Yassine Bounou", "Abdullah Al-Mayouf"], "DEF": ["Kalidou Koulibaly", "Ali Al-Bulaihi", "Renan Lodi"], "MID": ["Ruben Neves", "Sergej Milinkovic-Savic", "Salem Al-Dawsari"], "ATT": ["Aleksandar Mitrovic", "Malcom", "Marcos Leonardo"]}}, {"name": "Al Nassr", "short": "NAS", "comp": "WORLD", "c1": "#FFD700", "c2": "#0057B8", "acc": "#0057B8", "crest": "hoops", "sq": {"GK": ["Bento", "Nawaf Al-Aqidi"], "DEF": ["Aymeric Laporte", "Mohammed Al-Fatil", "Ali Lajami"], "MID": ["Marcelo Brozovic", "Otavio", "Sadio Mané"], "ATT": ["Cristiano Ronaldo", "Jhon Duran", "Ayman Yahya"]}}, {"name": "Al Ittihad", "short": "ITT", "comp": "WORLD", "c1": "#000000", "c2": "#FFD700", "acc": "#FFD700", "crest": "vstripe", "sq": {"GK": ["Predrag Rajkovic", "Marcelo Grohe"], "DEF": ["Danilo Pereira", "Ahmed Hegazy", "Saud Abdulhamid"], "MID": ["N'Golo Kanté", "Fabinho", "Houssem Aouar"], "ATT": ["Karim Benzema", "Moussa Diaby", "Abderrazak Hamdallah"]}}, {"name": "Al Ahli", "short": "AHL", "comp": "WORLD", "c1": "#00A651", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Edouard Mendy", "Mohammed Alrubaie"], "DEF": ["Roger Ibañez", "Merih Demiral", "Ali Majrashi"], "MID": ["Franck Kessié", "Matteo Guendouzi", "Ezgjan Alioski"], "ATT": ["Riyad Mahrez", "Ivan Toney", "Firas Al-Buraikan"]}}, {"name": "Al Shabab", "short": "SHB", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Kim Seung-gyu", "Fawaz Al-Qarni"], "DEF": ["Yannick Carrasco", "Metehan Baltaci", "Mohammed Al-Nakhli"], "MID": ["Gustavo Cuéllar", "Abdullah Al-Khaibari", "Hattan Bahebri"], "ATT": ["Carlos Junior", "Abderrazak Hamdallah", "Ever Banega"]}}, {"name": "Inter Miami", "short": "MIA", "comp": "WORLD", "c1": "#F7B5CD", "c2": "#000000", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Drake Callender", "Oscar Ustari"], "DEF": ["Sergio Busquets", "Jordi Alba", "Tomas Aviles"], "MID": ["Federico Redondo", "Benjamin Cremaschi", "Diego Gomez"], "ATT": ["Lionel Messi", "Luis Suárez", "Robert Taylor"]}}, {"name": "LA Galaxy", "short": "LAG", "comp": "WORLD", "c1": "#00245D", "c2": "#FFD200", "acc": "#FFD200", "crest": "sash", "sq": {"GK": ["John McCarthy", "Novak Micovic"], "DEF": ["Maya Yoshida", "Emiro Garces", "Julian Aude"], "MID": ["Riqui Puig", "Mark Delgado", "Gaston Brugman"], "ATT": ["Dejan Joveljic", "Gabriel Pec", "Joseph Paintsil"]}}, {"name": "LAFC", "short": "LFC", "comp": "WORLD", "c1": "#000000", "c2": "#C39E6D", "acc": "#C39E6D", "crest": "shield", "sq": {"GK": ["Hugo Lloris", "Eldin Jakupovic"], "DEF": ["Aaron Long", "Jesús Murillo", "Ryan Hollingshead"], "MID": ["Ilie Sánchez", "Timothy Tillman", "Mateusz Bogusz"], "ATT": ["Denis Bouanga", "Cristian Olivera", "David Martinez"]}}, {"name": "Seattle Sounders", "short": "SEA", "comp": "WORLD", "c1": "#5D9732", "c2": "#005595", "acc": "#005595", "crest": "circle", "sq": {"GK": ["Stefan Frei", "Andrew Thomas"], "DEF": ["Yeimar Gómez", "Jackson Ragen", "Nouhou Tolo"], "MID": ["João Paulo", "Cristian Roldan", "Albert Rusnák"], "ATT": ["Jordan Morris", "Raúl Ruidíaz", "Pedro de la Vega"]}}, {"name": "Atlanta United", "short": "ATL", "comp": "WORLD", "c1": "#80000A", "c2": "#000000", "acc": "#C39E6D", "crest": "vstripe", "sq": {"GK": ["Brad Guzan", "Quentin Westberg"], "DEF": ["Brooks Lennon", "Luis Abram", "Caleb Wiley"], "MID": ["Bartosz Slisz", "Tristan Muyumba", "Saba Lobjanidze"], "ATT": ["Giorgos Giakoumakis", "Alexey Miranchuk", "Jamal Thiare"]}}, {"name": "Celta Vigo", "short": "CLV", "comp": "WORLD", "c1": "#8AC3EE", "c2": "#FFFFFF", "acc": "#E30613", "crest": "circle", "sq": {"GK": ["Vicente Guaita", "Iván Villar"], "DEF": ["Unai Núñez", "Carl Starfelt", "Óscar Mingueza"], "MID": ["Fran Beltrán", "Luca de la Torre", "Hugo Álvarez"], "ATT": ["Iago Aspas", "Borja Iglesias", "Williot Swedberg"]}}];
+const CLUBS=[{"name": "Arsenal", "short": "ARS", "comp": "PL", "c1": "#EF0107", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cannon", "sq": {"GK": ["David Raya", "Kepa Arrizabalaga"], "DEF": ["William Saliba", "Gabriel Magalhães", "Ben White"], "MID": ["Declan Rice", "Martin Ødegaard", "Mikel Merino"], "ATT": ["Bukayo Saka", "Kai Havertz", "Viktor Gyökeres"]}}, {"name": "Aston Villa", "short": "AVL", "comp": "PL", "c1": "#95BFE5", "c2": "#670E36", "acc": "#FFE600", "crest": "lion", "sq": {"GK": ["Emiliano Martínez", "Marco Bizot"], "DEF": ["Ezri Konsa", "Pau Torres", "Matty Cash"], "MID": ["Boubacar Kamara", "John McGinn", "Youri Tielemans"], "ATT": ["Ollie Watkins", "Donyell Malen", "Jadon Sancho"]}}, {"name": "Bournemouth", "short": "BOU", "comp": "PL", "c1": "#DA291C", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Đorđe Petrović", "Will Dennis"], "DEF": ["Illia Zabarnyi", "Bafodé Diakité", "Adam Smith"], "MID": ["Ryan Christie", "Alex Scott", "Tyler Adams"], "ATT": ["Antoine Semenyo", "Evanilson", "Justin Kluivert"]}}, {"name": "Brentford", "short": "BRE", "comp": "PL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FBB800", "crest": "vstripe", "sq": {"GK": ["Mark Flekken", "Hákon Valdimarsson"], "DEF": ["Nathan Collins", "Ethan Pinnock", "Aaron Hickey"], "MID": ["Christian Nørgaard", "Mikkel Damsgaard", "Vitaly Janelt"], "ATT": ["Bryan Mbeumo", "Yoane Wissa", "Kevin Schade"]}}, {"name": "Brighton", "short": "BHA", "comp": "PL", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFCD00", "crest": "vstripe", "sq": {"GK": ["Bart Verbruggen", "Jason Steele"], "DEF": ["Jan Paul van Hecke", "Lewis Dunk", "Pervis Estupiñán"], "MID": ["Carlos Baleba", "Kaoru Mitoma", "Yasin Ayari"], "ATT": ["João Pedro", "Danny Welbeck", "Georginio Rutter"]}}, {"name": "Burnley", "short": "BUR", "comp": "PL", "c1": "#6C1D45", "c2": "#87CEEB", "acc": "#87CEEB", "crest": "shield", "sq": {"GK": ["James Trafford", "Václav Hladký"], "DEF": ["Maxime Estève", "Jordan Beyer", "Connor Roberts"], "MID": ["Josh Cullen", "Josh Brownhill", "Hannibal Mejbri"], "ATT": ["Zian Flemming", "Lyle Foster", "Jaidon Anthony"]}}, {"name": "Chelsea", "short": "CHE", "comp": "PL", "c1": "#034694", "c2": "#FFFFFF", "acc": "#DBA111", "crest": "lion", "sq": {"GK": ["Robert Sánchez", "Filip Jörgensen"], "DEF": ["Levi Colwill", "Wesley Fofana", "Malo Gusto"], "MID": ["Moisés Caicedo", "Enzo Fernández", "Morgan Rogers"], "ATT": ["Cole Palmer", "Nicolas Jackson", "Pedro Neto"]}}, {"name": "Crystal Palace", "short": "CRY", "comp": "PL", "c1": "#1B458F", "c2": "#C4122E", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Dean Henderson", "Remi Matthews"], "DEF": ["Marc Guéhi", "Maxence Lacroix", "Tyrick Mitchell"], "MID": ["Adam Wharton", "Will Hughes", "Daichi Kamada"], "ATT": ["Eberechi Eze", "Jean-Philippe Mateta", "Ismaïla Sarr"]}}, {"name": "Everton", "short": "EVE", "comp": "PL", "c1": "#003399", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Jordan Pickford", "João Virgínia"], "DEF": ["Jarrad Branthwaite", "James Tarkowski", "Vitaliy Mykolenko"], "MID": ["Idrissa Gueye", "Abdoulaye Doucouré", "Tim Iroegbunam"], "ATT": ["Beto", "Dwight McNeil", "Iliman Ndiaye"]}}, {"name": "Fulham", "short": "FUL", "comp": "PL", "c1": "#FFFFFF", "c2": "#000000", "acc": "#CC0000", "crest": "halves", "sq": {"GK": ["Bernd Leno", "Benjamin Lecomte"], "DEF": ["Calvin Bassey", "Joachim Andersen", "Antonee Robinson"], "MID": ["Sasa Lukic", "Tom Cairney", "Emile Smith Rowe"], "ATT": ["Raúl Jiménez", "Alex Iwobi", "Rodrigo Muniz"]}}, {"name": "Leeds United", "short": "LEE", "comp": "PL", "c1": "#FFFFFF", "c2": "#1D428A", "acc": "#1D428A", "crest": "halves", "sq": {"GK": ["Illan Meslier", "Karl Darlow"], "DEF": ["Pascal Struijk", "Joe Rodon", "Junior Firpo"], "MID": ["Ethan Ampadu", "Brenden Aaronson", "Ao Tanaka"], "ATT": ["Daniel James", "Joël Piroe", "Willy Gnonto"]}}, {"name": "Liverpool", "short": "LIV", "comp": "PL", "c1": "#C8102E", "c2": "#00B2A9", "acc": "#F6EB61", "crest": "bird", "sq": {"GK": ["Alisson Becker", "Giorgi Mamardashvili"], "DEF": ["Virgil van Dijk", "Ibrahima Konaté", "Andy Robertson"], "MID": ["Alexis Mac Allister", "Ryan Gravenberch", "Dominik Szoboszlai"], "ATT": ["Mohamed Salah", "Luis Díaz", "Hugo Ekitiké"]}}, {"name": "Manchester City", "short": "MCI", "comp": "PL", "c1": "#6CABDD", "c2": "#1C2C5B", "acc": "#FFFFFF", "crest": "ship", "sq": {"GK": ["Ederson", "Stefan Ortega"], "DEF": ["Rúben Dias", "Joško Gvardiol", "Nathan Aké"], "MID": ["Rodri", "Elliot Anderson", "Bernardo Silva"], "ATT": ["Erling Haaland", "Phil Foden", "Savinho"]}}, {"name": "Manchester United", "short": "MUN", "comp": "PL", "c1": "#DA291C", "c2": "#FBE122", "acc": "#FBE122", "crest": "devil", "sq": {"GK": ["André Onana", "Altay Bayındır"], "DEF": ["Lisandro Martínez", "Matthijs de Ligt", "Diogo Dalot"], "MID": ["Bruno Fernandes", "Kobbie Mainoo", "Manuel Ugarte"], "ATT": ["Marcus Rashford", "Rasmus Højlund", "Amad Diallo"]}}, {"name": "Newcastle United", "short": "NEW", "comp": "PL", "c1": "#241F20", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Nick Pope", "Martin Dúbravka"], "DEF": ["Sven Botman", "Fabian Schär", "Kieran Trippier"], "MID": ["Bruno Guimarães", "Joelinton", "Joe Willock"], "ATT": ["Alexander Isak", "Anthony Elanga", "Harvey Barnes"]}}, {"name": "Nottingham Forest", "short": "NFO", "comp": "PL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Murillo", "Nikola Milenković", "Neco Williams"], "MID": ["Morgan Gibbs-White", "Ryan Yates", "Nicolás Domínguez"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Taiwo Awoniyi"]}}, {"name": "Sunderland", "short": "SUN", "comp": "PL", "c1": "#EB172B", "c2": "#FFFFFF", "acc": "#211E1F", "crest": "vstripe", "sq": {"GK": ["Anthony Patterson", "Simon Moore"], "DEF": ["Dan Ballard", "Luke O'Nien", "Trai Hume"], "MID": ["Jobe Bellingham", "Chris Rigg", "Dan Neil"], "ATT": ["Wilson Isidor", "Patrick Roberts", "Romaine Mundle"]}}, {"name": "Tottenham", "short": "TOT", "comp": "PL", "c1": "#132257", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "cockerel", "sq": {"GK": ["Guglielmo Vicario", "Antonín Kinský"], "DEF": ["Cristian Romero", "Micky van de Ven", "Destiny Udogie"], "MID": ["Sandro Tonali", "James Maddison", "Pape Matar Sarr"], "ATT": ["Dominic Solanke", "Brennan Johnson", "Dejan Kulusevski"]}}, {"name": "West Ham", "short": "WHU", "comp": "PL", "c1": "#7A263A", "c2": "#1BB1E7", "acc": "#F3D459", "crest": "shield", "sq": {"GK": ["Alphonse Areola", "Łukasz Fabiański"], "DEF": ["Max Kilman", "Konstantinos Mavropanos", "Aaron Wan-Bissaka"], "MID": ["Lucas Paquetá", "Tomáš Souček", "Edson Álvarez"], "ATT": ["Jarrod Bowen", "Mohammed Kudus", "Niclas Füllkrug"]}}, {"name": "Wolves", "short": "WOL", "comp": "PL", "c1": "#FDB913", "c2": "#231F20", "acc": "#231F20", "crest": "wolf", "sq": {"GK": ["José Sá", "Sam Johnstone"], "DEF": ["Toti Gomes", "Yerson Mosquera", "Rayan Aït-Nouri"], "MID": ["João Gomes", "Mario Lemina", "André"], "ATT": ["Matheus Cunha", "Jørgen Strand Larsen", "Pablo Sarabia"]}}, {"name": "Real Madrid", "short": "RMA", "comp": "UCL", "c1": "#FFFFFF", "c2": "#00529F", "acc": "#FEBE10", "crest": "crown", "sq": {"GK": ["Thibaut Courtois", "Andriy Lunin"], "DEF": ["Antonio Rüdiger", "Éder Militão", "Trent Alexander-Arnold"], "MID": ["Jude Bellingham", "Federico Valverde", "Aurélien Tchouaméni"], "ATT": ["Kylian Mbappé", "Vinícius Júnior", "Rodrygo"]}}, {"name": "Barcelona", "short": "BAR", "comp": "UCL", "c1": "#A50044", "c2": "#004D98", "acc": "#FFCB05", "crest": "vstripe", "sq": {"GK": ["Marc-André ter Stegen", "Wojciech Szczęsny"], "DEF": ["Pau Cubarsí", "Iñigo Martínez", "Alejandro Balde"], "MID": ["Pedri", "Frenkie de Jong", "Gavi"], "ATT": ["Lamine Yamal", "Robert Lewandowski", "Anthony Gordon"]}}, {"name": "Atlético Madrid", "short": "ATM", "comp": "UCL", "c1": "#CB3524", "c2": "#FFFFFF", "acc": "#262E62", "crest": "vstripe", "sq": {"GK": ["Jan Oblak", "Juan Musso"], "DEF": ["José María Giménez", "Robin Le Normand", "Nahuel Molina"], "MID": ["Koke", "Rodrigo De Paul", "Pablo Barrios"], "ATT": ["Antoine Griezmann", "Julián Álvarez", "Alexander Sørloth"]}}, {"name": "Bayern München", "short": "BAY", "comp": "UCL", "c1": "#DC052D", "c2": "#0066B2", "acc": "#FFFFFF", "crest": "bavaria", "sq": {"GK": ["Manuel Neuer", "Sven Ulreich"], "DEF": ["Dayot Upamecano", "Jonathan Tah", "Alphonso Davies"], "MID": ["Joshua Kimmich", "Jamal Musiala", "Leon Goretzka"], "ATT": ["Harry Kane", "Michael Olise", "Serge Gnabry"]}}, {"name": "Borussia Dortmund", "short": "DOR", "comp": "UCL", "c1": "#FDE100", "c2": "#000000", "acc": "#000000", "crest": "wall", "sq": {"GK": ["Gregor Kobel", "Alexander Meyer"], "DEF": ["Nico Schlotterbeck", "Waldemar Anton", "Julian Ryerson"], "MID": ["Pascal Groß", "Felix Nmecha", "Marcel Sabitzer"], "ATT": ["Serhou Guirassy", "Karim Adeyemi", "Maximilian Beier"]}}, {"name": "Bayer Leverkusen", "short": "LEV", "comp": "UCL", "c1": "#E32219", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Exequiel Palacios"], "ATT": ["Patrik Schick", "Jeremie Frimpong", "Nathan Tella"]}}, {"name": "RB Leipzig", "short": "RBL", "comp": "UCL", "c1": "#DD0741", "c2": "#001F47", "acc": "#FFFFFF", "crest": "bull", "sq": {"GK": ["Péter Gulácsi", "Maarten Vandevoordt"], "DEF": ["Willi Orbán", "Castello Lukeba", "David Raum"], "MID": ["Xaver Schlager", "Xavi Simons", "Nicolas Seiwald"], "ATT": ["Benjamin Šeško", "Loïs Openda", "Antonio Nusa"]}}, {"name": "Paris Saint-Germain", "short": "PSG", "comp": "UCL", "c1": "#004170", "c2": "#DA291C", "acc": "#DA291C", "crest": "tower", "sq": {"GK": ["Gianluigi Donnarumma", "Matvey Safonov"], "DEF": ["Marquinhos", "Willian Pacho", "Nuno Mendes"], "MID": ["Vitinha", "João Neves", "Fabián Ruiz"], "ATT": ["Ousmane Dembélé", "Bradley Barcola", "Désiré Doué"]}}, {"name": "Monaco", "short": "MON", "comp": "UCL", "c1": "#E31B23", "c2": "#FFFFFF", "acc": "#C8102E", "crest": "monaco", "sq": {"GK": ["Philipp Köhn", "Radosław Majecki"], "DEF": ["Thilo Kehrer", "Wilfried Singo", "Caio Henrique"], "MID": ["Denis Zakaria", "Aleksandr Golovin", "Lamine Camara"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Marseille", "short": "MAR", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Geronimo Rulli", "Rubén Blanco"], "DEF": ["Leonardo Balerdi", "Derek Cornelius", "Quentin Merlin"], "MID": ["Adrien Rabiot", "Pierre-Emile Højbjerg", "Valentin Rongier"], "ATT": ["Mason Greenwood", "Amine Gouiri", "Jonathan Rowe"]}}, {"name": "Inter", "short": "INT", "comp": "UCL", "c1": "#0068A8", "c2": "#000000", "acc": "#FFFFFF", "crest": "snake", "sq": {"GK": ["Yann Sommer", "Josep Martínez"], "DEF": ["Alessandro Bastoni", "Francesco Acerbi", "Federico Dimarco"], "MID": ["Nicolò Barella", "Hakan Çalhanoğlu", "Henrikh Mkhitaryan"], "ATT": ["Lautaro Martínez", "Marcus Thuram", "Mehdi Taremi"]}}, {"name": "AC Milan", "short": "MIL", "comp": "UCL", "c1": "#FB090B", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Mike Maignan", "Marco Sportiello"], "DEF": ["Fikayo Tomori", "Malick Thiaw", "Theo Hernández"], "MID": ["Tijjani Reijnders", "Youssouf Fofana", "Ruben Loftus-Cheek"], "ATT": ["Rafael Leão", "Christian Pulisic", "Álvaro Morata"]}}, {"name": "Juventus", "short": "JUV", "comp": "UCL", "c1": "#000000", "c2": "#FFFFFF", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Michele Di Gregorio", "Mattia Perin"], "DEF": ["Gleison Bremer", "Federico Gatti", "Andrea Cambiaso"], "MID": ["Manuel Locatelli", "Khéphren Thuram", "Teun Koopmeiners"], "ATT": ["Dušan Vlahović", "Kenan Yıldız", "Francisco Conceição"]}}, {"name": "Napoli", "short": "NAP", "comp": "UCL", "c1": "#12A0D7", "c2": "#003C82", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Alex Meret", "Elia Caprile"], "DEF": ["Amir Rrahmani", "Alessandro Buongiorno", "Giovanni Di Lorenzo"], "MID": ["Stanislav Lobotka", "Scott McTominay", "André-Frank Zambo Anguissa"], "ATT": ["Romelu Lukaku", "Matteo Politano", "David Neres"]}}, {"name": "Atalanta", "short": "ATA", "comp": "UCL", "c1": "#1D71B8", "c2": "#000000", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Marco Carnesecchi", "Juan Musso"], "DEF": ["Isak Hien", "Sead Kolašinac", "Matteo Ruggeri"], "MID": ["Éderson", "Marten de Roon", "Mario Pašalić"], "ATT": ["Ademola Lookman", "Charles De Ketelaere", "Mateo Retegui"]}}, {"name": "Benfica", "short": "BEN", "comp": "UCL", "c1": "#E00034", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Anatoliy Trubin", "Samuel Soares"], "DEF": ["Nicolás Otamendi", "António Silva", "Álvaro Carreras"], "MID": ["Orkun Kökçü", "Fredrik Aursnes", "Florentino Luís"], "ATT": ["Ángel Di María", "Vangelis Pavlidis", "Kerem Aktürkoğlu"]}}, {"name": "Porto", "short": "POR", "comp": "UCL", "c1": "#0F4C9A", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "dragon", "sq": {"GK": ["Diogo Costa", "Cláudio Ramos"], "DEF": ["Otávio", "Nehuén Pérez", "Wendell"], "MID": ["Alan Varela", "Stephen Eustáquio", "Nico González"], "ATT": ["Samu Aghehowa", "Pepê", "Rodrigo Mora"]}}, {"name": "Sporting CP", "short": "SPO", "comp": "UCL", "c1": "#008057", "c2": "#FFFFFF", "acc": "#FFD700", "crest": "lion", "sq": {"GK": ["Franco Israel", "Rui Silva"], "DEF": ["Gonçalo Inácio", "Ousmane Diomande", "Matheus Reis"], "MID": ["Morten Hjulmand", "Hidemasa Morita", "Pedro Gonçalves"], "ATT": ["Conrad Harder", "Geovany Quenda", "Francisco Trincão"]}}, {"name": "Ajax", "short": "AJA", "comp": "UCL", "c1": "#D2122E", "c2": "#FFFFFF", "acc": "#D2122E", "crest": "vstripe", "sq": {"GK": ["Remko Pasveer", "Jay Gorter"], "DEF": ["Jorrel Hato", "Youri Baas", "Anton Gaaei"], "MID": ["Kenneth Taylor", "Jordan Henderson", "Branco van den Boomen"], "ATT": ["Wout Weghorst", "Steven Bergwijn", "Mika Godts"]}}, {"name": "PSV", "short": "PSV", "comp": "UCL", "c1": "#ED1C24", "c2": "#FFFFFF", "acc": "#000000", "crest": "chevron", "sq": {"GK": ["Walter Benítez", "Nick Olij"], "DEF": ["Olivier Boscagli", "Ryan Flamingo", "Sergiño Dest"], "MID": ["Joey Veerman", "Jerdy Schouten", "Guus Til"], "ATT": ["Luuk de Jong", "Ismael Saibari", "Noa Lang"]}}, {"name": "Feyenoord", "short": "FEY", "comp": "UCL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#000000", "crest": "halves", "sq": {"GK": ["Timon Wellenreuther", "Justin Bijlow"], "DEF": ["Dávid Hancko", "Gijs Smal", "Bart Nieuwkoop"], "MID": ["Quinten Timber", "Mats Wieffer", "Antoni Milambo"], "ATT": ["Santiago Giménez", "Igor Paixão", "Ayase Ueda"]}}, {"name": "Celtic", "short": "CEL", "comp": "UCL", "c1": "#018749", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Kasper Schmeichel", "Viljami Sinisalo"], "DEF": ["Cameron Carter-Vickers", "Liam Scales", "Greg Taylor"], "MID": ["Callum McGregor", "Reo Hatate", "Matt O'Riley"], "ATT": ["Kyogo Furuhashi", "Daizen Maeda", "Nicolas Kühn"]}}, {"name": "Galatasaray", "short": "GAL", "comp": "UCL", "c1": "#A90432", "c2": "#FDB912", "acc": "#FDB912", "crest": "lion", "sq": {"GK": ["Fernando Muslera", "Günay Güvenç"], "DEF": ["Davinson Sánchez", "Abdülkerim Bardakcı", "Kaan Ayhan"], "MID": ["Lucas Torreira", "Gabriel Sara", "Kerem Demirbay"], "ATT": ["Mauro Icardi", "Dries Mertens", "Barış Alper Yılmaz"]}}, {"name": "Roma", "short": "ROM", "comp": "EL", "c1": "#8E1F2F", "c2": "#F0BC42", "acc": "#F0BC42", "crest": "wolf", "sq": {"GK": ["Mile Svilar", "Pierluigi Gollini"], "DEF": ["Gianluca Mancini", "Evan Ndicka", "Angeliño"], "MID": ["Bryan Cristante", "Manu Koné", "Lorenzo Pellegrini"], "ATT": ["Paulo Dybala", "Artem Dovbyk", "Matías Soulé"]}}, {"name": "Lazio", "short": "LAZ", "comp": "EL", "c1": "#87D8F7", "c2": "#0B1560", "acc": "#0B1560", "crest": "eagle", "sq": {"GK": ["Ivan Provedel", "Christos Mandas"], "DEF": ["Alessio Romagnoli", "Mario Gila", "Nuno Tavares"], "MID": ["Matteo Guendouzi", "Nicolò Rovella", "Mattia Zaccagni"], "ATT": ["Taty Castellanos", "Boulaye Dia", "Gustav Isaksen"]}}, {"name": "Fiorentina", "short": "FIO", "comp": "EL", "c1": "#592C82", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "lily", "sq": {"GK": ["David de Gea", "Pietro Terracciano"], "DEF": ["Pietro Comuzzo", "Luca Ranieri", "Dodô"], "MID": ["Rolando Mandragora", "Danilo Cataldi", "Nicolò Fagioli"], "ATT": ["Moise Kean", "Albert Guðmundsson", "Riccardo Sottil"]}}, {"name": "Real Betis", "short": "BET", "comp": "EL", "c1": "#00954C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Rui Silva", "Adrián"], "DEF": ["Diego Llorente", "Marc Bartra", "Romain Perraud"], "MID": ["Isco", "Johnny Cardoso", "Giovani Lo Celso"], "ATT": ["Vitor Roque", "Cédric Bakambu", "Abde Ezzalzouli"]}}, {"name": "Villarreal", "short": "VIL", "comp": "EL", "c1": "#FFE667", "c2": "#005187", "acc": "#005187", "crest": "submarine", "sq": {"GK": ["Diego Conde", "Luiz Júnior"], "DEF": ["Juan Foyth", "Logan Costa", "Sergi Cardona"], "MID": ["Dani Parejo", "Santi Comesaña", "Álex Baena"], "ATT": ["Ayoze Pérez", "Gerard Moreno", "Nicolas Pépé"]}}, {"name": "Real Sociedad", "short": "RSO", "comp": "EL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Álex Remiro", "Unai Marrero"], "DEF": ["Igor Zubeldia", "Jon Aramburu", "Aihen Muñoz"], "MID": ["Martín Zubimendi", "Brais Méndez", "Beñat Turrientes"], "ATT": ["Mikel Oyarzabal", "Takefusa Kubo", "Sheraldo Becker"]}}, {"name": "Athletic Club", "short": "ATH", "comp": "EL", "c1": "#EE2523", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Unai Simón", "Julen Agirrezabala"], "DEF": ["Dani Vivian", "Aitor Paredes", "Yuri Berchiche"], "MID": ["Mikel Jauregizar", "Oihan Sancet", "Beñat Prados"], "ATT": ["Nico Williams", "Iñaki Williams", "Gorka Guruzeta"]}}, {"name": "Eintracht Frankfurt", "short": "EIN", "comp": "EL", "c1": "#E1000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "eagle", "sq": {"GK": ["Kaua Santos", "Kevin Trapp"], "DEF": ["Robin Koch", "Arthur Theate", "Nathaniel Brown"], "MID": ["Ellyes Skhiri", "Mario Götze", "Hugo Larsson"], "ATT": ["Omar Marmoush", "Hugo Ekitiké", "Ansgar Knauff"]}}, {"name": "Stuttgart", "short": "STU", "comp": "EL", "c1": "#FFFFFF", "c2": "#E32219", "acc": "#E32219", "crest": "circle", "sq": {"GK": ["Alexander Nübel", "Fabian Bredlow"], "DEF": ["Jeff Chabot", "Anthony Rouault", "Maximilian Mittelstädt"], "MID": ["Angelo Stiller", "Atakan Karazor", "Enzo Millot"], "ATT": ["Deniz Undav", "Ermedin Demirović", "Chris Führich"]}}, {"name": "Olympique Lyon", "short": "LYO", "comp": "EL", "c1": "#FFFFFF", "c2": "#DA001A", "acc": "#0B387E", "crest": "sash", "sq": {"GK": ["Lucas Perri", "Rémy Descamps"], "DEF": ["Moussa Niakhaté", "Duje Ćaleta-Car", "Nicolás Tagliafico"], "MID": ["Corentin Tolisso", "Maxence Caqueret", "Nemanja Matić"], "ATT": ["Alexandre Lacazette", "Georges Mikautadze", "Malick Fofana"]}}, {"name": "Nice", "short": "NIC", "comp": "EL", "c1": "#E4000F", "c2": "#000000", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Marcin Bułka", "Yehvann Diouf"], "DEF": ["Dante", "Jean-Clair Todibo", "Melvin Bard"], "MID": ["Morgan Sanson", "Pablo Rosario", "Hicham Boudaoui"], "ATT": ["Gaëtan Laborde", "Evann Guessand", "Jérémie Boga"]}}, {"name": "Fenerbahçe", "short": "FEN", "comp": "EL", "c1": "#FFED00", "c2": "#003DA5", "acc": "#003DA5", "crest": "hoops", "sq": {"GK": ["Dominik Livaković", "İrfan Can Eğribayat"], "DEF": ["Alexander Djiku", "Çağlar Söyüncü", "Jayden Oosterwolde"], "MID": ["Fred", "İsmail Yüksek", "Sebastian Szymański"], "ATT": ["Edin Džeko", "Youssef En-Nesyri", "Dušan Tadić"]}}, {"name": "Rangers", "short": "RAN", "comp": "EL", "c1": "#1B458F", "c2": "#FFFFFF", "acc": "#E4022D", "crest": "lion", "sq": {"GK": ["Jack Butland", "Liam Kelly"], "DEF": ["John Souttar", "Leon Balogun", "Ridvan Yilmaz"], "MID": ["Nicolas Raskin", "Connor Barron", "Tom Lawrence"], "ATT": ["Cyriel Dessers", "Vaclav Cerny", "Hamza Igamane"]}}, {"name": "Braga", "short": "BRA", "comp": "EL", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Matheus", "Tiago Sá"], "DEF": ["Sikou Niakaté", "Paulo Oliveira", "Adrián Marín"], "MID": ["João Moutinho", "Rodrigo Zalazar", "Gabri Martínez"], "ATT": ["Simon Banza", "Ricardo Horta", "Bruma"]}}, {"name": "Panathinaikos", "short": "PAO", "comp": "UECL", "c1": "#00693E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "clover", "sq": {"GK": ["Alberto Brignoli", "Bartłomiej Drągowski"], "DEF": ["Georgios Vagiannidis", "Ahmed Touba", "Filip Mladenović"], "MID": ["Adam Gnezda Čerin", "Rúben Pérez", "Tin Jedvaj"], "ATT": ["Fotis Ioannidis", "Tetê", "Andraž Šporar"]}}, {"name": "Anderlecht", "short": "AND", "comp": "UECL", "c1": "#4B2E83", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Colin Coosemans", "Maxime Dupé"], "DEF": ["Jan Vertonghen", "Zeno Debast", "Killian Sardella"], "MID": ["Yari Verschaeren", "Théo Leoni", "Mario Stroeykens"], "ATT": ["Kasper Dolberg", "Luis Vázquez", "Francis Amuzu"]}}, {"name": "Copenhagen", "short": "FCK", "comp": "UECL", "c1": "#12326D", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kamil Grabara", "Dominik Kotarski"], "DEF": ["Denis Vavro", "Gabriel Pereira", "Birger Meling"], "MID": ["Rasmus Falk", "Lukas Lerager", "Elias Achouri"], "ATT": ["Mohamed Elyounoussi", "Orri Óskarsson", "Viktor Dadason"]}}, {"name": "Rapid Vienna", "short": "RAP", "comp": "UECL", "c1": "#0C5C2E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Niklas Hedl", "Paul Gartler"], "DEF": ["Michael Sollbauer", "Leopold Querfeld", "Jonas Auer"], "MID": ["Matthias Seidl", "Nicolas Kühn", "Marco Grüll"], "ATT": ["Guido Burgstaller", "Ercan Kara", "Roman Kerschbaum"]}}, {"name": "Legia Warsaw", "short": "LEG", "comp": "UECL", "c1": "#046A38", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Kacper Tobiasz", "Gabriel Kobylak"], "DEF": ["Steve Kapuadi", "Radovan Pankov", "Patryk Kun"], "MID": ["Bartosz Kapustka", "Rafał Augustyniak", "Claude Gonçalves"], "ATT": ["Marc Gual", "Tomás Pekhart", "Ernest Muçi"]}}, {"name": "Crvena Zvezda", "short": "CZV", "comp": "UECL", "c1": "#E1001A", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "star", "sq": {"GK": ["Omri Glazer", "Ivan Guteša"], "DEF": ["Uroš Spajić", "Milan Rodić", "Nasser Djiga"], "MID": ["Timi Elšnik", "Hwang In-beom", "Mirko Ivanić"], "ATT": ["Cherif Ndiaye", "Silas", "Aleksandar Katai"]}}, {"name": "Slavia Prague", "short": "SLA", "comp": "UECL", "c1": "#D01317", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "star", "sq": {"GK": ["Jindřich Staněk", "Antonín Kinský"], "DEF": ["David Zima", "Igoh Ogbu", "David Douděra"], "MID": ["Oscar Dorley", "Christos Zafeiris", "Lukáš Provod"], "ATT": ["Mojmír Chytil", "Václav Jurečka", "Ivan Schranz"]}}, {"name": "Molde", "short": "MOL", "comp": "UECL", "c1": "#0067B1", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Jacob Karlstrøm", "Oliver Petersen"], "DEF": ["Martin Bjørnbak", "Valon Zumberi", "Eirik Haugan"], "MID": ["Fredrik Gulbrandsen", "Magnus Wolff Eikrem", "Mathias Løvik"], "ATT": ["Ola Brynhildsen", "Markus Kaasa", "Eirik Hestad"]}}, {"name": "Gent", "short": "GNT", "comp": "UECL", "c1": "#0B4EA2", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Davy Roef", "Paul Nardi"], "DEF": ["Ibrahim Kanaté", "Joseph Okumu", "Archie Brown"], "MID": ["Sven Kums", "Andrew Hjulsager", "Matisse Samoise"], "ATT": ["Hugo Cuypers", "Gift Orban", "Max Dean"]}}, {"name": "Heidenheim", "short": "HDH", "comp": "UECL", "c1": "#E30613", "c2": "#003DA5", "acc": "#FFFFFF", "crest": "halves", "sq": {"GK": ["Kevin Müller", "Diant Ramaj"], "DEF": ["Patrick Mainka", "Benedikt Gimber", "Omar Traoré"], "MID": ["Niklas Dorsch", "Jan Schöppner", "Lennard Maloney"], "ATT": ["Tim Kleindienst", "Marvin Pieringer", "Eren Dinkçi"]}}, {"name": "Nottingham Forest", "short": "NOT", "comp": "EL", "c1": "#DD0000", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "tower", "sq": {"GK": ["Matz Sels", "Carlos Miguel"], "DEF": ["Nikola Milenković", "Murillo", "Neco Williams"], "MID": ["Elliot Anderson", "Ryan Yates", "Morgan Gibbs-White"], "ATT": ["Chris Wood", "Callum Hudson-Odoi", "Anthony Elanga"]}}, {"name": "Bayer Leverkusen", "short": "B04", "comp": "UCL", "c1": "#E32221", "c2": "#000000", "acc": "#FFFFFF", "crest": "cross", "sq": {"GK": ["Lukáš Hrádecký", "Matěj Kovář"], "DEF": ["Jonathan Tah", "Edmond Tapsoba", "Alejandro Grimaldo"], "MID": ["Granit Xhaka", "Florian Wirtz", "Robert Andrich"], "ATT": ["Victor Boniface", "Patrik Schick", "Jeremie Frimpong"]}}, {"name": "Shakhtar Donetsk", "short": "SHK", "comp": "EL", "c1": "#FF5C00", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Dmytro Riznyk"], "DEF": ["Yukhym Konoplia", "Mykola Matviyenko", "Irakli Azarovi"], "MID": ["Heorhiy Sudakov", "Taras Stepanenko", "Dmytro Kryskiv"], "ATT": ["Danylo Sikan", "Kevin", "Eguinaldo"]}}, {"name": "Club Brugge", "short": "CLB", "comp": "UCL", "c1": "#0A50A1", "c2": "#000000", "acc": "#E30613", "crest": "halves", "sq": {"GK": ["Simon Mignolet"], "DEF": ["Brandon Mechele", "Joel Ordóñez", "Bjorn Meijer"], "MID": ["Hans Vanaken", "Raphael Onyedika", "Hugo Vetlesen"], "ATT": ["Ferran Jutglà", "Gustaf Nilsson", "Chemsdine Talbi"]}}, {"name": "Sevilla", "short": "SEV", "comp": "EL", "c1": "#D9143C", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Ørjan Nyland"], "DEF": ["Loïc Badé", "Kike Salas", "Adrià Pedrosa"], "MID": ["Djibril Sow", "Saúl Ñíguez", "Lucas Ocampos"], "ATT": ["Dodi Lukébakio", "Isaac Romero", "Chidera Ejuke"]}}, {"name": "Marseille", "short": "OM", "comp": "UCL", "c1": "#2FAEE0", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Gerónimo Rulli"], "DEF": ["Leonardo Balerdi", "Chancel Mbemba", "Quentin Merlin"], "MID": ["Geoffrey Kondogbia", "Pierre-Emile Højbjerg", "Adrien Rabiot"], "ATT": ["Pierre-Emerick Aubameyang", "Mason Greenwood", "Luis Henrique"]}}, {"name": "Borussia M'gladbach", "short": "BMG", "comp": "WORLD", "c1": "#000000", "c2": "#FFFFFF", "acc": "#00A34A", "crest": "vstripe", "sq": {"GK": ["Jonas Omlin", "Moritz Nicolas"], "DEF": ["Ko Itakura", "Nico Elvedi", "Luca Netz"], "MID": ["Julian Weigl", "Rocco Reitz", "Florian Neuhaus"], "ATT": ["Tim Kleindienst", "Alassane Plea", "Franck Honorat"]}}, {"name": "Wolfsburg", "short": "WOB", "comp": "WORLD", "c1": "#65B32E", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Kamil Grabara", "Niklas Klinger"], "DEF": ["Sebastiaan Bornauw", "Maxence Lacroix", "Ridle Baku"], "MID": ["Yannick Gerhardt", "Mattias Svanberg", "Lovro Majer"], "ATT": ["Jonas Wind", "Tiago Tomas", "Patrick Wimmer"]}}, {"name": "Freiburg", "short": "SCF", "comp": "WORLD", "c1": "#E2001A", "c2": "#FFFFFF", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Noah Atubolu", "Florian Müller"], "DEF": ["Matthias Ginter", "Philipp Lienhart", "Christian Günter"], "MID": ["Maximilian Eggestein", "Nicolas Höfler", "Ritsu Doan"], "ATT": ["Vincenzo Grifo", "Lucas Höler", "Michael Gregoritsch"]}}, {"name": "Union Berlin", "short": "FCU", "comp": "WORLD", "c1": "#EB1923", "c2": "#FFE500", "acc": "#FFE500", "crest": "halves", "sq": {"GK": ["Frederik Rönnow", "Alexander Schwolow"], "DEF": ["Danilho Doekhi", "Diogo Leite", "Robin Gosens"], "MID": ["Rani Khedira", "Janik Haberer", "Aljoscha Kemlein"], "ATT": ["Kevin Volland", "Benedict Hollerbach", "Andras Schäfer"]}}, {"name": "Werder Bremen", "short": "SVW", "comp": "WORLD", "c1": "#1D9053", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "diamond", "sq": {"GK": ["Michael Zetterer", "Jiri Pavlenka"], "DEF": ["Marco Friedl", "Amos Pieper", "Mitchell Weiser"], "MID": ["Leonardo Bittencourt", "Senne Lynen", "Romano Schmid"], "ATT": ["Marvin Ducksch", "Jens Stage", "Justin Njinmah"]}}, {"name": "Monaco", "short": "ASM", "comp": "WORLD", "c1": "#E51B22", "c2": "#FFFFFF", "acc": "#C8102E", "crest": "monaco", "sq": {"GK": ["Philipp Köhn", "Radoslaw Majecki"], "DEF": ["Wilfried Singo", "Thilo Kehrer", "Caio Henrique"], "MID": ["Denis Zakaria", "Lamine Camara", "Aleksandr Golovin"], "ATT": ["Folarin Balogun", "Takumi Minamino", "Maghnes Akliouche"]}}, {"name": "Lille", "short": "LIL", "comp": "WORLD", "c1": "#E01E13", "c2": "#FFFFFF", "acc": "#003DA5", "crest": "halves", "sq": {"GK": ["Lucas Chevalier", "Vito Mannone"], "DEF": ["Bafodé Diakité", "Alexsandro", "Gabriel Gudmundsson"], "MID": ["Angel Gomes", "Benjamin André", "Ayyoub Bouaddi"], "ATT": ["Jonathan David", "Edon Zhegrova", "Matias Fernandez-Pardo"]}}, {"name": "Lens", "short": "RCL", "comp": "WORLD", "c1": "#FFD100", "c2": "#E30613", "acc": "#E30613", "crest": "hoops", "sq": {"GK": ["Brice Samba", "Hervé Koffi"], "DEF": ["Kevin Danso", "Facundo Medina", "Deiver Machado"], "MID": ["Salis Abdul Samed", "Neil El Aynaoui", "Andy Diouf"], "ATT": ["Elye Wahi", "Florian Sotoca", "Wesley Saïd"]}}, {"name": "Rennes", "short": "SRFC", "comp": "WORLD", "c1": "#E23122", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Steve Mandanda", "Brice Samba"], "DEF": ["Arthur Theate", "Warmed Omari", "Adrien Truffert"], "MID": ["Baptiste Santamaria", "Enzo Le Fée", "Benjamin Bourigeaud"], "ATT": ["Arnaud Kalimuendo", "Amine Gouiri", "Ludovic Blas"]}}, {"name": "Strasbourg", "short": "RCSA", "comp": "WORLD", "c1": "#009BDB", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "sash", "sq": {"GK": ["Matz Sels", "Alaa Bellaarouch"], "DEF": ["Gerzino Nyamsi", "Abakar Sylla", "Guela Doué"], "MID": ["Habib Diarra", "Andrey Santos", "Dilane Bakwa"], "ATT": ["Emanuel Emegha", "Sebastian Nanasi", "Felix Lemarechal"]}}, {"name": "Valencia", "short": "VAL", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#F18E00", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Giorgi Mamardashvili", "Jaume Domenech"], "DEF": ["Mouctar Diakhaby", "Cristhian Mosquera", "José Gayà"], "MID": ["Pepelu", "Javi Guerra", "André Almeida"], "ATT": ["Hugo Duro", "Rafa Mir", "Diego López"]}}, {"name": "Girona", "short": "GIR", "comp": "WORLD", "c1": "#E30613", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "vstripe", "sq": {"GK": ["Paulo Gazzaniga", "Juan Carlos"], "DEF": ["David López", "Daley Blind", "Miguel Gutiérrez"], "MID": ["Aleix Garcia", "Yangel Herrera", "Iván Martín"], "ATT": ["Artem Dovbyk", "Cristhian Stuani", "Viktor Tsygankov"]}}, {"name": "Osasuna", "short": "OSA", "comp": "WORLD", "c1": "#D91A21", "c2": "#0A2D6E", "acc": "#0A2D6E", "crest": "circle", "sq": {"GK": ["Sergio Herrera", "Aitor Fernández"], "DEF": ["David García", "Alejandro Catena", "Juan Cruz"], "MID": ["Lucas Torró", "Jon Moncayola", "Aimar Oroz"], "ATT": ["Ante Budimir", "Rubén García", "Chimy Ávila"]}}, {"name": "Rayo Vallecano", "short": "RAY", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#E30613", "acc": "#E30613", "crest": "sash", "sq": {"GK": ["Stole Dimitrievski", "Augusto Batalla"], "DEF": ["Florian Lejeune", "Abdul Mumin", "Pep Chavarría"], "MID": ["Óscar Valentín", "Unai López", "Isi Palazón"], "ATT": ["Raúl de Tomás", "Sergio Camello", "Randy Nteka"]}}, {"name": "Al Hilal", "short": "HIL", "comp": "WORLD", "c1": "#0057B8", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "circle", "sq": {"GK": ["Yassine Bounou", "Abdullah Al-Mayouf"], "DEF": ["Kalidou Koulibaly", "Ali Al-Bulaihi", "Renan Lodi"], "MID": ["Ruben Neves", "Sergej Milinkovic-Savic", "Salem Al-Dawsari"], "ATT": ["Aleksandar Mitrovic", "Malcom", "Marcos Leonardo"]}}, {"name": "Al Nassr", "short": "NAS", "comp": "WORLD", "c1": "#FFD700", "c2": "#0057B8", "acc": "#0057B8", "crest": "hoops", "sq": {"GK": ["Bento", "Nawaf Al-Aqidi"], "DEF": ["Aymeric Laporte", "Mohammed Al-Fatil", "Ali Lajami"], "MID": ["Marcelo Brozovic", "Otavio", "Sadio Mané"], "ATT": ["Cristiano Ronaldo", "Jhon Duran", "Ayman Yahya"]}}, {"name": "Al Ittihad", "short": "ITT", "comp": "WORLD", "c1": "#000000", "c2": "#FFD700", "acc": "#FFD700", "crest": "vstripe", "sq": {"GK": ["Predrag Rajkovic", "Marcelo Grohe"], "DEF": ["Danilo Pereira", "Ahmed Hegazy", "Saud Abdulhamid"], "MID": ["N'Golo Kanté", "Fabinho", "Houssem Aouar"], "ATT": ["Karim Benzema", "Moussa Diaby", "Abderrazak Hamdallah"]}}, {"name": "Al Ahli", "short": "AHL", "comp": "WORLD", "c1": "#00A651", "c2": "#FFFFFF", "acc": "#FFFFFF", "crest": "hoops", "sq": {"GK": ["Edouard Mendy", "Mohammed Alrubaie"], "DEF": ["Roger Ibañez", "Merih Demiral", "Ali Majrashi"], "MID": ["Franck Kessié", "Matteo Guendouzi", "Ezgjan Alioski"], "ATT": ["Riyad Mahrez", "Ivan Toney", "Firas Al-Buraikan"]}}, {"name": "Al Shabab", "short": "SHB", "comp": "WORLD", "c1": "#FFFFFF", "c2": "#000000", "acc": "#000000", "crest": "vstripe", "sq": {"GK": ["Kim Seung-gyu", "Fawaz Al-Qarni"], "DEF": ["Yannick Carrasco", "Metehan Baltaci", "Mohammed Al-Nakhli"], "MID": ["Gustavo Cuéllar", "Abdullah Al-Khaibari", "Hattan Bahebri"], "ATT": ["Carlos Junior", "Abderrazak Hamdallah", "Ever Banega"]}}, {"name": "Inter Miami", "short": "MIA", "comp": "WORLD", "c1": "#F7B5CD", "c2": "#000000", "acc": "#000000", "crest": "circle", "sq": {"GK": ["Drake Callender", "Oscar Ustari"], "DEF": ["Sergio Busquets", "Jordi Alba", "Tomas Aviles"], "MID": ["Federico Redondo", "Benjamin Cremaschi", "Diego Gomez"], "ATT": ["Lionel Messi", "Luis Suárez", "Robert Taylor"]}}, {"name": "LA Galaxy", "short": "LAG", "comp": "WORLD", "c1": "#00245D", "c2": "#FFD200", "acc": "#FFD200", "crest": "sash", "sq": {"GK": ["John McCarthy", "Novak Micovic"], "DEF": ["Maya Yoshida", "Emiro Garces", "Julian Aude"], "MID": ["Riqui Puig", "Mark Delgado", "Gaston Brugman"], "ATT": ["Dejan Joveljic", "Gabriel Pec", "Joseph Paintsil"]}}, {"name": "LAFC", "short": "LFC", "comp": "WORLD", "c1": "#000000", "c2": "#C39E6D", "acc": "#C39E6D", "crest": "shield", "sq": {"GK": ["Hugo Lloris", "Eldin Jakupovic"], "DEF": ["Aaron Long", "Jesús Murillo", "Ryan Hollingshead"], "MID": ["Ilie Sánchez", "Timothy Tillman", "Mateusz Bogusz"], "ATT": ["Denis Bouanga", "Cristian Olivera", "David Martinez"]}}, {"name": "Seattle Sounders", "short": "SEA", "comp": "WORLD", "c1": "#5D9732", "c2": "#005595", "acc": "#005595", "crest": "circle", "sq": {"GK": ["Stefan Frei", "Andrew Thomas"], "DEF": ["Yeimar Gómez", "Jackson Ragen", "Nouhou Tolo"], "MID": ["João Paulo", "Cristian Roldan", "Albert Rusnák"], "ATT": ["Jordan Morris", "Raúl Ruidíaz", "Pedro de la Vega"]}}, {"name": "Atlanta United", "short": "ATL", "comp": "WORLD", "c1": "#80000A", "c2": "#000000", "acc": "#C39E6D", "crest": "vstripe", "sq": {"GK": ["Brad Guzan", "Quentin Westberg"], "DEF": ["Brooks Lennon", "Luis Abram", "Caleb Wiley"], "MID": ["Bartosz Slisz", "Tristan Muyumba", "Saba Lobjanidze"], "ATT": ["Giorgos Giakoumakis", "Alexey Miranchuk", "Jamal Thiare"]}}, {"name": "Celta Vigo", "short": "CLV", "comp": "WORLD", "c1": "#8AC3EE", "c2": "#FFFFFF", "acc": "#E30613", "crest": "circle", "sq": {"GK": ["Vicente Guaita", "Iván Villar"], "DEF": ["Unai Núñez", "Carl Starfelt", "Óscar Mingueza"], "MID": ["Fran Beltrán", "Luca de la Torre", "Hugo Álvarez"], "ATT": ["Iago Aspas", "Borja Iglesias", "Williot Swedberg"]}}];
 const CLUB_BY=Object.fromEntries(CLUBS.map(c=>[c.short,c]));
 const COMPS_LABEL={PL:"Premier League",UCL:"Champions League",EL:"Europa League",UECL:"Conference League",WORLD:"World"};
 /* ============================================================
@@ -1991,6 +2012,23 @@ function crest(club,size){
     snake:`<circle cx="20" cy="20" r="12" fill="none" stroke="${ac}" stroke-width="2.6"/><circle cx="20" cy="20" r="6.6" fill="none" stroke="${ac}" stroke-width="2"/>`,
     diamond:`<rect x="9.5" y="9.5" width="21" height="21" fill="${ac}" transform="rotate(45 20 20)"/><rect x="14.5" y="14.5" width="11" height="11" fill="${c1}" transform="rotate(45 20 20)"/>`,
     cross:`<rect x="17" y="8" width="6" height="24" fill="${ac}"/><rect x="8" y="17" width="24" height="6" fill="${ac}"/>`,
+    /* Bayern: white roundel carrying the blue-and-white Bavarian lozenges */
+    bavaria:`<circle cx="20" cy="20" r="10.8" fill="#FFFFFF"/>
+      <clipPath id="bv"><circle cx="20" cy="20" r="10.8"/></clipPath>
+      <g clip-path="url(#bv)" transform="rotate(45 20 20)">
+        ${[6,11,16,21,26,31].map(x=>`<rect x="${x}" y="4" width="2.5" height="32" fill="#0066B2"/>`).join('')}
+        ${[6,11,16,21,26,31].map(y=>`<rect x="4" y="${y}" width="32" height="2.5" fill="#0066B2"/>`).join('')}
+      </g>
+      <circle cx="20" cy="20" r="10.8" fill="none" stroke="${ac}" stroke-width="2.2"/>`,
+    /* Monaco: the shield split on the diagonal, red over white */
+    monaco:`<clipPath id="mc"><path d="M20 8 L30 11.6 V21 C30 26 25.4 29.6 20 31.2 C14.6 29.6 10 26 10 21 V11.6 Z"/></clipPath>
+      <g clip-path="url(#mc)">
+        <rect x="6" y="6" width="28" height="28" fill="#FFFFFF"/>
+        <path d="M6 6 L34 6 L6 34 Z" fill="#E31B23"/>
+        <path d="M34 6 L34 34 L6 34 Z" fill="#FFFFFF"/>
+      </g>
+      <path d="M20 8 L30 11.6 V21 C30 26 25.4 29.6 20 31.2 C14.6 29.6 10 26 10 21 V11.6 Z"
+        fill="none" stroke="${ac}" stroke-width="1.6"/>`,
     lily:`<path d="M20 8.5 C15.8 15 15.8 21.5 20 28 C24.2 21.5 24.2 15 20 8.5 Z" fill="${ac}"/><path d="M13.4 16.5 Q19.4 21 13.4 27 M26.6 16.5 Q20.6 21 26.6 27" stroke="${ac}" stroke-width="2.2" fill="none"/>`,
     submarine:`<ellipse cx="20" cy="21" rx="13" ry="6.4" fill="${ac}"/><rect x="17" y="12.6" width="6" height="5" rx="1.4" fill="${ac}"/><circle cx="20" cy="21" r="2.6" fill="${c1}"/>`,
     bull:`<path d="M10.5 15 Q20 8.6 29.5 15 Q25 22.6 20 20 Q15 22.6 10.5 15 Z" fill="${ac}"/><path d="M14 25 Q20 30 26 25" stroke="${ac}" stroke-width="2.4" fill="none"/>`,
@@ -2000,6 +2038,7 @@ function crest(club,size){
   const emblemFor={crown:'crown',eagle:'eagle',lion:'lion',bird:'bird',cannon:'cannon',devil:'devil',
     tower:'tower',dragon:'dragon',clover:'clover',star:'star',ship:'ship',cockerel:'cockerel',wolf:'wolf',
     snake:'snake',diamond:'diamond',cross:'cross',lily:'lily',submarine:'submarine',bull:'bull',
+    bavaria:'bavaria',monaco:'monaco',
     wall:'wall',shield:'shield'};
   const em=E[emblemFor[key]]||'';
 
@@ -3001,14 +3040,22 @@ function navbar(back,action){return `<div class="navbar">${back?`<button class="
 /* The action bar is written inside the scrolling body by each sheet, so lift it
    out to sit alongside it — that makes it a genuine footer instead of a sticky
    element that drifts a few pixels as you scroll. */
+/* Pin the Cancel/Save row to the bottom of the sheet. This runs after every
+   repaint, and a repaint builds a fresh bar inside the body — so any bar lifted
+   on a previous pass has to be thrown away first, or they stack up one per
+   keystroke and swallow the screen. */
 function liftFormbar(){
   try{
     const sheet=document.querySelector('#sheet');
     if(!sheet)return;
     const body=sheet.querySelector('.sbody');
     if(!body)return;
-    const bar=body.querySelector('.formbar');
-    if(bar)sheet.appendChild(bar);
+    /* drop any bar left over from a previous repaint */
+    [...sheet.children].forEach(el=>{ if(el.classList&&el.classList.contains('formbar'))el.remove() });
+    const bars=[...body.querySelectorAll('.formbar')];
+    if(!bars.length)return;
+    bars.slice(0,-1).forEach(b=>b.remove());     /* belt and braces */
+    sheet.appendChild(bars[bars.length-1]);
   }catch(e){}
 }
 
@@ -3140,7 +3187,6 @@ function vHome(){
         <div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
         <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
 
-      ${reviewBanner()}
       ${eventBanner()}
       ${potsRace()}
       ${closingIn()}
@@ -4124,7 +4170,10 @@ const FPL_RULES={
   budget:50, startPrice:8, chips:3,
   /* Prices move relative to each player's own starting price, so a £4m player
      can never become a £14m one. */
-  floorPct:0.6, ceilPct:1.5, minPrice:3, maxPrice:20,
+  /* One floor and one ceiling for everyone. No relative cap, so a player who
+     keeps performing climbs as far as they deserve. The floor stops anyone
+     becoming a free pick; the ceiling stops one player eating a whole budget. */
+  minPrice:4, maxPrice:25,
   /* how far above or below the average of those who played, over 3 gameweeks */
   moveBig:24, moveMid:16, moveSmall:10,
   transfersPerWeek:2, transferBank:5, squadSize:5,
@@ -4160,10 +4209,19 @@ function basePrice(pid){
   if(hit)return BASE_BY_NORM[hit];
   return FPL_RULES.startPrice;
 }
-function priceBand(pid){
-  const b=basePrice(pid);
-  return {lo:Math.max(FPL_RULES.minPrice,Math.round(b*FPL_RULES.floorPct*10)/10),
-          hi:Math.min(FPL_RULES.maxPrice,Math.round(b*FPL_RULES.ceilPct*10)/10)};
+function priceBand(pid){ return {lo:FPL_RULES.minPrice, hi:FPL_RULES.maxPrice} }
+/* The cheapest legal five, so we can prove a team is always affordable. */
+function cheapestLegalCost(){
+  const pool=season().players.filter(p=>p.active!==false&&FPL_RULES.eligible.includes(p.pos||'MID'))
+    .map(p=>({pos:p.pos||'MID',v:fplPrice(p.id)})).sort((a,b)=>a.v-b.v);
+  if(pool.length<FPL_RULES.squadSize)return 0;
+  const pick=[]; const used=new Set();
+  FPL_RULES.slots.forEach(pos=>{
+    const i=pool.findIndex((x,ix)=>x.pos===pos&&!used.has(ix));
+    if(i>=0){used.add(i);pick.push(pool[i].v)}
+  });
+  pool.forEach((x,ix)=>{ if(pick.length<FPL_RULES.squadSize&&!used.has(ix)){used.add(ix);pick.push(x.v)} });
+  return pick.reduce((t,v)=>t+v,0);
 }
 function fpl(){
   const S=season();
@@ -4579,8 +4637,9 @@ function fplRules(compact){
         </tbody>
       </table></div>
       <div class="note" style="padding:10px 0 0">
-        A player can never drift more than <b>60% below or 50% above</b> the price they started at, so a £4m player can reach £6m but never £14m.<br><br>
-        <b>Rises don't cost you your team.</b> Your squad counts against the budget at the price you <b>paid</b>, not today's price — so a player getting more expensive can never push you over the limit or block a transfer. Only new signings cost the current price.<br><br>
+        There is no cap on how far a player can climb beyond a floor of <b>£${R.minPrice}m</b> and a ceiling of <b>£${R.maxPrice}m</b> — keep performing and your price keeps rising.<br><br>
+        <b>Rises don't cost you your team.</b> While you own someone they count against your budget at the price you <b>paid</b>, so a player getting more expensive can never push you over the limit or block a transfer.<br><br>
+        <b>But you keep the profit when you sell.</b> Buy someone at £10m, watch them climb to £16m, sell them and you get the <b>full £16m</b> back — a £6m gain to spend elsewhere. A player who has dropped sells for whatever they are worth now, so holding a slider costs you real money.<br><br>
         Prices are recalculated from the games themselves every time the app loads, so they always match what actually happened.
       </div>
     </div>
@@ -4589,8 +4648,10 @@ function fplRules(compact){
     <div class="card pad">
       <div class="note" style="padding:0;line-height:1.75">
         📅 <b>No deadline to miss.</b> Change your team whenever you like. Whatever you have confirmed when the admin logs the next game is the team that scores for it — later changes only count from the following game.<br><br>
-        🔁 <b>${R.transfersPerWeek} transfers a gameweek</b>, and <b>they roll over</b> — save them up to a maximum of <b>${R.transferBank} in the bank</b>. Building your first team is free, and transfers are <b>unlimited until the first game is logged</b>.<br><br>
-        Banking matters because prices move every week. If someone in your squad goes cold you can hold, save up, and make two or three changes at once rather than being forced into a rushed swap.<br><br>
+        🔁 You get <b>${R.transfersPerWeek} free transfers every gameweek</b>.<br><br>
+        <b>They roll over.</b> Don't use them and they stack up, to a maximum of <b>${R.transferBank} in the bank</b> — so you could sit still for two gameweeks and then make four changes at once. Once you're on ${R.transferBank} you stop accruing, so there's no point hoarding beyond that.<br><br>
+        <b>Why it works this way:</b> prices move every week. A fixed weekly allowance would force you into a rushed swap the moment someone went cold. Banking lets you wait, watch a run develop, and then act properly.<br><br>
+        Building your first team is free, and transfers are <b>unlimited until the first game is logged</b> — so change your mind as often as you like before Sunday.<br><br>
         💷 <b>Prices move every gameweek</b> based on how a player is scoring compared with everyone else. Range £${R.minPrice}m–£${R.maxPrice}m.
       </div>
     </div>
@@ -4705,6 +4766,7 @@ function fplMyTeam(m,locked){
       <button class="btn pri full" style="margin-top:10px" onclick="setTeamName($('#tn').value)">Save</button></div>`;
   }
   const d=draftOf(m), spend=draftSpend(m), left=FPL_RULES.budget-spend;
+  const rev=reviewBanner();
   const probs=draftProblems(m), dirty=draftDirty(m);
   const confirmed=m.squad&&m.squad.length===FPL_RULES.squadSize;
   const gws=playedGws(), last=gws[gws.length-1];
@@ -4757,8 +4819,6 @@ function fplMyTeam(m,locked){
       ${Array.from({length:flex},()=>emptySlot(null,false)).join('')}</div>`:'';
 
   return `
-    ${fplInfoNote()}
-
     <!-- FPL-style header -->
     <div class="fh">
       <div class="fh-row">
@@ -4782,6 +4842,7 @@ function fplMyTeam(m,locked){
 
     ${m.wildcardActive?`<div class="fpl-chipbar">🃏 <b>Wildcard active</b> — unlimited changes until you confirm</div>`:''}
 
+    ${rev}
     <div class="fpitch">
       <div class="fp-lines"></div>
       <div class="fp-rows">${line('ATT')}${flexLine()}${line('MID')}${line('DEF')}</div>
@@ -4842,6 +4903,8 @@ function fplMyTeam(m,locked){
       <div class="note">One chip per gameweek. Anything you arm can be taken back off until that game is logged.</div>`;
     })()}
 
+    ${fplInfoNote()}
+
     <div class="card" style="margin-top:12px">
       <div class="row tap" onclick="renameTeam()"><div class="rt"><div class="r1">Rename team</div></div>${chev}</div>
       <div class="row tap" onclick="fplLogout()"><div class="rt"><div class="r1" style="color:var(--red)">Sign out of FPL</div></div></div>
@@ -4901,9 +4964,21 @@ function paidPrice(m,pid){
   const bought=(m.bought||{})[pid];
   return bought!=null?bought:fplPrice(pid);
 }
+/* You sell at the full market price and keep every penny of the rise. Real FPL
+   only gives you half, to stop team values running away — here the squad is 29
+   players and the season is short, so the simpler rule is worth more than the
+   protection. A fall comes off in full too, so holding a slider costs you. */
+function sellPrice(m,pid){ return fplPrice(pid); }
+/* Profit you have banked by selling risers this session. */
+function realisedProfit(m){
+  const d=draftOf(m), had=(m.squad||[]);
+  return had.filter(x=>!d.squad.includes(x))
+            .reduce((t,x)=>t+(sellPrice(m,x)-paidPrice(m,x)),0);
+}
 function draftSpend(m){
   const d=draftOf(m), owned=new Set(m.squad||[]);
-  return d.squad.reduce((t,x)=>t+(owned.has(x)?paidPrice(m,x):fplPrice(x)),0);
+  const gross=d.squad.reduce((t,x)=>t+(owned.has(x)?paidPrice(m,x):fplPrice(x)),0);
+  return Math.round((gross-realisedProfit(m))*10)/10;
 }
 function squadValue(m){ return (m.squad||[]).reduce((t,x)=>t+fplPrice(x),0) }
 function draftChanges(m){
@@ -4916,6 +4991,28 @@ function squadShape(squad){
   const c={DEF:0,MID:0,ATT:0};
   (squad||[]).forEach(id=>{const p=player(id); if(p&&c[p.pos]!=null)c[p.pos]++});
   return c;
+}
+/* Which positions still have to be covered, and how many slots are left.
+   A pick is only refused when taking it would make the minimum unreachable —
+   otherwise every position stays open, which is what people expect. */
+function shapeState(m){
+  const d=draftOf(m), sh=squadShape(d.squad);
+  const missing=FPL_RULES.slots.filter(pos=>!sh[pos]);
+  const slotsLeft=FPL_RULES.squadSize-d.squad.length;
+  return {sh,missing,slotsLeft,
+          /* if slots left exactly equals what's missing, only those may be picked */
+          forced: slotsLeft>0 && missing.length>=slotsLeft ? missing : null};
+}
+function canPickPos(m,pos){
+  const st=shapeState(m);
+  if(!st.forced)return true;
+  return st.forced.includes(pos);
+}
+function shapeHint(m){
+  const st=shapeState(m);
+  if(!st.forced)return '';
+  const list=st.forced.join(' and ');
+  return `<div class="warn" style="margin-bottom:12px">⚠️ ${st.slotsLeft} slot${st.slotsLeft===1?'':'s'} left, so you still need ${st.forced.length===1?'a':'one'} <b>${list}</b>. Only those are shown.</div>`;
 }
 function draftProblems(m){
   const d=draftOf(m), p=[], n=d.squad.length, need=FPL_RULES.squadSize;
@@ -4942,8 +5039,8 @@ let FSWAP=null;   // the player being replaced, if any
 function fplSwapOut(pid){
   const p=player(pid); if(!p)return;
   haptic('light');
-  FSWAP=pid; FPICK=p.pos||'MID'; FTAB='market'; render();
-  toast(`Pick a ${FPICK} to replace ${p.name.split(' ')[0]}`);
+  FSWAP=pid; FPICK=null; FTAB='market'; render();
+  toast(`Pick anyone to replace ${p.name.split(' ')[0]}`);
 }
 function fplDrop(pid){
   const m=fplMine(); if(!m)return;
@@ -4953,7 +5050,7 @@ function fplDrop(pid){
   if(d.captain===pid)d.captain=null;
   render();
 }
-function fplSwap(pos){ FSWAP=null; FPICK=pos||null; FTAB='market'; render(); }
+function fplSwap(pos){ FSWAP=null; FPICK=null; FTAB='market'; render(); }
 function fplPick(pid){
   haptic('light');
   const m=fplMine(); if(!m)return;
@@ -4962,6 +5059,10 @@ function fplPick(pid){
   const d=draftOf(m);
   if(d.squad.includes(pid)){ toast('Already in your team'); return; }
   if(FSWAP){                                   // replacing someone specific
+    const after=draftOf(m).squad.map(x=>x===FSWAP?pid:x);
+    const sh=squadShape(after);
+    const gap=FPL_RULES.slots.filter(pos=>!sh[pos]);
+    if(gap.length){ toast(`That would leave you without a ${gap.join(' or ')}`); return; }
     const outName=player(FSWAP)?.name.split(' ')[0]||'them';
     d.squad=d.squad.map(x=>x===FSWAP?pid:x);
     if(d.captain===FSWAP)d.captain=null;
@@ -4970,6 +5071,10 @@ function fplPick(pid){
   }
   if(d.squad.length>=FPL_RULES.squadSize){
     toast(`You already have ${FPL_RULES.squadSize} — tap a player to replace them`); return;
+  }
+  if(!canPickPos(m,p.pos||'MID')){
+    const st=shapeState(m);
+    toast(`Only ${st.forced.join(' or ')} left — you need one of each`); return;
   }
   d.squad.push(pid);
   if(d.squad.length===FPL_RULES.squadSize){ FPICK=null; FTAB='team'; }
@@ -5126,9 +5231,10 @@ function priceCurve(pid,perStep){
 }
 function stockOf(pid){
   const ser=(priceSeries()[pid])||[];
-  const now=ser.length?ser[ser.length-1].v:FPL_RULES.startPrice;
-  const prev=ser.length>1?ser[ser.length-2].v:FPL_RULES.startPrice;
-  const open=FPL_RULES.startPrice;
+  const base=basePrice(pid);
+  const now=ser.length?ser[ser.length-1].v:base;
+  const prev=ser.length>1?ser[ser.length-2].v:base;
+  const open=base;                 /* their own opening price, not a flat default */
   const chg=now-prev, pct=prev?(chg/prev*100):0;
   const season=now-open, seasonPct=open?(season/open*100):0;
   const highs=ser.map(x=>x.v);
@@ -5283,7 +5389,11 @@ function fplStocks(m){
 /* ---------- market ---------- */
 function fplMarket(m,locked){
   let st=fplStats();
-  if(FPICK)st=st.filter(x=>x.pos===FPICK);
+  /* Never narrow to a single position just because a slot was tapped — the
+     whole point is being able to change shape. Only narrow when the minimum
+     would otherwise become unreachable. */
+  const shape=shapeState(m);
+  if(shape.forced)st=st.filter(x=>shape.forced.includes(x.pos));
   else if(FPOS!=='ALL')st=st.filter(x=>x.pos===FPOS);
   const key={total:'total',form:'form',price:'price',owned:'ownedPct',threat:'threat',value:'value'}[FSORT2]||'total';
   st.sort((a,b)=>b[key]-a[key]);
@@ -5309,8 +5419,9 @@ function fplMarket(m,locked){
       </span></button>`;
   };
   return `
+    ${shapeHint(m)}
     ${swapping?`<div class="mk-banner swap">
-        <b>Replacing ${esc(swapping.name.split(' ')[0])}</b> — pick a ${FPICK}
+        <b>Replacing ${esc(swapping.name.split(' ')[0])}</b> — pick anyone
         <button onclick="FSWAP=null;FPICK=null;render()">Cancel</button></div>`
      :FPICK?`<div class="mk-banner">
         <b>Choosing a ${FPICK}</b>
@@ -7947,18 +8058,16 @@ async function migratePrices(){
   let touched=0;
   (f.managers||[]).forEach(m=>{
     if(!m.teamName||!(m.squad||[]).length)return;
-    const cost=(m.squad||[]).reduce((t,x)=>t+fplPrice(x),0);
-    if(cost<=FPL_RULES.budget){
-      /* already legal — just record what they now "paid" */
-      m.bought={}; m.squad.forEach(pid=>m.bought[pid]=fplPrice(pid));
-      return;
-    }
+    /* Everyone picked when all 29 cost the same, so no squad reflects a real
+       choice under the new prices — even the ones that happen to still fit.
+       Keep the two dearest and rebuild the rest for everybody. */
     const keep=[...m.squad].sort((a,b)=>fplPrice(b)-fplPrice(a)).slice(0,2);
     const next=autoFill(keep);
     m.squad=next;
     if(!next.includes(m.captain))m.captain=keep[0]||next[0];
     m.bought={}; next.forEach(pid=>m.bought[pid]=fplPrice(pid));
     m.needsReview=true;
+    m.wasAutoFilled=true;
     touched++;
   });
   f.migrated=MIGRATION_KEY;
@@ -7968,10 +8077,13 @@ async function migratePrices(){
 function reviewBanner(){
   const me=fplMine();
   if(!me||!me.needsReview)return '';
+  if(playedGws().length)return '';        /* once the season starts it is moot */
   return `<div class="revbar">
     <div class="rev-e">⚠️</div>
-    <div class="rev-t"><b>Your team was auto-filled</b>
-      <span>Prices changed in the latest update, so we kept your two most expensive players and filled the rest. Please review it before Sunday.</span></div>
+    <div class="rev-t"><b>${me.wasAutoFilled?'Your team was auto-filled':'Prices have changed'}</b>
+      <span>${me.wasAutoFilled
+        ? 'Every player now has their own price, so your old squad no longer fit the budget. We kept your two most expensive and filled the rest. Please review it before Sunday.'
+        : 'Every player now has their own price. Your squad still fits the budget, but have a look before Sunday in case you would pick differently.'}</span></div>
     <button onclick="go('fpl');FTAB='team';render()">Review</button>
   </div>`;
 }
@@ -8846,6 +8958,55 @@ function togetherStat(x,y){let tog=0,togW=0,vs=0,aw=0,bw=0;
 
 
 /* ============ ADMIN (password-locked) ============ */
+/* ---------- Admin: set a price by hand ----------
+   For a new player joining mid-season, or to correct something quickly.
+   An override is remembered on the player and becomes their opening price, so
+   the weekly movement engine carries on from it as normal. */
+async function setBasePrice(pid){
+  if(!requireAdmin())return;
+  const p=player(pid); if(!p)return;
+  const cur=basePrice(pid);
+  const v=await askText(`${p.name}'s price`,
+    `Their opening price in Sunday FPL. Weekly movement still applies on top, within ${Math.round(FPL_RULES.floorPct*100)}%–${Math.round(FPL_RULES.ceilPct*100)}% of it.`,
+    String(cur),'Save');
+  if(v===null)return;
+  const n=Math.round(parseFloat(v)*10)/10;
+  if(!isFinite(n)||n<FPL_RULES.minPrice||n>FPL_RULES.maxPrice){
+    toast(`Enter a number between £${FPL_RULES.minPrice}m and £${FPL_RULES.maxPrice}m`);return}
+  snapshot(`price change for ${p.name}`);
+  p.basePrice=n;
+  try{ recalcPrices() }catch(e){}
+  await save(); render();
+  toast(`${p.name} is now £${n}m`);
+}
+async function clearBasePrice(pid){
+  if(!requireAdmin())return;
+  const p=player(pid); if(!p)return;
+  delete p.basePrice;
+  try{ recalcPrices() }catch(e){}
+  await save(); render();
+  toast(`${p.name} back to the default £${basePrice(pid)}m`);
+}
+function adminPrices(){
+  const cheapest=cheapestLegalCost(), head=cheapest>FPL_RULES.budget
+    ? `<div class="warn" style="margin-bottom:10px">⚠️ The cheapest legal team now costs £${cheapest}m, above the £${FPL_RULES.budget}m budget. Bring some prices down or raise the budget.</div>`
+    : '';
+  const ps=season().players.filter(x=>x.active!==false)
+    .slice().sort((a,b)=>basePrice(b.id)-basePrice(a.id)||String(a.name).localeCompare(String(b.name)));
+  if(!ps.length)return '';
+  return `<div class="sechead">Sunday FPL prices</div>
+    ${head}
+    <div class="card">${ps.map(p=>{
+      const base=basePrice(p.id), now=fplPrice(p.id), band=priceBand(p.id);
+      const moved=Math.abs(now-base)>1e-9;
+      return `<div class="row tap" onclick="setBasePrice('${p.id}')">
+        <div class="rt"><div class="r1">${esc(p.name)}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${p.basePrice!=null?' <span class="pill" style="background:var(--tint-soft);color:var(--tint)">SET</span>':''}</div>
+          <div class="r2">opens £${base}m · can move £${band.lo}m–£${band.hi}m</div></div>
+        <div class="rv" style="font-weight:800;color:${moved?(now>base?'var(--green)':'var(--red)'):'var(--label)'}">£${(+now).toFixed(1)}m</div>
+        ${chev}</div>`}).join('')}</div>
+    <div class="note">Cheapest legal five right now: <b>£${cheapest}m</b> of the £${FPL_RULES.budget}m budget.<br><br>Tap anyone to set their opening price — useful for a new player, or to correct something mid-season. Weekly movement carries on from whatever you set. Changing a price never affects a confirmed squad's budget, because teams are valued at what they paid.</div>`;
+}
+
 function vAdmin(){
   $('#navMount').innerHTML=navbar();
   if(!pinOK){
@@ -8876,6 +9037,8 @@ function vAdmin(){
       <div class="sechead">Appearance</div>
       <div class="card"><div class="row"><div class="rt"><div class="r1">Dark mode</div></div>
         <button class="toggle ${dark?'on':''}" onclick="toggleTheme();render()"><i></i></button></div></div>
+
+      ${adminPrices()}
 
       <div class="sechead">Season</div>
       <div class="card">
@@ -9550,7 +9713,10 @@ function setSide(pid,sd){
   paintGame()}
 const teamCount=sd=>G[sd].size+G['fill'+sd].length;
 const goalSum=sd=>[...G[sd]].reduce((t,p)=>t+(G.goals[p]||0),0);
-function paintGame(){ return keepFocus(()=>_paintGame()); }
+function paintGame(){
+  if(!$('#gb'))return;              /* the game sheet is not open — nothing to paint */
+  return keepFocus(()=>_paintGame());
+}
 function _paintGame(){
   const all=[...season().players].filter(p=>p.active!==false).sort((a,b)=>a.name.localeCompare(b.name));
   const q=(G.q||'').toLowerCase().trim();
@@ -9587,6 +9753,7 @@ function _paintGame(){
     <div class="pgteams">${teamCard('A')}${teamCard('B')}</div>
 
     <div class="btnrow" style="margin:10px 0 4px">
+      <button class="btn sec sm" onclick="pgRepeatLast()">↩︎ Last week</button>
       <button class="btn sec sm" onclick="autoSplit()">⚖️ Auto-split</button>
       <button class="btn sec sm" onclick="clearTeams()">Clear all</button>
     </div>
@@ -9605,8 +9772,11 @@ function _paintGame(){
         <button class="b" onclick="pgPlace('B')">Add to B</button>
       </span></div>`:''}
     <div class="pgpool">
-      ${pool.length?pool.map(p=>`<button class="pgchip ${G.__sel.has(p.id)?'sel':''}" onclick="pgSelect('${p.id}')">
-        ${avatar(p,26)}<span>${esc(p.name.split(' ')[0])}</span>${G.__sel.has(p.id)?'<i class="tick">✓</i>':''}</button>`).join('')
+      ${pool.length?pool.map(p=>`<div class="pgrow ${G.__sel.has(p.id)?'sel':''}">
+        <button class="pgname" onclick="pgSelect('${p.id}')">${avatar(p,26)}<span>${esc(p.name.split(' ')[0])}</span>${G.__sel.has(p.id)?'<i class="tick">✓</i>':''}</button>
+        <button class="pgab a" onclick="pgQuick('${p.id}','A')" title="Straight into Team A">A</button>
+        <button class="pgab b" onclick="pgQuick('${p.id}','B')" title="Straight into Team B">B</button>
+      </div>`).join('')
       :`<div class="note" style="padding:8px 4px">${q?'No players match.':'Everyone\'s been placed.'}</div>`}
     </div>
     <div class="note" style="padding:8px 4px 0">Fillers are one-off guests — they make the teams add up but don't join the squad or the table.</div>
@@ -9625,7 +9795,8 @@ function _paintGame(){
       ${G.sa===G.sb?'Draw — 1 point each':`Team ${G.sa>G.sb?'A':'B'} wins — 3 points`}</div>
 
     ${(G.A.size||G.B.size)?`<div class="lbl">Who scored? <span style="text-transform:none;font-weight:400;color:var(--label3)">optional</span></div>
-      ${mismatch?`<div class="warn">⚠️ Goals don't add up to the score — A ${gA}/${G.sa}, B ${gB}/${G.sb}. You can fix it or save anyway.</div>`:''}
+      ${mismatch?`<div class="warn">⚠️ Goals don't add up to the score — A ${gA}/${G.sa}, B ${gB}/${G.sb}.
+        <button class="btn sec sm" style="margin-top:8px" onclick="pgScoreFromGoals()">Set the score to ${gA}–${gB}</button></div>`:''}
       <div class="card">${[...G.A,...G.B].map(pid=>{const p=player(pid),n=G.goals[pid]||0;
         return `<div class="row"><div class="rt"><div class="r1" style="font-size:15px">${esc(p?p.name:'')}
           <span style="font-size:11px;font-weight:700;color:${G.A.has(pid)?'var(--tint)':'var(--blue)'}">${G.A.has(pid)?'A':'B'}</span></div></div>
@@ -9666,6 +9837,30 @@ function pgSelectAll(){
   pool.forEach(p=>everyone?G.__sel.delete(p.id):G.__sel.add(p.id));
   paintGame()}
 function pgClearSel(){G.__sel.clear();paintGame()}
+/* One tap puts a player on a side — no select-then-place round trip. */
+function pgQuick(pid,sd){
+  G.A.delete(pid);G.B.delete(pid);G.__sel.delete(pid);
+  if(sd)G[sd].add(pid); else delete G.goals[pid];
+  paintGame();
+}
+/* Reuse the sides from the most recent game — most Sundays are close to it. */
+function pgRepeatLast(){
+  const gs=allGames();
+  const last=gs[gs.length-1];
+  if(!last){toast('No previous game to copy');return}
+  const live=new Set(season().players.filter(p=>p.active!==false).map(p=>p.id));
+  G.A=new Set((last.teamA||[]).filter(x=>live.has(x)));
+  G.B=new Set((last.teamB||[]).filter(x=>live.has(x)));
+  G.__sel.clear();
+  haptic('light');paintGame();
+  toast(`Copied last week's sides — ${G.A.size} v ${G.B.size}`);
+}
+/* Set the scoreline from the goals already entered. */
+function pgScoreFromGoals(){
+  const a=goalSum('A'), b=goalSum('B');
+  if(!a&&!b){toast('Enter some scorers first');return}
+  G.sa=a;G.sb=b;haptic('light');paintGame();
+}
 function pickComp(cid){G.compId=cid;if(!G.id)G.round=nextRound(cid);paintGame()}
 function clearTeams(){G.A.clear();G.B.clear();G.fillA=[];G.fillB=[];G.goals={};paintGame()}
 async function addFiller(sd){
