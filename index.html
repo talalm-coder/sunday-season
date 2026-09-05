@@ -8027,7 +8027,7 @@ function openMoment(id){
    most squads no longer fit the budget, so each team keeps its two dearest
    players and the rest is auto-filled with the cheapest legal combination.
    Runs once, and flags every team so people know to review it. */
-const MIGRATION_KEY='prices_v2';
+const MIGRATION_KEY='prices_v3';
 function autoFill(keep){
   const pool=season().players.filter(p=>p.active!==false&&FPL_RULES.eligible.includes(p.pos||'MID'))
     .map(p=>({id:p.id,pos:p.pos||'MID',price:fplPrice(p.id)}))
@@ -8049,9 +8049,56 @@ function autoFill(keep){
   }
   return squad.slice(0,FPL_RULES.squadSize);
 }
+/* Repairs any squad that costs more than the budget. This runs on EVERY load,
+   not just once — a one-shot flag is fragile, because a half-finished earlier
+   version can stamp it and lock the real fix out forever. Only touches teams
+   that are actually broken, so it costs nothing once everyone is legal. */
+/* Puts any broken squad right: players who no longer exist, squads that are the
+   wrong size, squads missing a position, and squads over budget. Runs on EVERY
+   load — a one-shot flag is fragile, because a half-finished earlier version can
+   stamp it and lock the real fix out. Costs nothing once everyone is legal. */
+async function repairOverBudget(){
+  const f=fpl(); let fixed=0;
+  const alive=pid=>{ const p=player(pid); return !!p && p.active!==false && FPL_RULES.eligible.includes(p.pos||'MID') };
+  (f.managers||[]).forEach(m=>{
+    if(!m.teamName||!(m.squad||[]).length)return;
+    /* drop anyone who has left the squad list entirely */
+    const before=(m.squad||[]).length;
+    let sq=(m.squad||[]).filter(alive);
+    const lostSomeone = sq.length!==before;
+    const cost=sq.reduce((t,x)=>t+((m.bought||{})[x]??fplPrice(x)),0);
+    const shape=squadShape(sq);
+    const missing=FPL_RULES.slots.some(pos=>!shape[pos]);
+    const wrongSize=sq.length!==FPL_RULES.squadSize;
+    if(!lostSomeone && !missing && !wrongSize && cost<=FPL_RULES.budget)return;
+    /* keep as much of their team as we can, cheapest-fill the rest */
+    const keep=[...sq].sort((a,b)=>fplPrice(b)-fplPrice(a))
+      .slice(0, cost>FPL_RULES.budget ? 2 : FPL_RULES.squadSize-1);
+    let next=autoFill(keep);
+    /* if that is still over budget, fall back to the two dearest and refill */
+    if(next.reduce((t,x)=>t+fplPrice(x),0)>FPL_RULES.budget)
+      next=autoFill([...sq].sort((a,b)=>fplPrice(b)-fplPrice(a)).slice(0,2));
+    m.squad=next;
+    if(!next.includes(m.captain))m.captain=next[0]||null;
+    m.bought={}; next.forEach(pid=>m.bought[pid]=fplPrice(pid));
+    /* past gameweeks keep whoever actually played, but drop ghosts so the
+       history views can never hit a missing player */
+    (m.history||[]).forEach(h=>{
+      h.squad=(h.squad||[]).filter(x=>!!player(x));
+      if(h.captain&&!player(h.captain))h.captain=h.squad[0]||null;
+    });
+    m.needsReview=true; m.wasAutoFilled=true;
+    fixed++;
+  });
+  if(fixed){ FDRAFT=null; try{ if(!CLOUD_FAIL)await save() }catch(e){} }
+  return fixed;
+}
 async function migratePrices(){
   const f=fpl();
-  if(f.migrated===MIGRATION_KEY)return false;
+  if(f.migrated===MIGRATION_KEY){
+    /* already migrated — but still repair anything left over budget */
+    return await repairOverBudget();
+  }
   /* wipe any price map saved under the old rules and rebuild from the new list */
   f.prices={};
   try{ recalcPrices() }catch(e){}
@@ -10020,7 +10067,12 @@ async function removePlayer(pid){if(!requireAdmin())return;
   const inG=season().games.some(g=>(g.teamA||[]).includes(pid)||(g.teamB||[]).includes(pid));
   if(!await askConfirm(`Remove ${p.name}?`,inG?'Past games keep their results, but they leave the squad.':'This removes them from the squad.','Remove',true))return;
   season().players=season().players.filter(x=>x.id!==pid);
-  await save();closeSheet();if(VIEW==='player')go('squad');else render();toast('Player removed')}
+  /* they were in people's fantasy teams — take them out and refill the hole,
+     otherwise every squad holding them carries a player who no longer exists */
+  let touched=0;
+  try{ recalcPrices(); touched=await repairOverBudget(); }catch(e){}
+  await save();closeSheet();if(VIEW==='player')go('squad');else render();
+  toast(touched?`Player removed · ${touched} fantasy team${touched===1?'':'s'} refilled`:'Player removed')}
 
 /* ============ TEAMS ============ */
 function manageTeams(){if(!requireAdmin())return;
