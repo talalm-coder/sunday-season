@@ -4251,6 +4251,11 @@ function syncManagers(){
         teamName:null,squad:[],captain:null,transfers:{},wildcards:0,tripleCaps:0,tcGws:[],doublePts:0,dpGws:[],history:[],joined:Date.now()});
     }
   });
+  /* Drop manager slots whose player no longer exists at all — otherwise a
+     removed player keeps a private code and a row in the codes list forever.
+     Someone merely marked inactive keeps their slot, so nothing is lost when
+     they come back. */
+  f.managers=f.managers.filter(m=>!!player(m.pid));
   f.managers.forEach(m=>{
     const p=player(m.pid); if(p)m.name=p.name;
     /* migrate the old single-use chip fields */
@@ -4414,6 +4419,7 @@ function playedGws(){
 }
 /* a manager's points for one gameweek, using the squad they had locked in */
 function fplManagerGw(m,gw){
+  if(!inGw(m,gw))return 0;      /* they had not joined yet */
   const snap=(m.history||[]).find(h=>h.gw===gw);
   const squad=snap?snap.squad:m.squad, cap=snap?snap.captain:m.captain;
   if(!squad||!squad.length)return 0;
@@ -4432,7 +4438,7 @@ function fplManagerTotal(m){
 function fplTable(){
   const f=fpl(), gws=playedGws(), last=gws[gws.length-1];
   const rows=f.managers.filter(m=>m.teamName&&m.squad.length===FPL_RULES.squadSize).map(m=>({
-    m, total:fplManagerTotal(m), gw:last?fplManagerGw(m,last):0
+    m, total:fplManagerTotal(m), gw:last?fplManagerGw(m,last):0, from:firstGwOf(m)
   })).sort((a,b)=>b.total-a.total||b.gw-a.gw);
   // movement vs previous gameweek
   const prevGws=gws.slice(0,-1);
@@ -5104,6 +5110,12 @@ async function confirmDraft(){
   if(!m.bought)m.bought={};
   d.squad.forEach(pid=>{ if(m.bought[pid]==null)m.bought[pid]=fplPrice(pid) });
   Object.keys(m.bought).forEach(pid=>{ if(!d.squad.includes(pid))delete m.bought[pid] });
+  /* first team ever? record which gameweek they start scoring from, so a
+     mid-season joiner is not credited with points from before they existed */
+  if(m.firstGw==null){
+    const played=playedGws();
+    m.firstGw = played.length ? Math.max(...played)+1 : 1;
+  }
   m.squad=[...d.squad]; m.captain=d.captain;
   m.needsReview=false;                       /* migration prompt clears once they confirm */
   if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; }
@@ -5516,7 +5528,7 @@ function fplLeague(){
       <tbody>${rows.map((r,i)=>`<tr class="${me&&r.m.pid===me.pid?'z-ucl':''}" onclick="viewManager('${r.m.pid}')">
         <td class="pos">${r.move>0?'<span class="mv up">▲</span>':r.move<0?'<span class="mv dn">▼</span>':'<span class="mv eq">·</span>'}<span class="posn" style="background:${i===0?'linear-gradient(150deg,#F5D76E,#C9A227)':'var(--fill2)'};color:${i===0?'#4a3a06':'var(--label2)'}">${i+1}</span></td>
         <td class="nm"><div style="font-weight:700">${esc(r.m.teamName||'—')}</div>
-          <div style="font-size:11.5px;color:var(--label3)">${esc(r.m.name)}</div></td>
+          <div style="font-size:11.5px;color:var(--label3)">${esc(r.m.name)}${r.from>1?` · joined GW${r.from}`:''}</div></td>
         <td class="c">${r.gw}</td><td class="pts">${r.total}</td></tr>`).join('')}</tbody></table></div></div>
     <div class="note" style="padding:6px 4px 0">Tap any team to see their ${FPL_RULES.squadSize}.</div>
     <div class="note">${esc(f.league)} · everyone with a team is entered automatically.</div>
@@ -8140,12 +8152,19 @@ function reviewBanner(){
    so it can never disagree with the league table. */
 let HGW=null, HWHO=null, HOPEN=null;
 function histGw(){ const g=playedGws(); return HGW&&g.includes(HGW)?HGW:(g[g.length-1]||null) }
+/* Which gameweek a manager's fantasy team started counting from. Anyone who
+   was here before a ball was kicked counts from GW1; someone who joins later
+   counts from the gameweek after they confirm a team. */
+function firstGwOf(m){ return m.firstGw||1 }
+function inGw(m,gw){ return gw>=firstGwOf(m) }
 /* the squad a manager actually had in a given gameweek */
 function squadInGw(m,gw){
+  if(!inGw(m,gw))return {squad:[],captain:null};
   const snap=(m.history||[]).find(h=>h.gw===gw);
   return snap?{squad:snap.squad||[],captain:snap.captain}:{squad:m.squad||[],captain:m.captain};
 }
 function gwLines(m,gw){
+  if(!inGw(m,gw))return [];
   const {squad,captain}=squadInGw(m,gw);
   const mult=((m.tcGws||[]).includes(gw))?3:2;
   return squad.map(pid=>{
@@ -9085,8 +9104,6 @@ function vAdmin(){
       <div class="card"><div class="row"><div class="rt"><div class="r1">Dark mode</div></div>
         <button class="toggle ${dark?'on':''}" onclick="toggleTheme();render()"><i></i></button></div></div>
 
-      ${adminPrices()}
-
       <div class="sechead">Season</div>
       <div class="card">
         <div class="row"><div class="rt"><div class="r1">Current season</div></div>
@@ -9114,20 +9131,6 @@ function vAdmin(){
           <div class="r2">A gentle tap when you press things</div></div>
           <label class="sw"><input type="checkbox" ${HAPTIC_OK?'checked':''} onchange="setHaptics(this.checked)"><span></span></label></div>
       </div>
-
-      <div class="sechead">🕹️ Sunday FPL codes</div>
-      ${(function(){const f=fpl(),ms=f.managers;
-        if(!ms.length)return `<div class="note">Add players to the squad and their codes appear here.</div>`;
-        const joined=ms.filter(m=>m.teamName&&m.squad.length===FPL_RULES.squadSize).length;
-        return `<div class="card">
-          <div class="row"><div class="rt"><div class="r1">${joined} of ${ms.length} have a team</div>
-            <div class="r2">Tap a code to copy it, then send it to that person</div></div>
-            <button class="btn sec sm" onclick="copyAllCodes()">Copy all</button></div>
-          ${ms.map(m=>`<div class="row">
-            <div class="rt"><div class="r1" style="font-size:15px">${esc(m.name)}</div>
-              <div class="r2">${m.teamName?`✅ ${esc(m.teamName)}`:'No team yet'}</div></div>
-            <button class="codebtn" onclick="copyCode('${m.code}','${esc(m.name)}')">${m.code}</button></div>`).join('')}
-        </div>`})()}
 
       <div class="sechead">Share the app</div>
       <div class="card pad" style="text-align:center">
@@ -9188,6 +9191,22 @@ function vAdmin(){
       <div class="sechead">Session</div>
       <div class="card"><div class="row tap" onclick="pinLock()"><div class="rt"><div class="r1">🔒 Lock admin area</div>
         <div class="r2">Re-locks until the password is entered again</div></div></div></div>
+      <div class="sechead">🕹️ Sunday FPL codes</div>
+      ${(function(){const f=fpl(),ms=f.managers;
+        if(!ms.length)return `<div class="note">Add players to the squad and their codes appear here.</div>`;
+        const joined=ms.filter(m=>m.teamName&&m.squad.length===FPL_RULES.squadSize).length;
+        return `<div class="card">
+          <div class="row"><div class="rt"><div class="r1">${joined} of ${ms.length} have a team</div>
+            <div class="r2">Tap a code to copy it, then send it to that person</div></div>
+            <button class="btn sec sm" onclick="copyAllCodes()">Copy all</button></div>
+          ${ms.map(m=>`<div class="row">
+            <div class="rt"><div class="r1" style="font-size:15px">${esc(m.name)}</div>
+              <div class="r2">${m.teamName?`✅ ${esc(m.teamName)}`:'No team yet'}</div></div>
+            <button class="codebtn" onclick="copyCode('${m.code}','${esc(m.name)}')">${m.code}</button></div>`).join('')}
+        </div>`})()}
+
+      ${adminPrices()}
+
       <div class="note" style="text-align:center;padding:22px 4px 8px">Sunday Season</div>
     </div></div>`;
 }
@@ -9197,7 +9216,9 @@ function adminSection(){
         <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
           <span class="admin-pill">☁️ Shared &amp; live</span></div>
         <div class="note" style="padding:6px 0 0">This tracker is hosted — everyone with the link sees the table update the moment you save. You're editing as admin because the password is entered on this device.</div>
-      </div>`;
+      </div>
+
+`;
 }
 
 
@@ -10061,7 +10082,25 @@ async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim
   PE.num=PE.num||null;
   if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:PE.active});
   else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:true});
-  logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
+  logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);
+  /* Wire the newcomer up BEFORE saving. syncManagers() runs inside fpl(), and
+     previously nothing called it between pushing the player and saving — so
+     their manager slot, private code and wallet were created locally but never
+     written to the cloud, and nobody else ever saw them. */
+  try{ joinSquad() }catch(e){}
+  await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
+
+/* Make sure every active player has a manager slot, a code, a wallet and a
+   price. Safe to call any time — it only fills in what is missing. */
+function joinSquad(){
+  const f=fpl();                       /* this runs syncManagers() */
+  const b=bets();
+  season().players.filter(p=>p.active!==false).forEach(p=>{
+    if(b.wallets[p.id]==null)b.wallets[p.id]=BET_RULES.start;
+    if(f.prices[p.id]==null)f.prices[p.id]=basePrice(p.id);
+  });
+  return f.managers.length;
+}
 async function removePlayer(pid){if(!requireAdmin())return;
   snapshot('removing a player');const p=player(pid);if(!p)return;
   const inG=season().games.some(g=>(g.teamA||[]).includes(pid)||(g.teamB||[]).includes(pid));
@@ -10497,6 +10536,16 @@ document.addEventListener('keydown',e=>{
   /* Always rebuild, even with no games yet — otherwise a price map saved under
      the old flat-£10m rules survives untouched until the first game is logged. */
   try{ if(season())recalcPrices(); }catch(e){}
+  /* anyone added before this fix has a player record but no manager slot —
+     create it and persist, so their code shows up for everybody */
+  try{
+    const f=season()&&season().fpl;
+    if(f){
+      const missing=season().players.filter(p=>p.active!==false&&!f.managers.some(m=>m.pid===p.id)).length;
+      joinSquad();
+      if(missing&&!CLOUD_FAIL)save();
+    }
+  }catch(e){}
   /* one-off: move everyone onto the bespoke price list */
   try{ migratePrices().then(n=>{ if(n){ render();
         toast(`⚠️ ${n} team${n===1?' was':'s were'} auto-filled after the price update`) } }) }catch(e){}
