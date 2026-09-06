@@ -10753,10 +10753,14 @@ async function saveGame(){if(!requireAdmin())return;
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
+  /* Wages, bet settlement, predictions and sponsor money all move real balances.
+     They ran AFTER the save above, so none of it was ever written down — the
+     payouts existed only until the next reload. Persist once they are done. */
   try{ payWages(); settleBets(); settlePreds();
     const sp=paySponsors();
     if(sp.length)setTimeout(()=>toast(`🤝 ${sp.map(x=>`${x.name} — ${usd(x.pay)} from ${x.n}`).join(' · ')}`),1400);
   }catch(e){}
+  try{ await save() }catch(e){}
   const _ups=levelUps(_lvlBefore);
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
   if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
