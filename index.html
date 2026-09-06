@@ -228,7 +228,7 @@ tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
 .form{display:inline-flex;gap:3px}
 .fd{width:17px;height:17px;border-radius:6px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff}
 .fd.W{background:var(--green)}.fd.D{background:var(--label3)}.fd.L{background:var(--red)}
-.fd.sm{width:8px;height:8px;border-radius:3px;font-size:0}
+.fd.sm{width:13px;height:13px;border-radius:4px;font-size:8px;line-height:1}
 
 /* ---------- AVATAR ---------- */
 .av{border-radius:11px;overflow:hidden;flex:0 0 auto;display:flex;align-items:center;justify-content:center;
@@ -812,7 +812,8 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .fame.live{border:1.5px solid var(--tint)}
 .fame-h{padding:13px 15px 8px;font-weight:800;font-size:16px;display:flex;align-items:center;gap:8px}
 .fame-now{font-size:9.5px;font-weight:900;background:var(--tint);color:#fff;padding:2px 7px;border-radius:20px}
-.fame-b{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 15px 12px}
+.fame-b{display:grid;grid-template-columns:1fr 1fr;gap:12px 10px;padding:0 15px 12px}
+@media(max-width:380px){.fame-b{grid-template-columns:1fr}}
 .fame-w{display:flex;gap:9px;align-items:flex-start}
 .fame-tr{font-size:24px}
 .fame-lbl{font-size:10px;font-weight:700;color:var(--label3);text-transform:uppercase;letter-spacing:.04em}
@@ -1916,6 +1917,125 @@ body[data-shop="mono"]{--bg:#F5F5F5;--card:#fff;--label:#000;--label2:#333;--lab
 .pgab.a{background:var(--tint)}
 .pgab.b{background:var(--blue)}
 .pgab:active{filter:brightness(.88)}
+
+.findbox{width:100%;border:none;background:var(--fill2);border-radius:12px;padding:12px 14px;
+  font-size:15px;color:var(--label);margin-bottom:12px;-webkit-appearance:none}
+.findbox::placeholder{color:var(--label3)}
+.findbox:focus{outline:2px solid var(--tint);outline-offset:-2px}
+.findnone{padding:14px 4px;font-size:13.5px;color:var(--label3);text-align:center}
+.sb-pick .findbox{margin-bottom:10px}
+
+table.anal{width:100%;border-collapse:collapse;font-size:13px}
+table.anal thead td{font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--label3);padding:10px 6px;border-bottom:.5px solid var(--sep);white-space:nowrap}
+table.anal tbody td{padding:10px 6px;border-bottom:.5px solid var(--sep);vertical-align:middle}
+table.anal tbody tr:last-child td{border-bottom:none}
+table.anal .nm{font-weight:700;white-space:nowrap}
+table.anal .c{text-align:center;font-variant-numeric:tabular-nums}
+.acca{font-style:normal;font-size:10.5px;font-weight:800;color:var(--green);margin-left:4px}
+
+/* ---- stats: grouped views + a legend you can actually read ---- */
+.statseg{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;margin-bottom:2px}
+.statseg::-webkit-scrollbar{display:none}
+.statseg button{flex:0 0 auto;border:none;background:var(--fill2);color:var(--label2);border-radius:18px;
+  padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.statseg button.on{background:var(--tint);color:var(--tint-ink)}
+.legend{margin-top:12px;background:var(--fill);border-radius:14px;padding:14px 16px}
+.legend-h{font-size:11px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--label3);margin-bottom:10px}
+.legend-r{display:flex;gap:12px;align-items:baseline;padding:7px 0;border-top:.5px solid var(--sep)}
+.legend-r:first-of-type{border-top:none}
+.legend-r b{flex:0 0 8.5rem;font-size:13px;font-weight:700;color:var(--label)}
+.legend-r span{flex:1;font-size:12.5px;line-height:1.45;color:var(--label2)}
+@media(max-width:400px){.legend-r{flex-direction:column;gap:2px}.legend-r b{flex:none}}
+
+/* the Home banner is the Sky one, unchanged — just needs spacing below it */
+#app .view .wrap > .sky-hero{margin-bottom:14px}
+
+/* 360px phones: the Form view has 7 columns and the Hall of Fame cards are
+   wide — tighten both rather than letting the page scroll sideways. */
+@media(max-width:380px){
+  table.sticky thead td, table.sticky tbody td{padding-left:4px;padding-right:4px;font-size:12px}
+  table.sticky .nm{max-width:5.4rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cab{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .reccard,.cab-i{min-width:0}
+  .form{gap:2px}
+  .fd{width:14px;height:14px;font-size:8px}
+}
+
+/* ---- the week's slips ---- */
+.bw{border-bottom:.5px solid var(--sep);padding:12px 14px}
+.bw:last-child{border-bottom:none}
+.bw-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.bw-h b{font-size:14.5px;font-weight:800}
+.bw-meta{flex:1;min-width:0;font-size:11.5px;color:var(--label3)}
+.bw-tag{font-size:12.5px;font-weight:800;padding:3px 9px;border-radius:20px;white-space:nowrap}
+.bw-won .bw-tag{background:color-mix(in srgb,var(--green) 18%,transparent);color:var(--green)}
+.bw-lost .bw-tag{background:color-mix(in srgb,var(--red) 15%,transparent);color:var(--red)}
+.bw-void .bw-tag{background:var(--fill2);color:var(--label2)}
+.bw-open .bw-tag{background:color-mix(in srgb,var(--orange) 18%,transparent);color:var(--orange)}
+.bw-legs{margin-top:7px;display:flex;flex-direction:column;gap:3px}
+.bw-leg{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--label2)}
+.bw-leg i{font-style:normal;font-weight:700;color:var(--label3);font-variant-numeric:tabular-nums}
+
+.chiprow{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:10px}
+.chiptag{font-size:11.5px;font-weight:800;padding:5px 10px;border-radius:20px;
+  background:color-mix(in srgb,var(--tint) 16%,transparent);color:var(--tint)}
+.chiprow-gw{font-size:10.5px;font-weight:800;color:var(--label3);letter-spacing:.04em}
+.fh .chiprow{margin:10px 0 0}
+.fh .chiptag{background:rgba(255,255,255,.2);color:#fff}
+.fh .chiprow-gw{color:rgba(255,255,255,.65)}
+
+.predcard{background:linear-gradient(140deg,color-mix(in srgb,var(--tint) 10%,var(--card)),var(--card))}
+.predrow{display:flex;align-items:center;justify-content:center;gap:18px}
+.predside{display:flex;flex-direction:column;align-items:center;gap:5px}
+.predside b{font-size:34px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1;min-width:2ch;text-align:center}
+.predside span{font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--label3)}
+.predside button{width:38px;height:32px;border:none;border-radius:10px;background:var(--fill2);
+  color:var(--label);font-size:19px;font-weight:800;cursor:pointer;line-height:1}
+.predside button:active{background:var(--tint);color:var(--tint-ink)}
+.preddash{font-size:28px;font-weight:800;color:var(--label3);align-self:center}
+
+/* ---- MOMENTS ----
+   These classes had no styling at all, which is why the card looked like
+   stacked plain text. */
+.moment{position:relative;border-radius:18px;padding:18px 18px 16px;overflow:hidden;color:#fff;
+  background:linear-gradient(158deg,#123A6B,#0B1F3C 62%,#081428);
+  box-shadow:0 14px 34px -18px rgba(0,0,0,.6)}
+.moment::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 12% 0%,rgba(255,255,255,.16),transparent 58%)}
+.moment>*{position:relative;z-index:1}
+.mhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}
+.mtag{font-size:9.5px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.24);border-radius:20px;padding:4px 10px}
+.moment .serial{font-size:10.5px;font-weight:800;letter-spacing:.05em;color:rgba(255,255,255,.5);
+  font-variant-numeric:tabular-nums}
+.mtitle{font-size:23px;font-weight:900;letter-spacing:-.02em;line-height:1.15}
+.mline{font-size:13.5px;line-height:1.5;color:rgba(255,255,255,.76);margin-top:7px}
+.mchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+.mchip{font-size:11.5px;font-weight:700;padding:5px 10px;border-radius:20px;
+  background:rgba(255,255,255,.13);color:rgba(255,255,255,.92);white-space:nowrap}
+.mrow{display:flex;gap:12px;align-items:baseline;margin-top:11px;padding-top:11px;
+  border-top:1px solid rgba(255,255,255,.13);font-size:12.5px;line-height:1.5}
+.mrow b{flex:0 0 5.6rem;font-weight:800;color:rgba(255,255,255,.55);
+  font-size:10.5px;letter-spacing:.06em;text-transform:uppercase}
+.mrow span{flex:1;color:rgba(255,255,255,.9)}
+.mfoot{display:flex;justify-content:space-between;gap:10px;margin-top:12px;
+  font-size:12px;color:rgba(255,255,255,.6)}
+@media(max-width:380px){.mtitle{font-size:20px}.mrow{flex-direction:column;gap:3px}.mrow b{flex:none}}
+
+/* ---- insights ---- */
+.hm{display:flex;flex-direction:column;gap:3px}
+.hm-row{display:flex;gap:3px;align-items:center}
+.hm-c{flex:1;aspect-ratio:1;min-width:0;border-radius:5px;background:var(--fill2);
+  display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:var(--label)}
+.hm-c.off{background:transparent}
+.hm-ax{flex:0 0 16px;text-align:center;font-size:10.5px;font-weight:800;color:var(--label3)}
+.hm-ax.b{flex:1;min-width:0}
+.legend-dots{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.legend-dots span{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--label2)}
+.legend-dots i{width:9px;height:9px;border-radius:50%;flex:0 0 9px}
+.legend-dots b{color:var(--label);font-weight:800}
 </style>
 </head>
 <body>
@@ -2624,15 +2744,23 @@ function potm(){
 function seasonSummary(s){
   const lg=(s.comps||[]).find(c=>c.type==='league')||(s.comps||[])[0];
   const games=(s.games||[]).filter(g=>!lg||g.compId===lg.id);
-  const m={};(s.players||[]).forEach(p=>m[p.id]={id:p.id,name:p.name,P:0,W:0,D:0,L:0,G:0,GF:0,GA:0,pts:0});
+  const m={};(s.players||[]).forEach(p=>m[p.id]={id:p.id,name:p.name,P:0,W:0,D:0,L:0,G:0,A:0,cs:0,GF:0,GA:0,pts:0});
   games.forEach(g=>{const a=g.scoreA??0,b=g.scoreB??0;
     [['A',g.teamA,a,b],['B',g.teamB,b,a]].forEach(([sd,tm,gf,ga])=>(tm||[]).forEach(pid=>{const x=m[pid];if(!x)return;
       x.P++;x.GF+=gf;x.GA+=ga;x.G+=(g.goals&&g.goals[pid])||0;
+      x.A+=(g.assists&&g.assists[pid])||0;
+      if(ga===0)x.cs++;
       if(g.result==='D'){x.D++;x.pts++}else if(g.result===sd){x.W++;x.pts+=3}else x.L++}))});
   const arr=Object.values(m).filter(x=>x.P>0).map(x=>({...x,GD:x.GF-x.GA})).sort(tableSort);
   const goals=games.reduce((t,g)=>t+(g.scoreA||0)+(g.scoreB||0),0);
   const boot=[...arr].sort((a,b)=>b.G-a.G)[0];
-  return {games:games.length,goals,table:arr,champ:arr[0]||null,boot:(boot&&boot.G)?boot:null,players:arr.length};
+  const maker=[...arr].sort((a,b)=>(b.A||0)-(a.A||0)||b.G-a.G)[0];
+  const wall=[...arr].filter(x=>x.P>=2).sort((a,b)=>(a.GA/a.P)-(b.GA/b.P)||b.cs-a.cs)[0];
+  return {games:games.length,goals,table:arr,champ:arr[0]||null,
+          boot:(boot&&boot.G)?boot:null,
+          maker:(maker&&maker.A)?maker:null,
+          wall:wall||null,
+          players:arr.length};
 }
 
 
@@ -2730,11 +2858,30 @@ function statsFor(games,upto){
     x.form=l5.length?l5.reduce((s,v)=>s+(v.r==='W'?3:v.r==='D'?1:0),0)/l5.length:0;
     let n=0,t=null;for(let i=x.seq.length-1;i>=0;i--){const r=x.seq[i].r;if(t===null){t=r;n=1}else if(r===t)n++;else break}
     x.streak={type:t,n}});
+  /* Player rating, out of 100. The old version was three-sixths goals, which
+     meant a striker won it every year. Now it is four equal parts — attacking,
+     winning, defending and turning up — and the attacking part is scored
+     against players in the SAME position, so a defender is compared with
+     defenders rather than with the top scorer. */
   const pl=arr.filter(x=>x.P>0);
-  if(pl.length){const nm=(k,inv)=>{const v=pl.map(x=>x[k]),lo=Math.min(...v,0),hi=Math.max(...v,0);
-    pl.forEach(x=>{const t=hi===lo?0:(x[k]-lo)/(hi-lo);x['_'+k]=inv?1-t:t})};
-    ['pts','ppg','wr','G','gpg'].forEach(k=>nm(k));nm('cpg',true);
-    pl.forEach(x=>x.index=Math.round((x._pts+x._ppg+x._wr+x._G+x._gpg+x._cpg)/6*100))}
+  if(pl.length){
+    const nm=(list,k,inv,out)=>{
+      const v=list.map(x=>x[k]),lo=Math.min(...v,0),hi=Math.max(...v,0);
+      list.forEach(x=>{const t=hi===lo?0.5:(x[k]-lo)/(hi-lo);x[out]=inv?1-t:t});
+    };
+    pl.forEach(x=>x._ga=(x.G+(x.A||0))/Math.max(1,x.P));      /* involvements a game */
+    ['ATT','MID','DEF','GK'].forEach(pos=>{
+      const grp=pl.filter(x=>((player(x.id)||{}).pos||'MID')===pos);
+      if(grp.length)nm(grp,'_ga',false,'_att');
+    });
+    pl.forEach(x=>{ if(x._att===undefined)x._att=0.5 });
+    nm(pl,'ppg',false,'_win1'); nm(pl,'wr',false,'_win2');
+    nm(pl,'cpg',true,'_def'); nm(pl,'P',false,'_app');
+    pl.forEach(x=>{
+      const win=(x._win1+x._win2)/2;
+      x.index=Math.round((x._att*0.34 + win*0.28 + x._def*0.24 + x._app*0.14)*100);
+    });
+  }
   arr.forEach(x=>{if(x.index===undefined)x.index=0});
   return arr;
 }
@@ -2944,7 +3091,11 @@ const clubOf=p=>p&&p.club?CLUB_BY[p.club]:null;
 function avatar(p,s){s=s||38;const c=clubOf(p);
   return c?`<div class="av" style="width:${s}px;height:${s}px">${crest(c,s)}</div>`
     :`<div class="av" style="width:${s}px;height:${s}px;font-size:${Math.round(s*.36)}px">${initials(p&&p.name)}</div>`}
-const formDots=(q,sm)=>`<span class="form">${(q||[]).map(r=>`<span class="fd ${r}${sm?' sm':''}">${sm?'':r}</span>`).join('')}</span>`;
+/* Form shown as arrows rather than plain dots: up for a win, down for a loss,
+   a dash for a draw — readable at a glance without needing the letters. */
+const FORM_ARROW={W:'▲',D:'–',L:'▼'};
+const formDots=(q,sm)=>`<span class="form">${(q||[]).map(r=>
+  `<span class="fd ${r}${sm?' sm':''}" title="${r==='W'?'Won':r==='D'?'Drew':'Lost'}">${FORM_ARROW[r]||r}</span>`).join('')}</span>`;
 const mvA=n=>n>0?'<span class="mv up">▲</span>':n<0?'<span class="mv dn">▼</span>':'<span class="mv eq">·</span>';
 function rtg(p){const c=clubOf(p);if(!c)return null;if(p.star)return p.star;
   const s=c.sq[p.pos||'MID']||c.sq.MID;return s&&s[0]}
@@ -3126,9 +3277,12 @@ function vHome(){
     <p>${S.players.length?'Log your first game and the table, stats and career all start filling in.':'Add your regulars first, then log a game.'}</p>
     <button class="btn pri" onclick="${S.players.length?'newGame()':'editPlayer(null)'}">${S.players.length?'Log a game':'Add players'}</button></div></div></div>`;return}
   app().innerHTML=`<div class="view active">
-    <div class="largetitle">${esc(S.name)}</div>
-    <div class="subtitle">${g.length} league games · ${goals} goals · ${S.players.filter(p=>p.active!==false).length} players</div>
     <div class="wrap">${cloudBanner()}
+      <div class="sky-hero">
+        <div class="sky-hero-t">SUNDAY SEASON · LIVE</div>
+        <div class="sky-hero-b">Super Sunday</div>
+      </div>
+      <div class="subtitle" style="padding:0 0 4px">${esc(S.name)} · ${g.length} league game${g.length===1?'':'s'} · ${goals} goals · ${S.players.filter(p=>p.active!==false).length} players</div>
       <div class="sechead">${lc.icon} ${esc(lc.name)} table</div>
       <div class="card"><div class="tw"><table class="hometbl">
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
@@ -3143,6 +3297,14 @@ function vHome(){
       <div class="note">Win 3 · Draw 1 · Loss 0. <button class="lnk" onclick="go('league')">See the full table →</button></div>
 
       <div class="grid g2">
+        <div><div class="sechead">🅰️ Most assists</div><div class="card">
+          ${(function(){const a=[...st].filter(x=>(x.A||0)>0).sort((p,q)=>q.A-p.A).slice(0,5);
+            return a.length?a.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
+              <div style="flex:0 0 22px;text-align:center;font-weight:800;color:var(--label3)">${i+1}</div>
+              ${avatar(x,28)}<div class="rt"><div class="r1">${esc(x.name)}</div></div>
+              <div class="rv" style="font-weight:800">${x.A}</div></div>`).join('')
+              :`<div class="note" style="padding:14px">No assists logged yet.</div>`})()}
+        </div></div>
         <div><div class="sechead">⚽ Top scorers</div><div class="card">
           ${scorers.length?scorers.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
@@ -3155,6 +3317,19 @@ function vHome(){
             <div class="rt"><div class="r1" style="font-size:15px">${esc(x.name)}</div><div class="r2">${formDots(x.last5,true)}</div></div>
             <div class="rv" style="font-weight:700;color:var(--green)">${x.form.toFixed(1)}</div></div>`).join('')
           :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'}</div></div>
+
+        <div><div class="sechead">🕹️ Sunday FPL</div><div class="card">
+          ${(function(){
+            const t=fplTable().slice(0,5);
+            if(!t.length)return `<div class="row"><div class="rt"><div class="r2">No teams picked yet</div></div></div>`;
+            const gws=playedGws(), last=gws[gws.length-1];
+            return t.map((r,i)=>`<div class="row tap" onclick="go('fpl');FTAB='league';render()">
+              <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
+              ${avatar(player(r.m.pid)||{name:r.m.name},30)}
+              <div class="rt"><div class="r1" style="font-size:15px">${esc(r.m.teamName||r.m.name)}</div>
+                <div class="r2">${esc(r.m.name)}${last?` · ${r.gw} last week`:''}</div></div>
+              <div class="rv" style="font-weight:800">${r.total}</div></div>`).join('');
+          })()}</div></div>
       </div>
 
       <div class="grid g2">
@@ -3454,13 +3629,19 @@ function focusFixtureSearch(){
 function clearFilters(){FF='all';FPLAYER='all';FRESULT='all';FSEARCH='';FSORT='new';render()}
 
 /* ============ SQUAD ============ */
+let SQQ='';
 function vSquad(){
   const S=season(),st=statsAll();
-  const list=[...S.players].sort((a,b)=>(a.active===false)-(b.active===false)||a.name.localeCompare(b.name));
+  const all=[...S.players].sort((a,b)=>(a.active===false)-(b.active===false)||a.name.localeCompare(b.name));
+  const q=(SQQ||'').toLowerCase().trim();
+  const list=q?all.filter(p=>p.name.toLowerCase().includes(q)||(p.pos||'').toLowerCase()===q):all;
   $('#navMount').innerHTML=navbar();
   app().innerHTML=`<div class="view active">
-    <div class="largetitle">Squad</div><div class="subtitle">${list.length} players</div>
+    <div class="largetitle">Squad</div><div class="subtitle">${q?`${list.length} of ${all.length}`:`${all.length} players`}</div>
     <div class="wrap">${cloudBanner()}<button class="btn pri full" data-admin style="margin-bottom:16px" onclick="editPlayer(null)">Add player</button>
+      ${all.length>8?`<input class="findbox" id="sqfind" placeholder="Search by name or position…" value="${esc(SQQ)}"
+        oninput="SQQ=this.value;render();const e=$('#sqfind');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length)}" autocomplete="off">`:''}
+      ${q&&!list.length?`<div class="findnone">Nobody matches “${esc(SQQ)}”</div>`:''}
       ${list.length?`<div class="card">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);
         return `<div class="row tap" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
         ${avatar(p,40)}<div class="rt"><div class="r1">${shirtBadge(p)}${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
@@ -4762,6 +4943,51 @@ function gwSquadCard(m,gw){
     <div class="note">Tap any player to see where their points came from. Use ‹ › above to look back at earlier gameweeks.</div>`;
 }
 
+/* A short read on the five you own: form, value and how they're trending.
+   Sits under the chips so the pitch stays the first thing you see. */
+function squadAnalysis(m){
+  const squad=(m.squad||[]).slice();
+  if(squad.length!==FPL_RULES.squadSize)return '';
+  const gws=playedGws();
+  const rows=squad.map(pid=>{
+    const p=player(pid)||{}, st=statsAll().find(x=>x.id===pid)||{P:0,G:0,A:0,pts:0};
+    const last3=gws.slice(-3).reduce((t,g)=>t+fplPlayerGw(pid,g),0);
+    const total=gws.reduce((t,g)=>t+fplPlayerGw(pid,g),0);
+    const price=fplPrice(pid), paid=paidPrice(m,pid);
+    return {pid,name:p.name||'—',pos:p.pos||'',price,paid,delta:Math.round((price-paid)*10)/10,
+            gp:st.P||0,g:st.G||0,a:st.A||0,total,last3,
+            per:price?total/price:0, isCap:pid===m.captain};
+  });
+  const tot=rows.reduce((t,r)=>t+r.total,0);
+  const val=rows.reduce((t,r)=>t+r.price,0);
+  const swing=rows.reduce((t,r)=>t+r.delta,0);
+  const best=rows.slice().sort((a,b)=>b.per-a.per)[0];
+  const cold=rows.slice().sort((a,b)=>a.last3-b.last3)[0];
+  return `<div class="sechead">Your five</div>
+    <div class="card" style="padding:0">
+      <div class="tw"><table class="anal">
+        <thead><tr><td>Player</td><td class="c">Gm</td><td class="c">⚽</td><td class="c">🅰️</td>
+          <td class="c">Last 3</td><td class="c">Pts</td><td class="c">Per £m</td><td class="c">Price</td></tr></thead>
+        <tbody>${rows.map(r=>`<tr>
+          <td class="nm">${esc(r.name.split(' ')[0])}${r.isCap?' <span class="pill" style="background:var(--tint-soft);color:var(--tint)">C</span>':''}
+            ${r.pos?`<span class="pill ${r.pos}">${r.pos}</span>`:''}</td>
+          <td class="c">${r.gp}</td><td class="c">${r.g}</td><td class="c">${r.a}</td>
+          <td class="c" style="font-weight:700">${r.last3}</td>
+          <td class="c">${r.total}</td>
+          <td class="c">${r.per.toFixed(1)}</td>
+          <td class="c">£${r.price.toFixed(1)}m${r.delta?`<div style="font-size:10.5px;font-weight:700;color:${r.delta>0?'var(--green)':'var(--red)'}">${r.delta>0?'+':''}${r.delta}</div>`:''}</td>
+        </tr>`).join('')}</tbody>
+      </table></div>
+    </div>
+    <div class="tiles" style="margin-bottom:10px">
+      ${tile(tot,'Squad points')}
+      ${tile('£'+val.toFixed(1)+'m','Team value',swing?`${swing>0?'+':''}${swing.toFixed(1)} since you bought`:'unchanged')}
+      ${best?tile(best.per.toFixed(1),'Best value',esc(best.name.split(' ')[0])+' · per £m','var(--green)'):''}
+      ${cold&&gws.length>=3?tile(cold.last3,'Coldest',esc(cold.name.split(' ')[0])+' · last 3','var(--red)'):''}
+    </div>
+    <div class="note">Last 3 is their points over the last three gameweeks — the same window the price engine uses, so it tells you who is about to rise or fall.</div>`;
+}
+
 function fplMyTeam(m,locked){
   const st=fplStats();
   if(!m.teamName){
@@ -4832,6 +5058,7 @@ function fplMyTeam(m,locked){
           <div class="fh-mn">${esc(m.name)}${rank?` · ${ordinal(rank)}`:''}</div></div>
         <div class="fh-gw"><b>${gws.length?gwTotal(m,teamGw()):gwPts}</b><span>${teamGw()?`GW${teamGw()}`:'points'}</span></div>
       </div>
+      ${gws.length?chipRow(m,teamGw()):''}
       ${gws.length?`<div class="gwpager">
         <button ${gws.indexOf(teamGw())<=0?'disabled':''} onclick="stepTeamGw(-1)">‹</button>
         <div class="gwp-mid"><b>Gameweek ${teamGw()}</b>
@@ -4908,6 +5135,8 @@ function fplMyTeam(m,locked){
       </div>
       <div class="note">One chip per gameweek. Anything you arm can be taken back off until that game is logged.</div>`;
     })()}
+
+    ${squadAnalysis(m)}
 
     ${fplInfoNote()}
 
@@ -5462,6 +5691,21 @@ function fplMarket(m,locked){
 }
 
 /* ---------- view another manager's team ---------- */
+/* Which chips someone had armed for a gameweek — so you can see why a rival's
+   score suddenly doubled, not just that it did. */
+function chipsUsed(m,gw){
+  const out=[];
+  if((m.tcGws||[]).includes(gw))out.push({e:'🔥',n:'Triple Captain'});
+  if((m.dpGws||[]).includes(gw))out.push({e:'✨',n:'Double Points'});
+  if((m.wcGws||[]).includes(gw))out.push({e:'⭐',n:'Wildcard'});
+  return out;
+}
+function chipRow(m,gw){
+  const c=chipsUsed(m,gw);
+  if(!c.length)return '';
+  return `<div class="chiprow">${c.map(x=>`<span class="chiptag">${x.e} ${x.n}</span>`).join('')}
+    <span class="chiprow-gw">GW${gw}</span></div>`;
+}
 function viewManager(pid){
   const f=fpl(), m=f.managers.find(x=>x.pid===pid);
   if(!m||!m.squad||!m.squad.length){toast('No team picked yet');return}
@@ -5485,6 +5729,7 @@ function viewManager(pid){
     <div class="st">${esc(m.teamName||m.name)}</div>
     <button class="sa r" onclick="closeSheet()">Done</button></div>
     <div class="sbody">
+      ${last?chipRow(m,last):''}
       <div class="fpl-head" style="margin-bottom:10px">
         <div><div class="fpl-tn">${esc(m.teamName||'—')}${mine?' <span class="fpl-owned">YOU</span>':''}</div>
           <div class="fpl-mn">${esc(m.name)}${rank?` · ${ordinal(rank)} in the league`:''}</div></div>
@@ -5831,38 +6076,46 @@ function setHaptics(on){
    Built from what we actually record: the result, the margin, goals, and how
    much the team let in. Deliberately generous at the top so a hat-trick in a
    win reads like a 9, and floored at 4.0 so nobody gets humiliated. */
+/* A match rating that a defender or a midfielder can actually win.
+   Three things were wrong before: assists counted for nothing, the defensive
+   credit only paid on clean sheets (which barely happen at five a side), and
+   attackers picked up goals at close to full weight anyway. Now every position
+   has a route to the top rating. */
+function leagueConceded(){
+  const gs=allGames();
+  if(!gs.length)return 4.6;
+  return gs.reduce((t,g)=>t+((g.scoreA||0)+(g.scoreB||0)),0)/(gs.length*2);
+}
 function ratingFor(pid,g){
   if(!g)return null;
   const onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
   if(!onA&&!onB)return null;
   const pos=(g.pos&&g.pos[pid])||(player(pid)||{}).pos||'MID';
   const goals=(g.goals||{})[pid]||0;
+  const asts=(g.assists||{})[pid]||0;
   const gf=onA?(g.scoreA||0):(g.scoreB||0);
   const ga=onA?(g.scoreB||0):(g.scoreA||0);
   const won=(onA&&g.result==='A')||(onB&&g.result==='B');
   const drew=g.result==='D';
   let r=6.0;
   r += won?1.2 : drew?0.3 : -0.7;
-  const margin=gf-ga;
-  r += Math.max(-1,Math.min(1,margin*0.18));
-  const gw={ATT:0.85,MID:1.0,DEF:1.25,GK:1.4}[pos]||1.0;
+  r += Math.max(-1,Math.min(1,(gf-ga)*0.18));
+  /* goals — worth more from deeper positions, because they are rarer there */
+  const gw={ATT:0.80,MID:1.05,DEF:1.35,GK:1.6}[pos]||1.0;
   r += goals*gw;
   if(goals>=3)r+=0.4;
-  const dw={GK:1,DEF:1,MID:0.6,ATT:0.3}[pos]??0.6;
-  if(ga===0)r+=1.6*dw; else if(ga===1)r+=1.0*dw; else if(ga===2)r+=0.5*dw;
-  else if(ga>=6)r-=0.9*dw; else if(ga>=5)r-=0.5*dw;
-  if(gf===0&&(pos==='ATT'))r-=0.4;
+  /* assists — the thing that was missing entirely */
+  const aw={ATT:0.55,MID:0.75,DEF:0.85,GK:1.0}[pos]||0.7;
+  r += asts*aw;
+  if(asts>=3)r+=0.3;
+  /* defending — measured against what a side normally concedes, so keeping it
+     to three in a league averaging five is properly rewarded */
+  const avg=leagueConceded();
+  const dw={GK:1.15,DEF:1.0,MID:0.5,ATT:0.22}[pos]??0.5;
+  r += Math.max(-1.6,Math.min(2.2,(avg-ga)*0.55))*dw;
+  if(ga===0)r+=0.8*dw;
+  if(gf===0&&pos==='ATT')r-=0.4;
   return Math.max(4.0,Math.min(10,Math.round(r*10)/10));
-}
-function ratingClass(r){ return r>=8.5?'r-elite':r>=7.5?'r-great':r>=6.5?'r-good':r>=5.5?'r-ok':'r-poor' }
-function ratingPill(r,size){
-  if(r==null)return '';
-  return `<span class="rpill ${ratingClass(r)} ${size==='lg'?'lg':''}">${r.toFixed(1)}</span>`;
-}
-function seasonRating(pid){
-  const rs=allGames().map(g=>ratingFor(pid,g)).filter(x=>x!=null);
-  if(!rs.length)return null;
-  return Math.round(rs.reduce((a,b)=>a+b,0)/rs.length*10)/10;
 }
 function matchRatings(g){
   const ids=[...(g.teamA||[]),...(g.teamB||[])];
@@ -6088,11 +6341,18 @@ function skyAwardsCore(){
     return {key,label,emoji,sub,rows:rank.map(x=>({id:x.id,name:p(x.id).name,v:fmt(x),raw:x}))};
   };
   return [
-    mk('potm','Player of the Season','🏆',
-       (a,b)=>(b.pts+b.G*1.5+b.cs*1.5+b.P*.25)-(a.pts+a.G*1.5+a.cs*1.5+a.P*.25),
-       x=>`${Math.round(x.pts+x.G*1.5+x.cs*1.5+x.P*.25)} rating`,'Points, goals, shut-outs and turning up'),
+    /* Uses the same player rating as the Stats tab, so the race and the table
+       never disagree — and it is scored within position, so it is not simply
+       a second Golden Boot. */
+    mk('potm','Player of the Season','🏆',(a,b)=>b.index-a.index,
+       x=>`${x.index} rating`,
+       'The player rating out of 100 — attacking 34% (against your own position), winning 28%, defending 24%, appearances 14%'),
     mk('boot','Golden Boot','👟',(a,b)=>b.G-a.G||b.gpg-a.gpg,
        x=>`${x.G} goal${x.G===1?'':'s'}`,'Most goals this season'),
+    mk('creator','Playmaker','🅰️',(a,b)=>(b.A||0)-(a.A||0)||b.apg-a.apg,
+       x=>`${x.A||0} assist${(x.A||0)===1?'':'s'}`,'Most assists this season'),
+    mk('wall','Best defensive record','🛡️',(a,b)=>(a.cpg-b.cpg)||(b.cs-a.cs),
+       x=>`${x.cpg.toFixed(1)} a game`,'Fewest goals let in per game, of everyone who has played'),
   ];
 }
 /* these two are position-specific, so filter rather than just sort */
@@ -6702,6 +6962,9 @@ function vSky(){
           <span class="sky-val">${ratingPill(x.r)}</span></div>`).join('')}
       </div>`})()}
 
+<div class="sky-h">The races</div>
+    ${awards.map(podium).join('')}
+
     ${(function(){const pr=last?pressRoom(last):[]; if(!pr.length)return '';
       return `<div class="sky-h mnf">The press room</div>
       <div class="press">${pr.map(x=>`
@@ -6733,8 +6996,7 @@ function vSky(){
           <span class="sky-val">${x.avg}</span></div>`).join('')}
       </div>`:''}`})()}
 
-    <div class="sky-h">The races</div>
-    ${awards.map(podium).join('')}
+
 
     ${imp.length?`<div class="sky-card">
       <div class="sky-cap"><span class="sky-em">📈</span>
@@ -7111,14 +7373,48 @@ function moments(){
   return out.map((m,i)=>({...m,serial:i+1}));
 }
 function momentsFor(pid){ return moments().filter(m=>m.owners.includes(pid)) }
-function momentCard(m,pid){
+/* What actually happened that day — pulled from the game the moment came from,
+   so a card carries the scoreline, who scored, who set them up, and who was
+   on the pitch, rather than a single line of text. */
+function momentFacts(m){
+  const g=allGames().find(x=>x.id===m.gid) || allGames().find(x=>x.date===m.date);
+  if(!g)return null;
+  const nm=id=>(player(id)||{}).name||'—';
+  const scorers=Object.entries(g.goals||{}).filter(([,n])=>n>0)
+    .sort((a,b)=>b[1]-a[1]).map(([id,n])=>({id,n,name:nm(id)}));
+  const makers=Object.entries(g.assists||{}).filter(([,n])=>n>0)
+    .sort((a,b)=>b[1]-a[1]).map(([id,n])=>({id,n,name:nm(id)}));
+  const played=[...(g.teamA||[]),...(g.teamB||[])];
+  const best=matchRatings(g)[0]||null;
+  return {g,scorers,makers,played,best,
+          goals:(g.scoreA||0)+(g.scoreB||0)};
+}
+function momentCard(m,pid,full){
   const n=m.owners.indexOf(pid);
+  const f=momentFacts(m);
+  const chip=(e,l)=>`<span class="mchip">${e} ${l}</span>`;
   return `<div class="moment ${pid?cosmClass(pid):''}">
-    <div class="mtag">MOMENT · UNREPEATABLE</div>
+    <div class="mhead">
+      <span class="mtag">Moment</span>
+      <span class="serial">${pid&&n>=0?`#${String(n+1).padStart(3,'0')} of ${m.owners.length}`:`${m.owners.length} owner${m.owners.length===1?'':'s'}`}</span>
+    </div>
     <div class="mtitle">${m.e} ${esc(m.t)}</div>
     <div class="mline">${esc(m.line)}</div>
-    <div class="mfoot"><span>${esc(fdate(m.date))}${m.round?' · '+esc(m.round):''} · ${m.score}</span>
-      <span class="serial">${pid&&n>=0?`#${String(n+1).padStart(3,'0')} / ${m.owners.length}`:`${m.owners.length} owners`}</span></div>
+    ${f?`<div class="mchips">
+      ${chip('📅',esc(fdate(m.date))+(m.round?' · '+esc(m.round):''))}
+      ${chip('⚽',`${f.g.scoreA}–${f.g.scoreB}`)}
+      ${chip('👥',`${f.played.length} played`)}
+      ${f.goals?chip('🥅',`${f.goals} goal${f.goals===1?'':'s'}`):''}
+      ${f.best?chip('⭐',`${esc(f.best.name)} ${f.best.r}`):''}
+    </div>`:`<div class="mfoot"><span>${esc(fdate(m.date))}${m.round?' · '+esc(m.round):''} · ${m.score}</span></div>`}
+    ${full&&f?`
+      ${f.scorers.length?`<div class="mrow"><b>Scorers</b><span>${f.scorers.map(x=>
+        `${esc(x.name)}${x.n>1?` ×${x.n}`:''}`).join(' · ')}</span></div>`:''}
+      ${f.makers.length?`<div class="mrow"><b>Assists</b><span>${f.makers.map(x=>
+        `${esc(x.name)}${x.n>1?` ×${x.n}`:''}`).join(' · ')}</span></div>`:''}
+      <div class="mrow"><b>On the pitch</b><span>${f.played.map(id=>esc((player(id)||{}).name||'—')).join(' · ')}</span></div>
+      ${m.owners.length?`<div class="mrow"><b>Owned by</b><span>${m.owners.map(id=>esc((player(id)||{}).name||'—')).join(' · ')}</span></div>`:''}
+    `:''}
   </div>`;
 }
 
@@ -7465,8 +7761,92 @@ function wallet(pid){
 }
 /* odds from a probability, with a small house margin so it is not a free lunch */
 function toOdds(p){
-  const q=Math.max(0.04,Math.min(0.94,p));
-  return Math.max(1.05,Math.round((1/q)*BET_RULES.margin*100)/100);
+  /* The old floor of 4% made every long shot collapse to the same price — a
+     hat-trick and a four-goal haul both came out at 22.50. A much lower floor
+     lets the rare markets actually separate. */
+  const q=Math.max(0.0008,Math.min(0.94,p));
+  const o=(1/q)*BET_RULES.margin;
+  return Math.max(1.05,Math.round(Math.min(o,999)*100)/100);
+}
+/* ---------- how likely is a player to score, really? ----------
+   Price is the league's own opinion of a player, so it carries most of the
+   weight: a £14m midfielder is expected to score like a £14m attacker, not
+   like an average midfielder. Position still tilts it, and once someone has
+   played a few games their own record takes over. */
+function medianPrice(){
+  const v=season().players.filter(p=>p.active!==false&&FPL_RULES.eligible.includes(p.pos||'MID'))
+    .map(p=>fplPrice(p.id)).filter(x=>typeof x==='number').sort((a,b)=>a-b);
+  return v.length?v[Math.floor(v.length/2)]:FPL_RULES.startPrice;
+}
+function priceFactor(pid){
+  const med=medianPrice()||8;
+  return Math.pow(Math.max(0.4,Math.min(2.6,fplPrice(pid)/med)),1.35);
+}
+/* Narrow, because 7-a-side is not 11-a-side — defenders push up and score.
+   Price still does most of the work; position only tilts it. */
+const XG_POS={ATT:1.22,MID:1.06,DEF:0.86,GK:0.16};
+const XA_POS={ATT:0.88,MID:1.18,DEF:0.80,GK:0.15};
+/* expected goals a game, blended with the player's actual record */
+function xgOf(pid){
+  const p=player(pid); if(!p)return 0.3;
+  const base=0.235*(XG_POS[p.pos||'MID']??1)*priceFactor(pid);
+  const st=statsAll().find(x=>x.id===pid);
+  if(st&&st.P){ const k=4; return Math.max(0.02,(st.G+base*k)/(st.P+k)); }
+  return Math.max(0.02,base);
+}
+function xaOf(pid){
+  const p=player(pid); if(!p)return 0.25;
+  const base=0.24*(XA_POS[p.pos||'MID']??1)*priceFactor(pid);
+  const st=statsAll().find(x=>x.id===pid);
+  if(st&&st.P){ const k=4; return Math.max(0.02,((st.A||0)+base*k)/(st.P+k)); }
+  return Math.max(0.02,base);
+}
+/* expected goals against while this player is on the pitch */
+function xcOf(pid){
+  const gsAll=allGames();
+  const lg=gsAll.length
+    ? gsAll.reduce((t,g)=>t+((g.scoreA||0)+(g.scoreB||0)),0)/(gsAll.length*2)
+    : 4.6;
+  const st=statsAll().find(x=>x.id===pid);
+  if(st&&st.P){ const k=4; return Math.max(0.4,(st.GA+lg*k)/(st.P+k)); }
+  return Math.max(0.4,lg);
+}
+/* P(no more than k) — the mirror of atLeast, for the conceding markets */
+function atMost(lam,k){
+  let cum=0,term=Math.exp(-lam);
+  for(let i=0;i<=k;i++){ cum+=term; term*=lam/(i+1); }
+  return Math.max(0.004,Math.min(0.95,cum));
+}
+/* P(at least k) for a Poisson rate — gives a proper ladder, so 3+, 4+ and 5+
+   are genuinely different prices instead of all hitting the same floor. */
+function atLeast(lam,k){
+  if(k<=0)return 1;
+  let cum=0,term=Math.exp(-lam);
+  for(let i=0;i<k;i++){ cum+=term; term*=lam/(i+1); }
+  let p=Math.max(1e-9,Math.min(0.97,1-cum));
+  /* A plain Poisson tail falls away far too fast — a four-goal game priced at
+     33 and a five-goal game at 155 is a silly cliff. Fattening the tail keeps
+     the big hauls long without being unreachable. */
+  /* A raw Poisson tail is far too thin for this league — hat-tricks and
+     four-goal hauls are common on a Sunday, so the big rungs must stay
+     reachable rather than drifting into the hundreds. */
+  if(k>1)p=Math.pow(p,1/(1+0.30*(k-1)));
+  return Math.max(1e-9,Math.min(0.94,p));
+}
+/* Turn a raw ladder into a priced one: strictly rising, never repeating, and
+   never jumping more than a sensible multiple — so every player has a real
+   price on every rung, right down to a defender scoring five. */
+function priceLadder(ps){
+  const MINX=1.45, MAXX=2.25;
+  let prev=0;
+  return ps.map((p,i)=>{
+    let o=toOdds(p);
+    if(i){
+      o=Math.min(Math.max(o,prev*MINX),prev*MAXX);
+      o=Math.round(Math.min(o,999)*100)/100;
+    }
+    prev=o; return o;
+  });
 }
 /* how often has this happened, softened toward a prior when there is little data */
 /* Blend a position-based opening price with what the player has actually done.
@@ -7498,6 +7878,25 @@ function formEdge(pid){
   if(!avg)return 1;
   return Math.max(0.65,Math.min(1.5,me.ppg/avg));
 }
+/* The squad is 30 deep now, so scrolling to find someone is slow. Search
+   narrows the row; the row itself still scrolls, so both ways work. */
+let BQ='';
+function betChips(players,sel){
+  const q=(BQ||'').toLowerCase().trim();
+  const list=q?players.filter(x=>x.name.toLowerCase().includes(q)):players;
+  if(!list.length)return `<div class="findnone">Nobody matches “${esc(BQ)}”</div>`;
+  return list.map(x=>`
+    <button class="sb-chip ${x.id===sel?'on':''}" onclick="BPLAYER='${x.id}';BPICK=null;BQ='';render()">
+      ${avatar(x,22)}<span>${esc(x.name.split(' ')[0])}</span></button>`).join('');
+}
+/* repaint just the chips so the keyboard never closes mid-search */
+function paintBetPick(){
+  const el=$('#bchips'); if(!el)return;
+  const players=season().players.filter(p=>p.active!==false);
+  const sel=BPLAYER&&players.find(p=>p.id===BPLAYER)?BPLAYER:(players[0]||{}).id;
+  el.innerHTML=betChips(players,sel);
+}
+
 function playerMarkets(pid){
   const gs=allGames().filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(pid));
   const n=gs.length;
@@ -7513,28 +7912,53 @@ function playerMarkets(pid){
     if(scale)pr=Math.max(0.01,Math.min(0.94,pr*edge));
     M.push({k,l,d,grp,p:pr,pid,odds:toOdds(pr),n});
   };
-  /* --- goals --- */
-  [[1,'To score','Any time'],[2,'To score 2 or more','A brace or better'],
-   [3,'To score a hat-trick','Three or more'],[4,'To score 4 or more','A big afternoon']]
-   .forEach(([t,l,d])=>add('g'+t,l,d,gs.filter(g=>goals(g)>=t).length,PR['g'+t],'Goals',true));
+  /* --- goals ---
+     Straight from the expected-goals model, which is built from price first,
+     position second and the player's own record third. A Poisson ladder means
+     every rung is a different price. */
+  const lamG=xgOf(pid), lamA=xaOf(pid);
+  /* No form multiplier here: xgOf() and xaOf() already fold the player's own
+     record in, so applying formEdge on top double-counts it and pushes
+     everything to the ceiling. */
+  const put=(k,l,d,p,grp)=>{
+    const pr=Math.max(0.0008,Math.min(0.96,p));
+    M.push({k,l,d,grp,p:pr,pid,odds:toOdds(pr),n});
+  };
+  const GL=[[1,'To score','Any time'],[2,'To score 2 or more','A brace or better'],
+   [3,'To score a hat-trick','Three or more'],[4,'To score 4 or more','A big afternoon'],
+   [5,'To score 5 or more','A truly silly day']];
+  const gOdds=priceLadder(GL.map(([t])=>atLeast(lamG,t)));
+  GL.forEach(([t,l,d],i)=>M.push({k:'g'+t,l,d,grp:'Goals',p:atLeast(lamG,t),pid,odds:gOdds[i],n}));
   /* --- assists --- */
   const asts=g=>((g.assists||{})[pid]||0);
-  [[1,'To assist','Set one up'],[2,'To assist 2 or more','Two or more']]
-    .forEach(([t,l,d])=>add('a'+t,l,d,gs.filter(g=>asts(g)>=t).length,PR['a'+t],'Assists',true));
-  add('ga','Goal or assist','Involved in a goal',
-      gs.filter(g=>goals(g)>0||asts(g)>0).length,
-      Math.min(0.9,(PR.g1||0)+(PR.a1||0)*0.7),'Assists',true);
-  /* --- goals against, full ladder --- */
-  add('c0','Clean sheet','Their team concedes none',
-      gs.filter(g=>conceded(g)===0).length,CONCEDE_PRIOR[0],'Goals against');
-  for(let t=1;t<=7;t++){
-    add('c'+t,`Concede under ${t+1}`,`${t} or fewer against`,
-        gs.filter(g=>conceded(g)<=t).length,CONCEDE_PRIOR[t],'Goals against');
-  }
-  /* --- the rest --- */
-  add('win','To be on the winning side','Their team wins',gs.filter(won).length,PR.win,'Result');
-  add('motm','Top rating of the day','Highest rated on the pitch',
-      gs.filter(g=>{const r=matchRatings(g);return r.length&&r[0].id===pid}).length,PR.motm,'Result',true);
+  const AL=[[1,'To assist','Set one up'],[2,'To assist 2 or more','Two or more']];
+  const aOdds=priceLadder(AL.map(([t])=>atLeast(lamA,t)));
+  AL.forEach(([t,l,d],i)=>M.push({k:'a'+t,l,d,grp:'Assists',p:atLeast(lamA,t),pid,odds:aOdds[i],n}));
+  put('ga','Goal or assist','Involved in a goal',
+      1-(1-atLeast(lamG,1))*(1-atLeast(lamA,1)),'Assists');
+  /* --- goals against ---
+     Also a Poisson: how many the other lot are expected to put past you. The
+     league average sets the rate, then the player's own record pulls it. */
+  const lamC=xcOf(pid);
+  const CL=[[0,'Clean sheet','Their team concedes none']].concat(
+    [1,2,3,4,5,6,7].map(t=>[t,`Concede under ${t+1}`,`${t} or fewer against`]));
+  const cOdds=priceLadder(CL.map(([t])=>atMost(lamC,t)).reverse()).reverse();
+  CL.forEach(([t,l,d],i)=>M.push({k:'c'+t,l,d,grp:'Goals against',p:atMost(lamC,t),pid,odds:cOdds[i],n}));
+  /* --- result ---
+     Winning is close to a coin toss in a two-team kickabout, nudged by how
+     good the player is: a better player is on the winning side more often. */
+  const wp=Math.max(0.20,Math.min(0.72,0.45+(priceFactor(pid)-1)*0.11));
+  const wRec=n?gs.filter(won).length/n:null;
+  const winP=wRec==null?wp:(wRec*Math.min(1,n/6)+wp*(1-Math.min(1,n/6)));
+  M.push({k:'win',l:'To be on the winning side',d:'Their team wins',grp:'Result',
+          p:winP,pid,odds:toOdds(winP),n});
+  /* top rating scales with squad size — one of N, tilted by quality */
+  const live=season().players.filter(p2=>p2.active!==false).length||10;
+  const mBase=Math.max(0.03,Math.min(0.45,(1/Math.max(4,live/2))*priceFactor(pid)*1.5));
+  const mRec=n?gs.filter(g=>{const r=matchRatings(g);return r.length&&r[0].id===pid}).length/n:null;
+  const mP=mRec==null?mBase:(mRec*Math.min(1,n/6)+mBase*(1-Math.min(1,n/6)));
+  M.push({k:'motm',l:'Top rating of the day',d:'Highest rated on the pitch',grp:'Result',
+          p:mP,pid,odds:toOdds(mP),n});
   return M.map(m=>({...m,edge}));
 }
 function marketResult(pid,g,k){
@@ -7547,7 +7971,7 @@ function marketResult(pid,g,k){
   const asts=(g.assists||{})[pid]||0;
   if(k==='ga')return goals>0||asts>0;
   if(k[0]==='a'&&/^\d$/.test(k[1]))return asts>=(+k[1]);
-  if(k[0]==='g'&&/^\d$/.test(k[1]))return goals>=(+k[1]);
+  if(k[0]==='g'&&/^\d$/.test(k[1]))return goals>=(+k[1]);   /* covers g1..g5 */
   if(k[0]==='c'&&/^\d$/.test(k[1]))return con<=(+k[1]);
   if(k==='win')return won;
   if(k==='motm'){const r=matchRatings(g);return !!(r.length&&r[0].id===pid)}
@@ -7558,6 +7982,7 @@ function betLabel(k){
   if(k==='motm')return 'Top rating';
   if(k==='ga')return 'Goal or assist';
   if(k[0]==='a'&&/^\d$/.test(k[1]))return k[1]==='1'?'To assist':`To assist ${k[1]}+`;
+  if(k==='g5')return 'To score 5+';
   if(k[0]==='g')return k[1]==='1'?'To score':`To score ${k[1]}+`;
   if(k[0]==='c')return k[1]==='0'?'Clean sheet':`Concede under ${(+k[1])+1}`;
   return k;
@@ -7573,7 +7998,9 @@ async function placeBet(){
   if(amt>BET_RULES.max){toast(`Maximum stake is ${usd(BET_RULES.max)}`);return}
   if(amt>bal){toast('Not enough in your balance');return}
   const legs=BSLIP.map(x=>({pid:x.pid,k:x.k,odds:x.odds}));
-  const combined=Math.round(legs.reduce((t,x)=>t*x.odds,1)*100)/100;
+  /* the accumulator bonus has to be baked into the stored price, or the slip
+     promises one return and the settlement pays another */
+  const combined=Math.round(legs.reduce((t,x)=>t*x.odds,1)*accaBonus(legs.length)*100)/100;
   b.wallets[me.pid]=bal-amt;
   b.open.push({id:uid(),by:me.pid,legs,odds:combined,stake:amt,gw:fplNextGw(),at:Date.now(),
                pid:legs[0].pid,k:legs[0].k});
@@ -7611,15 +8038,18 @@ function settleBets(){
       if(!games.length)return true;
     }
     const legs=bet.legs||[{pid:bet.pid,k:bet.k,odds:bet.odds}];
-    let odds=1, allIn=true, anyPlayed=false;
+    let odds=1, allIn=true, anyPlayed=false, standing=0;
     for(const leg of legs){
       const g=games.find(x=>[...(x.teamA||[]),...(x.teamB||[])].includes(leg.pid));
       if(!g)continue;                       // that player sat out: leg voids at 1.00
       anyPlayed=true;
       const hit=marketResult(leg.pid,g,leg.k);
       if(hit===false){allIn=false;break}
-      if(hit===true)odds*=leg.odds;
+      if(hit===true){ odds*=leg.odds; standing++ }
     }
+    /* Pay the accumulator bonus that was on the slip when the bet was placed.
+       Legs that voided don't earn it, so the bonus is for the legs that stood. */
+    if(allIn&&standing>1)odds*=accaBonus(standing);
     if(!anyPlayed){                         // nobody on the slip played — full refund
       b.wallets[bet.by]=wallet(bet.by)+bet.stake;
       b.settled.unshift({...bet,res:'void',ret:bet.stake,when:Date.now()});
@@ -7841,7 +8271,12 @@ function giveUpGuess(){ if(!GUESS)return; GSTREAK=0; GUESSDONE={right:false,gave
 
 let BTAB='markets', BSLIP=[], BSTAKE=100, BPLAYER=null;
 const BET_MAXLEGS=4;
-const slipOdds=()=>BSLIP.reduce((t,x)=>t*x.odds,1);
+/* An accumulator multiplies, and every extra leg earns a bonus on top — the
+   more you stack, the better the price, which is what makes a four-fold worth
+   attempting instead of four singles. */
+const ACCA_BONUS={1:1, 2:1.05, 3:1.12, 4:1.22};
+const accaBonus=n=>ACCA_BONUS[Math.min(n,BET_MAXLEGS)]||1;
+const slipOdds=()=>BSLIP.reduce((t,x)=>t*x.odds,1)*accaBonus(BSLIP.length);
 function inSlip(pid,k){ return BSLIP.some(x=>x.pid===pid&&x.k===k) }
 function clearSlip(){ BSLIP=[]; render() }
 async function customStake(){
@@ -7877,7 +8312,7 @@ function paintSlip(){
   el.innerHTML=`<div class="sb-slip">
       <div class="sb-slip-h">
         <b>${BSLIP.length===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[BSLIP.length])}</b>
-        <span class="sb-slip-odds">${slipOdds().toFixed(2)}</span>
+        <span class="sb-slip-odds">${slipOdds().toFixed(2)}${BSLIP.length>1?`<i class="acca">+${Math.round((accaBonus(BSLIP.length)-1)*100)}%</i>`:''}</span>
         <button class="sb-clear" onclick="clearSlip()">Clear</button>
       </div>
       <div class="sb-picks">${BSLIP.map(x=>`
@@ -7890,7 +8325,7 @@ function paintSlip(){
         <button onclick="maxStake()">Max</button>
       </div>
       <div class="sb-slip-b">
-        <div>Returns <b>${usd(BSTAKE*slipOdds())}</b></div>
+        <div>Returns <b>${usd(BSTAKE*slipOdds())}</b>${BSLIP.length>1?` <span style="font-size:11px;color:var(--green)">acca bonus included</span>`:''}</div>
         <button class="btn pri" onclick="placeBet()">Place ${usd(BSTAKE)}</button>
       </div>
       ${BSLIP.length<BET_MAXLEGS?`<div class="sb-tip">Add up to ${BET_MAXLEGS} selections — the odds multiply.</div>`:''}
@@ -7991,14 +8426,19 @@ function histMoments(){
     <p>These write themselves when something rare happens — a first goal, a hat-trick, a ten-goal game.</p></div>`;
   const mine=me?momentsFor(me.pid):[];
   return `${mine.length?`<div class="sechead">Yours · ${mine.length}</div>
-      ${momentCard(mine[mine.length-1],me.pid)}<div style="height:14px"></div>`:''}
+      ${momentCard(mine[mine.length-1],me.pid,true)}<div style="height:14px"></div>`:''}
     <div class="sechead">Every moment</div>
-    <div class="card">${ms.slice().reverse().map(m=>`
-      <div class="row tap" onclick="openMoment('${esc(m.id)}')">
+    <div class="card">${ms.slice().reverse().map(m=>{
+      const f=momentFacts(m);
+      const bits=[esc(fdate(m.date))];
+      if(f)bits.push(`${f.g.scoreA}–${f.g.scoreB}`);
+      if(f&&f.scorers.length)bits.push(`${esc(f.scorers[0].name)}${f.scorers[0].n>1?` ×${f.scorers[0].n}`:''}`);
+      bits.push(`${m.owners.length} ${m.owners.length===1?'owner':'owners'}`);
+      return `<div class="row tap" onclick="openMoment('${esc(m.id)}')">
         <div style="font-size:20px;flex:0 0 26px">${m.e}</div>
         <div class="rt"><div class="r1">${esc(m.t)}</div>
-          <div class="r2">${esc(fdate(m.date))} · ${m.owners.length} ${m.owners.length===1?'person was':'people were'} there</div></div>
-        ${chev}</div>`).join('')}</div>
+          <div class="r2">${bits.join(' · ')}</div></div>
+        ${chev}</div>`}).join('')}</div>
     <div class="note">Only the people who played that day own the moment. Your card style applies to it.</div>`;
 }
 /* ---------- FIRSTS, appended to the Records tab ---------- */
@@ -8027,11 +8467,25 @@ function histFirsts(){
 function openMoment(id){
   const m=moments().find(x=>x.id===id); if(!m)return;
   const me=fplMine();
-  openSheet('Moment',`${momentCard(m,me?me.pid:null)}
+  const f=momentFacts(m);
+  openSheet('Moment',`${momentCard(m,me?me.pid:null,true)}
+    ${f?`<div class="sechead">That game</div>
+      <div class="card"><div class="row tap" onclick="closeSheet();openMatch('${esc(f.g.id)}')">
+        <div style="font-size:20px;flex:0 0 26px">🎬</div>
+        <div class="rt"><div class="r1">${f.g.scoreA}–${f.g.scoreB}${f.g.round?` · ${esc(f.g.round)}`:''}</div>
+          <div class="r2">Open the full match centre</div></div>${chev}</div></div>`:''}
     <div class="sechead">Who was there</div>
-    <div class="card">${m.owners.map((pid,i)=>`
-      <div class="row"><div style="flex:0 0 26px;text-align:center;color:var(--label3);font-size:12px">#${String(i+1).padStart(3,'0')}</div>
-        <div class="rt"><div class="r1">${esc((player(pid)||{}).name||'—')}</div></div></div>`).join('')}</div>`);
+    <div class="card">${m.owners.map((pid,i)=>{
+      const st=f?{g:(f.g.goals||{})[pid]||0,a:(f.g.assists||{})[pid]||0}:null;
+      const bits=[];
+      if(st&&st.g)bits.push(`${st.g} goal${st.g===1?'':'s'}`);
+      if(st&&st.a)bits.push(`${st.a} assist${st.a===1?'':'s'}`);
+      const r=f?matchRatings(f.g).find(x=>x.id===pid):null;
+      return `<div class="row tap" onclick="closeSheet();openPlayer('${pid}')">
+        <div style="flex:0 0 30px;text-align:center;color:var(--label3);font-size:11.5px;font-weight:700">#${String(i+1).padStart(3,'0')}</div>
+        <div class="rt"><div class="r1">${esc((player(pid)||{}).name||'—')}</div>
+          ${bits.length?`<div class="r2">${bits.join(' · ')}</div>`:''}</div>
+        ${r?`<div class="rv">${ratingPill(r.r)}</div>`:''}</div>`}).join('')}</div>`);
 }
 
 /* ============ PRICE MIGRATION ============
@@ -8291,6 +8745,153 @@ function vPlayerGw(){
     </div></div>`;
 }
 
+/* Everyone's bets for a gameweek — who backed what, what landed, and what it
+   paid. The point of a betting round is the arguing afterwards, and until now
+   nobody could see anyone else's slip. */
+let BWGW=null;
+function betWeekGw(){
+  const gws=playedGws();
+  return BWGW&&gws.includes(BWGW)?BWGW:(gws[gws.length-1]||null);
+}
+function betWeek(){
+  const b=bets(), gws=playedGws(), gw=betWeekGw();
+  if(!gws.length)return `<div class="empty"><div class="ee">📅</div><h3>No gameweek yet</h3>
+    <p>Once a game is logged the week's slips appear here.</p></div>`;
+  const settled=b.settled.filter(x=>x.gw===gw);
+  const open=b.open.filter(x=>x.gw===gw);
+  const all=[...settled,...open];
+  const legLabel=l=>`${esc((player(l.pid)||{}).name||'—')} ${esc(betLabel(l.k))}`;
+  const byName=pid=>esc((player(pid)||{}).name||'—');
+  const won=settled.filter(x=>x.res==='won');
+  const paid=won.reduce((t,x)=>t+(x.ret||0),0);
+  const staked=all.reduce((t,x)=>t+(x.stake||0),0);
+  const best=won.slice().sort((x,y)=>(y.ret-y.stake)-(x.ret-x.stake))[0];
+  return `<div class="gwbar">${gws.map(n=>`<button class="${n===gw?'on':''}"
+      onclick="BWGW=${n};render()">GW${n}</button>`).join('')}</div>
+
+    <div class="tiles" style="margin-bottom:14px">
+      ${tile(all.length,'Slips')}
+      ${tile(usd(staked),'Staked')}
+      ${tile(usd(paid),'Paid out',won.length?`${won.length} winner${won.length===1?'':'s'}`:'nobody landed one','var(--green)')}
+      ${best?tile(usdSigned(best.ret-best.stake),'Biggest win',byName(best.by),'var(--green)'):tile('—','Biggest win')}
+    </div>
+
+    ${all.length?`<div class="card">${all.map(x=>{
+      const legs=x.legs||[{pid:x.pid,k:x.k,odds:x.odds}];
+      const res=x.res||'open';
+      const cls=res==='won'?'bw-won':res==='void'?'bw-void':res==='open'?'bw-open':'bw-lost';
+      const tag=res==='won'?`+${usd(x.ret-x.stake)}`:res==='void'?'Void':res==='open'?'Riding':`−${usd(x.stake)}`;
+      return `<div class="bw ${cls}">
+        <div class="bw-h">
+          <b>${byName(x.by)}</b>
+          <span class="bw-meta">${legs.length===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[legs.length]||legs.length+'-fold')}
+            · ${usd(x.stake)} at ${(+x.odds).toFixed(2)}</span>
+          <span class="bw-tag">${tag}</span>
+        </div>
+        <div class="bw-legs">${legs.map(l=>`<div class="bw-leg">${legLabel(l)}
+          <i>${(+l.odds).toFixed(2)}</i></div>`).join('')}</div>
+      </div>`}).join('')}</div>`
+    : `<div class="note" style="padding:18px;text-align:center">Nobody had a bet on in GW${gw}.</div>`}
+    <div class="note">Every slip from the whole group, so you can see who called it and who got it badly wrong.</div>`;
+}
+
+/* ============ FREE SCORE PREDICTION ============
+   One free guess a gameweek, no stake. Call the exact scoreline and it pays a
+   flat prize — the point is a bit of fun for people who don't want to risk
+   their balance, so it never costs anything to enter. */
+const PREDICT_PRIZE=2000;
+function preds(){
+  const b=bets();
+  if(!b.preds)b.preds={};
+  return b.preds;
+}
+function myPred(gw){
+  const me=fplMine(); if(!me)return null;
+  return (preds()[gw]||{})[me.pid]||null;
+}
+function predLocked(gw){ return playedGws().includes(gw) }
+let PRA=null, PRB=null;
+function setPred(side,d){
+  const cur=side==='A'?(PRA??0):(PRB??0);
+  const v=Math.max(0,Math.min(20,cur+d));
+  if(side==='A')PRA=v; else PRB=v;
+  render();
+}
+async function savePred(){
+  const me=fplMine();
+  if(!me){toast('Enter your code on the Sunday FPL tab first');return}
+  const gw=fplNextGw();
+  if(predLocked(gw)){toast('That gameweek has already been played');return}
+  if(PRA==null||PRB==null){toast('Pick a score first');return}
+  const p=preds();
+  if(!p[gw])p[gw]={};
+  p[gw][me.pid]={a:PRA,b:PRB,at:Date.now()};
+  try{ if(!CLOUD_FAIL)await save() }catch(e){}
+  haptic('success'); render();
+  toast(`Prediction in: ${PRA}–${PRB} for GW${gw}`);
+}
+/* settle every prediction for a gameweek once its game is logged */
+function settlePreds(){
+  const p=preds(), gws=playedGws(), b=bets();
+  let paid=0;
+  gws.forEach(gw=>{
+    const entries=p[gw]; if(!entries)return;
+    const gs=gamesInGw(gw); if(!gs.length)return;
+    const g=gs[0];
+    Object.entries(entries).forEach(([pid,e])=>{
+      if(e.done)return;
+      e.done=true;
+      e.actual={a:g.scoreA,b:g.scoreB};
+      /* right either way round — the sides are arbitrary week to week */
+      const hit=(e.a===g.scoreA&&e.b===g.scoreB)||(e.a===g.scoreB&&e.b===g.scoreA);
+      e.won=hit;
+      if(hit){ b.wallets[pid]=wallet(pid)+PREDICT_PRIZE; e.prize=PREDICT_PRIZE; paid++; }
+    });
+  });
+  return paid;
+}
+function predBlock(){
+  const gw=fplNextGw(), me=fplMine();
+  const mine=myPred(gw);
+  const all=preds();
+  const past=playedGws().slice(-1)[0];
+  const lastRound=past!=null?Object.entries(all[past]||{}) : [];
+  const winners=lastRound.filter(([,e])=>e.won);
+  if(mine&&PRA==null){PRA=mine.a;PRB=mine.b}
+  const a=PRA??0, b2=PRB??0;
+  return `<div class="sechead">🎯 Score predictor · free</div>
+    <div class="card pad predcard">
+      <div class="note" style="padding:0 0 12px">Call the exact scoreline for GW${gw} and win <b>${usd(PREDICT_PRIZE)}</b>.
+        It costs nothing to enter and you get one guess a gameweek. Either way round counts.</div>
+      <div class="predrow">
+        <div class="predside">
+          <button onclick="setPred('A',1)">+</button>
+          <b>${a}</b>
+          <button onclick="setPred('A',-1)">−</button>
+          <span>Team A</span>
+        </div>
+        <div class="preddash">–</div>
+        <div class="predside">
+          <button onclick="setPred('B',1)">+</button>
+          <b>${b2}</b>
+          <button onclick="setPred('B',-1)">−</button>
+          <span>Team B</span>
+        </div>
+      </div>
+      <button class="btn pri full" style="margin-top:12px" onclick="savePred()">
+        ${mine?`Change my guess (${mine.a}–${mine.b})`:'Put my guess in'}</button>
+      ${mine?`<div class="note" style="padding:10px 0 0;text-align:center">You have ${mine.a}–${mine.b} for GW${gw}.</div>`:''}
+    </div>
+    ${lastRound.length?`<div class="sechead">GW${past} predictions</div>
+      <div class="card">${lastRound.sort((x,y)=>(y[1].won?1:0)-(x[1].won?1:0)).map(([pid,e])=>`
+        <div class="row"><div class="rt">
+          <div class="r1">${esc((player(pid)||{}).name||'—')}</div>
+          <div class="r2">Called ${e.a}–${e.b}${e.actual?` · it finished ${e.actual.a}–${e.actual.b}`:''}</div></div>
+          <div class="rv" style="font-weight:800;color:${e.won?'var(--green)':'var(--label3)'}">
+            ${e.won?usdSigned(PREDICT_PRIZE):'—'}</div></div>`).join('')}</div>
+      ${winners.length?'':`<div class="note">Nobody called it. The ${usd(PREDICT_PRIZE)} stays in the pot.</div>`}`:''}`;
+}
+
 function vBets(){
   $('#navMount').innerHTML=navbar();
   const me=fplMine(), b=bets();
@@ -8299,19 +8900,21 @@ function vBets(){
     <div class="wrap">${cloudBanner()}<div class="empty"><div class="ee">🎰</div><h3>No markets yet</h3>
     <p>Add the squad and the book opens.</p></div></div></div>`;return}
 
-  const tabs=[['markets','Markets'],['slips','My bets'],['board','Leaderboard']];
+  const tabs=[['markets','Markets'],['slips','My bets'],['week','This week'],['board','Leaderboard']];
   let body='';
 
   if(BTAB==='markets'){
+    const predUI=predBlock();
     const sel=BPLAYER&&players.find(p=>p.id===BPLAYER)?BPLAYER:players[0].id;
     const mk=playerMarkets(sel);
     const p=player(sel);
     body=`
+      ${predUI}
       <div class="sb-pick">
         <div class="sb-lab">Choose a player</div>
-        <div class="sb-scroll">${players.map(x=>`
-          <button class="sb-chip ${x.id===sel?'on':''}" onclick="BPLAYER='${x.id}';BPICK=null;render()">
-            ${avatar(x,22)}<span>${esc(x.name.split(' ')[0])}</span></button>`).join('')}</div>
+        <input class="findbox" id="bfind" placeholder="Search the squad…" value="${esc(BQ||'')}"
+          oninput="BQ=this.value;paintBetPick()" autocomplete="off">
+        <div class="sb-scroll" id="bchips">${betChips(players,sel)}</div>
       </div>
       <div class="sb-head">
         <div class="sb-h-av">${avatar(p,44)}</div>
@@ -8327,6 +8930,8 @@ function vBets(){
             <span class="sb-m"><b>${esc(m.l)}</b><i>${esc(m.d)}</i></span>
             <span class="sb-o">${m.odds.toFixed(2)}</span></button>`}).join('')}</div>`}).join('')}
       <div class="note">Odds come from this player's own record. With few games the price sits nearer the opening line for their position.</div>`;
+  } else if(BTAB==='week'){
+    body=betWeek();
   } else if(BTAB==='slips'){
     const mine=me?b.open.filter(x=>x.by===me.pid):[];
     const past=me?b.settled.filter(x=>x.by===me.pid).slice(0,20):[];
@@ -8555,7 +9160,7 @@ function histRecords(){
   </div>
   <div class="sechead">Lifetime table</div>
   <div class="card"><div class="tw"><table class="sticky">
-    <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">Sea</td><td class="c">P</td><td class="c">W</td>
+    <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">SZN</td><td class="c">P</td><td class="c">W</td>
     <td class="c">D</td><td class="c">L</td><td class="c">⚽</td><td class="c">CS</td><td class="c">Win%</td><td class="pts">Pts</td></tr></thead>
     <tbody>${lt.map((x,i)=>`<tr><td class="pos"><span class="posn" style="background:var(--fill2);color:var(--label2)">${i+1}</span></td>
       <td class="nm">${esc(x.name)}</td><td class="c">${x.seasons}</td><td class="c">${x.P}</td><td class="c">${x.W}</td>
@@ -8596,10 +9201,12 @@ function histFame(){
   if(!rows.length)return `<div class="empty"><div class="ee">🏛️</div><h3>Nothing enshrined yet</h3>
     <p>Champions and Golden Boot winners appear here once a season has games.</p></div>`;
   // count titles per player
-  const titles={},boots={};
+  const titles={},boots={},makers={},walls={};
   rows.forEach(({sm})=>{
     if(sm.champ)titles[sm.champ.name]=(titles[sm.champ.name]||0)+1;
     if(sm.boot)boots[sm.boot.name]=(boots[sm.boot.name]||0)+1;
+    if(sm.maker)makers[sm.maker.name]=(makers[sm.maker.name]||0)+1;
+    if(sm.wall)walls[sm.wall.name]=(walls[sm.wall.name]||0)+1;
   });
   const rank=o=>Object.entries(o).sort((a,b)=>b[1]-a[1]);
   return `${rows.map(({s,sm})=>`
@@ -8616,7 +9223,19 @@ function histFame(){
           <div class="fame-tr">👟</div>
           <div><div class="fame-lbl">Golden Boot</div>
             <div class="fame-nm">${sm.boot?esc(sm.boot.name):'—'}</div>
-            ${sm.boot?`<div class="fame-sub">${sm.boot.G} goals</div>`:''}</div>
+            ${sm.boot?`<div class="fame-sub">${sm.boot.G} goal${sm.boot.G===1?'':'s'}</div>`:''}</div>
+        </div>
+        <div class="fame-w">
+          <div class="fame-tr">🅰️</div>
+          <div><div class="fame-lbl">Playmaker</div>
+            <div class="fame-nm">${sm.maker?esc(sm.maker.name):'—'}</div>
+            ${sm.maker?`<div class="fame-sub">${sm.maker.A} assist${sm.maker.A===1?'':'s'}</div>`:''}</div>
+        </div>
+        <div class="fame-w">
+          <div class="fame-tr">🛡️</div>
+          <div><div class="fame-lbl">Best defence</div>
+            <div class="fame-nm">${sm.wall?esc(sm.wall.name):'—'}</div>
+            ${sm.wall?`<div class="fame-sub">${(sm.wall.GA/Math.max(1,sm.wall.P)).toFixed(1)} a game · ${sm.wall.cs} clean sheet${sm.wall.cs===1?'':'s'}</div>`:''}</div>
         </div>
       </div>
       <div class="fame-f">${sm.games} games · ${sm.goals} goals · ${sm.players} players
@@ -8813,27 +9432,171 @@ function statsPool(){
   st.forEach(x=>x.ptsShare=x.pts/totPts);
   return {st,total};
 }
+/* Twenty-one columns in one wall was unreadable and needed sideways scrolling.
+   Same data, grouped into four views you switch between — each one fits. */
+const STAT_VIEWS={
+  overview:{l:'Overview',cols:[['name','Player'],['P','P'],['G','⚽'],['A','🅰️'],['pts','Pts'],['index','Rating']]},
+  attack:{l:'Attack',cols:[['name','Player'],['G','⚽'],['A','🅰️'],['GA_','G+A'],['gpg','⚽/G'],['apg','🅰️/G']]},
+  defence:{l:'Defence',cols:[['name','Player'],['GA','GA'],['cpg','GA/G'],['cs','CS'],['GF','GF'],['GD','GD']]},
+  form:{l:'Form & record',cols:[['name','Player'],['W','W'],['D','D'],['L','L'],['wr','Win%'],['ppg','PPG'],['form','Form']]}
+};
+const STAT_HELP={
+  P:'Games played', G:'Goals scored', A:'Assists', GA_:'Goals and assists added together',
+  pts:'League points — 3 for a win, 1 for a draw', index:'Player rating out of 100. Attacking counts for 34% and is scored against your own position, winning 28%, defending 24%, turning up 14%.',
+  gpg:'Goals divided by games', apg:'Assists divided by games',
+  GA:'Goals your team let in while you were on the pitch', cpg:'Those goals divided by games — lower is better',
+  cs:'Games where your team conceded nothing', GF:'Goals your team scored while you were on',
+  GD:'Scored minus conceded, while you were on',
+  W:'Games won', D:'Games drawn', L:'Games lost', wr:'Share of games won',
+  ppg:'League points divided by games', form:'Average points over the last five games',
+  app:'Share of all games you turned out for'
+};
+let SVIEW='overview';
+const statCols=()=>(STAT_VIEWS[SVIEW]||STAT_VIEWS.overview).cols;
+/* a rating shown as a coloured pill, used on Sky Sports and the match centre */
+function ratingPill(r){
+  if(r==null)return '<span class="rpill r-mid">—</span>';
+  return `<span class="rpill ${ratingClass(r)}">${(+r).toFixed(1)}</span>`;
+}
+/* colour a match rating badge — green for a big score, red for a poor one */
+function ratingClass(r){
+  return r>=8.5?'r-elite' : r>=7.5?'r-good' : r>=6.5?'r-ok' : r>=5.5?'r-mid' : 'r-poor';
+}
+
+/* ============ INSIGHTS ============
+   Three things the numbers can show that a table cannot: who you actually win
+   with, what scorelines this league produces, and how form has moved. */
+
+/* who you win most alongside — same side only, minimum games so one lucky
+   afternoon does not top the list */
+function partnerships(minGames){
+  const min=minGames||3, gs=allGames(), pair={};
+  gs.forEach(g=>{
+    [['A',g.teamA],['B',g.teamB]].forEach(([sd,tm])=>{
+      const ids=(tm||[]).filter(x=>player(x));
+      for(let i=0;i<ids.length;i++)for(let j=i+1;j<ids.length;j++){
+        const k=[ids[i],ids[j]].sort().join('|');
+        if(!pair[k])pair[k]={a:ids[i],b:ids[j],P:0,W:0,D:0,L:0,GF:0,GA:0};
+        const p=pair[k];p.P++;
+        const gf=sd==='A'?(g.scoreA||0):(g.scoreB||0);
+        const ga=sd==='A'?(g.scoreB||0):(g.scoreA||0);
+        p.GF+=gf;p.GA+=ga;
+        if(g.result==='D')p.D++; else if(g.result===sd)p.W++; else p.L++;
+      }
+    });
+  });
+  return Object.values(pair).filter(p=>p.P>=min)
+    .map(p=>({...p,wr:p.W/p.P,gd:p.GF-p.GA}))
+    .sort((x,y)=>y.wr-x.wr||y.P-x.P);
+}
+/* every scoreline this league has produced, as a grid */
+function scoreGrid(){
+  const gs=allGames(), grid={}; let max=0, top=6;
+  gs.forEach(g=>{
+    const hi=Math.max(g.scoreA||0,g.scoreB||0), lo=Math.min(g.scoreA||0,g.scoreB||0);
+    top=Math.max(top,hi);
+    const k=hi+'-'+lo;
+    grid[k]=(grid[k]||0)+1;
+    max=Math.max(max,grid[k]);
+  });
+  return {grid,max,top:Math.min(top,9),games:gs.length};
+}
+function insightsBody(){
+  const gs=allGames();
+  if(gs.length<2)return `<div class="empty"><div class="ee">🔍</div><h3>Not enough games</h3>
+    <p>Partnerships, scorelines and form curves need a few Sundays behind them.</p></div>`;
+  const pairs=partnerships(3);
+  const best=pairs.slice(0,6), worst=pairs.slice(-4).reverse().filter(p=>!best.includes(p));
+  const sg=scoreGrid();
+  const nm=id=>esc((player(id)||{}).name||'—');
+  /* form curve: cumulative points per game for the top few */
+  const st=statsAll().filter(x=>x.P>=3).sort((a,b)=>b.pts-a.pts).slice(0,5);
+  const gws=playedGws();
+  const series=st.map(x=>{
+    let run=0;
+    return {id:x.id,name:x.name,pts:gws.map(gw=>{
+      const g=gamesInGw(gw)[0];
+      if(g){const onA=(g.teamA||[]).includes(x.id),onB=(g.teamB||[]).includes(x.id);
+        if(onA||onB){ if(g.result==='D')run+=1; else if((onA&&g.result==='A')||(onB&&g.result==='B'))run+=3; }}
+      return run;
+    })};
+  });
+  const hiPts=Math.max(1,...series.map(s2=>s2.pts[s2.pts.length-1]||0));
+  const W=300,H=110,LINE=['#12B76A','#3B82F6','#F59E0B','#EF4444','#8B5CF6'];
+  const path=arr=>arr.map((v,i)=>`${(i/(Math.max(1,arr.length-1)))*W},${H-(v/hiPts)*H}`).join(' ');
+  return `
+    <div class="sechead">🤝 Best partnerships</div>
+    <div class="card">${best.length?best.map(p=>`
+      <div class="row"><div class="rt">
+        <div class="r1">${nm(p.a)} <span style="color:var(--label3)">&amp;</span> ${nm(p.b)}</div>
+        <div class="r2">${p.P} together · ${p.W}W ${p.D}D ${p.L}L · ${p.gd>0?'+':''}${p.gd} goal difference</div></div>
+        <div class="rv" style="font-weight:800;color:var(--green)">${Math.round(p.wr*100)}%</div></div>`).join('')
+      :`<div class="note" style="padding:14px">Nobody has played three together yet.</div>`}</div>
+    ${worst.length?`<div class="sechead">😬 Struggle together</div>
+      <div class="card">${worst.map(p=>`
+        <div class="row"><div class="rt">
+          <div class="r1">${nm(p.a)} <span style="color:var(--label3)">&amp;</span> ${nm(p.b)}</div>
+          <div class="r2">${p.P} together · ${p.W}W ${p.D}D ${p.L}L</div></div>
+          <div class="rv" style="font-weight:800;color:var(--red)">${Math.round(p.wr*100)}%</div></div>`).join('')}</div>`:''}
+    <div class="note">Only counts games played on the same side, with at least three together.</div>
+
+    <div class="sechead">🔥 Scoreline heatmap</div>
+    <div class="card pad">
+      <div class="hm">${(function(){
+        let out='';
+        for(let hi=sg.top;hi>=0;hi--){
+          out+=`<div class="hm-row"><span class="hm-ax">${hi}</span>`;
+          for(let lo=0;lo<=sg.top;lo++){
+            if(lo>hi){out+='<span class="hm-c off"></span>';continue}
+            const n=sg.grid[hi+'-'+lo]||0;
+            const a=n?(0.16+0.84*(n/sg.max)):0;
+            out+=`<span class="hm-c" style="background:rgba(18,183,106,${a.toFixed(2)})"
+              title="${hi}–${lo}: ${n}">${n||''}</span>`;
+          }
+          out+='</div>';
+        }
+        out+='<div class="hm-row"><span class="hm-ax"></span>';
+        for(let lo=0;lo<=sg.top;lo++)out+=`<span class="hm-ax b">${lo}</span>`;
+        out+='</div>';
+        return out;
+      })()}</div>
+      <div class="note" style="padding:10px 0 0">Winning score down the side, losing score along the bottom.
+        Darker means it has happened more often. ${sg.games} game${sg.games===1?'':'s'} counted.</div>
+    </div>
+
+    <div class="sechead">📈 Form curves</div>
+    <div class="card pad">
+      ${series.length?`<svg viewBox="-4 -8 ${W+8} ${H+16}" style="width:100%;height:150px;overflow:visible">
+        ${series.map((s2,i)=>`<polyline points="${path(s2.pts)}" fill="none"
+          stroke="${LINE[i%LINE.length]}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`).join('')}
+      </svg>
+      <div class="legend-dots">${series.map((s2,i)=>`<span><i style="background:${LINE[i%LINE.length]}"></i>
+        ${esc(s2.name)} <b>${s2.pts[s2.pts.length-1]||0}</b></span>`).join('')}</div>`
+      :`<div class="note">Not enough games to draw a curve.</div>`}
+      <div class="note" style="padding:10px 0 0">League points as they built up, gameweek by gameweek.</div>
+    </div>`;
+}
+
 function vStats(){
   const {st,total}=statsPool();
-  const cols=[['name','Player'],['P','P'],['app','App%'],['W','W'],['D','D'],['L','L'],['G','⚽'],['A','🅰️'],['GA_','G+A'],['cs','CS'],
-    ['GF','GF'],['GA','GA'],['GD','GD'],['ppg','PPG'],['gpg','G/G'],['cpg','C/G'],['gdpg','GD/G'],
-    ['wr','Win%'],['form','Form'],['index','Idx'],['pts','Pts']];
-  const s=[...st].sort((a,b)=>SORT.k==='name'?SORT.d*String(a.name).localeCompare(String(b.name)):SORT.d*((a[SORT.k]||0)-(b[SORT.k]||0)));
+    const s=[...st].sort((a,b)=>SORT.k==='name'?SORT.d*String(a.name).localeCompare(String(b.name)):SORT.d*((a[SORT.k]||0)-(b[SORT.k]||0)));
   const f=(m,k)=>k==='name'?`${esc(m.name)}${m.pos?` <span class="pill ${m.pos}">${m.pos}</span>`:''}`
-    :(k==='wr'||k==='app')?Math.round(m[k]*100)+'%'
-    :(k==='ppg'||k==='gpg')?m[k].toFixed(2)
-    :(k==='cpg'||k==='form')?m[k].toFixed(1)
-    :k==='gdpg'?(m.gdpg>0?'+':'')+m.gdpg.toFixed(2)
-    :k==='GD'?(m.GD>0?'+':'')+m.GD:m[k];
+    :(k==='wr'||k==='app')?Math.round((m[k]||0)*100)+'%'
+    :(k==='ppg'||k==='gpg'||k==='apg')?(m[k]||0).toFixed(2)
+    :(k==='cpg'||k==='form')?(m[k]||0).toFixed(1)
+    :k==='gdpg'?((m.gdpg||0)>0?'+':'')+(m.gdpg||0).toFixed(2)
+    :k==='GD'?((m.GD||0)>0?'+':'')+(m.GD||0):(m[k]??0);
   $('#navMount').innerHTML=navbar();
   app().innerHTML=`<div class="view active">
     <div class="largetitle">Stats</div>
     <div class="subtitle">${st.length} player${st.length===1?'':'s'} · ${total} game${total===1?'':'s'}</div>
     <div class="wrap">${cloudBanner()}
       <div class="seg" style="margin-bottom:12px">
-        ${[['table','Table'],['leaders','Leaders'],['splits','Splits'],['chem','Chemistry'],['compare','Compare']].map(([k,l])=>`<button class="${SMODE===k?'on':''}" onclick="SMODE='${k}';render()">${l}</button>`).join('')}
+        ${[['table','Table'],['leaders','Leaders'],['insights','Insights'],['splits','Splits'],['chem','Chemistry'],['compare','Compare']].map(([k,l])=>`<button class="${SMODE===k?'on':''}" onclick="SMODE='${k}';render()">${l}</button>`).join('')}
       </div>
-      ${(SMODE==='chem'||SMODE==='compare')?'':`<div class="filterbar" style="margin-bottom:12px">
+      ${SMODE==='table'?`<div class="statseg">${Object.entries(STAT_VIEWS).map(([k,v])=>
+        `<button class="${SVIEW===k?'on':''}" onclick="SVIEW='${k}';render()">${v.l}</button>`).join('')}</div>`:''}
+      ${(SMODE==='chem'||SMODE==='compare'||SMODE==='insights')?'':`<div class="filterbar" style="margin-bottom:12px">
         <select class="fsel" onchange="SCOMP=this.value;render()">
           <option value="all" ${SCOMP==='all'?'selected':''}>All comps</option>
           ${comps().map(c=>`<option value="${c.id}" ${SCOMP===c.id?'selected':''}>${c.icon} ${esc(c.name)}</option>`).join('')}
@@ -8850,13 +9613,17 @@ function vStats(){
         <p>${total?'No players match these filters.':'Play a game and every column fills in.'}</p></div>`
       : SMODE==='table'? `
         <div class="card"><div class="tw"><table class="sticky">
-          <thead><tr>${cols.map(([k,l],i)=>`<td onclick="setSort('${k}')" style="${i===0?'padding-left:16px':'text-align:center'}">${l}${SORT.k===k?(SORT.d<0?' ↓':' ↑'):''}</td>`).join('')}</tr></thead>
+          <thead><tr>${statCols().map(([k,l],i)=>`<td onclick="setSort('${k}')" style="${i===0?'padding-left:16px':'text-align:center'}">${l}${SORT.k===k?(SORT.d<0?' ↓':' ↑'):''}</td>`).join('')}</tr></thead>
           <tbody>${s.map(m=>`<tr onclick="openPlayer('${m.id}')">
             <td class="nm" style="padding-left:16px">${f(m,'name')}</td>
-            ${cols.slice(1,-1).map(([k])=>`<td class="c">${f(m,k)}</td>`).join('')}<td class="pts">${m.pts}</td></tr>`).join('')}</tbody></table></div></div>
-        <div class="scrollhint">← swipe the table sideways for more columns →</div>
-        <div class="note">App% share of games attended · CS clean sheets · GF/GA team goals for and against while on the pitch · PPG points per game · GD/G goal difference per game · Idx POTY index out of 100.</div>`
+            ${statCols().slice(1).map(([k])=>`<td class="c">${f(m,k)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>
+        <div class="legend">
+          <div class="legend-h">What the columns mean</div>
+          ${statCols().filter(([k])=>k!=='name'&&STAT_HELP[k]).map(([k,l])=>
+            `<div class="legend-r"><b>${l}</b><span>${STAT_HELP[k]}</span></div>`).join('')}
+        </div>`
       : SMODE==='leaders'? statLeaders(st)
+      : SMODE==='insights'? insightsBody()
       : SMODE==='chem'? statChem()
       : SMODE==='compare'? compareBody()
       : statSplits(st,total)}
@@ -8893,7 +9660,8 @@ function statLeaders(st){
     <div>${leadBlock('Points per game','📈',top('ppg'),i2,'Minimum 1 game')}
       ${leadBlock('Goals per game','🎯',top('gpg'),i2)}
       ${leadBlock('Win rate','💪',top('wr'),pc)}
-      ${leadBlock('POTY index','💎',top('index'),i0,'Six metrics, equal weight, out of 100')}
+      ${leadBlock('Player rating','💎',top('index'),i0,'Out of 100. Attacking 34% (scored against your own position), winning 28%, defending 24%, appearances 14% — so a defender competes with defenders, not with the top scorer.')}
+      ${leadBlock('Assists per game','🅰️',top('apg'),i2)}
       ${leadBlock('Fewest conceded per game','🛡️',low('cpg'),i1,'Minimum 2 games')}</div>
   </div>`;
 }
@@ -9985,7 +10753,7 @@ async function saveGame(){if(!requireAdmin())return;
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
-  try{ payWages(); settleBets();
+  try{ payWages(); settleBets(); settlePreds();
     const sp=paySponsors();
     if(sp.length)setTimeout(()=>toast(`🤝 ${sp.map(x=>`${x.name} — ${usd(x.pay)} from ${x.n}`).join(' · ')}`),1400);
   }catch(e){}
