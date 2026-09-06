@@ -11308,6 +11308,21 @@ document.addEventListener('keydown',e=>{
   /* Always rebuild, even with no games yet — otherwise a price map saved under
      the old flat-£10m rules survives untouched until the first game is logged. */
   try{ if(season())recalcPrices(); }catch(e){}
+  /* Catch-up settlement. Bets placed before the save-ordering fix are still
+     sitting open even though their gameweek has been played, because the
+     payout was only ever made in memory. Settle anything whose week is done,
+     on every load, so nothing can get stranded again. */
+  try{
+    const b=season()&&season().bets;
+    if(b&&(b.open||[]).length&&playedGws().length){
+      const stuck=b.open.filter(x=>playedGws().includes(x.gw)).length;
+      if(stuck){
+        settleBets(); settlePreds();
+        if(!CLOUD_FAIL)save();
+        setTimeout(()=>toast(`Settled ${stuck} bet${stuck===1?'':'s'} from an earlier gameweek`),1200);
+      }
+    }
+  }catch(e){}
   /* anyone added before this fix has a player record but no manager slot —
      create it and persist, so their code shows up for everybody */
   try{
