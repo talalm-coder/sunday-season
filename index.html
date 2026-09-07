@@ -2100,6 +2100,19 @@ details.drop.on>summary{background:var(--tint-soft);color:var(--tint-ink,var(--l
 details.drop.on>summary i.sig{color:var(--tint);font-weight:900}
 details.drop.on>summary span{font-weight:800}
 details.drop+details.drop{margin-top:-4px}
+
+/* a finished gameweek is for reading, not editing */
+.sh.sh-view .sh-top{cursor:pointer;border:none;background:transparent;padding:0;width:100%}
+.sh.sh-view .sh-pts{font-weight:900}
+.sh.sh-view .sh-pts.out{opacity:.4}
+.sh-sub{font-size:9.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--label3);margin-top:2px}
+
+.tp-r{display:flex;gap:11px;align-items:flex-start;padding:11px 14px;border-top:1px solid var(--hair)}
+.tp-r:first-child{border-top:none}
+.tp-e{font-size:19px;flex:0 0 24px;text-align:center}
+.tp-r b{display:block;font-size:14px;font-weight:800;letter-spacing:-.01em}
+.tp-r i{display:block;font-style:normal;font-size:12.5px;line-height:1.5;color:var(--label2);margin-top:2px}
 </style>
 </head>
 <body>
@@ -2939,8 +2952,18 @@ function statsFor(games,upto){
       if(grp.length)nm(grp,'_ga',false,'_att');
     });
     pl.forEach(x=>{ if(x._att===undefined)x._att=0.5 });
+    /* Defending is scored within position too. How many your team lets in
+       depends enormously on where you play, so ranking a midfielder against
+       defenders quietly handed the award to the same positions every year.
+       Winning and turning up stay global — those mean the same wherever
+       you play. */
+    ['ATT','MID','DEF','GK'].forEach(pos=>{
+      const grp=pl.filter(x=>((player(x.id)||{}).pos||'MID')===pos);
+      if(grp.length)nm(grp,'cpg',true,'_def');
+    });
+    pl.forEach(x=>{ if(x._def===undefined)x._def=0.5 });
     nm(pl,'ppg',false,'_win1'); nm(pl,'wr',false,'_win2');
-    nm(pl,'cpg',true,'_def'); nm(pl,'P',false,'_app');
+    nm(pl,'P',false,'_app');
     pl.forEach(x=>{
       const win=(x._win1+x._win2)/2;
       x.index=Math.round((x._att*0.34 + win*0.28 + x._def*0.24 + x._app*0.14)*100);
@@ -3360,10 +3383,9 @@ function vHome(){
   app().innerHTML=`<div class="view active">
     <div class="wrap">${cloudBanner()}
       <div class="sky-hero">
-        <div class="sky-hero-t">LIVE · MATCHDAY ${fplNextGw()}</div>
+        <div class="sky-hero-t">${playedGws().length>=2?esc(season().name||""):`LIVE · MATCHDAY ${fplNextGw()}`}</div>
         <div class="sky-hero-b">Super Sunday</div>
       </div>
-      <div class="subtitle" style="padding:0 0 4px">${esc(S.name)} · ${g.length} league game${g.length===1?'':'s'} · ${goals} goals · ${S.players.filter(p=>p.active!==false).length} players</div>
       <div class="sechead">${lc.icon} ${esc(lc.name)} table</div>
       <div class="card"><div class="tw"><table class="hometbl">
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
@@ -4015,7 +4037,16 @@ function levelLadder(board){
     const seen=new Set();
     show=picks.filter(L=>{ if(seen.has(L.n))return false; seen.add(L.n); return true })
               .sort((a,b)=>b.n-a.n);
-    if(!show.length)show=LEVELS.slice(-3).reverse();
+    /* Someone at the top has no "next", and their level IS the top — which
+       collapsed to a single lonely row. Pad downwards so there is always
+       something to look at. */
+    if(show.length<3){
+      for(let i=LEVELS.length-1;i>=0&&show.length<3;i--){
+        const L=LEVELS[i];
+        if(!seen.has(L.n)){ seen.add(L.n); show.push(L); }
+      }
+      show.sort((a,b)=>b.n-a.n);
+    }
   }
   return `<div class="sechead">🪜 The ${LEVELS.length} levels</div>
     <div class="card ladder">
@@ -5200,12 +5231,32 @@ function fplMyTeam(m,locked){
   const rank=fplTable().findIndex(r=>r.m.pid===m.pid)+1;
 
   /* an FPL-style shirt: crest badge, name bar, points bar */
+  /* Two different jobs. In Points you are looking at a week that has finished:
+     the side that actually played it, what each of them scored, and nothing to
+     tap. In Pick team you are choosing for the week ahead: prices, swaps, the
+     captain armband. Sharing one shirt for both was why a finished gameweek
+     still offered transfers. */
+  const viewing = TMODE==='pts' && gws.length;
   const shirt=pid=>{
     const p=player(pid); if(!p)return '';
+    if(viewing){
+      const gw=teamGw();
+      const l=(gwLines(m,gw)||[]).find(x=>x.pid===pid);
+      const capThen=squadInGw(m,gw).captain===pid;
+      const mult=l?l.mult:1;
+      return `<div class="sh sh-view">
+        <div class="sh-top" onclick="openPlayer('${pid}')">
+          ${capThen?`<span class="sh-cap">${mult>2?'3C':'C'}</span>`:''}
+          <span class="sh-kit">${avatar(p,40)}</span>
+        </div>
+        <div class="sh-name">${esc(p.name.split(' ')[0])}</div>
+        <div class="sh-pts${l&&!l.played?' out':''}">${l?l.total:0}</div>
+        <div class="sh-sub">${l&&!l.played?'did not play':`GW${gw}`}</div>
+      </div>`;
+    }
     const isNew=!(m.squad||[]).includes(pid);
     const cap=d.captain===pid;
     const tc=(m.tcGws||[]).includes(fplNextGw());
-    const pts=last?fplPlayerGw(pid,last):0;
     return `<div class="sh ${isNew?'sh-new':''}">
       <button class="sh-top" onclick="fplSwapOut('${pid}')" title="Tap to replace">
         ${cap?`<span class="sh-cap">${tc?'3C':'C'}</span>`:''}
@@ -5214,7 +5265,7 @@ function fplMyTeam(m,locked){
       </button>
       <button class="sh-x" onclick="event.stopPropagation();fplDrop('${pid}')" title="Remove">✕</button>
       <div class="sh-name">${esc(p.name.split(' ')[0])}</div>
-      <div class="sh-pts">${pts}</div>
+      <div class="sh-pts">£${fplPrice(pid).toFixed(1)}</div>
       <button class="sh-c ${cap?'on':''}" onclick="event.stopPropagation();draftCaptain('${pid}')">${cap?'Captain':'Set captain'}</button>
     </div>`;
   };
@@ -5233,13 +5284,14 @@ function fplMyTeam(m,locked){
   const missing=FPL_RULES.slots.filter(pos=>!sh[pos]);
   const flex=Math.max(0,FPL_RULES.squadSize-d.squad.length-missing.length);
   const line=pos=>{
-    const ids=d.squad.filter(x=>(player(x)||{}).pos===pos);
-    const needOne=missing.includes(pos);
+    const src = viewing ? squadInGw(m,teamGw()).squad : d.squad;
+    const ids=src.filter(x=>(player(x)||{}).pos===pos);
+    const needOne=!viewing&&missing.includes(pos);
     if(!ids.length&&!needOne)return '';
     return `<div class="sh-line">${ids.map(shirt).join('')}
       ${needOne?emptySlot(pos,true):''}</div>`;
   };
-  const flexLine=()=>flex?`<div class="sh-line flexline">
+  const flexLine=()=>(!viewing&&flex)?`<div class="sh-line flexline">
       ${Array.from({length:flex},()=>emptySlot(null,false)).join('')}</div>`:'';
 
   return `
@@ -5248,7 +5300,9 @@ function fplMyTeam(m,locked){
       <div class="fh-row">
         <div class="fh-team"><div class="fh-tn">${esc(m.teamName)}</div>
           <div class="fh-mn">${esc(m.name)}${rank?` · ${ordinal(rank)}`:''}</div></div>
-        <div class="fh-gw"><b>${gws.length?gwTotal(m,teamGw()):gwPts}</b><span>${teamGw()?`GW${teamGw()}`:'points'}</span></div>
+        <div class="fh-gw">${(TMODE==='pick'&&gws.length)
+          ?`<b>GW${fplNextGw()}</b><span>picking for</span>`
+          :`<b>${gws.length?gwTotal(m,teamGw()):gwPts}</b><span>${teamGw()?`GW${teamGw()}`:'points'}</span>`}</div>
       </div>
       ${gws.length?chipRow(m,teamGw()):''}
       ${gws.length?`<div class="gwpager"${TMODE==='pick'?' style="display:none"':''}>
@@ -5281,6 +5335,7 @@ function fplMyTeam(m,locked){
     </div>
     ${gws.length&&TMODE==='pts'?gwSquadCard(m,teamGw()):''}
 
+    ${viewing?'':`
     ${need>0?`<button class="btn pri full" style="margin-top:10px" onclick="fplSwap()">
       + Add ${need} more player${need===1?'':'s'} <span style="opacity:.7">(${d.squad.length}/${FPL_RULES.squadSize})</span></button>`:''}
 
@@ -5334,6 +5389,7 @@ function fplMyTeam(m,locked){
       </div>
       <div class="note">One chip per gameweek. Anything you arm can be taken back off until that game is logged.</div>`;
     })()}
+    `}
 
     ${TMODE==='pick'?squadAnalysis(m):''}
 
@@ -6334,6 +6390,22 @@ function ratingFor(pid,g){
   if(gf===0&&pos==='ATT')r-=0.4;
   return Math.max(4.0,Math.min(10,Math.round(r*10)/10));
 }
+/* Ratings for a whole gameweek, not just the last game logged in it. A Sunday
+   can be more than one match — and with 9, 10 or 11 a side people often split
+   across two — so rating only the final game silently left players out. */
+function gwRatings(gw){
+  const gs=gamesInGw(gw); if(!gs.length)return [];
+  const by={};
+  gs.forEach(g=>matchRatings(g).forEach(x=>{
+    if(!by[x.id])by[x.id]={id:x.id,name:x.name,rs:[]};
+    by[x.id].rs.push(x.r);
+  }));
+  return Object.values(by).map(x=>({
+    id:x.id, name:x.name, n:x.rs.length,
+    r:Math.round((x.rs.reduce((t,v)=>t+v,0)/x.rs.length)*10)/10
+  })).sort((a,b)=>b.r-a.r);
+}
+
 function matchRatings(g){
   const ids=[...(g.teamA||[]),...(g.teamB||[])];
   return ids.map(id=>({id,name:(player(id)||{}).name||'—',r:ratingFor(id,g)}))
@@ -6444,6 +6516,46 @@ const PUNDITS=[
   {id:'klopp', n:'Klopp',      r:'Manages from the sideline',        e:'🤯', c:'#D62828'},
   {id:'pep',   n:'Pep',        r:'Has opinions about shape',         e:'🧠', c:'#00897B'},
 ];
+/* The press room is pundits reacting. This is the desk beside it: things the
+   numbers say that nobody would notice on the day. Every line is real data. */
+function talkingPoints(g){
+  if(!g)return [];
+  const out=[], st=statsAll(), nm=id=>(player(id)||{}).name||'—';
+  const played=[...(g.teamA||[]),...(g.teamB||[])];
+  const gws=playedGws(), gw=gws[gws.length-1];
+  /* biggest win of the season so far */
+  const all=allGames();
+  const marg=Math.abs((g.scoreA||0)-(g.scoreB||0));
+  const biggest=Math.max(...all.map(x=>Math.abs((x.scoreA||0)-(x.scoreB||0))));
+  if(marg>0&&marg===biggest&&all.length>1)
+    out.push({e:'📊',t:'Biggest margin of the season',d:`${g.scoreA}–${g.scoreB} is the widest gap anyone has managed so far.`});
+  /* a scoreline this league keeps producing */
+  const key=Math.max(g.scoreA||0,g.scoreB||0)+'-'+Math.min(g.scoreA||0,g.scoreB||0);
+  const same=all.filter(x=>Math.max(x.scoreA||0,x.scoreB||0)+'-'+Math.min(x.scoreA||0,x.scoreB||0)===key).length;
+  if(same>=3)out.push({e:'🔁',t:'That scoreline again',d:`${key.replace('-','–')} has now happened ${same} times this season. It is becoming this league's default.`});
+  /* longest current run among those who played */
+  const runs=played.map(id=>{const k=(st.find(x=>x.id===id)||{}).streak;
+      return {id,n:(k&&k.type==='W')?k.n:0}}).filter(x=>x.n>=3).sort((a,b)=>b.n-a.n);
+  if(runs[0])out.push({e:'🔥',t:'On a run',d:`${esc(nm(runs[0].id))} has won ${runs[0].n} in a row now.`});
+  /* who the market moved on */
+  const mv=(fpl().ticker||[]).filter(x=>x.gw===gw);
+  const up=mv.filter(x=>x.d>0).sort((a,b)=>b.d-a.d)[0];
+  const dn=mv.filter(x=>x.d<0).sort((a,b)=>a.d-b.d)[0];
+  if(up)out.push({e:'📈',t:'The market noticed',d:`${esc(nm(up.pid))} went up £${Math.abs(up.d).toFixed(1)}m after that.${dn?` ${esc(nm(dn.pid))} went the other way.`:''}`});
+  /* closest to a milestone */
+  const near=closingInRows()[0];
+  if(near)out.push({e:'⏳',t:'One to watch',d:`${esc(near.name)} — ${esc(near.t)}.`});
+  /* how the title race stands */
+  const tbl=st.filter(x=>x.P>0).sort(tableSort);
+  if(tbl.length>1&&gws.length>=2){
+    const gap=tbl[0].pts-tbl[1].pts;
+    out.push({e:'🏆',t:'At the top',d:gap===0
+      ? `${esc(tbl[0].name)} and ${esc(tbl[1].name)} are level on ${tbl[0].pts} points — split by win rate.`
+      : `${esc(tbl[0].name)} leads ${esc(tbl[1].name)} by ${gap} point${gap===1?'':'s'}.`});
+  }
+  return out.slice(0,5);
+}
+
 function pressRoom(g){
   if(!g)return [];
   const rs=matchRatings(g);
@@ -6548,7 +6660,11 @@ function fplHomeBlock(){
    A broadcast-styled read of the season: the award races, man of the match,
    a deadline-day price ticker, and Monday-Night-Football style analysis. */
 function skyAwards(){
-  return [...skyAwardsCore(), ...skyPosAwards()];
+  /* Overall first, then the three position winners right beneath it, then the
+     rest — so you can see who won it and who won it in your position together. */
+  const core=skyAwardsCore(), pos=skyPosAwards();
+  const isPots=a=>String(a.key).startsWith('pots_');
+  return [core[0], ...pos.filter(isPots), ...core.slice(1), ...pos.filter(a=>!isPots(a))].filter(Boolean);
 }
 function skyAwardsCore(){
   const st=statsAll().filter(x=>x.P>0);
@@ -6563,7 +6679,7 @@ function skyAwardsCore(){
        a second Golden Boot. */
     mk('potm','Player of the Season','🏆',(a,b)=>b.index-a.index,
        x=>`${x.index} rating`,
-       'The player rating out of 100 — attacking 34% (against your own position), winning 28%, defending 24%, appearances 14%'),
+       'Your season out of 100 — scored against others in your position, so every position can win it.'),
     mk('boot','Golden Boot','👟',(a,b)=>b.G-a.G||b.gpg-a.gpg,
        x=>`${x.G} goal${x.G===1?'':'s'}`,'Most goals this season'),
     mk('creator','Playmaker','🅰️',(a,b)=>(b.A||0)-(a.A||0)||b.apg-a.apg,
@@ -6583,6 +6699,14 @@ function skyPosAwards(){
     return rows.length?{key,label,emoji,sub,rows}:null;
   };
   return [
+    /* The same rating, but run inside each position — so the best defender is
+       named even in a season an attacker sweeps the overall award. */
+    build('pots_att','Attacker of the Season','⚔️','Best rating of the attackers',
+      ['ATT'],(a,b)=>b.index-a.index, x=>`${x.index} rating`),
+    build('pots_mid','Midfielder of the Season','🎩','Best rating of the midfielders',
+      ['MID'],(a,b)=>b.index-a.index, x=>`${x.index} rating`),
+    build('pots_def','Defender of the Season','🛡️','Best rating of the defenders',
+      ['DEF','GK'],(a,b)=>b.index-a.index, x=>`${x.index} rating`),
     build('glove','Golden Defence','🧤','Fewest let in per game — defenders only (min 3)',
       ['DEF','GK'],(a,b)=>(a.GA/a.P)-(b.GA/b.P)||b.cs-a.cs,
       x=>`${(x.GA/Math.max(x.P,1)).toFixed(1)} conceded/gm`),
@@ -7128,7 +7252,7 @@ function vSky(){
     <div class="wrap">${cloudBanner()}
 
     <div class="sky-hero">
-      <div class="sky-hero-t">LIVE · MATCHDAY ${fplNextGw()}</div>
+      <div class="sky-hero-t">${playedGws().length>=2?esc(season().name||""):`LIVE · MATCHDAY ${fplNextGw()}`}</div>
       <div class="sky-hero-b">Super Sunday</div>
     </div>
 
@@ -7167,11 +7291,18 @@ function vSky(){
           <span class="bu-v">${esc((player(b.leader.id)||{}).name||'')} v ${esc((player(b.second.id)||{}).name||'')}</span></div>`:''}
       </div>`})()}
 
-    ${(function(){const rs=last?matchRatings(last):[]; if(!rs.length)return '';
+    ${(function(){
+      const gws=playedGws(), gw=gws[gws.length-1];
+      const rs=gw!=null?gwRatings(gw):[]; if(!rs.length)return '';
+      const gs=gamesInGw(gw);
+      const played=new Set(); gs.forEach(x=>[...(x.teamA||[]),...(x.teamB||[])].forEach(i=>played.add(i)));
+      const off=season().players.filter(x=>x.active!==false&&!played.has(x.id));
       return `<div class="sky-h">Player ratings</div>
       <div class="sky-card">
         <div class="sky-cap"><span class="sky-em">⭐</span>
-          <div><b>${esc(last.round||fdate(last.date))}</b><i>${last.scoreA}–${last.scoreB} · out of 10</i></div></div>
+          <div><b>Gameweek ${gw}</b><i>${gs.map(x=>`${x.scoreA}–${x.scoreB}`).join(' · ')} · out of 10</i></div></div>
+        ${off.length?`<div class="note" style="padding:2px 14px 10px">All ${rs.length} who played are rated${gs.length>1?`, across ${gs.length} games`:''}.
+          ${off.length} sat out: ${off.slice(0,6).map(x=>esc(x.name)).join(' · ')}${off.length>6?` +${off.length-6} more`:''}.</div>`:''}
         ${rs.map((x,i)=>`<div class="sky-row ${i===0?'lead':''}" onclick="openPlayer('${x.id}')">
           <span class="sky-pos">${i+1}</span>
           <span class="sky-av">${avatar(p(x.id),26)}</span>
@@ -7182,15 +7313,11 @@ function vSky(){
 <div class="sky-h">The races</div>
     ${awards.map(podium).join('')}
 
-    ${(function(){const pr=last?pressRoom(last):[]; if(!pr.length)return '';
-      return `<div class="sky-h mnf">The press room</div>
-      <div class="press">${pr.map(x=>`
-        <div class="press-c" style="--pc:${x.p.c}">
-          <div class="press-av">${x.p.e}</div>
-          <div class="press-b">
-            <div class="press-n">${esc(x.p.n)}</div>
-            <div class="press-q">“${esc(x.q)}”</div>
-          </div></div>`).join('')}</div>`})()}
+    ${(function(){const tp=last?talkingPoints(last):[]; if(!tp.length)return '';
+      return `<div class="sky-h">Talking points</div>
+      <div class="sky-card">${tp.map(x=>`<div class="tp-r">
+        <span class="tp-e">${x.e}</span>
+        <div><b>${x.t}</b><i>${x.d}</i></div></div>`).join('')}</div>`})()}
 
     ${(function(){const h=potmHistory(); if(!h.length)return '';
       const w=h[h.length-1], past=h.slice(0,-1).reverse();
@@ -7232,6 +7359,16 @@ function vSky(){
           <div class="mnf-b">${esc(n.b)}</div>
           <div class="mnf-d">${esc(n.d)}</div>
         </div>`).join('')}</div>`:''}
+        ${(function(){const pr=last?pressRoom(last):[]; if(!pr.length)return '';
+      return `<div class="sky-h mnf">The press room</div>
+      <div class="press">${pr.map(x=>`
+        <div class="press-c" style="--pc:${x.p.c}">
+          <div class="press-av">${x.p.e}</div>
+          <div class="press-b">
+            <div class="press-n">${esc(x.p.n)}</div>
+            <div class="press-q">“${esc(x.q)}”</div>
+          </div></div>`).join('')}</div>`})()}
+
     <div style="height:20px"></div>
   </div></div>`;
 }
@@ -9294,9 +9431,10 @@ function vGames(){
 
 function vHistory(){
   $('#navMount').innerHTML=navbar();
-  const tabs=[['records','Records'],['moments','Moments'],['fame','Champions'],['rivals','Rivalries'],['improve','Risers']];
+  const tabs=[['season','The Season'],['records','Records'],['moments','Moments'],['fame','Champions'],['rivals','Rivalries'],['improve','Risers']];
   let body='';
-  if(HMODE==='records')body=histRecords();
+  if(HMODE==='season')body=seasonReview();
+  else if(HMODE==='records')body=histRecords();
   else if(HMODE==='moments')body=histMoments();
   else if(HMODE==='fame')body=histFame();
   else if(HMODE==='rivals')body=histRivals();
@@ -9310,6 +9448,145 @@ function vHistory(){
 }
 
 /* ---------- ALL-TIME RECORDS ---------- */
+/* ============ THE SEASON ============
+   The year as one page. Live from the first few games, so it earns its place
+   all season rather than appearing once in May — and when the season closes
+   this is the review. Everything here is built from data already computed
+   elsewhere; nothing new is invented. */
+function seasonTeam(){
+  const st=statsAll().filter(x=>x.P>0);
+  if(st.length<3)return null;
+  const of=pos=>st.filter(x=>((player(x.id)||{}).pos||'MID')===pos).sort((a,b)=>b.index-a.index);
+  const att=of('ATT').slice(0,2), mid=of('MID').slice(0,2), def=of('DEF').slice(0,2);
+  const gk=of('GK')[0]||null;
+  const star=[...st].sort((a,b)=>b.index-a.index)[0]||null;
+  return {gk,def,mid,att,star};
+}
+/* league position after each gameweek, for the top few */
+function seasonArcs(n){
+  const gws=playedGws(); if(gws.length<2)return {gws:[],rows:[]};
+  const st=statsAll().filter(x=>x.P>0).sort(tableSort).slice(0,n||5);
+  const rows=st.map(x=>({id:x.id,name:x.name,pos:[]}));
+  gws.forEach((gw,i)=>{
+    const upto=allGames().filter(g=>gwOf(g)<=gw);
+    const tbl=statsFor(upto).filter(x=>x.P>0).sort(tableSort);
+    rows.forEach(r=>{
+      const k=tbl.findIndex(x=>x.id===r.id);
+      r.pos.push(k<0?null:k+1);
+    });
+  });
+  return {gws,rows,size:Math.max(2,statsAll().filter(x=>x.P>0).length)};
+}
+function seasonReview(){
+  const gws=playedGws();
+  if(gws.length<1)return `<div class="empty"><div class="ee">📖</div><h3>The season hasn't started</h3>
+    <p>Log a game and this page starts writing itself.</p></div>`;
+  const S=season(), g=allGames();
+  const goals=g.reduce((t,x)=>t+(x.scoreA||0)+(x.scoreB||0),0);
+  const sm=seasonSummary(S);
+  const st=statsAll().filter(x=>x.P>0);
+  const arcs=seasonArcs(5);
+  const sg=scoreGrid();
+  const pairs=partnerships(3).slice(0,4);
+  const ms=moments();
+  const big=[...g].sort((a,b)=>Math.abs((b.scoreA||0)-(b.scoreB||0))-Math.abs((a.scoreA||0)-(a.scoreB||0))).slice(0,3);
+  const p=id=>player(id)||{name:'—'};
+  const W=300,H=110,LINE=['#12B76A','#3B82F6','#F59E0B','#EF4444','#8B5CF6'];
+  const cell=x=>x?`<div class="totw-p ${x.id===(seasonTeam().star||{}).id?'star':''}" onclick="openPlayer('${x.id}')">
+      ${x.id===(seasonTeam().star||{}).id?'<span class="totw-star">★</span>':''}
+      ${avatar(p(x.id),38)}<span class="totw-n">${esc(String(x.name).split(' ')[0])}</span>
+      <span class="totw-pts">${x.index}</span></div>`:'';
+  const team=seasonTeam();
+  return `
+    <div class="tiles" style="margin-bottom:4px">
+      ${tile(gws.length,'Gameweeks')}${tile(g.length,'Games')}${tile(goals,'Goals')}
+      ${tile(st.length,'Players')}
+    </div>
+
+    ${sm.champ?`<div class="sechead">🏆 As it stands</div>
+    <div class="card">
+      ${[['🏆','Top of the table',sm.champ,`${sm.champ.pts} pts`],
+         ['👟','Golden Boot',sm.boot,sm.boot?`${sm.boot.G} goal${sm.boot.G===1?'':'s'}`:''],
+         ['🅰️','Playmaker',sm.maker,sm.maker?`${sm.maker.A} assist${sm.maker.A===1?'':'s'}`:''],
+         ['🛡️','Best defence',sm.wall,sm.wall?`${(sm.wall.GA/Math.max(1,sm.wall.P)).toFixed(1)} a game`:'']]
+        .filter(r=>r[2]).map(([e,l,x,v])=>`
+        <div class="row tap" onclick="openPlayer('${x.id}')">
+          <div style="font-size:20px;flex:0 0 28px">${e}</div>
+          <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${l}</div></div>
+          <div class="rv" style="font-weight:800">${esc(v)}</div></div>`).join('')}
+    </div>`:''}
+
+    ${team?`<div class="sechead">⭐ Team of the season</div>
+    <div class="card pad"><div class="totw">
+      ${team.att.length?`<div class="totw-line">${team.att.map(cell).join('')}</div>`:''}
+      ${team.mid.length?`<div class="totw-line">${team.mid.map(cell).join('')}</div>`:''}
+      ${team.def.length?`<div class="totw-line">${team.def.map(cell).join('')}</div>`:''}
+      ${team.gk?`<div class="totw-line">${cell(team.gk)}</div>`:''}
+    </div>
+    <div class="note" style="padding:8px 0 0">Picked on season rating, best in each position. ★ is the highest rated of everyone.</div></div>`:''}
+
+    ${arcs.rows.length&&arcs.gws.length>1?`<div class="sechead">📈 The table, week by week</div>
+    <div class="card pad">
+      <svg viewBox="-4 -8 ${W+8} ${H+16}" style="width:100%;height:150px;overflow:visible">
+        ${arcs.rows.map((r,i)=>{
+          const pts=r.pos.map((v,k)=>v==null?null:`${(k/Math.max(1,r.pos.length-1))*W},${((v-1)/Math.max(1,arcs.size-1))*H}`)
+            .filter(Boolean).join(' ');
+          return pts?`<polyline points="${pts}" fill="none" stroke="${LINE[i%LINE.length]}"
+            stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`:'';
+        }).join('')}
+      </svg>
+      <div class="legend-dots">${arcs.rows.map((r,i)=>`<span><i style="background:${LINE[i%LINE.length]}"></i>
+        ${esc(r.name)} <b>${r.pos.filter(Boolean).slice(-1)[0]||'—'}</b></span>`).join('')}</div>
+      <div class="note" style="padding:10px 0 0">Where the top five sat after each gameweek. Higher is better.</div>
+    </div>`:''}
+
+    ${big.length?`<div class="sechead">💥 Days to remember</div>
+    <div class="card">${big.map(x=>`
+      <div class="row tap" onclick="openMatch('${x.id}')">
+        <div style="font-size:20px;flex:0 0 28px">⚽</div>
+        <div class="rt"><div class="r1">${x.scoreA}–${x.scoreB}</div>
+          <div class="r2">${esc(x.round||'')}${x.round?' · ':''}${esc(fdate(x.date))}</div></div>
+        <div class="rv" style="font-weight:800">${Math.abs((x.scoreA||0)-(x.scoreB||0))} margin</div></div>`).join('')}</div>`:''}
+
+    ${pairs.length?`<div class="sechead">🤝 Who wins together</div>
+    <div class="card">${pairs.map(x=>`
+      <div class="row"><div class="rt">
+        <div class="r1">${esc(p(x.a).name)} <span style="color:var(--label3)">&amp;</span> ${esc(p(x.b).name)}</div>
+        <div class="r2">${x.P} together · ${x.W}W ${x.D}D ${x.L}L</div></div>
+        <div class="rv" style="font-weight:800;color:var(--green)">${Math.round(x.wr*100)}%</div></div>`).join('')}</div>`:''}
+
+    ${sg.games?`<div class="sechead">🔥 Every scoreline</div>
+    <div class="card pad">
+      <div class="hm">${(function(){let out='';
+        for(let hi=sg.top;hi>=0;hi--){
+          out+=`<div class="hm-row"><span class="hm-ax">${hi}</span>`;
+          for(let lo=0;lo<=sg.top;lo++){
+            if(lo>hi){out+='<span class="hm-c off"></span>';continue}
+            const n=sg.grid[hi+'-'+lo]||0;
+            const a=n?(0.16+0.84*(n/sg.max)):0;
+            out+=`<span class="hm-c" style="background:rgba(18,183,106,${a.toFixed(2)})" title="${hi}–${lo}: ${n}">${n||''}</span>`;
+          }
+          out+='</div>';
+        }
+        out+='<div class="hm-row"><span class="hm-ax"></span>';
+        for(let lo=0;lo<=sg.top;lo++)out+=`<span class="hm-ax b">${lo}</span>`;
+        return out+'</div>';
+      })()}</div>
+      <div class="note" style="padding:10px 0 0">Winning score down the side, losing score along the bottom.</div>
+    </div>`:''}
+
+    ${ms.length?`<div class="sechead">✨ Moments of the season</div>
+    <div class="card">${ms.slice().reverse().slice(0,6).map(m=>`
+      <div class="row tap" onclick="openMoment('${esc(m.id)}')">
+        <div style="font-size:20px;flex:0 0 28px">${m.e}</div>
+        <div class="rt"><div class="r1">${esc(m.t)}</div>
+          <div class="r2">${esc(fdate(m.date))} · ${m.owners.length} ${m.owners.length===1?'owner':'owners'}</div></div>
+        ${chev}</div>`).join('')}</div>`:''}
+
+    <button class="btn pri full" style="margin-top:14px" onclick="exportWrapped()">📸 Share the season</button>
+    <div class="note">Everything above updates as the season goes. When it ends, this is the review.</div>`;
+}
+
 function histRecords(){
   const lt=lifetime(), games=allTimeGames();
   if(!lt.length)return `<div class="empty"><div class="ee">📜</div><h3>No history yet</h3>
