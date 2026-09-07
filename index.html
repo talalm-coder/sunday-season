@@ -3005,7 +3005,7 @@ const XP={ assist:12,app:10,win:25,draw:12,goal:20,hat:60,streak:15,
      keeps paying well down the scale. Weighted by position the same way the
      FPL side is, so defenders are actually rewarded for defending. */
   defend:[70,58,49,41,34,28,22,16],
-  defendW:{GK:1.35,DEF:1.12,MID:0.7,ATT:0.45}};
+  defendW:{GK:1.25,DEF:1.00,MID:0.72,ATT:0.55}};
 const LVN=[['👟','Academy Prospect'],['🎽','Youth Team'],['📋','Squad Number'],['⚡','First Appearance'],['🎯','Squad Player'],
 ['🔁','Rotation Option'],['🧩','Regular Starter'],['🛠️','Ever Present'],['📈','Breakout Season'],['💪','Proven Performer'],
 ['🔥','In Form'],['💥','Match Winner'],['⭐','Standout Season'],['🧠','Big Game Player'],['💎','Star Man'],
@@ -3059,9 +3059,12 @@ const CH=[
  {id:'ws8',g:'Winning',e:'🌪️',n:'Unstoppable',d:'Win 8 in a row',x:480,f:m=>[Math.min(best(m.seq,s=>s.r==='W'),8),8]},
  {id:'unb6',g:'Winning',e:'🪄',n:'Invincible',d:'Go 6 games unbeaten',x:300,f:m=>[Math.min(best(m.seq,s=>s.r!=='L'),6),6]},
  {id:'unb10',g:'Winning',e:'🧿',n:'The Arsenal Run',d:'Go 10 games unbeaten',x:550,f:m=>[Math.min(best(m.seq,s=>s.r!=='L'),10),10]},
- {id:'cs1',g:'Defending',e:'🧤',n:'Shut Out',d:'Keep a clean sheet',x:120,f:m=>[Math.min(m.cs,1),1]},
- {id:'cs4',g:'Defending',e:'🧱',n:'The Wall',d:'Keep 2 clean sheets',x:280,f:m=>[Math.min(m.cs,2),2]},
- {id:'cs10',g:'Defending',e:'🏰',n:'Fortress',d:'Keep 4 clean sheets',x:460,f:m=>[Math.min(m.cs,4),4]},
+ {id:'cs1',g:'Defending',e:'🧤',n:'Shut Out',d:'Concede 3 or fewer in a game',x:120,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=3).length,1),1]},
+ {id:'cs4',g:'Defending',e:'🧱',n:'The Wall',d:'Concede 4 or fewer in 5 games',x:280,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=4).length,5),5]},
+ {id:'cs10',g:'Defending',e:'🏰',n:'Fortress',d:'Concede 4 or fewer in 10 games',x:460,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=4).length,10),10]},
  {id:'p30',g:'Milestones',e:'📊',n:'Thirty Points',d:'Reach 30 points',x:180,f:m=>[Math.min(m.pts,30),30]},
  {id:'p60',g:'Milestones',e:'💯',n:'Sixty Points',d:'Reach 60 points',x:340,f:m=>[Math.min(m.pts,60),60]},
  {id:'idx75',g:'Milestones',e:'💎',n:'Elite Rating',d:'Reach a POTY index of 75',x:400,f:m=>[Math.min(m.index,75),75]},
@@ -3073,7 +3076,8 @@ const CH=[
  {id:'g20',g:'Scoring',e:'🎯',n:'Twenty Club',d:'Score 20 goals',x:400,f:m=>[Math.min(m.G,20),20]},
  {id:'gpg1',g:'Scoring',e:'⚡',n:'A Goal A Game',d:'Average a goal per game (min 8 games)',x:480,
    f:m=>[m.P>=8?Math.min(Math.round(m.gpg*100),100):0,100]},
- {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Keep 6 clean sheets',x:640,f:m=>[Math.min(m.cs,6),6]},
+ {id:'cs15',g:'Defending',e:'🛡️',n:'Impassable',d:'Concede 3 or fewer in 6 games',x:640,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=3).length,6),6]},
  {id:'gd25',g:'Milestones',e:'📈',n:'On The Right Side',d:'Reach +20 goal difference',x:360,
    f:m=>[Math.min(Math.max(m.GD,0),20),20]},
  {id:'p100',g:'Milestones',e:'🏆',n:'Seventy Five',d:'Reach 75 points',x:600,f:m=>[Math.min(m.pts,75),75]},
@@ -3086,8 +3090,8 @@ const CH=[
    f:m=>[Math.min(best(m.seq,s=>s.ga<=4),4),4]},
  {id:'tight',g:'Defending',e:'🔒',n:'Tight At The Back',d:'Concede under 4 per game (min 8 games)',x:380,
    f:m=>[m.P>=8?Math.min(Math.round((5-Math.min(m.cpg,5))/1.5*100),100):0,100]},
- {id:'cs8',g:'Defending',e:'🥶',n:'Back-to-Back',d:'Concede 2 or fewer in 2 straight games',x:340,
-   f:m=>[Math.min(best(m.seq,s=>s.ga<=2),2),2]},
+ {id:'cs8',g:'Defending',e:'🥶',n:'Back-to-Back',d:'Concede 4 or fewer in 2 straight games',x:340,
+   f:m=>[Math.min(best(m.seq,s=>s.ga<=4),2),2]},
  {id:'solid',g:'Defending',e:'🏗️',n:'Foundations',d:'Win 6 games conceding 4 or fewer',x:420,
    f:m=>[Math.min(m.seq.filter(s=>s.ga<=4&&s.r==='W').length,6),6]},
 
@@ -3117,8 +3121,8 @@ const CH=[
    f:m=>[Math.min(m.seq.filter(s=>s.ga<=6).length,18),18]},
  {id:'cpg1',g:'Defending',e:'📉',n:'Under Six A Game',d:'Concede under 6 per game (min 8 games)',x:520,
    f:m=>[m.P>=8?Math.min(Math.round((7-Math.min(m.cpg,7))/1*100),100):0,100]},
- {id:'wall5',g:'Defending',e:'🧊',n:'Ice Cold',d:'Concede 3 or fewer in 3 straight games',x:600,
-   f:m=>[Math.min(best(m.seq,s=>s.ga<=3),3),3]},
+ {id:'wall5',g:'Defending',e:'🧊',n:'Ice Cold',d:'Concede 5 or fewer in 3 straight games',x:600,
+   f:m=>[Math.min(best(m.seq,s=>s.ga<=5),3),3]},
  {id:'gaunder',g:'Defending',e:'🥅',n:'Rearguard',d:'Average under 5.5 conceded (min 10 games)',x:400,
    f:m=>[m.P>=10?Math.min(Math.round((7-Math.min(m.cpg,7))/1.5*100),100):0,100]},
  {id:'defgoal',g:'Defending',e:'🎯',n:'Up For A Corner',d:'Score 3 goals as a defender',x:340,
@@ -3133,11 +3137,12 @@ const CH=[
    f:m=>[Math.min(Math.max(0,...m.seq.map(s=>s.goals||0)),5),5]},
  {id:'scorerun8',g:'Scoring',e:'🌋',n:'On Fire',d:'Score in 8 games running',x:700,
    f:m=>[Math.min(best(m.seq,s=>(s.goals||0)>0),8),8]},
- {id:'cs20',g:'Defending',e:'🏔️',n:'The Great Wall',d:'Keep 8 clean sheets',x:760,f:m=>[Math.min(m.cs,8),8]},
- {id:'csrate',g:'Defending',e:'📐',n:'One In Four',d:'Keep a clean sheet in a quarter of your games (min 10)',x:600,
-   f:m=>[m.P>=10?Math.min(Math.round(m.cs/m.P*100),25):0,25]},
- {id:'gd40',g:'Defending',e:'🛡️',n:'Immovable',d:'Reach +25 goal difference',x:560,
-   f:m=>[Math.min(Math.max(m.GD,0),25),25]},
+ {id:'cs20',g:'Defending',e:'🏔️',n:'The Great Wall',d:'Concede 3 or fewer in 12 games',x:760,
+   f:m=>[Math.min(m.seq.filter(s=>s.ga<=3).length,12),12]},
+ {id:'csrate',g:'Defending',e:'📐',n:'One In Four',d:'Concede 3 or fewer in a third of your games (min 10)',x:600,
+   f:m=>[m.P>=10?Math.min(m.seq.filter(s=>s.ga<=3).length,Math.ceil(m.P/3)):0,m.P>=10?Math.ceil(m.P/3):1]},
+ {id:'gd40',g:'Defending',e:'🛡️',n:'Immovable',d:'Reach +12 goal difference',
+   x:560, f:m=>[Math.min(Math.max(m.GD,0),12),12]},
 
  /* ---- all-round work, which is where midfielders live ---- */
  {id:'b2b',g:'Team',e:'🔄',n:'Box To Box',d:'Score 8 goals and win 8 games conceding under 3',x:620,
@@ -6693,8 +6698,10 @@ function skyPosAwards(){
   const st=statsAll().filter(x=>x.P>0);
   const posOf=id=>((player(id)||{}).pos)||'MID';
   const p=id=>player(id)||{name:'—'};
-  const build=(key,label,emoji,sub,pool,sortf,fmt)=>{
-    const rows=st.filter(x=>pool.includes(posOf(x.id))&&x.P>=3).sort(sortf).slice(0,3)
+  const build=(key,label,emoji,sub,pool,sortf,fmt,minP)=>{
+    /* Position awards used to need three games each, so for the first weeks of
+       a season they simply did not appear. They show from game one now. */
+    const rows=st.filter(x=>pool.includes(posOf(x.id))&&x.P>=(minP||1)).sort(sortf).slice(0,3)
       .map(x=>({id:x.id,name:p(x.id).name,v:fmt(x)}));
     return rows.length?{key,label,emoji,sub,rows}:null;
   };
@@ -6709,10 +6716,10 @@ function skyPosAwards(){
       ['DEF','GK'],(a,b)=>b.index-a.index, x=>`${x.index} rating`),
     build('glove','Golden Defence','🧤','Fewest let in per game — defenders only (min 3)',
       ['DEF','GK'],(a,b)=>(a.GA/a.P)-(b.GA/b.P)||b.cs-a.cs,
-      x=>`${(x.GA/Math.max(x.P,1)).toFixed(1)} conceded/gm`),
+      x=>`${(x.GA/Math.max(x.P,1)).toFixed(1)} conceded/gm`,3),
     build('mid','Golden Midfielder','🎩','Best return from midfield (min 3)',
       ['MID'],(a,b)=>(b.pts+b.G*2)-(a.pts+a.G*2),
-      x=>`${x.pts} pts · ${x.G} goal${x.G===1?'':'s'}`),
+      x=>`${x.pts} pts · ${x.G} goal${x.G===1?'':'s'}`,3),
   ].filter(Boolean);
 }
 
@@ -7313,11 +7320,7 @@ function vSky(){
 <div class="sky-h">The races</div>
     ${awards.map(podium).join('')}
 
-    ${(function(){const tp=last?talkingPoints(last):[]; if(!tp.length)return '';
-      return `<div class="sky-h">Talking points</div>
-      <div class="sky-card">${tp.map(x=>`<div class="tp-r">
-        <span class="tp-e">${x.e}</span>
-        <div><b>${x.t}</b><i>${x.d}</i></div></div>`).join('')}</div>`})()}
+    )()}
 
     ${(function(){const h=potmHistory(); if(!h.length)return '';
       const w=h[h.length-1], past=h.slice(0,-1).reverse();
