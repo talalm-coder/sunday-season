@@ -172,18 +172,24 @@ tbody td{padding:11px 6px;font-size:15px;white-space:nowrap;border-bottom:.5px s
 tbody tr:last-child td{border-bottom:none}
 tbody tr{cursor:pointer;transition:background .12s}
 tbody tr:active{background:var(--fill)}
-td.pos{width:38px;color:var(--label2);font-size:14px;padding-left:16px}
+td.pos{width:38px;color:var(--label2);font-size:14px;padding-left:13px}
 td.nm{font-weight:500;max-width:180px;overflow:hidden;text-overflow:ellipsis}
 td.c{text-align:center;color:var(--label2);font-size:14px;width:34px}
 td.pts{text-align:right;font-weight:700;font-size:16px;padding-right:16px;width:46px}
-tr.qual td.pos{border-left:3px solid var(--green);padding-left:13px}
-tr.qual2 td.pos{border-left:3px solid var(--blue);padding-left:13px}
+tr.qual td.pos{border-left:3px solid var(--green);padding-left:13px}  /* 3 + 13 = 16 */
+tr.qual2 td.pos{border-left:3px solid var(--blue);padding-left:13px}  /* 3 + 13 = 16 */
 /* Premier League style qualification zones */
 /* ---- qualification zones: solid bar + numbered badge + row tint ---- */
-tr[class*="z-"] td.pos{position:relative;padding-left:15px}
+/* Every position number sits in the same 22px box whether or not the row is
+   in a qualification zone, so 1 in a gold badge lines up exactly with a plain
+   6 three rows below. The coloured bar is absolutely positioned, so it never
+   shifts the text. */
+.posn{display:inline-flex;align-items:center;justify-content:center;
+  min-width:22px;height:22px;border-radius:7px;font-size:12.5px;font-weight:800;
+  padding:0 5px;box-sizing:border-box}
+tr[class*="z-"] td.pos{position:relative}
 tr[class*="z-"] td.pos::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px}
-tr[class*="z-"] td.pos .posn{display:inline-flex;align-items:center;justify-content:center;
-  min-width:22px;height:22px;border-radius:7px;font-size:12.5px;font-weight:800;color:#fff;padding:0 5px}
+tr[class*="z-"] td.pos .posn{color:#fff}
 tr.z-champ td.pos::before{background:linear-gradient(180deg,#F5D76E,#C9A227)}
 tr.z-ucl   td.pos::before{background:#0A84FF}
 tr.z-eur   td.pos::before{background:#FF6B00}
@@ -451,8 +457,13 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 }
 /* sticky player column so tables stay readable while scrolling sideways */
 @media(max-width:640px){
+  /* The name column is pinned 38px in ONLY when a rank column sits to its
+     left. Stats has no rank column, so pinning its name at 38px detached it
+     from a header pinned at 0 — a visible 38px step. */
   table.sticky td.pos,table.sticky thead td:first-child{position:sticky;left:0;z-index:2;background:var(--card)}
-  table.sticky td.nm,table.sticky thead td:nth-child(2){position:sticky;left:38px;z-index:2;background:var(--card)}
+  table.sticky td.nm{position:sticky;left:38px;z-index:2;background:var(--card)}
+  table.sticky td.nm:first-child{left:0}
+  table.sticky:has(td.pos) thead td:nth-child(2){position:sticky;left:38px;z-index:2;background:var(--card)}
   table.sticky td.nm{box-shadow:6px 0 6px -6px rgba(0,0,0,.18)}
 }
 .scrollhint{font-size:11px;color:var(--label3);padding:6px 4px 0;display:none}
@@ -2435,6 +2446,13 @@ tr.lifetime td{font-weight:800;border-top:1.5px solid var(--sep)}
 .wx{color:var(--label3);font-weight:500}
 
 .venseg button{font-size:13px}
+
+/* The rank header must sit on exactly the same left edge as the numbers below
+   it. td.pos is 13px; the generic thead padding was 16px, so the # sat 3px to
+   the right of every number in its column. */
+/* Only tables WITH a rank column need the 13px header inset. Stats leads with
+   the name column, which sits at 16px, so forcing 13px there broke it instead. */
+table:has(td.pos) thead td:first-child{padding-left:13px!important}
 </style>
 </head>
 <body>
@@ -4602,7 +4620,7 @@ function vPlayer(pid){
         if(!sv)return mine?`<div class="sechead">🏃 Physical</div>
           <div class="card pad">
             <div class="note" style="padding:0 0 12px">Type in what your watch showed after a game —
-              Whoop, Garmin, Apple Watch, Google Fit, anything. Minutes, average and max heart rate.</div>
+              Whoop, Garmin, Apple Watch, Google Fit, anything. Calories, average and max heart rate.</div>
             <button class="btn sec full" onclick="physAdd('${pid}')">+ Add numbers for a game</button>
           </div>`:'';
         const who=STRAVA_WHO[pid];
@@ -4610,6 +4628,7 @@ function vPlayer(pid){
            so both synced and typed entries chart the same way */
         const acts=physAll(pid);
         const num=k=>acts.map(a=>+a[k]).filter(v=>isFinite(v)&&v>0);
+        const kcals=num('kcal');
         const mins=num('mins');
         const hrs =num('hr');
         const mx  =num('maxHr');
@@ -4624,22 +4643,22 @@ function vPlayer(pid){
           if(early==null||late==null||!early)return null;
           return Math.round(100*(late-early)/early);
         };
-        const tHr=trend(hrs), tMin=trend(mins);
+        const tHr=trend(hrs), tKcal=trend(kcals);
         const arrow=v=>v==null?'':`<span class="trd ${v>2?'up':v<-2?'dn':''}">${v>0?'▲':v<0?'▼':'▬'} ${Math.abs(v)}%</span>`;
         return `<div class="sechead">🏃 Physical</div>
         <div class="card pad">
           <div class="phys">
-            <div><b>${sv.mins!=null?Math.round(sv.mins):'—'}</b><span>min a game</span></div>
+            <div><b>${sv.kcal!=null?Math.round(sv.kcal):'—'}</b><span>kcal a game</span></div>
             <div><b>${sv.hr!=null?Math.round(sv.hr):'—'}</b><span>avg bpm</span></div>
             <div><b>${sv.maxHr!=null?Math.round(sv.maxHr):'—'}</b><span>max bpm</span></div>
             ${sv.hasGps&&sv.km!=null?`<div><b>${sv.km.toFixed(1)}</b><span>km a game</span></div>`
-              :sv.kcal!=null?`<div><b>${Math.round(sv.kcal)}</b><span>kcal a game</span></div>`
+              :sv.mins!=null?`<div><b>${Math.round(sv.mins)}</b><span>min a game</span></div>`
               :`<div><b>${sv.n}</b><span>game${sv.n===1?'':'s'} logged</span></div>`}
           </div>
           ${hrs.length>1?`<div class="phhead">Heart rate ${arrow(tHr)}</div>
             ${lineChart(hrs,`Average bpm each game. The dashed line is your ${Math.round(avg(hrs))} average.`,avg(hrs))}`:''}
-          ${mins.length>1?`<div class="phhead">Minutes played ${arrow(tMin)}</div>
-            ${lineChart(mins,`How long you lasted, game by game.`,avg(mins))}`:''}
+          ${kcals.length>1?`<div class="phhead">Calories ${arrow(tKcal)}</div>
+            ${lineChart(kcals,`What you burned each game.`,avg(kcals))}`:''}
           ${kms.length>1?`<div class="phhead">Distance</div>
             ${lineChart(kms,`Kilometres covered each game.`,avg(kms))}`:''}
           ${mx.length>1&&hrs.length>1?`<div class="phhead">Effort range</div>
@@ -4808,7 +4827,10 @@ async function loadStrava(){
    and Whoop the same. So anyone can type the three numbers their watch shows
    after a game. Stored in the season document, so it syncs and backs up with
    everything else. */
-const PHYS_BOUNDS={mins:[20,150], hr:[80,200], maxHr:[100,220], km:[0.5,20]};
+/* Calories rather than minutes: Whoop, Garmin and Apple Watch all show it
+   after a session, and it reflects effort rather than just time on the pitch.
+   Minutes still come through from Strava when a device reports them. */
+const PHYS_BOUNDS={kcal:[80,2000], hr:[80,200], maxHr:[100,220], km:[0.5,20], mins:[20,150]};
 function physLog(){ const s=season(); if(!s.phys)s.phys=[]; return s.phys }
 const physFor=pid=>physLog().filter(x=>x.pid===pid);
 const physGame=(pid,gid)=>physLog().find(x=>x.pid===pid&&x.gid===gid)||null;
@@ -4860,7 +4882,7 @@ function stravaAxes(pid){
     const lo=Math.min(...vals),hi=Math.max(...vals);
     return hi===lo?60:Math.round(8+92*((v-lo)/(hi-lo)));
   };
-  return { Stamina:scale('mins',mine.mins), 'Work rate':scale('hr',mine.hr) };
+  return { Stamina:scale('kcal',mine.kcal), 'Work rate':scale('hr',mine.hr) };
 }
 
 
@@ -4899,8 +4921,8 @@ async function physAdd(pid,gid){
     if(!isFinite(n)||n<lo||n>hi){ toast(`${label} must be between ${lo} and ${hi}`); return undefined }
     return n;
   };
-  const mins=await ask('Minutes played','How long you were on','mins',prev.mins);
-  if(mins===null||mins===undefined)return;
+  const kcal=await ask('Calories','What your watch says you burned','kcal',prev.kcal);
+  if(kcal===null||kcal===undefined)return;
   const hr=await ask('Average heart rate','The average your watch showed','hr',prev.hr);
   if(hr===null||hr===undefined)return;
   const maxHr=await ask('Max heart rate','The highest it hit','maxHr',prev.maxHr);
@@ -4909,13 +4931,14 @@ async function physAdd(pid,gid){
   if(km===null||km===undefined)return;
 
   if(hr!==''&&maxHr!==''&&+maxHr<=+hr){ toast('Max heart rate must be higher than the average'); return }
-  if(mins===''&&hr===''&&maxHr===''&&km===''){ toast('Nothing entered'); return }
+  if(kcal===''&&hr===''&&maxHr===''&&km===''){ toast('Nothing entered'); return }
 
   const log=physLog();
   const i=log.findIndex(x=>x.pid===pid&&x.gid===g.id);
   const row={ pid, gid:g.id, src:'typed', by:me.pid, at:Date.now(),
-    mins:mins===''?null:+mins, hr:hr===''?null:+hr,
-    maxHr:maxHr===''?null:+maxHr, km:km===''?null:+km };
+    kcal:kcal===''?null:+kcal, hr:hr===''?null:+hr,
+    maxHr:maxHr===''?null:+maxHr, km:km===''?null:+km,
+    mins:prev.mins??null };
   if(i>=0) log[i]=row; else log.push(row);
   await save(); haptic('light'); toast('Saved'); render();
 }
@@ -4937,13 +4960,13 @@ function physRows(pid){
     const who=r.src==='strava'?'<span class="psrc sy">SYNCED</span>':'<span class="psrc">TYPED</span>';
     return `<div class="physrow">
       <span class="pr-g">${g?esc(g.round||fmtDate(g.date)):'—'}</span>
-      <span class="pr-v">${r.mins!=null?Math.round(r.mins)+"'":'—'}</span>
+      <span class="pr-v">${r.kcal!=null?Math.round(r.kcal):'—'}</span>
       <span class="pr-v">${r.hr!=null?Math.round(r.hr):'—'}</span>
       <span class="pr-v">${r.maxHr!=null?Math.round(r.maxHr):'—'}</span>
       ${who}
       ${mine&&r.src!=='strava'?`<button class="pr-x" onclick="physRemove('${pid}','${r.gid}')">×</button>`:'<span class="pr-x"></span>'}
     </div>`}).join('')}
-    <div class="physrow physhead"><span class="pr-g"></span><span class="pr-v">MIN</span>
+    <div class="physrow physhead"><span class="pr-g"></span><span class="pr-v">KCAL</span>
       <span class="pr-v">AVG</span><span class="pr-v">MAX</span><span></span><span class="pr-x"></span></div>
   </div>`;
 }
