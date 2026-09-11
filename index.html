@@ -2412,6 +2412,29 @@ tr.lifetime td{font-weight:800;border-top:1.5px solid var(--sep)}
 .bellbtn.on{color:var(--tint)}
 .bell-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;
   background:var(--green);border:2px solid var(--bg)}
+
+/* beta tag beside a section heading */
+.betatag{font-size:9px;font-weight:800;letter-spacing:.1em;padding:2px 6px;border-radius:20px;
+  background:var(--tint);color:#fff;margin-left:6px;vertical-align:middle;text-transform:none}
+/* the per-game physical list */
+.physlist{margin-top:14px;padding-top:12px;border-top:1px solid var(--sep);
+  display:flex;flex-direction:column-reverse;gap:2px}
+.physrow{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:5px 0}
+.physrow+.physrow{border-top:1px solid var(--sep)}
+.pr-g{flex:1;color:var(--label2);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pr-v{flex:0 0 38px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.psrc{flex:0 0 50px;text-align:center;font-size:8.5px;font-weight:800;letter-spacing:.06em;
+  padding:2px 0;border-radius:20px;background:var(--fill);color:var(--label3)}
+.psrc.sy{background:rgba(18,183,106,.15);color:var(--green)}
+.pr-x{flex:0 0 20px;text-align:center;background:none;border:none;color:var(--label3);
+  font-size:16px;line-height:1;padding:0}
+.physhead{border-top:none!important;padding-bottom:2px}
+.physhead .pr-v{font-size:9px;font-weight:800;letter-spacing:.06em;color:var(--label3)}
+
+/* weather: one quiet line, never a heading */
+.wx{color:var(--label3);font-weight:500}
+
+.venseg button{font-size:13px}
 </style>
 </head>
 <body>
@@ -2747,7 +2770,7 @@ const PUSH_FN      = SUPA_URL + '/functions/v1/send-push';
 /* Strava. The client id is public by design — the secret lives only in the
    Edge Function. Players are sent to Strava with their player id in `state`
    so the callback knows who to attach the account to. */
-const STRAVA_CLIENT_ID = 'REPLACE_WITH_STRAVA_CLIENT_ID';
+const STRAVA_CLIENT_ID = '278674';
 const STRAVA_AUTH_FN   = SUPA_URL + '/functions/v1/strava-auth';
 
 const supaConfigured = /^https:\/\/.+\.supabase\.co\/?$/.test(SUPA_URL) && SUPA_KEY.length>20 && !/YOUR_SUPABASE/.test(SUPA_URL);
@@ -4576,15 +4599,21 @@ function vPlayer(pid){
         const sv=stravaSummary(pid);
         const me=fplMine();
         const mine=me&&me.pid===pid;
-        if(!sv)return '';
+        if(!sv)return mine?`<div class="sechead">🏃 Physical</div>
+          <div class="card pad">
+            <div class="note" style="padding:0 0 12px">Type in what your watch showed after a game —
+              Whoop, Garmin, Apple Watch, Google Fit, anything. Minutes, average and max heart rate.</div>
+            <button class="btn sec full" onclick="physAdd('${pid}')">+ Add numbers for a game</button>
+          </div>`:'';
         const who=STRAVA_WHO[pid];
-        const acts=stravaFor(pid).slice()
-          .sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
-        const num=(k,f)=>acts.map(a=>+a[k]).map(v=>isFinite(v)&&v>0?(f?f(v):v):null);
-        const mins=num('moving_sec',v=>v/60).filter(v=>v!=null);
-        const hrs =num('avg_hr').filter(v=>v!=null);
-        const mx  =num('max_hr').filter(v=>v!=null);
-        const kms =num('distance_m',v=>v/1000).filter(v=>v!=null);
+        /* physAll already returns rows in game order with normalised field names,
+           so both synced and typed entries chart the same way */
+        const acts=physAll(pid);
+        const num=k=>acts.map(a=>+a[k]).filter(v=>isFinite(v)&&v>0);
+        const mins=num('mins');
+        const hrs =num('hr');
+        const mx  =num('maxHr');
+        const kms =num('km');
         const avg=a=>a.length?a.reduce((t,v)=>t+v,0)/a.length:null;
         /* how the last three compare with the ones before — the same idea as
            the form line on the rating chart */
@@ -4604,7 +4633,8 @@ function vPlayer(pid){
             <div><b>${sv.hr!=null?Math.round(sv.hr):'—'}</b><span>avg bpm</span></div>
             <div><b>${sv.maxHr!=null?Math.round(sv.maxHr):'—'}</b><span>max bpm</span></div>
             ${sv.hasGps&&sv.km!=null?`<div><b>${sv.km.toFixed(1)}</b><span>km a game</span></div>`
-              :`<div><b>${sv.kcal!=null?Math.round(sv.kcal):'—'}</b><span>kcal a game</span></div>`}
+              :sv.kcal!=null?`<div><b>${Math.round(sv.kcal)}</b><span>kcal a game</span></div>`
+              :`<div><b>${sv.n}</b><span>game${sv.n===1?'':'s'} logged</span></div>`}
           </div>
           ${hrs.length>1?`<div class="phhead">Heart rate ${arrow(tHr)}</div>
             ${lineChart(hrs,`Average bpm each game. The dashed line is your ${Math.round(avg(hrs))} average.`,avg(hrs))}`:''}
@@ -4614,7 +4644,7 @@ function vPlayer(pid){
             ${lineChart(kms,`Kilometres covered each game.`,avg(kms))}`:''}
           ${mx.length>1&&hrs.length>1?`<div class="phhead">Effort range</div>
             <div class="hrband">${acts.slice(-8).map(a=>{
-              const lo=+a.avg_hr||0, hi=+a.max_hr||0;
+              const lo=+a.hr||0, hi=+a.maxHr||0;
               if(!lo||!hi)return '';
               const top=Math.max(...mx), base=Math.min(...hrs)*0.9;
               const sp=Math.max(1,top-base);
@@ -4622,8 +4652,12 @@ function vPlayer(pid){
                 <i style="bottom:${Math.max(0,100*(lo-base)/sp)}%;height:${Math.max(4,100*(hi-lo)/sp)}%"></i></div>`;
             }).join('')}</div>
             <div class="note" style="padding:6px 0 0">Average to maximum heart rate, last ${Math.min(8,acts.length)} games.</div>`:''}
-          <div class="note" style="padding:10px 0 0">From ${esc(who||'Strava')} · ${sv.n} game${sv.n===1?'':'s'} matched.
-            Only games ${mine?'you were':'they were'} logged as playing count.</div>
+          ${physRows(pid)}
+          ${mine?`<button class="btn sec full" style="margin-top:12px" onclick="physAdd('${pid}')">
+            + Add numbers for a game</button>`:''}
+          <div class="note" style="padding:10px 0 0">${sv.synced?`${sv.synced} synced`:''}${
+            sv.synced&&sv.typed?' · ':''}${sv.typed?`${sv.typed} typed in`:''} · only games ${
+            mine?'you were':'they were'} logged as playing count.</div>
         </div>`;
       })()}
 
@@ -4679,11 +4713,79 @@ function vPlayer(pid){
     </div></div></div>`}
 
 
+
+/* ============ WEATHER ============
+   Half the season is indoors, so this only ever applies to games marked
+   outdoor. Free archive API — no key, no account, no per-user anything —
+   which is why it works for all 29 rather than ten.
+   Deliberately no forecasts and no insights: it decorates a game you
+   already logged, nothing more. */
+const WX_CACHE_KEY='wx_v1';
+function wxCoords(){
+  const s=season();
+  return (s.lat!=null&&s.lng!=null)?{lat:+s.lat,lng:+s.lng}:{lat:25.2048,lng:55.2708}; /* Dubai */
+}
+/* Open-Meteo's archive lags a few days, so recent games come from the
+   forecast endpoint, which keeps ~3 months of past days. */
+function wxUrl(date){
+  const {lat,lng}=wxCoords();
+  const age=(Date.now()-new Date(date+'T12:00:00').getTime())/86400000;
+  const base=age>7
+    ? 'https://archive-api.open-meteo.com/v1/archive'
+    : 'https://api.open-meteo.com/v1/forecast';
+  return `${base}?latitude=${lat}&longitude=${lng}&start_date=${date}&end_date=${date}`
+    +`&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max`
+    +`&timezone=auto`;
+}
+async function wxFetch(date){
+  try{
+    const r=await fetch(wxUrl(date));
+    if(!r.ok)return null;
+    const d=await r.json();
+    const dy=d&&d.daily; if(!dy||!dy.time||!dy.time.length)return null;
+    const t=dy.temperature_2m_max?.[0], lo=dy.temperature_2m_min?.[0];
+    const mm=dy.precipitation_sum?.[0], w=dy.windspeed_10m_max?.[0];
+    if(t==null)return null;
+    return {t:Math.round(t), lo:lo!=null?Math.round(lo):null,
+            mm:mm!=null?+mm.toFixed(1):null, w:w!=null?Math.round(w):null};
+  }catch(e){ return null }
+}
+/* Fill in anything missing, oldest first, a few at a time so a long back
+   catalogue never blocks the interface. */
+let WX_RUNNING=false;
+async function wxBackfill(limit){
+  if(WX_RUNNING)return; WX_RUNNING=true;
+  try{
+    const todo=allGames().filter(g=>g.venue==='out'&&!g.wx&&g.date).slice(0,limit||6);
+    let got=0;
+    for(const g of todo){
+      const w=await wxFetch(g.date);
+      if(w){ g.wx=w; got++ } else { g.wx={none:true} }
+    }
+    if(got){ await save(); render() }
+  }catch(e){}
+  WX_RUNNING=false;
+}
+/* one quiet line, never a heading */
+function wxLine(g){
+  if(!g||g.venue!=='out')return '';
+  const w=g.wx; if(!w||w.none||w.t==null)return '';
+  const bits=[`${w.t}°`];
+  if(w.mm>=1)bits.push(w.mm>=6?'wet':'a bit of rain');
+  if(w.w>=25)bits.push('windy');
+  return `<span class="wx"> · ${bits.join(' · ')}</span>`;
+}
+const wxHot=()=>{
+  const g=allGames().filter(x=>x.wx&&!x.wx.none&&x.wx.t!=null);
+  if(!g.length)return null;
+  return g.reduce((a,b)=>b.wx.t>a.wx.t?b:a);
+};
+
 /* ============ STRAVA ============
    Read-only from the app's side. Activities are attached by the webhook
    function; the app just displays them. Nothing here can create a game or
    mark anyone as having played — Strava only decorates games you logged. */
-let STRAVA=[], STRAVA_WHO={};              /* activities; pid -> athlete name */
+let STRAVA=[], STRAVA_WHO={}, STRAVA_STATE={};              /* activities; pid -> athlete name */
 const stravaConfigured=()=>!STRAVA_CLIENT_ID.startsWith('REPLACE');
 
 async function loadStrava(){
@@ -4694,24 +4796,54 @@ async function loadStrava(){
       supa.from('strava_connected').select('pid,athlete_name'),
     ]);
     STRAVA=acts||[];
-    STRAVA_WHO={}; (who||[]).forEach(w=>STRAVA_WHO[w.pid]=w.athlete_name||'Connected');
+    STRAVA_WHO={}; STRAVA_STATE={};
+    (who||[]).forEach(w=>{
+      STRAVA_WHO[w.pid]=w.athlete_name||'Connected';
+      STRAVA_STATE[w.pid]={lapsed:!!w.lapsed, at:w.lapsed_at, last:w.last_ok};
+    });
   }catch(e){ /* the profile simply shows no physical data */ }
+}
+/* ---- typed-in physical ----
+   Not everyone can connect a wearable — Strava caps a free app at ten people,
+   and Whoop the same. So anyone can type the three numbers their watch shows
+   after a game. Stored in the season document, so it syncs and backs up with
+   everything else. */
+const PHYS_BOUNDS={mins:[20,150], hr:[80,200], maxHr:[100,220], km:[0.5,20]};
+function physLog(){ const s=season(); if(!s.phys)s.phys=[]; return s.phys }
+const physFor=pid=>physLog().filter(x=>x.pid===pid);
+const physGame=(pid,gid)=>physLog().find(x=>x.pid===pid&&x.gid===gid)||null;
+
+/* A Strava row and a typed row describe the same thing, so normalise both
+   into one shape before anything reads them. Strava wins when both exist —
+   a device beats a memory. */
+function physAll(pid){
+  const out=stravaFor(pid).map(a=>({
+    gid:a.game_id, mins:+a.moving_sec?+a.moving_sec/60:null,
+    hr:+a.avg_hr||null, maxHr:+a.max_hr||null,
+    km:+a.distance_m?+a.distance_m/1000:null, kcal:+a.calories||null,
+    at:a.start_at, src:'strava'
+  }));
+  const have=new Set(out.map(x=>x.gid));
+  physFor(pid).forEach(x=>{ if(!have.has(x.gid))out.push({...x,src:x.src||'typed'}) });
+  return out.sort((a,b)=>{
+    const ga=allGames().find(g=>g.id===a.gid), gb=allGames().find(g=>g.id===b.gid);
+    return (ga?ga.created:0)-(gb?gb.created:0);
+  });
 }
 const stravaFor=pid=>STRAVA.filter(a=>a.pid===pid);
 const stravaGame=(pid,gid)=>STRAVA.find(a=>a.pid===pid&&a.game_id===gid)||null;
 
-/* one player's physical picture, averaged over their attached games */
+/* one player's physical picture, averaged over every game with data */
 function stravaSummary(pid){
-  const a=stravaFor(pid); if(!a.length)return null;
+  const a=physAll(pid); if(!a.length)return null;
   const avg=(k)=>{const v=a.map(x=>+x[k]).filter(v=>isFinite(v)&&v>0);
     return v.length?v.reduce((t,x)=>t+x,0)/v.length:null};
   return {
     n:a.length,
-    mins:avg('moving_sec')!=null?avg('moving_sec')/60:null,
-    km:avg('distance_m')!=null?avg('distance_m')/1000:null,
-    hr:avg('avg_hr'), maxHr:avg('max_hr'), kcal:avg('calories'),
-    effort:avg('suffer_score'),
-    hasGps:a.some(x=>+x.distance_m>0),
+    mins:avg('mins'), km:avg('km'), hr:avg('hr'), maxHr:avg('maxHr'), kcal:avg('kcal'),
+    hasGps:a.some(x=>+x.km>0),
+    typed:a.filter(x=>x.src!=='strava').length,
+    synced:a.filter(x=>x.src==='strava').length,
   };
 }
 
@@ -4720,7 +4852,8 @@ function stravaSummary(pid){
    have no data. */
 function stravaAxes(pid){
   const mine=stravaSummary(pid); if(!mine||mine.n<1)return null;
-  const pool=[...new Set(STRAVA.map(a=>a.pid))].map(p=>stravaSummary(p)).filter(Boolean);
+  const pool=[...new Set([...STRAVA.map(a=>a.pid),...physLog().map(x=>x.pid)])]
+    .map(p=>stravaSummary(p)).filter(Boolean);
   const scale=(k,v)=>{
     const vals=pool.map(p=>p[k]).filter(x=>x!=null);
     if(v==null||vals.length<2){return 60}
@@ -4728,6 +4861,91 @@ function stravaAxes(pid){
     return hi===lo?60:Math.round(8+92*((v-lo)/(hi-lo)));
   };
   return { Stamina:scale('mins',mine.mins), 'Work rate':scale('hr',mine.hr) };
+}
+
+
+/* ---- entering your own numbers ----
+   Bounded so a typo or a joke cannot poison the averages, and every entry is
+   stamped with who logged it and when, so the data is auditable rather than
+   anonymous. Deliberately NOT wired to XP or challenges — the moment a number
+   is worth points, someone games it. */
+async function physAdd(pid,gid){
+  const me=fplMine();
+  if(!me)  { toast('Enter your code first'); return }
+  if(me.pid!==pid && !isAdmin()){ toast('You can only log your own numbers'); return }
+
+  const games=allGames().filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(pid))
+    .slice().sort((a,b)=>b.created-a.created);
+  if(!games.length){ toast('No games played yet'); return }
+
+  let g = gid ? games.find(x=>x.id===gid) : null;
+  if(!g){
+    const pick=await askChoice('Which game?','Pick the match these numbers came from',
+      games.slice(0,8).map(x=>({
+        label:`${x.round||fmtDate(x.date)} · ${x.scoreA}–${x.scoreB}${physGame(pid,x.id)?' ✓':''}`,
+        value:x.id})));
+    if(!pick)return;
+    g=games.find(x=>x.id===pick);
+  }
+  if(!g)return;
+
+  const prev=physGame(pid,g.id)||{};
+  const ask=async(label,hint,key,cur)=>{
+    const [lo,hi]=PHYS_BOUNDS[key];
+    const v=await askText(label,`${hint} (${lo}–${hi})`,cur!=null?String(cur):'','Next');
+    if(v==null)return null;
+    if(v.trim()==='')return '';
+    const n=parseFloat(v);
+    if(!isFinite(n)||n<lo||n>hi){ toast(`${label} must be between ${lo} and ${hi}`); return undefined }
+    return n;
+  };
+  const mins=await ask('Minutes played','How long you were on','mins',prev.mins);
+  if(mins===null||mins===undefined)return;
+  const hr=await ask('Average heart rate','The average your watch showed','hr',prev.hr);
+  if(hr===null||hr===undefined)return;
+  const maxHr=await ask('Max heart rate','The highest it hit','maxHr',prev.maxHr);
+  if(maxHr===null||maxHr===undefined)return;
+  const km=await ask('Distance in km','Leave blank if your device has no GPS','km',prev.km);
+  if(km===null||km===undefined)return;
+
+  if(hr!==''&&maxHr!==''&&+maxHr<=+hr){ toast('Max heart rate must be higher than the average'); return }
+  if(mins===''&&hr===''&&maxHr===''&&km===''){ toast('Nothing entered'); return }
+
+  const log=physLog();
+  const i=log.findIndex(x=>x.pid===pid&&x.gid===g.id);
+  const row={ pid, gid:g.id, src:'typed', by:me.pid, at:Date.now(),
+    mins:mins===''?null:+mins, hr:hr===''?null:+hr,
+    maxHr:maxHr===''?null:+maxHr, km:km===''?null:+km };
+  if(i>=0) log[i]=row; else log.push(row);
+  await save(); haptic('light'); toast('Saved'); render();
+}
+
+async function physRemove(pid,gid){
+  if(!await askConfirm('Remove these numbers?','The entry for this game will be deleted.','Remove'))return;
+  const log=physLog();
+  const i=log.findIndex(x=>x.pid===pid&&x.gid===gid);
+  if(i>=0){ log.splice(i,1); await save(); toast('Removed'); render(); }
+}
+
+/* the per-game list, so every number is visible and challengeable */
+function physRows(pid){
+  const rows=physAll(pid).slice().reverse().slice(0,8);
+  if(!rows.length)return '';
+  const me=fplMine(); const mine=me&&me.pid===pid;
+  return `<div class="physlist">${rows.map(r=>{
+    const g=allGames().find(x=>x.id===r.gid);
+    const who=r.src==='strava'?'<span class="psrc sy">SYNCED</span>':'<span class="psrc">TYPED</span>';
+    return `<div class="physrow">
+      <span class="pr-g">${g?esc(g.round||fmtDate(g.date)):'—'}</span>
+      <span class="pr-v">${r.mins!=null?Math.round(r.mins)+"'":'—'}</span>
+      <span class="pr-v">${r.hr!=null?Math.round(r.hr):'—'}</span>
+      <span class="pr-v">${r.maxHr!=null?Math.round(r.maxHr):'—'}</span>
+      ${who}
+      ${mine&&r.src!=='strava'?`<button class="pr-x" onclick="physRemove('${pid}','${r.gid}')">×</button>`:'<span class="pr-x"></span>'}
+    </div>`}).join('')}
+    <div class="physrow physhead"><span class="pr-g"></span><span class="pr-v">MIN</span>
+      <span class="pr-v">AVG</span><span class="pr-v">MAX</span><span></span><span class="pr-x"></span></div>
+  </div>`;
 }
 
 function stravaConnect(){
@@ -4749,9 +4967,18 @@ function stravaRow(){
   const who=STRAVA_WHO[me.pid];
   const n=stravaFor(me.pid).length;
   const ready=stravaConfigured();
-  return `<div class="sechead">🏃 Strava</div>
+  return `<div class="sechead">🏃 Strava <span class="betatag">BETA</span></div>
     <div class="card">
-      <div class="row${ready&&!who?' tap':''}"${ready&&!who?' onclick="stravaConnect()"':''}>
+      ${(function(){
+        const st=STRAVA_STATE[me.pid]||{};
+        /* A lapsed subscription must never look like a working connection —
+           otherwise people play, see nothing appear, and assume it is broken. */
+        if(who&&st.lapsed)return `<div class="row tap" onclick="stravaConnect()">
+          <div class="rt"><div class="r1">Sync paused</div>
+            <div class="r2">Strava stopped accepting us — usually a lapsed subscription.
+              Add your numbers by hand below, or tap to reconnect.</div></div>
+          <span class="ichip" style="background:#F59E0B;color:#fff;border-color:#F59E0B">PAUSED</span></div>`;
+        return `<div class="row${ready&&!who?' tap':''}"${ready&&!who?' onclick="stravaConnect()"':''}>
         <div class="rt"><div class="r1">${who?'Connected as '+esc(who):ready?'Connect Strava':'Strava not set up yet'}</div>
           <div class="r2">${who
             ? (n?`${n} game${n===1?'':'s'} matched so far`:'Record your next game and it will appear here')
@@ -4759,7 +4986,8 @@ function stravaRow(){
                     : 'Once the admin finishes setup, connect here for heart rate and effort on every game'}</div></div>
         ${who?`<span class="ichip" style="background:var(--green);color:#fff;border-color:var(--green)">ON</span>`
           :ready?chev:`<span class="ichip">SOON</span>`}
-      </div>
+      </div>`;
+      })()}
     </div>`;
 }
 
@@ -7942,7 +8170,8 @@ function mnfNotes(){
 }
 
 /* ============ MATCH CENTRE ============ */
-function openMatch(id){ pushBack(); app()._gid=id; VIEW='match'; render(); window.scrollTo(0,0); }
+function openMatch(id){ try{wxBackfill(3)}catch(e){}
+ pushBack(); app()._gid=id; VIEW='match'; render(); window.scrollTo(0,0); }
 function vMatch(gid){
   const g=allGames().find(x=>x.id===gid); if(!g){go('fixtures');return}
   const c=comps().find(x=>x.id===g.compId);
@@ -7968,7 +8197,7 @@ function vMatch(gid){
         <div class="mc-n">${a}<span>–</span>${b}</div>
         <div class="mc-t ${b>a?'w':''}">Team B</div>
       </div>
-      <div class="mc-date">${fdate(g.date)}</div>
+      <div class="mc-date">${fdate(g.date)}${g.venue==='in'?' · indoor':''}${wxLine(g)}</div>
       <div class="mc-res">${a===b?'Draw':`Team ${a>b?'A':'B'} won`}</div>
     </div>
     <div class="sechead">Report</div>
@@ -8890,6 +9119,8 @@ function momentCard(m,pid,full){
       ${chip('⚽',`${f.g.scoreA}–${f.g.scoreB}`)}
       ${chip('👥',`${f.played.length} played`)}
       ${f.goals?chip('🥅',`${f.goals} goal${f.goals===1?'':'s'}`):''}
+      ${f.g.venue==='out'&&f.g.wx&&!f.g.wx.none&&f.g.wx.t!=null
+        ? chip('🌡',`${f.g.wx.t}°${f.g.wx.mm>=1?' · rain':''}`) : ''}
       ${f.best?chip('⭐',`${esc(f.best.name)} ${f.best.r}`):''}
     </div>`:`<div class="mfoot"><span>${esc(fdate(m.date))}${m.round?' · '+esc(m.round):''} · ${m.score}</span></div>`}
     ${full&&f?`
@@ -10659,6 +10890,13 @@ function seasonReview(){
       ${tile(gws.length,'Gameweeks')}${tile(g.length,'Games')}${tile(goals,'Goals')}
       ${tile(st.length,'Players')}
     </div>
+    ${(function(){
+      const h=wxHot(); if(!h)return '';
+      const out=allGames().filter(x=>x.venue==='out').length;
+      if(!out)return '';
+      return `<div class="note" style="padding:0 4px 10px">Hottest outing: ${h.wx.t}° for
+        ${esc(h.round||fdate(h.date))}.</div>`;
+    })()}
 
     ${sm.champ?`<div class="sechead">🏆 As it stands</div>
     <div class="card">
@@ -12233,6 +12471,7 @@ function nextRound(cid){
 function newGame(){ track('game_created');if(!requireAdmin())return;
   const cid=(comp().type==='league'?comp().id:lgComp().id);
   G={id:null,compId:cid,date:new Date().toISOString().slice(0,10),round:nextRound(cid),
+     venue:(season().lastVenue||'out'),
      A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},assists:{},sa:0,sb:0,q:'',__sel:new Set()};
   gameSheet()}
 function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x.id===id);if(!g)return;
@@ -12284,7 +12523,12 @@ function _paintGame(){
     <div class="chips">${comps().map(c=>`<button class="${c.id===G.compId?'on':''}" onclick="pickComp('${c.id}')">${c.icon} ${esc(c.name)}</button>`).join('')}</div>
     <div class="grid g2" style="margin-top:14px">
       <div><div class="lbl" style="padding-top:0">Date</div><input type="date" value="${G.date}" onchange="G.date=this.value"></div>
-      <div><div class="lbl" style="padding-top:0">Round</div><input value="${esc(G.round)}" placeholder="GW1" oninput="G.round=this.value"></div></div>
+      <div><div class="lbl" style="padding-top:0">Round</div><input value="${esc(G.round)}" placeholder="GW1" oninput="G.round=this.value"></div>
+      <div style="grid-column:1/-1"><div class="lbl">Where</div>
+        <div class="seg venseg">
+          <button class="${(G.venue||'out')==='out'?'on':''}" onclick="G.venue='out';gameSheet()">Outdoor</button>
+          <button class="${G.venue==='in'?'on':''}" onclick="G.venue='in';gameSheet()">Indoor</button>
+        </div></div></div>
 
     <div class="lbl">Pick the sides <span style="text-transform:none;font-weight:400;color:var(--label3)">${cA} v ${cB}</span></div>
     <div class="pgteams">${teamCard('A')}${teamCard('B')}</div>
@@ -12447,13 +12691,18 @@ async function saveGame(){ track('game_completed');if(!requireAdmin())return;
   const posSnap={}; [...G.A,...G.B].forEach(pid=>{const pl=player(pid); if(pl)posSnap[pid]=pl.pos||'MID'});
   const g={id:G.id||uid(),compId:G.compId,created:G.id?(S.games.find(x=>x.id===G.id)?.created||Date.now()):Date.now(),
     date:G.date,round:(G.round||'').trim(),teamA:[...G.A],teamB:[...G.B],fillA:[...G.fillA],fillB:[...G.fillB],
-    pos:posSnap,goals:{...G.goals},assists:{...(G.assists||{})},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D'};
+    pos:posSnap,goals:{...G.goals},assists:{...(G.assists||{})},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D',
+    venue:G.venue||'out'};
+  S.lastVenue=g.venue;
+  /* keep whatever weather was already fetched for this game */
+  if(G.id){const old=S.games.find(x=>x.id===G.id); if(old&&old.wx)g.wx=old.wx}
   if(G.id)S.games[S.games.findIndex(x=>x.id===G.id)]=g;else S.games.push(g);
   await save();closeSheet();
   const i=allGames().findIndex(x=>x.id===g.id),ms=feed().filter(e=>e.i===i);
   render();
   recordOvr();
   try{await fplAfterGame()}catch(e){}
+  try{ setTimeout(()=>wxBackfill(2),1200) }catch(e){}
   /* Wages, bet settlement, predictions and sponsor money all move real balances.
      They ran AFTER the save above, so none of it was ever written down — the
      payouts existed only until the next reload. Persist once they are done. */
@@ -13024,6 +13273,7 @@ document.addEventListener('keydown',e=>{
      safe and self-healing: anything owed from a week that was logged before the
      save-ordering fix lands now. */
   try{ await loadStrava(); stravaAfterRedirect(); }catch(e){}
+  try{ setTimeout(()=>wxBackfill(8),2500) }catch(e){}
   try{ refreshPushState(); }catch(e){}
   try{
     if(playedGws().length){
