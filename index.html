@@ -2341,6 +2341,77 @@ tr.lifetime td{font-weight:800;border-top:1.5px solid var(--sep)}
 /* a list value is always the same weight — rows that set nothing inline were
    falling back to regular text, which is what made lists look mismatched */
 .rv{font-weight:800}
+
+/* ---- the rating header: one number, what it means, and where it ranks ---- */
+.idxcard{background:var(--inset);border:1px solid var(--cardline);border-radius:16px;
+  padding:16px 16px 14px;margin:4px 0 4px}
+.idxcard-top{display:flex;gap:16px;align-items:flex-start}
+.idxcard-n{flex:0 0 auto;text-align:center;min-width:76px}
+.idxcard-v{font-size:52px;font-weight:900;letter-spacing:-.05em;line-height:.92;
+  font-variant-numeric:tabular-nums}
+.idxcard-k{font-size:9.5px;font-weight:800;letter-spacing:.16em;color:var(--label3);margin-top:6px}
+.idxcard-m{flex:1;min-width:0;padding-top:2px}
+.idxcard-arc{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+.idxcard-sub{font-size:12.5px;color:var(--label3);margin-top:3px;line-height:1.4}
+.idxcard-chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.ichip{font-size:10px;font-weight:800;letter-spacing:.04em;padding:3px 8px;border-radius:20px;
+  background:var(--card);border:1px solid var(--cardline);color:var(--label2);white-space:nowrap}
+.idxbar{height:6px;border-radius:3px;background:var(--sep);overflow:hidden;margin-top:14px}
+.idxbar i{display:block;height:100%;border-radius:3px;
+  background:linear-gradient(90deg,#F59E0B,var(--tint))}
+
+/* ---- attributes as bars under the wheel ---- */
+.axbars{display:flex;flex-direction:column;gap:7px;margin-top:14px}
+.axb{display:flex;align-items:center;gap:9px}
+.axb-k{flex:0 0 84px;font-size:12px;font-weight:600;color:var(--label2)}
+.axb-t{flex:1;height:7px;border-radius:4px;background:var(--sep);overflow:hidden}
+.axb-t i{display:block;height:100%;border-radius:4px;transition:width .4s cubic-bezier(.32,.72,0,1)}
+.axb b{flex:0 0 26px;text-align:right;font-size:12.5px;font-weight:800;font-variant-numeric:tabular-nums}
+.axnote{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;padding-top:12px;
+  border-top:1px solid var(--sep);font-size:12px;color:var(--label3)}
+.axnote b{color:var(--label);font-weight:700}
+
+/* ---- contribution ---- */
+.dnstat{display:flex;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--sep)}
+.dnstat > div{flex:1;text-align:center}
+.dnstat b{display:block;font-size:17px;font-weight:800;font-variant-numeric:tabular-nums;
+  letter-spacing:-.02em}
+.dnstat span{display:block;font-size:10px;color:var(--label3);margin-top:3px;line-height:1.3}
+@media(max-width:370px){
+  .idxcard-v{font-size:44px}
+  .idxcard-arc{font-size:17px}
+  .axb-k{flex:0 0 72px;font-size:11.5px}
+}
+
+/* physical stats from a wearable */
+.phys{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.phys > div{background:var(--card);border:1px solid var(--cardline);border-radius:12px;padding:12px 6px;text-align:center}
+.phys b{display:block;font-size:20px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.phys span{display:block;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--label3);margin-top:4px}
+@media(max-width:370px){.phys{grid-template-columns:repeat(2,1fr)}}
+
+/* strava mark in the squad list */
+.stmark{color:var(--tint);font-weight:700}
+/* physical trends */
+.phhead{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--label3);margin:16px 0 4px;display:flex;align-items:center;gap:8px}
+.trd{font-size:10px;font-weight:800;letter-spacing:0;text-transform:none;
+  padding:2px 6px;border-radius:20px;background:var(--sep);color:var(--label2)}
+.trd.up{background:rgba(18,183,106,.15);color:var(--green)}
+.trd.dn{background:rgba(239,68,68,.15);color:var(--red)}
+/* average-to-max heart rate bands */
+.hrband{display:flex;align-items:flex-end;gap:6px;height:90px;margin-top:8px}
+.hrb{flex:1;position:relative;height:100%;background:var(--sep);border-radius:5px;opacity:.35}
+.hrb i{position:absolute;left:0;right:0;border-radius:5px;
+  background:linear-gradient(180deg,#EF4444,var(--tint))}
+.hrb{opacity:1;background:transparent}
+
+/* the alerts bell, beside the theme toggle */
+.bellbtn{position:relative;color:var(--label2)}
+.bellbtn svg{width:18px;height:18px}
+.bellbtn.on{color:var(--tint)}
+.bell-dot{position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;
+  background:var(--green);border:2px solid var(--bg)}
 </style>
 </head>
 <body>
@@ -2664,6 +2735,20 @@ function psBadge(id){
 const SUPA_URL   = 'https://hgaulhlnvhsysfgcgvci.supabase.co';
 const SUPA_KEY   = 'sb_publishable_Wu70tpfgRAOALUuAW2G-Ig_dakfrT1r';
 const MAIN_KEY   = 'st_db_v7';                 // the one key that gets shared — do not change
+
+/* ---- push notifications ----
+   The public VAPID key is meant to be public — it only lets a browser encrypt
+   a message TO you. The private key lives in the Edge Function and never comes
+   near this file. PUSH_TOKEN is the shared secret that stops anyone reading
+   this HTML from firing notifications at the whole group. */
+const VAPID_PUBLIC = 'BEAxIvAQrNhfB29Hz5-UyubH4oOgpkGmelPfpWpBOAOlwp86T_hphV4DTCKs12_tmTROMnMKPItXCpcpcdi0eRU';
+const PUSH_TOKEN   = 'l8KoYbpGjIzBeKoIicCau2nJ0BJWfI';
+const PUSH_FN      = SUPA_URL + '/functions/v1/send-push';
+/* Strava. The client id is public by design — the secret lives only in the
+   Edge Function. Players are sent to Strava with their player id in `state`
+   so the callback knows who to attach the account to. */
+const STRAVA_CLIENT_ID = 'REPLACE_WITH_STRAVA_CLIENT_ID';
+const STRAVA_AUTH_FN   = SUPA_URL + '/functions/v1/strava-auth';
 
 const supaConfigured = /^https:\/\/.+\.supabase\.co\/?$/.test(SUPA_URL) && SUPA_KEY.length>20 && !/YOUR_SUPABASE/.test(SUPA_URL);
 let supa=null, CLOUD_FAIL=null, CLOUD_EMPTY=false, WIPE_OK=false, RECOVERED=null, REMOTE_STAMP=null, CONFLICT=null;
@@ -3534,7 +3619,36 @@ function go(v){haptic('light');
 const chev='<svg class="chev" viewBox="0 0 8 13"><path d="M1.5 1.5L6.5 6.5l-5 5"/></svg>';
 function navbar(back,action){return `<div class="navbar">${back?`<button class="backbtn" onclick="${back.on}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>${esc(back.label)}</button>`
     :`<button class="menubtn" onclick="toggleDrawer()"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Menu</button>`}
-  <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}<button class="iconbtn themeIcon" onclick="toggleTheme()"></button></div></div>`}
+  <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}${bellIcon()}<button class="iconbtn themeIcon" onclick="toggleTheme()"></button></div></div>`}
+
+/* The bell sits next to the theme toggle. It only appears once you have
+   signed in with your code, because there is nobody to notify otherwise. */
+function bellIcon(){
+  if(!fplMine())return '';
+  const on = PUSH_ON==='on';
+  const off = !!pushBlockedReason();
+  return `<button class="iconbtn bellbtn${on?' on':''}" title="${on?'Alerts are on':'Turn on match alerts'}"
+    onclick="bellTap()" aria-label="${on?'Alerts are on':'Turn on match alerts'}">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+      stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+      <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+      ${off?'<path d="M3 3l18 18" stroke-width="2.1"/>':''}
+    </svg>
+    ${on?'<i class="bell-dot"></i>':''}
+  </button>`;
+}
+/* The bell only ever turns alerts ON. There is no off switch here on purpose —
+   matchday messages are the point of it, and an off button next to the theme
+   toggle invites idle tapping. Anyone who genuinely wants them gone can do it
+   in their phone's own notification settings, which no web app can override. */
+async function bellTap(){
+  const why=pushBlockedReason();
+  if(why){ toast(why); return }
+  const st=await pushStatus();
+  if(st==='on'){ toast('🔔 Alerts are on for this device'); return }
+  await pushEnable();
+}
 
 /* The action bar is written inside the scrolling body by each sheet, so lift it
    out to sit alongside it — that makes it a genuine footer instead of a sticky
@@ -4041,7 +4155,8 @@ function vSquad(){
       ${list.length?`<div class="card">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);
         return `<div class="row tap" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
         ${avatar(p,40)}<div class="rt"><div class="r1">${shirtBadge(p)}${esc(p.name)}${p.nation?' '+p.nation:''}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
-        <div class="r2">${r?`⭐ ${esc(r)} · `:''}${m.P} games · ${m.pts} pts</div></div>
+        <div class="r2">${r?`⭐ ${esc(r)} · `:''}${m.P} games · ${m.pts} pts${
+          stravaFor(p.id).length?` · <span class="stmark">🏃 ${stravaFor(p.id).length}</span>`:''}</div></div>
         ${p.ps&&PS_BY[p.ps]?`<span class="squadps" title="${esc(PS_BY[p.ps].name)}">${psDiamond(p.ps,30)}</span>`:''}${chev}</div>`}).join('')}</div>`
       :`<div class="empty"><div class="ee">👥</div><h3>No players yet</h3><p>Add your regulars — more can be added at the venue.</p></div>`}
       `}
@@ -4061,9 +4176,9 @@ function openPlayer(id){if(VIEW==='player'&&app()._pid===id)return;track('player
 function playerAxes(pid){
   const all=statsAll().filter(x=>x.P>0);
   const me=all.find(x=>x.id===pid); if(!me)return null;
-  const pos=(player(pid)||{}).pos||'MID';
-  const grp=all.filter(x=>((player(x.id)||{}).pos||'MID')===pos);
-  const pool=grp.length>1?grp:all;
+  /* measured against the whole squad, not just your position — these are what
+     you actually did, not what is impressive for a defender */
+  const pool=all;
   const games=allGames();
   const consistencyOf=id=>{
     const rs=games.filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(id))
@@ -4088,6 +4203,8 @@ function playerAxes(pid){
     const v=raw[k](me);
     out[k]=hi===lo?60:Math.round(8+92*((v-lo)/(hi-lo)));
   });
+  /* players with Strava data get two more axes; everyone else keeps six */
+  const sx=stravaAxes(pid); if(sx)Object.assign(out,sx);
   return out;
 }
 
@@ -4130,7 +4247,7 @@ function archetypeOf(pid){
 }
 /* the hexagon */
 const AX_SHORT={Finishing:'FIN',Creating:'CRE',Winning:'WIN',Defending:'DEF',
-  Availability:'APP',Consistency:'CON'};
+  Availability:'APP',Consistency:'CON',Stamina:'STA','Work rate':'WRK'};
 function radarSVG(axes,size){
   if(!axes)return '';
   const keys=Object.keys(axes), n=keys.length, S=size||210, C=S/2, R=S*0.32;
@@ -4361,18 +4478,51 @@ function vPlayer(pid){
         G:t.G+x.G,A:t.A+x.A,pts:t.pts+x.pts}),{P:0,W:0,D:0,L:0,G:0,A:0,pts:0});
       const best=[...seasons].sort((a,b)=>b.pts-a.pts||b.G-a.G)[0];
       return `
-      <div class="pindex">
-        <div class="pindex-l"><div class="pindex-v">${m.index}</div><div class="pindex-k">INDEX</div></div>
-        ${arc?`<div class="pindex-r"><div class="pindex-a">${esc(arc.name)}</div>
-          <div class="pindex-d">${esc(arc.line)}</div></div>`:''}
-      </div>
+      ${(function(){
+        const all=statsAll().filter(x=>x.P>0).sort((a,b)=>b.index-a.index);
+        const pos=(player(pid)||{}).pos||'MID';
+        const samePos=all.filter(x=>((player(x.id)||{}).pos||'MID')===pos);
+        const posRank=samePos.findIndex(x=>x.id===pid)+1;
+        /* a word for the number, so 74 means something without a table */
+        return `<div class="idxcard">
+          <div class="idxcard-top">
+            <div class="idxcard-n">
+              <div class="idxcard-v">${m.index}</div>
+              <div class="idxcard-k">RATING</div>
+            </div>
+            <div class="idxcard-m">
+              ${arc?`<div class="idxcard-arc">${esc(arc.name)}</div>
+              <div class="idxcard-sub">${esc(arc.line)}</div>`:''}
+              ${posRank?`<div class="idxcard-chips">
+                <span class="ichip">#${posRank} ${esc(pos)} of ${samePos.length}</span>
+              </div>`:''}
+            </div>
+          </div>
+          <div class="idxbar"><i style="width:${Math.max(3,m.index)}%"></i></div>
+        </div>`;
+      })()}
 
-      ${ax?`<div class="sechead">Attributes</div>
-      <div class="card pad">${radarSVG(ax,215)}
-        <div class="axgrid">${Object.entries(ax).map(([k,v])=>`
-          <div class="axrow"><span>${k}</span><b>${v}</b></div>`).join('')}</div>
-        <div class="note" style="padding:8px 0 0">Each score is against others in the same position,
-          so a defender is judged as a defender.</div></div>`:''}
+      ${ax?(function(){
+        const ent=Object.entries(ax).sort((a,b)=>b[1]-a[1]);
+        const best=ent[0], worst=ent[ent.length-1];
+        const tone=v=>v>=80?'var(--green)':v>=60?'var(--tint)':v>=40?'#F59E0B':'var(--red)';
+        return `<div class="sechead">Attributes</div>
+        <div class="card pad">
+          ${radarSVG(ax,215)}
+          <div class="axbars">${Object.entries(ax).map(([k,v])=>`
+            <div class="axb">
+              <span class="axb-k">${k}</span>
+              <span class="axb-t"><i style="width:${Math.max(3,v)}%;background:${tone(v)}"></i></span>
+              <b style="color:${tone(v)}">${v}</b>
+            </div>`).join('')}</div>
+          <div class="axnote">
+            <span>💪 Strongest <b>${best[0]}</b> ${best[1]}</span>
+            <span>🎯 To work on <b>${worst[0]}</b> ${worst[1]}</span>
+          </div>
+          <div class="note" style="padding:10px 0 0">Every score is out of 100, measured against
+            everyone else who has played this season.</div>
+        </div>`;
+      })():''}
 
       ${ins.length?`<div class="sechead">What the numbers say</div>
       <div class="card">${ins.map(x=>`<div class="tp-r">
@@ -4382,14 +4532,106 @@ function vPlayer(pid){
       ${rs.length>1?`<div class="sechead">Match rating</div>
       <div class="card pad">${lineChart(rs,`Each game this season. The dashed line is your average, ${avg.toFixed(1)}.`,avg)}</div>`:''}
 
-      ${(m.G+(m.A||0))>0?`<div class="sechead">Contribution</div>
-      <div class="card pad"><div class="dn">
-        ${donut([{v:m.G,c:'var(--tint)'},{v:m.A||0,c:'#F59E0B'}],128)}
-        <div class="dn-k">
-          <div><i style="background:var(--tint)"></i>Goals <b>${m.G}</b></div>
-          <div><i style="background:#F59E0B"></i>Assists <b>${m.A||0}</b></div>
-          <div class="dn-x">${(((m.G+(m.A||0))/Math.max(1,m.P))).toFixed(2)} a game</div>
-        </div></div></div>`:''}
+      ${(function(){
+        const G=m.G, A=m.A||0, P=Math.max(1,m.P);
+        if(G+A+m.GA===0)return '';
+        const conceded=m.GA/P, scoredFor=m.GF/P;
+        /* how your side's attack compares with what it let in, while you played */
+        const ratio=m.GA>0?(m.GF/m.GA):m.GF;
+        const league=(function(){
+          const all=statsAll().filter(x=>x.P>0);
+          const t=all.reduce((a,x)=>a+x.GA,0)/Math.max(1,all.reduce((a,x)=>a+x.P,0));
+          return t;
+        })();
+        const better=league>0?Math.round(100*(league-conceded)/league):0;
+        return `<div class="sechead">Contribution</div>
+        <div class="card pad">
+          <div class="dn">
+            ${donut([{v:G,c:'var(--tint)'},{v:A,c:'#F59E0B'}],132)}
+            <div class="dn-k">
+              <div><i style="background:var(--tint)"></i>Goals <b>${G}</b></div>
+              <div><i style="background:#F59E0B"></i>Assists <b>${A}</b></div>
+              <div class="dn-x">${((G+A)/P).toFixed(2)} a game</div>
+            </div>
+          </div>
+          <div class="dnstat">
+            <div><b>${scoredFor.toFixed(1)}</b><span>scored a game</span></div>
+            <div><b>${conceded.toFixed(1)}</b><span>conceded a game</span></div>
+            <div><b style="color:${ratio>=1?'var(--green)':'var(--red)'}">${ratio.toFixed(2)}</b>
+              <span>for / against</span></div>
+          </div>
+          <div class="note" style="padding:10px 0 0">While you were on the pitch your side scored
+            ${m.GF} and let in ${m.GA}${better?` — ${Math.abs(better)}% ${better>0?'fewer':'more'} than the league average`:''}.</div>
+        </div>`;
+      })()}
+
+      ${(function(){
+        const sv=stravaSummary(pid);
+        const me=fplMine();
+        const mine=me&&me.pid===pid;
+        /* your own profile offers the connect button; everyone else's just
+           shows the data, or nothing at all */
+        if(!sv){
+          if(!mine||STRAVA_WHO[pid])return '';
+          const ready=stravaConfigured();
+          return `<div class="sechead">🏃 Physical</div>
+             <div class="card">
+               <div class="row${ready?' tap':''}"${ready?' onclick="stravaConnect()"':''}>
+                 <div class="rt"><div class="r1">${ready?'Connect Strava':'Strava not set up yet'}</div>
+                   <div class="r2">${ready
+                     ? 'Heart rate, minutes and effort on every game you play'
+                     : 'Once setup is done, your watch or Whoop data lands here automatically'}</div></div>
+                 ${ready?chev:`<span class="ichip">SOON</span>`}</div></div>`;
+        }
+        const who=STRAVA_WHO[pid];
+        const acts=stravaFor(pid).slice()
+          .sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
+        const num=(k,f)=>acts.map(a=>+a[k]).map(v=>isFinite(v)&&v>0?(f?f(v):v):null);
+        const mins=num('moving_sec',v=>v/60).filter(v=>v!=null);
+        const hrs =num('avg_hr').filter(v=>v!=null);
+        const mx  =num('max_hr').filter(v=>v!=null);
+        const kms =num('distance_m',v=>v/1000).filter(v=>v!=null);
+        const avg=a=>a.length?a.reduce((t,v)=>t+v,0)/a.length:null;
+        /* how the last three compare with the ones before — the same idea as
+           the form line on the rating chart */
+        const trend=(a)=>{
+          if(a.length<4)return null;
+          const k=Math.max(2,Math.round(a.length/3));
+          const late=avg(a.slice(-k)), early=avg(a.slice(0,-k));
+          if(early==null||late==null||!early)return null;
+          return Math.round(100*(late-early)/early);
+        };
+        const tHr=trend(hrs), tMin=trend(mins);
+        const arrow=v=>v==null?'':`<span class="trd ${v>2?'up':v<-2?'dn':''}">${v>0?'▲':v<0?'▼':'▬'} ${Math.abs(v)}%</span>`;
+        return `<div class="sechead">🏃 Physical</div>
+        <div class="card pad">
+          <div class="phys">
+            <div><b>${sv.mins!=null?Math.round(sv.mins):'—'}</b><span>min a game</span></div>
+            <div><b>${sv.hr!=null?Math.round(sv.hr):'—'}</b><span>avg bpm</span></div>
+            <div><b>${sv.maxHr!=null?Math.round(sv.maxHr):'—'}</b><span>max bpm</span></div>
+            ${sv.hasGps&&sv.km!=null?`<div><b>${sv.km.toFixed(1)}</b><span>km a game</span></div>`
+              :`<div><b>${sv.kcal!=null?Math.round(sv.kcal):'—'}</b><span>kcal a game</span></div>`}
+          </div>
+          ${hrs.length>1?`<div class="phhead">Heart rate ${arrow(tHr)}</div>
+            ${lineChart(hrs,`Average bpm each game. The dashed line is your ${Math.round(avg(hrs))} average.`,avg(hrs))}`:''}
+          ${mins.length>1?`<div class="phhead">Minutes played ${arrow(tMin)}</div>
+            ${lineChart(mins,`How long you lasted, game by game.`,avg(mins))}`:''}
+          ${kms.length>1?`<div class="phhead">Distance</div>
+            ${lineChart(kms,`Kilometres covered each game.`,avg(kms))}`:''}
+          ${mx.length>1&&hrs.length>1?`<div class="phhead">Effort range</div>
+            <div class="hrband">${acts.slice(-8).map(a=>{
+              const lo=+a.avg_hr||0, hi=+a.max_hr||0;
+              if(!lo||!hi)return '';
+              const top=Math.max(...mx), base=Math.min(...hrs)*0.9;
+              const sp=Math.max(1,top-base);
+              return `<div class="hrb" title="${Math.round(lo)}–${Math.round(hi)} bpm">
+                <i style="bottom:${Math.max(0,100*(lo-base)/sp)}%;height:${Math.max(4,100*(hi-lo)/sp)}%"></i></div>`;
+            }).join('')}</div>
+            <div class="note" style="padding:6px 0 0">Average to maximum heart rate, last ${Math.min(8,acts.length)} games.</div>`:''}
+          <div class="note" style="padding:10px 0 0">From ${esc(who||'Strava')} · ${sv.n} game${sv.n===1?'':'s'} matched.
+            Only games ${mine?'you were':'they were'} logged as playing count.</div>
+        </div>`;
+      })()}
 
       ${seasons.length?`<div class="sechead">Season by season</div>
       <div class="seg" style="margin-bottom:12px">
@@ -4442,8 +4684,279 @@ function vPlayer(pid){
       <div class="row tap" data-admin onclick="removePlayer('${pid}')"><div class="rt"><div class="r1" style="color:var(--red)">Remove from squad</div></div></div>
     </div></div></div>`}
 
+
+/* ============ STRAVA ============
+   Read-only from the app's side. Activities are attached by the webhook
+   function; the app just displays them. Nothing here can create a game or
+   mark anyone as having played — Strava only decorates games you logged. */
+let STRAVA=[], STRAVA_WHO={};              /* activities; pid -> athlete name */
+const stravaConfigured=()=>!STRAVA_CLIENT_ID.startsWith('REPLACE');
+
+async function loadStrava(){
+  if(!supaConfigured||!supa)return;
+  try{
+    const [{data:acts},{data:who}]=await Promise.all([
+      supa.from('strava_activities').select('*'),
+      supa.from('strava_connected').select('pid,athlete_name'),
+    ]);
+    STRAVA=acts||[];
+    STRAVA_WHO={}; (who||[]).forEach(w=>STRAVA_WHO[w.pid]=w.athlete_name||'Connected');
+  }catch(e){ /* the profile simply shows no physical data */ }
+}
+const stravaFor=pid=>STRAVA.filter(a=>a.pid===pid);
+const stravaGame=(pid,gid)=>STRAVA.find(a=>a.pid===pid&&a.game_id===gid)||null;
+
+/* one player's physical picture, averaged over their attached games */
+function stravaSummary(pid){
+  const a=stravaFor(pid); if(!a.length)return null;
+  const avg=(k)=>{const v=a.map(x=>+x[k]).filter(v=>isFinite(v)&&v>0);
+    return v.length?v.reduce((t,x)=>t+x,0)/v.length:null};
+  return {
+    n:a.length,
+    mins:avg('moving_sec')!=null?avg('moving_sec')/60:null,
+    km:avg('distance_m')!=null?avg('distance_m')/1000:null,
+    hr:avg('avg_hr'), maxHr:avg('max_hr'), kcal:avg('calories'),
+    effort:avg('suffer_score'),
+    hasGps:a.some(x=>+x.distance_m>0),
+  };
+}
+
+/* Two extra attributes, scored against the other connected players only —
+   it would be meaningless to rank someone's heart rate against people who
+   have no data. */
+function stravaAxes(pid){
+  const mine=stravaSummary(pid); if(!mine||mine.n<1)return null;
+  const pool=[...new Set(STRAVA.map(a=>a.pid))].map(p=>stravaSummary(p)).filter(Boolean);
+  const scale=(k,v)=>{
+    const vals=pool.map(p=>p[k]).filter(x=>x!=null);
+    if(v==null||vals.length<2){return 60}
+    const lo=Math.min(...vals),hi=Math.max(...vals);
+    return hi===lo?60:Math.round(8+92*((v-lo)/(hi-lo)));
+  };
+  return { Stamina:scale('mins',mine.mins), 'Work rate':scale('hr',mine.hr) };
+}
+
+function stravaConnect(){
+  const me=fplMine(); if(!me){toast('Enter your code first');return}
+  if(!stravaConfigured()){toast('Strava is not set up yet');return}
+  const u=new URL('https://www.strava.com/oauth/authorize');
+  u.searchParams.set('client_id',STRAVA_CLIENT_ID);
+  u.searchParams.set('redirect_uri',STRAVA_AUTH_FN);
+  u.searchParams.set('response_type','code');
+  u.searchParams.set('approval_prompt','auto');
+  u.searchParams.set('scope','activity:read_all');
+  u.searchParams.set('state',me.pid);
+  location.href=u.toString();
+}
+
+/* the row in Career Mode */
+function stravaRow(){
+  const me=fplMine(); if(!me)return '';
+  const who=STRAVA_WHO[me.pid];
+  const n=stravaFor(me.pid).length;
+  const ready=stravaConfigured();
+  return `<div class="sechead">🏃 Strava</div>
+    <div class="card">
+      <div class="row${ready&&!who?' tap':''}"${ready&&!who?' onclick="stravaConnect()"':''}>
+        <div class="rt"><div class="r1">${who?'Connected as '+esc(who):ready?'Connect Strava':'Strava not set up yet'}</div>
+          <div class="r2">${who
+            ? (n?`${n} game${n===1?'':'s'} matched so far`:'Record your next game and it will appear here')
+            : ready ? 'Heart rate and effort from your watch or Whoop, matched to games you play'
+                    : 'Once the admin finishes setup, connect here for heart rate and effort on every game'}</div></div>
+        ${who?`<span class="ichip" style="background:var(--green);color:#fff;border-color:var(--green)">ON</span>`
+          :ready?chev:`<span class="ichip">SOON</span>`}
+      </div>
+    </div>`;
+}
+
+/* what came back from Strava after the redirect */
+function stravaAfterRedirect(){
+  const q=new URLSearchParams(location.search).get('strava'); if(!q)return;
+  history.replaceState(null,'',location.pathname);
+  const msg={ok:'🏃 Strava connected',denied:'Strava connection cancelled',
+    taken:'That Strava account is already linked to someone else',
+    error:'Could not connect Strava — try again'}[q];
+  if(msg)setTimeout(()=>toast(msg),900);
+}
+
 /* ============ CAREER ============ */
 /* what you are earning right now, shown where the level actually lives */
+/* ============ PUSH NOTIFICATIONS ============
+   Web Push, no third party. The browser holds the subscription, Supabase holds
+   the list, and an Edge Function does the sending.
+
+   The iOS catch, which decides whether any of this works for a given person:
+   Safari only permits push when the app has been added to the home screen.
+   In a browser tab the API is simply absent, so we detect that and say so
+   plainly rather than showing a button that can never work. */
+
+const pushSupported = () =>
+  'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+
+/* isStandalone() and isIOS() already exist further down — reused here */
+
+/* why push is unavailable, in words a player can act on */
+function pushBlockedReason(){
+  if(!pushSupported()){
+    if(isIOS() && !isStandalone())
+      return 'Add Super Sunday to your home screen first — iPhone only allows alerts from installed apps.';
+    return 'This browser cannot do notifications.';
+  }
+  if(Notification.permission === 'denied')
+    return 'Notifications are blocked in your browser settings for this site.';
+  return null;
+}
+
+let SW_REG = null;
+async function ensureSW(){
+  if(SW_REG) return SW_REG;
+  if(!('serviceWorker' in navigator)) return null;
+  try{ SW_REG = await navigator.serviceWorker.register('/sw.js'); return SW_REG; }
+  catch(e){ return null; }
+}
+
+function b64ToU8(base64){
+  const pad='='.repeat((4 - base64.length % 4) % 4);
+  const raw=atob((base64+pad).replace(/-/g,'+').replace(/_/g,'/'));
+  return Uint8Array.from([...raw].map(c=>c.charCodeAt(0)));
+}
+
+async function pushStatus(){
+  const set=v=>{ if(PUSH_ON!==v){PUSH_ON=v;} return v };
+  if(!pushSupported()) return set('unsupported');
+  if(Notification.permission === 'denied') return set('denied');
+  const reg = await ensureSW(); if(!reg) return set('unsupported');
+  const sub = await reg.pushManager.getSubscription();
+  return set(sub ? 'on' : 'off');
+}
+/* The bell reads a cached value so it can render synchronously. Refresh it
+   whenever the answer could have changed, then repaint if it did. */
+async function refreshPushState(){
+  const was=PUSH_ON;
+  await pushStatus();
+  if(PUSH_ON!==was && typeof render==='function') render();
+}
+
+async function pushEnable(){
+  const me = fplMine();
+  if(!me){ toast('Enter your code first so we know who to notify'); return }
+  const why = pushBlockedReason();
+  if(why){ toast(why); return }
+  try{
+    const perm = await Notification.requestPermission();
+    if(perm !== 'granted'){ toast('Not allowed — nothing will be sent'); render(); return }
+    const reg = await ensureSW();
+    if(!reg){ toast('Could not start the notification service'); return }
+    let sub = await reg.pushManager.getSubscription();
+    if(!sub) sub = await reg.pushManager.subscribe({
+      userVisibleOnly:true, applicationServerKey:b64ToU8(VAPID_PUBLIC)
+    });
+    const j = sub.toJSON();
+    if(supa){
+      /* one row per device, so a person can have their phone and their iPad */
+      await supa.from('push_subs').insert({
+        pid: me.pid, name: me.name, endpoint: j.endpoint,
+        p256dh: j.keys.p256dh, auth: j.keys.auth,
+        ua: navigator.userAgent.slice(0,120)
+      });
+    }
+    PUSH_ON='on'; haptic('light'); toast('🔔 Alerts on for this device'); render();
+  }catch(e){ toast('Could not turn alerts on'); }
+}
+
+async function pushDisable(){
+  try{
+    const reg = await ensureSW(); if(!reg) return;
+    const sub = await reg.pushManager.getSubscription();
+    if(sub){
+      const ep = sub.endpoint;
+      await sub.unsubscribe();
+      if(supa) await supa.from('push_subs').delete().eq('endpoint', ep);
+    }
+    PUSH_ON='off'; toast('Alerts off for this device'); render();
+  }catch(e){ toast('Could not turn alerts off'); }
+}
+
+async function pushToggle(){
+  const st = await pushStatus();
+  if(st === 'on') return pushDisable();
+  return pushEnable();
+}
+
+/* Fire a notification at the group. Never throws — a failed notification must
+   never stop a game being saved. */
+async function pushSend(title, body, kind, opts){
+  try{
+    if(!supaConfigured || PUSH_TOKEN.startsWith('REPLACE')) return;
+    await fetch(PUSH_FN, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'x-push-token': PUSH_TOKEN },
+      body: JSON.stringify({ title, body, kind: kind||'general', ...(opts||{}) })
+    });
+  }catch(e){ /* silence is correct here */ }
+}
+
+async function pushTest(){
+  if(!requireAdmin())return;
+  await pushSend('Super Sunday','Test alert — if you can see this, it works.','test');
+  toast('Test sent');
+}
+/* The three matchday alerts you send by hand, plus a free-text one.
+   Time and place are remembered so you are not retyping them every week. */
+function pushVenue(){
+  const b=bets(); return b.venue||{ time:'6:00 PM', place:'' };
+}
+async function pushMatchAlert(when){
+  if(!requireAdmin())return;
+  const v=pushVenue();
+  const time=await askText(when==='today'?'Game today':'Game tomorrow',
+    'What time?', v.time, 'Next');
+  if(time==null)return;
+  const place=await askText('Where?','Pitch or venue', v.place, 'Send');
+  if(place==null)return;
+  const b=bets(); b.venue={time,place}; await save();
+  const title = when==='today' ? '⚽ Game today' : '⚽ Game tomorrow';
+  const body  = [time, place].filter(Boolean).join(' · ') || 'Details to follow';
+  await pushSend(title, body, 'fixture', {url:'/'});
+  toast('Sent to everyone');
+}
+async function pushCustom(){
+  if(!requireAdmin())return;
+  const msg=await askText('Send a message','Whatever you want the group to see','','Send');
+  if(!msg||!msg.trim())return;
+  await pushSend('Super Sunday', msg.trim(), 'custom', {url:'/'});
+  toast('Sent to everyone');
+}
+
+async function pushDeadline(){
+  if(!requireAdmin())return;
+  const gw=fplNextGw();
+  /* only nag the people who actually still need to do something */
+  const late=fpl().managers.filter(m=>!m.teamName||(m.squad||[]).length<FPL_RULES.squadSize)
+    .map(m=>m.pid);
+  if(!late.length){ toast('Everyone has picked'); return }
+  await pushSend(`Pick your team · GW${gw}`,
+    'You have not set a side yet. Tap to sort it.','deadline',{url:'/',pids:late});
+  toast(`Nudged ${late.length}`);
+}
+
+/* the row that lives in Career Mode */
+function pushRow(){
+  if(!fplMine()) return '';
+  const why = pushBlockedReason();
+  const on = PUSH_ON === 'on';
+  return `<div class="sechead">🔔 Alerts</div>
+    <div class="card">
+      <div class="row${why?'':' tap'}"${why?'':' onclick="pushToggle()"'}>
+        <div class="rt"><div class="r1">Match alerts on this device</div>
+          <div class="r2">${why ? esc(why)
+            : on ? 'Results and team deadlines'
+                 : 'Get told when results are up and when to pick your team'}</div></div>
+        ${why ? '' : `<div class="sw ${on?'on':''}"><i></i></div>`}
+      </div>
+    </div>`;
+}
+
 function wagesBlock(){
   const me=fplMine();
   if(!me)return `<div class="note">Enter your code on the Sunday FPL tab to see your wages here.</div>`;
@@ -4574,6 +5087,7 @@ function vCareer(){
       <button class="btn pri" onclick="newGame()">Log a game</button></div>`
     :`${wagesBlock()}
       ${dealsBlock()}
+      ${stravaRow()}
       ${levelLadder(board)}
 
       ${milestoneCatalogue(board)}
@@ -5706,7 +6220,7 @@ function fplJoin(){
 function fplReset(){ FDRAFT=null; FSWAP=null; FPICK=null; FTAB='team'; BSLIP=[]; }
 /* the same code unlocks the fantasy game and the betting, so signing in from
    either place signs you into both */
-async function signIn(code){
+async function signIn(code){ setTimeout(()=>{try{refreshPushState()}catch(e){}},300);
   const t=String(code||'').trim().toUpperCase();
   if(!t){toast('Enter your code');return false}
   const m=fplManager(t);
@@ -5732,7 +6246,7 @@ function fplLogout(){ fplForget(); fplReset(); render(); toast('Signed out'); }
 
 /* ---------- my team ---------- */
 /* A left/right gameweek pager on My Team, the way FPL does it. */
-let SQTAB='people', PCAR='season';
+let SQTAB='people', PCAR='season', PUSH_ON='off';
 let TEAMGW=null, PREDOPEN=false, PREDPASTOPEN=false, WAGEOPEN=false, BOOTOPEN=false, SPONOPEN=false, LADDEROPEN=false;
 /* My Team has two jobs — showing what a past gameweek scored, and picking the
    side for the next one. Real FPL splits these; ours did not, which made it
@@ -11046,6 +11560,21 @@ function vAdmin(){
         <div class="row tap" onclick="undoLast()"><div class="rt">
           <div class="r1" style="color:${canUndo()?'var(--tint)':'var(--label3)'}">↩︎ Undo last change</div>
           <div class="r2">${canUndo()?esc(UNDO.label)+' · '+fmtWhen(UNDO.t):'Nothing to undo right now'}</div></div></div>
+        <div class="row tap" onclick="pushMatchAlert('tomorrow')"><div class="rt">
+          <div class="r1">📅 Game tomorrow</div>
+          <div class="r2">Tell everyone the time and the pitch</div></div>${chev}</div>
+        <div class="row tap" onclick="pushMatchAlert('today')"><div class="rt">
+          <div class="r1">⚽ Game today</div>
+          <div class="r2">Same, for the morning of</div></div>${chev}</div>
+        <div class="row tap" onclick="pushCustom()"><div class="rt">
+          <div class="r1">✏️ Send your own message</div>
+          <div class="r2">Type anything and it goes to the group</div></div>${chev}</div>
+        <div class="row tap" onclick="pushTest()"><div class="rt">
+          <div class="r1">🔔 Send a test alert</div>
+          <div class="r2">Goes to every device that has alerts on</div></div>${chev}</div>
+        <div class="row tap" onclick="pushDeadline()"><div class="rt">
+          <div class="r1">⏰ Nudge the team pickers</div>
+          <div class="r2">Reminds anyone who hasn't set a side for the next gameweek</div></div>${chev}</div>
         <div class="row tap" onclick="TELOPEN=!TELOPEN;render()"><div class="rt">
           <div class="r1">📊 Usage</div>
           <div class="r2">What people actually open</div></div>
@@ -11932,7 +12461,14 @@ async function saveGame(){ track('game_completed');if(!requireAdmin())return;
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
   if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
   else if(ms.length){const p=player(ms[0].pid);toast(`${ms[0].e} ${p?p.name:''} — ${ms[0].t}!`)}
-  else toast(G.id?'Game saved':'Game logged')}
+  else toast(G.id?'Game saved':'Game logged');
+  /* tell the group, but never the person who just did the saving */
+  if(!G.id){
+    const me=fplMine();
+    pushSend('Full time · '+(G.round||'Super Sunday'),
+      `${G.sa}\u2013${G.sb}. Ratings, points and prices are up.`,
+      'result', {url:'/', except: me?me.pid:null});
+  }}
 async function deleteGame(){if(!requireAdmin())return;
   snapshot('deleting a game');if(!await askConfirm('Delete game?','This removes it and its stats permanently.','Delete',true))return;
   const S=season();S.games=S.games.filter(x=>x.id!==G.id);logEntry('delete',`Deleted ${G.round||'a game'}`);fplResync();await save();closeSheet();render();toast('Game deleted')}
@@ -12482,6 +13018,8 @@ document.addEventListener('keydown',e=>{
   /* Wages are paid per gameweek and guarded by bets().paid, so calling this is
      safe and self-healing: anything owed from a week that was logged before the
      save-ordering fix lands now. */
+  try{ await loadStrava(); stravaAfterRedirect(); }catch(e){}
+  try{ refreshPushState(); }catch(e){}
   try{
     if(playedGws().length){
       const owed=payWages();
