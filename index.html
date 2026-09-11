@@ -4566,23 +4566,17 @@ function vPlayer(pid){
       })()}
 
       ${(function(){
+        /* the same Strava row as Career Mode, so people can connect from
+           either place. Only ever on your own profile. */
+        const me=fplMine(); if(!me||me.pid!==pid)return '';
+        return stravaRow();
+      })()}
+
+      ${(function(){
         const sv=stravaSummary(pid);
         const me=fplMine();
         const mine=me&&me.pid===pid;
-        /* your own profile offers the connect button; everyone else's just
-           shows the data, or nothing at all */
-        if(!sv){
-          if(!mine||STRAVA_WHO[pid])return '';
-          const ready=stravaConfigured();
-          return `<div class="sechead">🏃 Physical</div>
-             <div class="card">
-               <div class="row${ready?' tap':''}"${ready?' onclick="stravaConnect()"':''}>
-                 <div class="rt"><div class="r1">${ready?'Connect Strava':'Strava not set up yet'}</div>
-                   <div class="r2">${ready
-                     ? 'Heart rate, minutes and effort on every game you play'
-                     : 'Once setup is done, your watch or Whoop data lands here automatically'}</div></div>
-                 ${ready?chev:`<span class="ichip">SOON</span>`}</div></div>`;
-        }
+        if(!sv)return '';
         const who=STRAVA_WHO[pid];
         const acts=stravaFor(pid).slice()
           .sort((a,b)=>new Date(a.start_at)-new Date(b.start_at));
