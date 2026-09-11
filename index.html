@@ -4892,33 +4892,44 @@ async function pushSend(title, body, kind, opts){
 
 async function pushTest(){
   if(!requireAdmin())return;
-  await pushSend('Super Sunday','Test alert — if you can see this, it works.','test');
+  await pushSend('🔔 Test alert','If you can see this, notifications are working.','test');
   toast('Test sent');
 }
 /* The three matchday alerts you send by hand, plus a free-text one.
    Time and place are remembered so you are not retyping them every week. */
 function pushVenue(){
-  const b=bets(); return b.venue||{ time:'6:00 PM', place:'' };
+  const b=bets(); return b.venue||{ day:'', time:'6:00 PM', place:'', extra:'' };
 }
 async function pushMatchAlert(when){
   if(!requireAdmin())return;
   const v=pushVenue();
-  const time=await askText(when==='today'?'Game today':'Game tomorrow',
-    'What time?', v.time, 'Next');
+  /* Day, time, place and an optional line of your own — each remembered, so
+     next week is four taps of Next rather than four lots of typing. */
+  const day=await askText(when==='today'?'Game today':'Game tomorrow',
+    'Which day? Leave as is, or type something like "Sunday" or "Sun 14th"',
+    when==='today'?'Today':(v.day||'Tomorrow'),'Next');
+  if(day==null)return;
+  const time=await askText('What time?','Kick-off', v.time||'6:00 PM','Next');
   if(time==null)return;
-  const place=await askText('Where?','Pitch or venue', v.place, 'Send');
+  const place=await askText('Where?','Pitch or venue', v.place||'','Next');
   if(place==null)return;
-  const b=bets(); b.venue={time,place}; await save();
-  const title = when==='today' ? '⚽ Game today' : '⚽ Game tomorrow';
-  const body  = [time, place].filter(Boolean).join(' · ') || 'Details to follow';
+  const extra=await askText('Anything else?','Optional — bibs, parking, who is short', v.extra||'','Send');
+  if(extra==null)return;
+
+  const b=bets(); b.venue={day,time,place,extra}; await save();
+
+  const title = `⚽ ${day.trim()||'Game'} · ${time.trim()}`;
+  const body  = [place.trim(), extra.trim()].filter(Boolean).join(' — ') || 'See you there';
   await pushSend(title, body, 'fixture', {url:'/'});
   toast('Sent to everyone');
 }
 async function pushCustom(){
   if(!requireAdmin())return;
-  const msg=await askText('Send a message','Whatever you want the group to see','','Send');
+  const head=await askText('Headline','The bold line people see first','📣 Heads up','Next');
+  if(head==null)return;
+  const msg=await askText('Message','What you want the group to read','','Send');
   if(!msg||!msg.trim())return;
-  await pushSend('Super Sunday', msg.trim(), 'custom', {url:'/'});
+  await pushSend(head.trim()||'📣 Heads up', msg.trim(), 'custom', {url:'/'});
   toast('Sent to everyone');
 }
 
@@ -12459,7 +12470,7 @@ async function saveGame(){ track('game_completed');if(!requireAdmin())return;
   /* tell the group, but never the person who just did the saving */
   if(!G.id){
     const me=fplMine();
-    pushSend('Full time · '+(G.round||'Super Sunday'),
+    pushSend(G.round?('⚽ Full time · '+G.round):'⚽ Full time',
       `${G.sa}\u2013${G.sb}. Ratings, points and prices are up.`,
       'result', {url:'/', except: me?me.pid:null});
   }}
