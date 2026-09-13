@@ -2852,6 +2852,11 @@ td.posc .pill{font-size:9.5px;padding:2px 5px}
 #navMount{position:-webkit-sticky;position:sticky;top:0;z-index:60}
 /* Safari needs the sticky element's ancestors to be plain blocks */
 .shell,.main{transform:none;filter:none;perspective:none}
+
+/* the movement arrow now follows the name, so the rank column is just a number
+   and every position lines up regardless of who moved */
+td.nm .mv{margin-right:0;margin-left:2px}
+td.pos{text-align:left}
 </style>
 </head>
 <body>
@@ -4202,8 +4207,8 @@ function vHome(){
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
         <td class="c opt">GF</td><td class="c opt">GA</td><td class="c opt">GD</td><td class="c opt2">⚽</td><td class="c opt2">Form</td><td class="pts">Pts</td></tr></thead>
         <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
-          <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
-          <td class="nm"><span style="display:inline-flex;align-items:center;gap:8px">${avatar(x,24)}<span>${esc(x.name)}</span></span></td>
+          <td class="pos"><span class="posn">${i+1}</span></td>
+          <td class="nm"><span style="display:inline-flex;align-items:center;gap:8px">${avatar(x,24)}<span>${esc(x.name)}</span>${mvA(m[x.id]||0)}</span></td>
           <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
           <td class="c opt">${x.GF}</td><td class="c opt">${x.GA}</td><td class="c opt">${x.GD>0?'+':''}${x.GD}</td>
           <td class="c opt2">${x.G}</td><td class="c opt2">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
@@ -4404,8 +4409,8 @@ function lgBlock(c){
       <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
       <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">🅰️</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
       <tbody>${rows.map((x,i)=>`<tr class="${zoneOf(i,rows.length)}" onclick="openPlayer('${x.id}')">
-        <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
-        <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}</span></span></td>
+        <td class="pos"><span class="posn">${i+1}</span></td>
+        <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}</span>${mvA(m[x.id]||0)}</span></td>
         <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
         <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
         <td class="c">${x.G}</td><td class="c">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
@@ -6883,7 +6888,23 @@ function walkPrices(){
     const apps={};
     live.forEach(p=>apps[p.id]=win.filter(g=>gamesInGw(g).some(x=>
       [...(x.teamA||[]),...(x.teamB||[])].includes(p.id))).length);
-    const rate={}; live.forEach(p=>rate[p.id]=apps[p.id]?pts[p.id]/apps[p.id]:0);
+    /* Results count toward the price, not just the scoresheet. A win is worth 3
+       FPL points against 4-6 for a goal, so someone who won every week without
+       scoring still drifted down. This adds a per-game result bonus used ONLY
+       for pricing — the mini-league points themselves are untouched, so nobody's
+       existing total changes. */
+    const resBonus=pid=>{
+      let n=0,b2=0;
+      win.forEach(gw2=>gamesInGw(gw2).forEach(g=>{
+        const onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
+        if(!onA&&!onB)return;
+        n++;
+        if(g.result==='D')b2+=0.7;
+        else if((onA&&g.result==='A')||(onB&&g.result==='B'))b2+=2.0;
+      }));
+      return n?b2/n:0;
+    };
+    const rate={}; live.forEach(p=>rate[p.id]=apps[p.id]?(pts[p.id]/apps[p.id])+resBonus(p.id):0);
     const vals=live.filter(p=>appeared.has(p.id)).map(p=>rate[p.id]);
     const avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0;
     const stepMoves=[];
@@ -8228,8 +8249,8 @@ function fplLeague(){
     <div class="card"><div class="tw"><table>
       <thead><tr><td style="padding-left:16px">#</td><td>Team</td><td class="c">GW</td><td class="pts">Total</td></tr></thead>
       <tbody>${rows.map((r,i)=>`<tr class="${me&&r.m.pid===me.pid?'z-ucl':''}" onclick="viewManager('${r.m.pid}')">
-        <td class="pos">${mvA(r.move||0)}<span class="posn" style="background:${i===0?'linear-gradient(150deg,#F5D76E,#C9A227)':'var(--fill2)'};color:${i===0?'#4a3a06':'var(--label2)'}">${i+1}</span></td>
-        <td class="nm"><div style="font-weight:700">${esc(r.m.teamName||'—')}</div>
+        <td class="pos"><span class="posn" style="background:${i===0?'linear-gradient(150deg,#F5D76E,#C9A227)':'var(--fill2)'};color:${i===0?'#4a3a06':'var(--label2)'}">${i+1}</span></td>
+        <td class="nm"><div style="font-weight:700;display:flex;align-items:center;gap:7px"><span>${esc(r.m.teamName||'—')}</span>${mvA(r.move||0)}</div>
           <div style="font-size:11.5px;color:var(--label3)">${esc(r.m.name)}${r.from>1?` · joined GW${r.from}`:''}</div></td>
         <td class="c">${r.gw}</td><td class="pts">${r.total}</td></tr>`).join('')}</tbody></table></div></div>
     <div class="note" style="padding:6px 4px 0">Tap any team to see their ${FPL_RULES.squadSize}.</div>
@@ -13204,8 +13225,8 @@ function vLeague(){
           <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
           <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">🅰️</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
           <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
-            <td class="pos">${mvA(m[x.id]||0)}<span class="posn">${i+1}</span></td>
-            <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}${x.pos?` <span class="pill ${x.pos}">${x.pos}</span>`:''}</span></span></td>
+            <td class="pos"><span class="posn">${i+1}</span></td>
+            <td class="nm"><span style="display:inline-flex;align-items:center;gap:9px">${avatar(x,26)}<span>${esc(x.name)}${x.pos?` <span class="pill ${x.pos}">${x.pos}</span>`:''}</span>${mvA(m[x.id]||0)}</span></td>
             <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
             <td class="c">${x.GF}</td><td class="c">${x.GA}</td><td class="c">${x.GD>0?'+':''}${x.GD}</td>
             <td class="c">${x.G}</td><td class="c">${x.A||0}</td><td class="c">${formDots(x.last5,true)}</td><td class="pts">${x.pts}</td></tr>`).join('')}</tbody></table></div></div>
