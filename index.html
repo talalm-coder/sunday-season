@@ -225,8 +225,14 @@ tr.z-rel{background:color-mix(in srgb,#FF453A 8%,transparent)}
 .lgkey-d.z-eur{background:#FF6B00}.lgkey-d.z-con{background:#00C08B}.lgkey-d.z-rel{background:#FF453A}
 .lgkey-l{color:var(--label);font-weight:600}
 .lgkey-r{color:var(--label3);font-weight:600;font-variant-numeric:tabular-nums}
-.mv{font-size:10px;margin-right:2px;font-weight:700}
-.mv.up{color:var(--green)}.mv.dn{color:var(--red)}.mv.eq{color:var(--label3)}
+/* Movement since last gameweek: a small CSS triangle in a fixed-width slot,
+   so every position number below starts on the same pixel and an unchanged
+   player shows nothing rather than a stray dot. */
+.mv{display:inline-block;width:7px;margin-right:5px;vertical-align:middle;position:relative;top:-1px}
+.mv.up:before,.mv.dn:before{content:"";display:block;width:0;height:0;
+  border-left:3.5px solid transparent;border-right:3.5px solid transparent}
+.mv.up:before{border-bottom:5px solid var(--green)}
+.mv.dn:before{border-top:5px solid var(--red)}
 
 /* ---------- BADGES / FORM ---------- */
 .pill{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;padding:2px 7px;border-radius:6px;letter-spacing:.01em}
@@ -803,7 +809,9 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
   .hometbl thead td{padding:10px 3px;font-size:11px}
   .hometbl td.pos{padding-left:13px}
   .hometbl td.nm{padding-right:4px}
-  .hometbl td.nm .av{display:none}          /* drop the crest so names never truncate */
+  /* the crest stays — the table fits now, and a name with no badge beside it
+     left the column looking unfinished */
+  .hometbl td.nm .av{display:inline-flex;align-items:center;justify-content:center}
   .hometbl td.c{width:26px}
   .hometbl td.pts{width:34px}
 }
@@ -2603,6 +2611,238 @@ td.pts{font-weight:700;font-size:16px}
 .dn2-r.tot span,.dn2-r.tot b{color:var(--label3)}
 .dn2-r.tot b{color:var(--label)}
 @media(max-width:370px){.dn2{gap:14px}.dn2-svg{width:112px;height:112px;flex:0 0 112px}}
+
+/* ---- the top bar follows you down the page ----
+   Menu, bell and theme were scrolling away, so getting back to them meant
+   scrolling to the top of a long profile. Now pinned, with a blur and a
+   hairline that only appears once you have moved. */
+.navbar{position:sticky;top:0;z-index:60;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
+
+/* ---- home: the table follows the banner directly ---- */
+.view.active .wrap > .sky-hero{margin-bottom:14px}
+.hometbl-lead{margin-top:0}
+
+/* ---- section headers: tighter, but still a real gap ---- */
+.sechead{padding:20px 4px 8px}
+.sechead:first-of-type{padding-top:4px}
+.grid.g2 > div > .sechead{padding-top:18px}
+
+/* ---- league: the segmented control sits close to what it controls ---- */
+.view.active .seg{margin-bottom:12px}
+
+/* ---- the league table, made to fit ----
+   Thirteen columns needed 586px in a 354px box, and the container was
+   overflow:hidden — so a third of the table was unreachable. On a phone we
+   now show the eight that matter and let the rest scroll into view if the
+   screen is wide enough. */
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:520px){
+  /* GF, GA, goals, assists and form step aside; GD and PTS stay */
+  table.lgfull thead td:nth-child(7),table.lgfull tbody td:nth-child(7),
+  table.lgfull thead td:nth-child(8),table.lgfull tbody td:nth-child(8),
+  table.lgfull thead td:nth-child(10),table.lgfull tbody td:nth-child(10),
+  table.lgfull thead td:nth-child(11),table.lgfull tbody td:nth-child(11),
+  table.lgfull thead td:nth-child(12),table.lgfull tbody td:nth-child(12){display:none}
+  table.lgfull{width:100%;table-layout:auto}
+  table.lgfull td.nm{max-width:none;width:auto}
+  table.lgfull thead td:nth-child(3),table.lgfull tbody td:nth-child(3),
+  table.lgfull thead td:nth-child(4),table.lgfull tbody td:nth-child(4),
+  table.lgfull thead td:nth-child(5),table.lgfull tbody td:nth-child(5),
+  table.lgfull thead td:nth-child(6),table.lgfull tbody td:nth-child(6),
+  table.lgfull thead td:nth-child(9),table.lgfull tbody td:nth-child(9){
+    width:30px;padding-left:2px;padding-right:2px}
+}
+
+@media(max-width:375px){
+  /* the smallest phones need the rank column and cell padding trimmed too */
+  table.lgfull td.pos,table.lgfull thead td:first-child{width:26px!important;
+    padding-left:8px!important;padding-right:0!important}
+  table.lgfull td{padding-left:1px;padding-right:1px}
+  table.lgfull td.nm{padding-left:6px}
+  table.lgfull td.pts{width:34px;padding-right:8px}
+}
+
+/* The navbar lives inside #navMount, a 48px-tall wrapper — so making the bar
+   itself sticky gave it nowhere to travel. The mount is what needs pinning. */
+#navMount{position:sticky;top:0;z-index:60}
+.navbar{position:relative}
+@media(max-width:380px){
+  table.lgfull td.pos,table.lgfull thead td:first-child{width:24px!important;padding-left:6px!important}
+  table.lgfull td.nm{padding-left:4px}
+  table.lgfull td.pts{width:32px;padding-right:6px}
+}
+
+/* prediction history, inside the one predictor dropdown */
+.prg-head{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--label3);margin:22px 0 10px;padding-top:16px;border-top:.5px solid var(--sep)}
+.prg{margin-bottom:14px}
+.prg-h{display:flex;align-items:baseline;gap:8px;font-size:12.5px;color:var(--label3);
+  padding-bottom:6px}
+.prg-h b{font-size:13px;font-weight:700;color:var(--label)}
+.prg-h i{margin-left:auto;font-style:normal;font-weight:600}
+.prg-r{display:flex;align-items:center;gap:10px;padding:7px 0;font-size:13.5px;
+  border-top:.5px solid var(--sep)}
+.prg-n{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.prg-s{font-variant-numeric:tabular-nums;font-weight:600;color:var(--label2)}
+.prg-v{flex:0 0 42px;text-align:right;font-size:10px;font-weight:800;letter-spacing:.06em;
+  color:var(--label3)}
+.prg-r.hit .prg-v{color:var(--green)}
+.prg-r.hit .prg-n{font-weight:700}
+
+/* stadiums */
+.vst{display:flex;justify-content:space-between;padding:2px 0 14px}
+.vst > div{flex:1}
+.vst b{display:block;font-size:26px;font-weight:700;letter-spacing:-.024em;line-height:1.05}
+.vst span{display:block;font-size:11px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;
+  color:var(--label3);margin-top:4px}
+.vbar{height:6px;border-radius:3px;background:var(--sep);overflow:hidden}
+.vbar i{display:block;height:100%;border-radius:3px;background:var(--tint)}
+.vsplit{display:flex;gap:12px}
+.vsplit > div{flex:1;background:var(--inset);border-radius:14px;padding:14px}
+.vsplit span{display:block;font-size:12px;font-weight:600;color:var(--label2)}
+.vsplit b{display:block;font-size:30px;font-weight:700;letter-spacing:-.026em;margin-top:6px;line-height:1}
+.vsplit i{display:block;font-style:normal;font-size:11.5px;color:var(--label3);margin-top:5px}
+
+/* form ribbon and position rank on the player card */
+.fut-form{position:relative;z-index:1;display:flex;align-items:center;gap:10px;
+  margin-top:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.18)}
+.fut-rib{display:flex;gap:5px}
+.fut-rib i{width:22px;height:22px;border-radius:7px;display:flex;align-items:center;
+  justify-content:center;font-size:10px;font-weight:800;font-style:normal;
+  background:rgba(255,255,255,.18);color:#fff}
+.fut-rib i.f-W{background:#fff;color:#0b0b0d}
+.fut-rib i.f-L{background:rgba(0,0,0,.28)}
+.fut-rank{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.08em;
+  color:rgba(255,255,255,.8)}
+
+/* how you compare */
+.cmpw{margin-top:16px;padding-top:14px;border-top:.5px solid var(--sep)}
+.cmp{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:13.5px}
+.cmp-k{flex:0 0 108px;color:var(--label2)}
+.cmp-t{flex:1;height:6px;border-radius:3px;background:var(--sep);position:relative}
+.cmp-t i{display:block;height:100%;border-radius:3px}
+.cmp-t u{position:absolute;top:-3px;width:2px;height:12px;background:var(--label3);border-radius:1px}
+.cmp b{flex:0 0 38px;text-align:right;font-weight:700;font-variant-numeric:tabular-nums}
+/* standing pill on each attribute */
+.axband{font-size:9.5px;font-weight:800;letter-spacing:.04em;padding:3px 7px;border-radius:20px;
+  white-space:nowrap;flex:0 0 auto}
+.axband.g{background:rgba(18,209,120,.16);color:#0E7A46}
+.axband.b{background:rgba(46,155,255,.16);color:#0A5BBF}
+.axband.a{background:rgba(255,185,46,.18);color:#8A5A00}
+html[data-theme="dark"] .axband.g{color:#12D178}
+html[data-theme="dark"] .axband.b{color:#2E9BFF}
+html[data-theme="dark"] .axband.a{color:#FFB92E}
+@media(max-width:370px){.axband{display:none}.cmp-k{flex:0 0 92px}}
+
+/* the games behind a stat */
+.sgm{background:var(--inset);margin:0 14px 10px;border-radius:12px;padding:4px 12px}
+.sgm-r{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13px}
+.sgm-r+.sgm-r{border-top:.5px solid var(--sep)}
+.sgm-g{flex:1;color:var(--label2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sgm-r b{font-weight:700;font-variant-numeric:tabular-nums}
+.sgm-c{color:var(--label3);font-size:15px;transition:transform .18s ease;margin-left:8px}
+.sgm-c.on{transform:rotate(180deg)}
+
+/* the card is a flat position colour, as in the mockup — no club gradient */
+/* A flat position colour, as in the mockup — but only when no shop background
+   is equipped. Anything bought in the shop must win, or people pay for a card
+   finish and never see it. The shop classes all set background-image, so the
+   position colour is applied as background-color underneath and the blanket
+   background-image:none is scoped to cards with no cb- class. */
+.fut{background-color:var(--futc)}
+.fut:not([class*="cb-"]){background-image:none}
+/* form ribbon: green won, red lost, grey drew */
+.fut-rib i{background:rgba(255,255,255,.16);color:#fff}
+.fut-rib i.f-W{background:#12D178;color:#04220f}
+.fut-rib i.f-L{background:#FF3B4E;color:#fff}
+.fut-rib i.f-D{background:rgba(255,255,255,.26);color:#fff}
+.cmph{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--label3);padding-bottom:6px}
+
+/* crest, name and position number on one baseline in the tables */
+td.nm > span{display:inline-flex!important;align-items:center;gap:9px;line-height:1}
+td.nm .av{flex:0 0 auto}
+td.pos{vertical-align:middle}
+td.nm{vertical-align:middle}
+/* the crest svg is already circular; just keep it from collapsing */
+td.nm .av{flex:0 0 auto;line-height:0}
+td.nm .av svg{display:block}
+
+/* the position number sat 1.5px below the crest and name — the movement
+   marker was nudging the line box */
+.mv{top:0}
+td.pos .posn{vertical-align:middle;position:relative;top:-1px}
+@media(max-width:375px){
+  /* the last few pixels on the smallest phones */
+  table.lgfull td.nm{padding-left:3px;padding-right:2px}
+  table.lgfull td.nm .av{width:20px!important;height:20px!important}
+  table.lgfull td.nm > span{gap:6px}
+}
+
+/* the position column in the league table */
+td.posc,thead td.posc{width:44px;padding-left:2px;padding-right:2px}
+td.posc .pill{font-size:9.5px;padding:2px 5px}
+
+
+/* ============ BADGE RINGS ============
+   Only on the profile card. Each ring sits outside the crest, so the badge
+   itself is never covered. */
+.fut-crest.ring{position:relative;display:inline-flex;align-items:center;justify-content:center}
+.fut-crest.ring:before{content:"";position:absolute;inset:-7px;border-radius:50%;pointer-events:none}
+.fut-crest.ring:after{content:"";position:absolute;inset:-7px;border-radius:50%;pointer-events:none}
+
+/* Hairline — a fine ring, nothing more */
+.fut-crest.r_thin:before{border:1.5px solid rgba(255,255,255,.75)}
+
+/* Chrome — brushed metal, bright at the top-left */
+.fut-crest.r_chrome:before{padding:2.5px;
+  background:conic-gradient(from 210deg,#F5F7FA,#8F9BA5,#EDEFF2,#6E7A85,#F5F7FA);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude}
+
+/* Laurel — a champion wreath, drawn as two arcs of leaves */
+.fut-crest.r_laurel:before{border:2px solid #C9A227}
+.fut-crest.r_laurel:after{
+  background:
+    radial-gradient(4px 7px at 50% 0,#E8C55A 60%,transparent 62%),
+    radial-gradient(4px 7px at 14% 18%,#C9A227 60%,transparent 62%),
+    radial-gradient(4px 7px at 86% 18%,#C9A227 60%,transparent 62%),
+    radial-gradient(4px 7px at 2% 50%,#E8C55A 60%,transparent 62%),
+    radial-gradient(4px 7px at 98% 50%,#E8C55A 60%,transparent 62%),
+    radial-gradient(4px 7px at 14% 82%,#C9A227 60%,transparent 62%),
+    radial-gradient(4px 7px at 86% 82%,#C9A227 60%,transparent 62%);
+  inset:-12px}
+
+/* Neon — a soft glow that never sleeps */
+.fut-crest.r_neon:before{border:2px solid #2EE6FF;
+  box-shadow:0 0 10px #2EE6FF,0 0 22px rgba(46,230,255,.6),inset 0 0 8px rgba(46,230,255,.45);
+  animation:ringPulse 2.6s ease-in-out infinite}
+@keyframes ringPulse{0%,100%{opacity:.75}50%{opacity:1}}
+
+/* Flame — burns while you are on a streak */
+.fut-crest.r_flame:before{padding:3px;
+  background:conic-gradient(from 0deg,#FF3B00,#FFB300,#FF6A00,#FFD24A,#FF3B00);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  animation:ringSpin 3.2s linear infinite}
+.fut-crest.r_flame:after{box-shadow:0 0 16px rgba(255,90,0,.7)}
+@keyframes ringSpin{to{transform:rotate(360deg)}}
+
+/* Gold leaf — beaten gold, uneven the way real leaf is */
+.fut-crest.r_gold:before{padding:3.5px;
+  background:conic-gradient(from 140deg,#FFF3C4,#C9A227,#FFE9A3,#8A6E13,#FFF3C4,#C9A227);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude}
+.fut-crest.r_gold:after{box-shadow:0 0 12px rgba(201,162,39,.55)}
+
+/* the ring sits outside the crest, so its container needs room and must not clip */
+.fut-av{overflow:visible!important}
+.fut-crest.ring{margin:9px}
+.fut-crest.ring:before,.fut-crest.ring:after{inset:-8px}
+.fut-crest.r_laurel:after{inset:-13px}
 </style>
 </head>
 <body>
@@ -2663,14 +2903,17 @@ function crest(club,size){
   const s=size||40,id='c'+Math.random().toString(36).slice(2,8);
   const c1=club.c1||'#888',c2=club.c2||'#fff',ac=club.acc||'#fff';
   const key=club.crest||'solid';
-  const round=['circle','ship','snake','wolfc'].includes(key);
+  /* Always a circle. The shield tapers to a point, so a four-letter short code
+     ran past the edge and the whole thing read as a cheap sticker. */
+  const round=true;
   /* a proper crest silhouette: straight shoulders, tapered waist, pointed base */
   const SHIELD="M20 1.8 C26 3.4 32 4.4 37 4.6 V19 C37 28.4 29.8 35.8 20 38.6 C10.2 35.8 3 28.4 3 19 V4.6 C8 4.4 14 3.4 20 1.8 Z";
   const clip=round?`<circle cx="20" cy="20" r="18"/>`:`<path d="${SHIELD}"/>`;
   /* white outer rim + coloured keyline, the way real badges are built */
+  /* One clean rim. The inner accent ring in the club's second colour read as a
+     coloured halo at small sizes and made every badge look like a sticker. */
   const edge=round
-    ? `<circle cx="20" cy="20" r="18" fill="none" stroke="url(#${id}rim)" stroke-width="2.2"/>
-       <circle cx="20" cy="20" r="15.6" fill="none" stroke="${ac}" stroke-width="1" opacity=".85"/>`
+    ? `<circle cx="20" cy="20" r="18" fill="none" stroke="url(#${id}rim)" stroke-width="2"/>`
     : `<path d="${SHIELD}" fill="none" stroke="url(#${id}rim)" stroke-width="2.2" stroke-linejoin="round"/>
        <path d="${SHIELD}" fill="none" stroke="${ac}" stroke-width="0.9" opacity=".8"
          transform="translate(20,20) scale(0.88) translate(-20,-20)" stroke-linejoin="round"/>`;
@@ -2741,11 +2984,13 @@ function crest(club,size){
   const em=E[emblemFor[key]]||'';
 
   /* name band shaped to the crest, with a hairline above it like real badges */
-  const bandY = round?27.5:26.5;
+  /* Lifted off the rim. At 27.5 the band sat on the circle's edge and the
+     code looked like it was falling out of the badge. */
+  const bandY = 25.4;
   const band=`<rect x="0" y="${bandY}" width="40" height="10" fill="rgba(8,10,14,.62)"/>
     <rect x="0" y="${bandY}" width="40" height="0.7" fill="${ac}" opacity=".75"/>`;
   const code=String(club.short||'').slice(0,4);
-  const tSize=code.length>=4?7.4:code.length===3?8.8:10.2;
+  const tSize=code.length>=4?7.0:code.length===3?8.4:9.8;
   return `<svg width="${s}" height="${s}" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
     <defs>
       <clipPath id="${id}">${clip}</clipPath>
@@ -3720,7 +3965,13 @@ function avatar(p,s){s=s||38;const c=clubOf(p);
 const FORM_ARROW={W:'▲',D:'–',L:'▼'};
 const formDots=(q,sm)=>`<span class="form">${(q||[]).map(r=>
   `<span class="fd ${r}${sm?' sm':''}" title="${r==='W'?'Won':r==='D'?'Drew':'Lost'}">${FORM_ARROW[r]||r}</span>`).join('')}</span>`;
-const mvA=n=>n>0?'<span class="mv up">▲</span>':n<0?'<span class="mv dn">▼</span>':'<span class="mv eq">·</span>';
+/* Movement since the last gameweek. A fixed-width slot so the numbers below
+   stay in a straight line, a small triangle rather than a full-size glyph,
+   and nothing at all when a player has not moved — the old middle dot read as
+   a bullet point and pulled the eye away from the position. */
+const mvA=n=>n>0?'<span class="mv up" title="Up ' +n+ '"></span>'
+              :n<0?'<span class="mv dn" title="Down ' +(-n)+ '"></span>'
+                  :'<span class="mv eq"></span>';
 function rtg(p){const c=clubOf(p);if(!c)return null;if(p.star)return p.star;
   const s=c.sq[p.pos||'MID']||c.sq.MID;return s&&s[0]}
 
@@ -3937,7 +4188,7 @@ function vHome(){
         <div class="sky-hero-t">LIVE · MATCHDAY ${fplNextGw()} · ${esc(season().name||"")}</div>
         <div class="sky-hero-b">Super Sunday</div>
       </div>
-      <div class="sechead">${lc.icon} ${esc(lc.name)} table</div>
+      
       <div class="card"><div class="tw"><table class="hometbl">
         <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
         <td class="c opt">GF</td><td class="c opt">GA</td><td class="c opt">GD</td><td class="c opt2">⚽</td><td class="c opt2">Form</td><td class="pts">Pts</td></tr></thead>
@@ -4539,6 +4790,114 @@ function donut2(g,a,p){
       font-size="9.5" font-weight="700" fill="var(--label3)" letter-spacing="1">G+A</text></svg>`;
 }
 
+
+/* Where a player stood in the table after each gameweek. Recomputed from
+   scratch each time rather than stored, so it stays correct if a game is
+   edited or deleted later. */
+function positionSeries(pid){
+  const gws=playedGws(); if(gws.length<2)return null;
+  const out=[];
+  gws.forEach(gw=>{
+    const upto=allGames().filter(g=>gwOf(g)<=gw);
+    if(!upto.length)return;
+    const tbl=statsFor(upto).filter(x=>x.P>0).sort(tableSort);
+    const i=tbl.findIndex(x=>x.id===pid);
+    if(i>=0)out.push({gw,pos:i+1,of:tbl.length});
+  });
+  return out.length>1?out:null;
+}
+/* a line where lower is better, so the axis is inverted */
+function positionChart(series){
+  if(!series||series.length<2)return '';
+  const W=300,H=96, worst=Math.max(...series.map(s=>s.of),...series.map(s=>s.pos));
+  const y=p=>((p-1)/Math.max(1,worst-1))*H;
+  const pts=series.map((s,i)=>`${(i/(series.length-1))*W},${y(s.pos).toFixed(1)}`).join(' ');
+  const last=series[series.length-1], best=Math.min(...series.map(s=>s.pos));
+  return `<svg viewBox="-4 -10 ${W+8} ${H+20}" style="width:100%;height:120px;overflow:visible">
+    <line x1="0" y1="${y(1).toFixed(1)}" x2="${W}" y2="${y(1).toFixed(1)}"
+      stroke="var(--label3)" stroke-width="1" stroke-dasharray="4 4" opacity=".4"/>
+    <polyline points="${pts}" fill="none" stroke="var(--tint)" stroke-width="2.6"
+      stroke-linecap="round" stroke-linejoin="round"/>
+    ${series.map((sx,i)=>`<circle cx="${((i/(series.length-1))*W).toFixed(1)}" cy="${y(sx.pos).toFixed(1)}"
+      r="${i===series.length-1?3.8:2.2}" fill="var(--tint)"/>`).join('')}
+  </svg>
+  <div class="note" style="padding:6px 0 0">Position after each gameweek — the dashed line is top.
+    Currently ${ordinal(last.pos)} of ${last.of}${best<last.pos?`, best was ${ordinal(best)}`:''}.</div>`;
+}
+
+
+/* Each figure shown against the rest of the squad, so a number means something
+   without anyone having to hold the whole table in their head. The tick is the
+   squad average; the bar is this player. */
+function compareRows(pid){
+  const all=statsAll().filter(x=>x.P>0);
+  if(all.length<3)return '';
+  const me=all.find(x=>x.id===pid); if(!me)return '';
+  const per=(x,k)=>x[k]/Math.max(1,x.P);
+  const rows=[
+    {k:'Goals a game',   v:per(me,'G'),  vals:all.map(x=>per(x,'G')),  low:false, dp:2},
+    {k:'Assists a game', v:per(me,'A'),  vals:all.map(x=>per(x,'A')),  low:false, dp:2},
+    {k:'Points a game',  v:per(me,'pts'),vals:all.map(x=>per(x,'pts')),low:false, dp:2},
+    {k:'Conceded a game',v:per(me,'GA'), vals:all.map(x=>per(x,'GA')), low:true,  dp:1},
+  ];
+  return `<div class="cmpw"><div class="cmph">How you compare</div>${rows.map(r=>{
+    const hi=Math.max(...r.vals,0.001);
+    const avg=r.vals.reduce((t,x)=>t+x,0)/r.vals.length;
+    const good=r.low ? r.v<=avg : r.v>=avg;
+    return `<div class="cmp">
+      <span class="cmp-k">${r.k}</span>
+      <span class="cmp-t">
+        <i style="width:${Math.max(2,Math.round(100*r.v/hi))}%;background:${good?'var(--green)':'var(--label3)'}"></i>
+        <u style="left:${Math.min(98,Math.round(100*avg/hi))}%"></u>
+      </span>
+      <b>${r.v.toFixed(r.dp)}</b></div>`;
+  }).join('')}
+    <div class="note" style="padding:10px 0 0">The mark on each bar is the squad average.</div></div>`;
+}
+
+/* Where a score sits among everyone who has played, in words. A 94 means
+   little on its own; "top 15%" is immediately legible. */
+function rankBand(pid,key,axes){
+  const all=statsAll().filter(x=>x.P>0).map(x=>x.id);
+  const scores=all.map(id=>{const a=playerAxes(id);return a?a[key]:null}).filter(v=>v!=null);
+  if(scores.length<3)return null;
+  const mine=axes[key];
+  /* Ties have to count as half, or a squad where everyone scores 100 reports
+     each of them as mid-table. */
+  const below=scores.filter(v=>v<mine).length;
+  const ties =scores.filter(v=>v===mine).length;
+  const rank=(below+ties/2)/scores.length;      /* 0 = worst, 1 = best */
+  const top=Math.max(1,Math.round((1-rank)*100));
+  if(top<=30) return {t:`TOP ${Math.max(5,Math.round(top/5)*5)}%`,c:'g'};
+  if(top<=60) return {t:`TOP ${Math.round(top/5)*5}%`,c:'b'};
+  return {t:`BOTTOM ${Math.max(5,Math.round((100-top)/5)*5)}%`,c:'a'};
+}
+
+let STATOPEN=null;
+function toggleStat(k){ STATOPEN = STATOPEN===k ? null : k; render(); }
+/* The games behind a number. Tapping 18 goals should show you which Sundays
+   they came in rather than leaving you to remember. */
+function statGames(pid,kind){
+  const gs=allGames().filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(pid));
+  const rows=gs.map(g=>{
+    const onA=(g.teamA||[]).includes(pid);
+    const gf=onA?(g.scoreA||0):(g.scoreB||0), ga=onA?(g.scoreB||0):(g.scoreA||0);
+    const won=(onA&&g.result==='A')||(!onA&&g.result==='B');
+    const n = kind==='goals'   ? ((g.goals||{})[pid]||0)
+            : kind==='assists' ? ((g.assists||{})[pid]||0)
+            : kind==='wins'    ? (won?1:0)
+            : kind==='cs'      ? (ga===0?1:0) : 0;
+    return {g,n,gf,ga};
+  }).filter(x=>x.n>0).reverse().slice(0,10);
+  if(!rows.length)return `<div class="sgm"><div class="note" style="padding:6px 0">Nothing yet.</div></div>`;
+  return `<div class="sgm">${rows.map(({g,n,gf,ga})=>{
+    const v=venueName(g);
+    return `<div class="sgm-r tap" onclick="event.stopPropagation();openMatch('${g.id}')">
+      <span class="sgm-g">${esc(g.round||fdate(g.date))} · ${gf}–${ga}${v?` · ${esc(v)}`:''}</span>
+      <b>${kind==='wins'||kind==='cs'?'✓':n}</b></div>`;
+  }).join('')}</div>`;
+}
+
 function playerInsights(pid){
   const out=[], games=allGames(), st=statsAll(), me=st.find(x=>x.id===pid);
   if(!me||!me.P)return out;
@@ -4640,16 +4999,24 @@ function vPlayer(pid){
           <div class="fut-ovn">${m&&m.P?m.index:'—'}</div>
           <div class="fut-ovp">${p.pos||'--'}</div>
         </div>
-        <div class="fut-av">${c?`<div class="fut-crest">${crest(c,96)}</div>`
+        <div class="fut-av">${c?`<div class="fut-crest${ringClass(pid)}">${crest(c,96)}</div>`
           :`<div class="fut-initials">${esc(initials(p.name))}</div>`}</div>
         <div class="fut-side">
           ${ps?`<div class="fut-psd">${psDiamond(p.ps,40)}</div>`:'<div class="fut-psd"></div>'}
           <div class="fut-flag">${p.nation||''}</div>
         </div>
       </div>
-      <div class="fut-name">${shirtBadge(p,'onCard')}${esc(p.name)}</div>
+      <div class="fut-name">${esc(p.name)}</div>
       ${(function(){const bt=bootFor(pid);return bt?`<div class="fut-boot">${bt.e} ${esc(bt.n)}</div>`:''})()}
-      ${r?`<div class="fut-like">plays like <b>${esc(r)}</b></div>`:''}
+      ${(function(){
+        /* The squad number used to sit beside the name, which pushed the name
+           off centre by however many digits it was. It reads better on the
+           line below, where nothing depends on its width. */
+        const n=shirtOf(p);
+        if(!n&&!r)return '';
+        return `<div class="fut-like">${n?`<b>#${n}</b>`:''}${n&&r?' ':''}${
+          r?`plays like <b>${esc(r)}</b>`:''}</div>`;
+      })()}
       ${(p.avail&&p.avail!=='ok')?`<div style="position:relative;z-index:1;text-align:center;margin-bottom:10px">
         <span class="avpill big" style="--ac:${availOf(p).col}">${availOf(p).icon} ${availOf(p).label}</span></div>`:''}
       <div class="fut-stats">
@@ -4657,6 +5024,24 @@ function vPlayer(pid){
            ['PLAYED',m?m.P:0],['WIN RATE',m?Math.round(m.wr*100)+'%':'0%'],['CLEAN SHEETS',m?m.cs:0]].map(([l,v])=>`
           <div class="fut-st"><b>${v}</b><span>${l}</span></div>`).join('')}
       </div>
+      ${(function(){
+        /* last five results, most recent last, plus where they rank in their
+           position — the two things the card could not tell you before */
+        const gs=allGames().filter(g=>[...(g.teamA||[]),...(g.teamB||[])].includes(pid)).slice(-5);
+        if(!gs.length)return '';
+        const all=statsAll().filter(x=>x.P>0)
+          .filter(x=>((player(x.id)||{}).pos||'MID')===(p.pos||'MID')).sort(tableSort);
+        const rk=all.findIndex(x=>x.id===pid)+1;
+        const res=gs.map(g=>{
+          const onA=(g.teamA||[]).includes(pid);
+          if(g.result==='D')return 'D';
+          return ((onA&&g.result==='A')||(!onA&&g.result==='B'))?'W':'L';
+        });
+        return `<div class="fut-form">
+          <div class="fut-rib">${res.map(r=>`<i class="f-${r}">${r}</i>`).join('')}</div>
+          ${rk?`<span class="fut-rank">#${rk} ${esc(p.pos||'MID')} of ${all.length}</span>`:''}
+        </div>`;
+      })()}
     </div>
 
     ${ps?`<div class="sechead">PlayStyle+</div>
@@ -4689,21 +5074,7 @@ function vPlayer(pid){
             ${cur?'<span class="lvlrow-now">YOU</span>':reached?'<span class="lvlrow-ok">✓</span>':''}</div>`}).join('')}</div>`:''}
       </div>`:''}
 
-    ${(function(){
-      /* OUTSIDE the played-games guard below. A player who has not played yet
-         still needs to connect Strava — gating it on appearances meant new
-         players saw it in Career Mode but not on their own profile. */
-      const me=fplMine();
-      if(!me||me.pid!==pid)return '';
-      /* both sections sit outside the played-games guard: a player with no
-         appearances yet still needs to see them */
-      return stravaRow() + (stravaSummary(pid)?'':`<div class="sechead">🏃 Physical</div>
-        <div class="card pad">
-          <div class="note" style="padding:0 0 12px">Type in what your watch showed after a game —
-            Whoop, Garmin, Apple Watch, anything. Calories, average and max heart rate.</div>
-          <button class="btn sec full" onclick="physAdd('${pid}')">+ Add numbers for a game</button>
-        </div>`);
-    })()}
+
 
     ${(function(){
       if(!m||!m.P)return '';
@@ -4747,12 +5118,14 @@ function vPlayer(pid){
         return `<div class="sechead">Attributes</div>
         <div class="card pad">
           ${radarSVG(ax,215)}
-          <div class="axbars">${Object.entries(ax).map(([k,v])=>`
-            <div class="axb">
+          <div class="axbars">${Object.entries(ax).map(([k,v])=>{
+            const bd=rankBand(pid,k,ax);
+            return `<div class="axb">
               <span class="axb-k">${k}</span>
               <span class="axb-t"><i style="width:${Math.max(3,v)}%;background:${tone(v)}"></i></span>
+              ${bd?`<span class="axband ${bd.c}">${bd.t}</span>`:''}
               <b style="color:${tone(v)}">${v}</b>
-            </div>`).join('')}</div>
+            </div>`}).join('')}</div>
           <div class="axnote">
             <span>💪 Strongest <b>${best[0]}</b> ${best[1]}</span>
             <span>🎯 To work on <b>${worst[0]}</b> ${worst[1]}</span>
@@ -4766,6 +5139,12 @@ function vPlayer(pid){
       <div class="card">${ins.map(x=>`<div class="tp-r">
         <span class="tp-e">${x.e}</span>
         <div><b>${esc(x.t)}</b><i>${x.d}</i></div></div>`).join('')}</div>`:''}
+
+      ${(function(){
+        const ps=positionSeries(pid); if(!ps)return '';
+        return `<div class="sechead">League position</div>
+          <div class="card pad">${positionChart(ps)}</div>`;
+      })()}
 
       ${rs.length>1?`<div class="sechead">Match rating</div>
       <div class="card pad">${lineChart(rs,`Each game this season. The dashed line is your average, ${avg.toFixed(1)}.`,avg)}</div>`:''}
@@ -4800,9 +5179,26 @@ function vPlayer(pid){
             <div><b style="color:${ratio>=1?'var(--green)':'var(--red)'}">${ratio.toFixed(2)}</b>
               <span>for / against</span></div>
           </div>
+          ${compareRows(pid)}
           <div class="note" style="padding:12px 0 0">While you were on the pitch your side scored
             ${m.GF} and let in ${m.GA}${better?` — ${Math.abs(better)}% ${better>0?'fewer':'more'} than the league average`:''}.</div>
         </div>`;
+      })()}
+
+      ${(function(){
+      /* OUTSIDE the played-games guard below. A player who has not played yet
+         still needs to connect Strava — gating it on appearances meant new
+         players saw it in Career Mode but not on their own profile. */
+      const me=fplMine();
+      if(!me||me.pid!==pid)return '';
+      /* both sections sit outside the played-games guard: a player with no
+         appearances yet still needs to see them */
+      return stravaRow() + (stravaSummary(pid)?'':`<div class="sechead">🏃 Physical</div>
+        <div class="card pad">
+          <div class="note" style="padding:0 0 12px">Type in what your watch showed after a game —
+            Whoop, Garmin, Apple Watch, anything. Calories, average and max heart rate.</div>
+          <button class="btn sec full" onclick="physAdd('${pid}')">+ Add numbers for a game</button>
+        </div>`);
       })()}
 
       ${(function(){
@@ -4892,8 +5288,19 @@ function vPlayer(pid){
     <div class="card">
       <div class="row"><div class="rt"><div class="r1">Record</div></div><div class="rv">${m.W}W · ${m.D}D · ${m.L}L</div></div>
       <div class="row"><div class="rt"><div class="r1">Form</div></div><div class="rv">${m.P?formDots(m.last5,true):'—'}</div></div>
+      <div class="row tap" onclick="toggleStat('goals')"><div class="rt"><div class="r1">Goals</div></div>
+        <div class="rv">${m.G}</div><span class="sgm-c${STATOPEN==='goals'?' on':''}">⌄</span></div>
+      ${STATOPEN==='goals'?statGames(pid,'goals'):''}
+      <div class="row tap" onclick="toggleStat('assists')"><div class="rt"><div class="r1">Assists</div></div>
+        <div class="rv">${m.A||0}</div><span class="sgm-c${STATOPEN==='assists'?' on':''}">⌄</span></div>
+      ${STATOPEN==='assists'?statGames(pid,'assists'):''}
       <div class="row"><div class="rt"><div class="r1">Goals per game</div></div><div class="rv">${m.gpg.toFixed(2)}</div></div>
-      <div class="row"><div class="rt"><div class="r1">Clean sheets</div></div><div class="rv">${m.cs}</div></div>
+      <div class="row tap" onclick="toggleStat('wins')"><div class="rt"><div class="r1">Wins</div></div>
+        <div class="rv">${m.W}</div><span class="sgm-c${STATOPEN==='wins'?' on':''}">⌄</span></div>
+      ${STATOPEN==='wins'?statGames(pid,'wins'):''}
+      <div class="row tap" onclick="toggleStat('cs')"><div class="rt"><div class="r1">Clean sheets</div></div>
+        <div class="rv">${m.cs}</div><span class="sgm-c${STATOPEN==='cs'?' on':''}">⌄</span></div>
+      ${STATOPEN==='cs'?statGames(pid,'cs'):''}
       ${m.streak.n>=2?`<div class="row"><div class="rt"><div class="r1">Current streak</div></div>
         <div class="rv" style="color:${m.streak.type==='W'?'var(--green)':m.streak.type==='L'?'var(--red)':'var(--label2)'}">
         ${m.streak.type==='W'?'🔥':m.streak.type==='L'?'❄️':'➖'} ${m.streak.n} ${m.streak.type==='W'?'wins':m.streak.type==='L'?'losses':'draws'}</div></div>`:''}
@@ -4991,6 +5398,94 @@ function venuesBlock(){
       <div class="row tap" data-admin onclick="editVenue(null)">
         <div class="rt"><div class="r1" style="color:var(--tint)">+ Add a venue</div></div></div>
     </div>`;
+}
+
+
+/* ============ VENUES: THE STADIUMS VIEW ============
+   Every pitch you play at, with your record there. Only games logged with a
+   venue count — older ones sit under "not recorded" rather than being
+   guessed at. */
+function venueStats(){
+  const gs=allGames().filter(g=>g.venueId&&venueBy(g.venueId));
+  const by={};
+  gs.forEach(g=>{
+    const v=venueBy(g.venueId);
+    const b=by[v.id]=by[v.id]||{v,P:0,gf:0,ga:0,big:null,hi:0,draws:0,scores:[]};
+    b.P++;
+    const a=g.scoreA||0, bb=g.scoreB||0;
+    b.gf+=a+bb;
+    if(a===bb)b.draws++;
+    const margin=Math.abs(a-bb);
+    if(!b.big||margin>b.big.m)b.big={m:margin,s:`${Math.max(a,bb)}–${Math.min(a,bb)}`,round:g.round,id:g.id};
+    if(a+bb>b.hi)b.hi=a+bb;
+    b.scores.push([a,bb]);
+  });
+  return Object.values(by).sort((x,y)=>y.P-x.P);
+}
+function venuesBody(){
+  const vs=venueStats();
+  const unlogged=allGames().filter(g=>!g.venueId).length;
+  if(!vs.length)return `<div class="empty"><div class="ee">📍</div><h3>No venues logged yet</h3>
+    <p>Pick a venue when you log a game and the records build from there.</p></div>`;
+  const totalG=vs.reduce((t,x)=>t+x.P,0);
+  const inG=vs.filter(x=>x.v.t==='in').reduce((t,x)=>t+x.P,0);
+  const outG=totalG-inG;
+  const avg=a=>a.P?(a.gf/a.P):0;
+  const busiest=vs[0];
+  const highest=vs.slice().sort((a,b2)=>avg(b2)-avg(a))[0];
+
+  return `
+    <div class="tiles" style="margin-bottom:6px">
+      ${tile(vs.length,'Venues')}${tile(totalG,'Games')}
+      ${tile(outG,'Outdoor')}${tile(inG,'Indoor')}
+    </div>
+    ${highest&&highest.P>1?`<div class="note" style="padding:0 4px 14px">Most goals a game at
+      <b>${esc(highest.v.n)}</b> — ${avg(highest).toFixed(1)}. Busiest is
+      <b>${esc(busiest.v.n)}</b> with ${busiest.P}.</div>`:''}
+
+    ${vs.map(b=>{
+      const g=avg(b);
+      const share=Math.round(100*b.P/totalG);
+      return `<div class="sechead">${b.v.t==='in'?'🏟':'☀️'} ${esc(b.v.n)}</div>
+      <div class="card pad">
+        <div class="vst">
+          <div><b>${b.P}</b><span>games</span></div>
+          <div><b>${g.toFixed(1)}</b><span>goals a game</span></div>
+          <div><b>${b.hi}</b><span>most in a game</span></div>
+          <div><b>${b.draws}</b><span>draws</span></div>
+        </div>
+        <div class="vbar"><i style="width:${share}%"></i></div>
+        <div class="note" style="padding:8px 0 0">${share}% of your season is played here${
+          b.big&&b.big.m>0?` · biggest win ${b.big.s}${b.big.round?` in ${esc(b.big.round)}`:''}`:''}.
+          ${b.v.t==='in'?'Indoor, so no weather is recorded.':'Outdoor.'}</div>
+      </div>`}).join('')}
+
+    ${(function(){
+      /* how scorelines differ between the two surfaces */
+      const bucket=t=>{
+        const gs=allGames().filter(g=>venueType(g)===t);
+        if(!gs.length)return null;
+        const tot=gs.reduce((a,g)=>a+(g.scoreA||0)+(g.scoreB||0),0);
+        const dr=gs.filter(g=>g.result==='D').length;
+        return {n:gs.length, gpg:tot/gs.length, draws:Math.round(100*dr/gs.length)};
+      };
+      const o=bucket('out'), i=bucket('in');
+      if(!o||!i)return '';
+      return `<div class="sechead">Indoor vs outdoor</div>
+      <div class="card pad">
+        <div class="vsplit">
+          <div><span>☀️ Outdoor</span><b>${o.gpg.toFixed(1)}</b><i>${o.n} games · ${o.draws}% drawn</i></div>
+          <div><span>🏟 Indoor</span><b>${i.gpg.toFixed(1)}</b><i>${i.n} games · ${i.draws}% drawn</i></div>
+        </div>
+        <div class="note" style="padding:10px 0 0">Goals a game on each surface.
+          ${Math.abs(o.gpg-i.gpg)<0.3?'Barely any difference so far.'
+            :`${o.gpg>i.gpg?'Outdoor':'Indoor'} games are producing
+              ${Math.abs(o.gpg-i.gpg).toFixed(1)} more a game.`}</div>
+      </div>`;
+    })()}
+
+    ${unlogged?`<div class="note">${unlogged} game${unlogged===1?' was':'s were'} logged before venues existed,
+      so they are not counted here.</div>`:''}`;
 }
 
 /* ============ WEATHER ============
@@ -5631,8 +6126,6 @@ function vCareer(){
       <button class="btn pri" onclick="newGame()">Log a game</button></div>`
     :`${wagesBlock()}
       ${dealsBlock()}
-      ${stravaRow()}
-      ${physCareerRow()}
       ${levelLadder(board)}
 
       ${milestoneCatalogue(board)}
@@ -6096,7 +6589,11 @@ async function shareGameweek(){
 
 /* The PlayStyle colours are neon by design, which looks harsh across a whole
    card. The card instead uses a curated deep tone per position. */
-const CARD_TONE={ATT:'#8E2140', MID:'#1B5E7A', DEF:'#1D4E7C', GK:'#7A5A14'};
+/* Position colour, so a profile is recognisable before you read the name.
+   Red / green / blue, with amber for keepers. */
+const CARD_TONE={ATT:'#C2183C', MID:'#0E7A46', DEF:'#0A5BBF', GK:'#B07A0C'};
+const POS_NEON={ATT:'#FF3B6B', MID:'#12D178', DEF:'#2E9BFF', GK:'#FFB92E'};
+const posCol=p=>POS_NEON[(p&&p.pos)||'MID']||POS_NEON.MID;
 /* The card takes the player's club colour so each one feels like their team.
    Very light club colours (Real Madrid, Spurs) are swapped for their accent so
    the card never washes out. */
@@ -6122,6 +6619,17 @@ function pitchSkin(){
   return p?(' sk-'+p):'';
 }
 
+
+/* ---- badge rings ----
+   Six of these were on sale and none of them did anything: the shop drew a
+   swatch, but nothing ever applied a ring to a crest. They only appear on the
+   profile card, where the crest is 96px — at 24px in a table a ring is just
+   noise. */
+function ringClass(pid){
+  const r = pid ? equipped(pid,'border') : null;
+  return r ? ' ring ' + r : '';
+}
+
 function cosmClass(pid){
   const c=equipped(pid,'card');
   if(!c)return '';
@@ -6129,6 +6637,11 @@ function cosmClass(pid){
   return `cf-${st} cb-${st}`;              /* frame and background together */
 }
 function cardTone(p){
+  /* Position wins. The club colour used to override it, so an attacker at a
+     blue club got a blue card and the position colour never showed. */
+  return CARD_TONE[(p&&p.pos)||'MID']||'#2B3A55';
+}
+function __clubTone(p){
   const c=clubOf(p);
   if(!c)return CARD_TONE[(p&&p.pos)||'MID']||'#2B3A55';
   const lum=hex=>{const h=String(hex||'').replace('#','');
@@ -8520,6 +9033,19 @@ function vMatch(gid){
         <div style="font-size:19px;flex:0 0 26px">⚽</div>
         <div class="rt"><div class="r1">${esc(x.name)}</div>
           <div class="r2">Team ${x.onA?'A':'B'}${x.n>1?` · ${x.n} goals`:''}</div></div></div>`).join('')}</div>`:''}
+    ${(function(){
+      /* assists had no home on the match page — the goals were credited but
+         whoever set them up was invisible */
+      const as=Object.entries(g.assists||{}).filter(([,n])=>n>0)
+        .map(([pid,n])=>({pid,n,name:(player(pid)||{}).name,onA:(g.teamA||[]).includes(pid)}))
+        .filter(x=>x.name).sort((x,y)=>y.n-x.n);
+      if(!as.length)return '';
+      return `<div class="sechead">Assists</div>
+      <div class="card">${as.map(x=>`<div class="row tap" onclick="openPlayer('${x.pid}')">
+        <div style="font-size:19px;flex:0 0 26px">🅰️</div>
+        <div class="rt"><div class="r1">${esc(x.name)}</div>
+          <div class="r2">Team ${x.onA?'A':'B'}${x.n>1?` · ${x.n} assists`:''}</div></div></div>`).join('')}</div>`;
+    })()}
     ${(function(){const rs=matchRatings(g); if(!rs.length)return '';
       return `<div class="sechead">Player ratings</div>
       <div class="card">${rs.map((x,i)=>`
@@ -10385,7 +10911,7 @@ function paintSlip(){
           <b>${x.odds.toFixed(2)}</b>
           <button onclick="pickBet('${x.pid}','${x.k}')">✕</button></div>`).join('')}</div>
       <div class="sb-stake">
-        ${[50,100,250,500].map(v=>`<button class="${BSTAKE===v?'on':''}" onclick="BSTAKE=${v};render()">${usd(v)}</button>`).join('')}
+        ${[100,250,500,1000].map(v=>`<button class="${BSTAKE===v?'on':''}" onclick="BSTAKE=${v};render()">${usd(v)}</button>`).join('')}
         <button onclick="customStake()">Custom</button>
         <button onclick="maxStake()">Max</button>
       </div>
@@ -10895,12 +11421,32 @@ function predBlock(){
   const gw=fplNextGw(), me=fplMine();
   const mine=myPred(gw);
   const all=preds();
-  const past=playedGws().slice(-1)[0];
-  const lastRound=past!=null?Object.entries(all[past]||{}) : [];
   if(mine&&PRA==null){PRA=mine.a;PRB=mine.b}
   const a=PRA??0, b2=PRB??0;
-  /* A thin bar, not a billboard. The markets are what people come here for,
-     so the predictor states its business in one line and folds away. */
+
+  /* Everything the predictor does lives in one dropdown: this week's guess at
+     the top, then every settled gameweek beneath it with who hit and who
+     missed. Two separate drops for one feature was one too many. */
+  const done=playedGws().filter(g=>Object.keys(all[g]||{}).length).sort((x,y)=>y-x);
+  const myHits=done.filter(g=>(all[g][me?me.pid:'']||{}).won).length;
+
+  const history=done.map(g=>{
+    const rows=Object.entries(all[g]||{});
+    const act=(rows.find(([,e])=>e.actual)||[])[1];
+    const hits=rows.filter(([,e])=>e.won).length;
+    return `<div class="prg">
+      <div class="prg-h"><b>GW${g}</b>
+        ${act&&act.actual?`<span>finished ${act.actual.a}–${act.actual.b}</span>`:'<span>not settled</span>'}
+        <i>${hits?`${hits} hit`:'nobody hit'}</i></div>
+      ${rows.sort((x,y)=>(y[1].won?1:0)-(x[1].won?1:0)).map(([pid,e])=>`
+        <div class="prg-r${e.won?' hit':''}">
+          <span class="prg-n">${esc((player(pid)||{}).name||'—')}</span>
+          <span class="prg-s">${e.a}–${e.b}</span>
+          <span class="prg-v">${e.won?'HIT':'MISS'}</span>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+
   return `<details class="drop${mine?' on':''}"${PREDOPEN?' open':''} ontoggle="PREDOPEN=this.open">
       <summary><span>🎯 Score predictor · free</span>
         <i class="${mine?'sig':''}">${mine?`Your call ${mine.a}–${mine.b}`:`Win ${usd(PREDICT_PRIZE)}`}</i></summary>
@@ -10924,17 +11470,11 @@ function predBlock(){
         </div>
         <button class="btn pri full" style="margin-top:12px" onclick="savePred()">
           ${mine?`Change my guess (${mine.a}–${mine.b})`:'Put my guess in'}</button>
+
+        ${history?`<div class="prg-head">Previous predictions${
+          me&&myHits?` · you have hit ${myHits}`:''}</div>${history}`:''}
       </div>
-    </details>
-    ${lastRound.length?`<details class="drop"${PREDPASTOPEN?' open':''} ontoggle="PREDPASTOPEN=this.open">
-      <summary><span>GW${past} predictions</span><i>${lastRound.length} entered</i></summary>
-      <div class="card">${lastRound.sort((x,y)=>(y[1].won?1:0)-(x[1].won?1:0)).map(([pid,e])=>`
-        <div class="row"><div class="rt">
-          <div class="r1">${esc((player(pid)||{}).name||'—')}</div>
-          <div class="r2">Called ${e.a}–${e.b}${e.actual?` · it finished ${e.actual.a}–${e.actual.b}`:''}</div></div>
-          <div class="rv" style="color:${e.won?'var(--green)':'var(--label3)'}">
-            ${e.won?usdSigned(PREDICT_PRIZE):'—'}</div></div>`).join('')}</div>
-    </details>`:''}`;
+    </details>`;
 }
 
 function vBets(){
@@ -11787,11 +12327,11 @@ function vStats(){
             top&&top.G?`${esc(top.name)} leads with ${top.G}`:'nobody has scored yet'}`});
       })()}
       <div class="seg" style="margin-bottom:12px">
-        ${[['table','Table'],['leaders','Leaders'],['insights','Insights'],['splits','Splits'],['chem','Chemistry'],['compare','Compare']].map(([k,l])=>`<button class="${SMODE===k?'on':''}" onclick="SMODE='${k}';render()">${l}</button>`).join('')}
+        ${[['table','Table'],['leaders','Leaders'],['insights','Insights'],['splits','Splits'],['venues','Venues'],['chem','Chemistry'],['compare','Compare']].map(([k,l])=>`<button class="${SMODE===k?'on':''}" onclick="SMODE='${k}';render()">${l}</button>`).join('')}
       </div>
       ${SMODE==='table'?`<div class="statseg">${Object.entries(STAT_VIEWS).map(([k,v])=>
         `<button class="${SVIEW===k?'on':''}" onclick="SVIEW='${k}';render()">${v.l}</button>`).join('')}</div>`:''}
-      ${(SMODE==='chem'||SMODE==='compare'||SMODE==='insights')?'':`<div class="filterbar" style="margin-bottom:12px">
+      ${(SMODE==='chem'||SMODE==='compare'||SMODE==='insights'||SMODE==='venues')?'':`<div class="filterbar" style="margin-bottom:12px">
         <select class="fsel" onchange="SCOMP=this.value;render()">
           <option value="all" ${SCOMP==='all'?'selected':''}>All comps</option>
           ${comps().map(c=>`<option value="${c.id}" ${SCOMP===c.id?'selected':''}>${c.icon} ${esc(c.name)}</option>`).join('')}
@@ -11820,6 +12360,7 @@ function vStats(){
       : SMODE==='leaders'? statLeaders(st)
       : SMODE==='insights'? insightsBody()
       : SMODE==='chem'? statChem()
+      : SMODE==='venues'? venuesBody()
       : SMODE==='compare'? compareBody()
       : statSplits(st,total)}
     </div></div>`;
@@ -12650,8 +13191,7 @@ function vLeague(){
         <button class="${LMODE==='comps'?'on':''}" onclick="LMODE='comps';render()">Competitions</button>
       </div>
       ${LMODE==='comps'?compsBody():LMODE==='fixtures'?fixturesBody():`
-      ${tbl.length?`<div class="sechead">Table</div>
-        <div class="card"><div class="tw"><table>
+      ${tbl.length?`<div class="card" style="margin-top:0"><div class="tw"><table class="lgfull">
           <thead><tr><td style="padding-left:16px">#</td><td>Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
           <td class="c">GF</td><td class="c">GA</td><td class="c">GD</td><td class="c">⚽</td><td class="c">🅰️</td><td class="c">Form</td><td class="pts">Pts</td></tr></thead>
           <tbody>${tbl.map((x,i)=>`<tr class="${zoneOf(i,tbl.length)}" onclick="openPlayer('${x.id}')">
@@ -13651,6 +14191,16 @@ document.addEventListener('keydown',e=>{
   if(supaConfigured && !supa)setTimeout(()=>toast('⚠️ Could not reach the shared database — check your setup'),1400);
 })();
 
+</script>
+<script>
+/* the nav only grows a hairline once the page has actually moved */
+(function(){
+  let t=false;
+  const on=()=>{const y=window.scrollY>4;
+    if(y!==t){t=y;document.documentElement.classList.toggle('scrolled',y)}};
+  window.addEventListener('scroll',on,{passive:true});
+  window.addEventListener('load',on);
+})();
 </script>
 </body>
 </html>
