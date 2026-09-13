@@ -2092,8 +2092,8 @@ details.drop .card{margin-top:0;border-radius:0 0 14px 14px}
 .wagegrp{font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;
   color:var(--label3);padding:12px 4px 7px}
 details.drop .wagegrp:first-of-type{padding-top:4px}
-details.drop>.card{border-radius:14px}
-details.drop>.card:last-child{border-radius:14px 14px 14px 14px}
+details.drop>.card{border-radius:18px}
+details.drop>.card:last-child{border-radius:18px}
 .carhead{display:flex;align-items:center;gap:13px;background:var(--card);border-radius:16px;
   padding:14px 16px;margin-bottom:14px;box-shadow:0 6px 18px -12px rgba(0,0,0,.3)}
 .carhead-n{flex:1;min-width:0}
@@ -2456,6 +2456,153 @@ tr.lifetime td{font-weight:800;border-top:1.5px solid var(--sep)}
 /* Only tables WITH a rank column need the 13px header inset. Stats leads with
    the name column, which sits at 16px, so forcing 13px there broke it instead. */
 table:has(td.pos) thead td:first-child{padding-left:13px!important}
+
+/* venue picker on the game sheet — a wrapping list, not a two-way toggle */
+.vpick{display:flex;flex-wrap:wrap;gap:6px}
+.vpick button{flex:0 0 auto;background:var(--fill);border:1px solid var(--cardline);
+  border-radius:10px;padding:8px 11px;font-size:13px;font-weight:600;color:var(--label);
+  display:flex;flex-direction:column;align-items:flex-start;gap:1px;line-height:1.2}
+.vpick button i{font-style:normal;font-size:9.5px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--label3)}
+.vpick button.on{background:var(--tint);border-color:var(--tint);color:#fff}
+.vpick button.on i{color:rgba(255,255,255,.75)}
+
+/* ============================================================
+   APPLE PASS — apple.com product pages, not iOS Settings.
+   That means: confident large type, generous rounded tiles, real
+   colour used vividly, strong anchors. NOT flat grey hairlines.
+   The refinement is in the type and the spacing; the colour stays.
+   ============================================================ */
+
+/* ---- type: the scale is the win, weights lifted back up ---- */
+.largetitle{font-size:32px;font-weight:700;letter-spacing:-.026em;line-height:1.08}
+.sechead{font-size:12px;font-weight:700;letter-spacing:.05em;color:var(--label3);
+  text-transform:uppercase;padding:28px 4px 10px;align-items:flex-end}
+.r1{font-size:15.5px;font-weight:600;letter-spacing:-.012em}
+.r2{font-size:13px;font-weight:400;color:var(--label3);letter-spacing:-.004em;margin-top:2px}
+.rv{font-size:16px;font-weight:700;letter-spacing:-.012em}
+.note{font-size:13px;font-weight:400;color:var(--label3);line-height:1.45;padding:10px 4px 2px}
+
+/* ---- tiles, the apple.com way: generous radius, real surface ---- */
+.card{border:1px solid var(--cardline);border-radius:18px;background:var(--card);
+  box-shadow:none;margin-bottom:14px;overflow:hidden}
+.card.pad{padding:16px}
+.card > .row{padding:14px 16px}
+.card > .row + .row{border-top:.5px solid var(--sep)}
+.tw{border:1px solid var(--cardline);border-radius:18px;background:var(--card);overflow:hidden}
+
+/* ---- tables ---- */
+thead td{font-size:11px;font-weight:700;letter-spacing:.05em;color:var(--label3);
+  padding-top:12px;padding-bottom:10px}
+tbody td{font-size:15px;font-weight:500;padding-top:13px;padding-bottom:13px}
+td.nm{font-weight:600;letter-spacing:-.012em}
+td.pts{font-weight:700;font-size:16px}
+
+/* ---- segmented controls ---- */
+.seg{background:var(--fill);border-radius:11px;padding:3px}
+.seg button{font-size:13.5px;font-weight:600;letter-spacing:-.01em;border-radius:8px;padding:8px 10px}
+.seg button.on{background:var(--card);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+
+/* ---- buttons ---- */
+.btn{font-size:15.5px;font-weight:600;letter-spacing:-.012em;border-radius:12px}
+
+/* ---- numbers: big and confident, the apple.com hero treatment ---- */
+.tiles b,.phys b{font-size:30px;font-weight:700;letter-spacing:-.026em;line-height:1.05}
+.tiles span,.phys span{font-size:12px;font-weight:600;letter-spacing:.02em;
+  color:var(--label3);text-transform:uppercase;margin-top:4px}
+.dnstat b{font-size:22px;font-weight:700;letter-spacing:-.022em}
+.dnstat span{font-size:11.5px;color:var(--label3);letter-spacing:.02em}
+
+/* ---- the rating card ---- */
+.idxcard{background:var(--inset);border:1px solid var(--cardline);border-radius:18px;padding:18px}
+.idxcard-v{font-size:56px;font-weight:800;letter-spacing:-.04em}
+.idxcard-k{font-size:11px;font-weight:700;letter-spacing:.1em}
+.idxcard-arc{font-size:21px;font-weight:700;letter-spacing:-.022em}
+.idxcard-sub{font-size:14px;color:var(--label3);font-weight:400}
+.ichip{font-size:11px;font-weight:600;background:var(--card);border:1px solid var(--cardline)}
+.idxbar{height:5px;border-radius:3px;margin-top:18px}
+
+/* ---- attributes ---- */
+.axb-k{font-size:12.5px;font-weight:500;color:var(--label2)}
+.axb-t{height:6px;border-radius:3px}
+.axb b{font-size:12.5px;font-weight:700}
+
+/* ---- breathing room ---- */
+.wrap{padding-left:16px;padding-right:16px}
+.empty{padding:56px 20px}
+
+
+/* ---- the banner, embedded rather than stuck on ----
+   It was a floating rounded rectangle with a shadow, sitting on the page like
+   a sticker. Now it bleeds to the screen edges and tucks under the nav bar,
+   so the page begins with it rather than containing it. */
+.view.active .wrap > .sky-hero{
+  border-radius:0;
+  margin-left:-16px;
+  margin-right:-16px;
+  margin-top:-8px;
+  margin-bottom:22px;
+  box-shadow:none;
+  padding-top:22px;
+  padding-bottom:20px;
+  padding-left:16px;
+  padding-right:16px;
+}
+/* a soft edge where it meets the page, instead of a hard stop */
+.view.active .wrap > .sky-hero::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:rgba(0,0,0,.10)}
+@media(max-width:370px){
+  .view.active .wrap > .sky-hero{margin-left:-14px;margin-right:-14px;
+    padding-left:14px;padding-right:14px}
+}
+
+/* ---- game logger: the A / B buttons ----
+   They were 30px wide and touching, so a thumb aimed at A regularly hit B and
+   put someone on the wrong team. Now 46px each — above Apple's 44px minimum —
+   with a real gap, and a clear pressed state. */
+.pgab{border:none;cursor:pointer;width:46px;align-self:stretch;font-size:15px;font-weight:700;
+  color:#fff;border-radius:12px;margin:5px 0;transition:transform .1s ease,filter .1s ease}
+.pgab.a{background:var(--tint);margin-left:8px}
+.pgab.b{background:var(--blue);margin-left:6px;margin-right:5px}
+.pgab:active{transform:scale(.93);filter:brightness(.9)}
+.pgname{flex:1;min-width:0}
+.pgrow{align-items:stretch;min-height:56px}
+@media(max-width:370px){
+  .pgab{width:42px;font-size:14px}
+  .pgab.a{margin-left:6px}
+}
+
+/* contribution: three confident numbers over a proportion bar. The donut
+   collapsed into a plain ring whenever a player had no assists, which is most
+   defenders — this reads correctly at every split. */
+.cbig{display:flex;justify-content:space-between;padding:2px 0 18px}
+.cbig > div{flex:1}
+.cbig b{display:block;font-size:34px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.cbig span{display:block;font-size:12px;font-weight:600;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--label3);margin-top:6px}
+.cbar{display:flex;gap:3px;height:10px;border-radius:5px;overflow:hidden;background:var(--sep)}
+.cbar i{display:block;border-radius:5px}
+.ckey{display:flex;gap:16px;margin-top:10px;font-size:12.5px;color:var(--label3)}
+.ckey span{display:flex;align-items:center;gap:6px}
+.ckey i{width:9px;height:9px;border-radius:3px}
+
+/* a couple of cards kept a 14px radius from before the tile change */
+.card,.card.pad,.card.predcard,.hof .card{border-radius:18px}
+
+/* contribution ring */
+.dn2{display:flex;gap:20px;align-items:center;padding:4px 0 4px}
+.dn2-svg{width:132px;height:132px;flex:0 0 132px}
+.dn2-k{flex:1;min-width:0}
+.dn2-r{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:14px}
+.dn2-r+.dn2-r{border-top:.5px solid var(--sep)}
+.dn2-r i{width:10px;height:10px;border-radius:3px;flex:0 0 10px}
+.dn2-r span{color:var(--label2);flex:1}
+.dn2-r b{font-size:17px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.dn2-r.tot i{background:transparent}
+.dn2-r.tot span,.dn2-r.tot b{color:var(--label3)}
+.dn2-r.tot b{color:var(--label)}
+@media(max-width:370px){.dn2{gap:14px}.dn2-svg{width:112px;height:112px;flex:0 0 112px}}
 </style>
 </head>
 <body>
@@ -3668,7 +3815,8 @@ function navbar(back,action){return `<div class="navbar">${back?`<button class="
 /* The bell sits next to the theme toggle. It only appears once you have
    signed in with your code, because there is nobody to notify otherwise. */
 function bellIcon(){
-  if(!fplMine())return '';
+  /* Always visible. Hiding it until someone signed in meant people never knew
+     alerts existed — they just saw a moon and nothing else. */
   const on = PUSH_ON==='on';
   const off = !!pushBlockedReason();
   return `<button class="iconbtn bellbtn${on?' on':''}" title="${on?'Alerts are on':'Turn on match alerts'}"
@@ -3687,6 +3835,7 @@ function bellIcon(){
    toggle invites idle tapping. Anyone who genuinely wants them gone can do it
    in their phone's own notification settings, which no web app can override. */
 async function bellTap(){
+  if(!fplMine()){ toast('Enter your code first so we know who to notify'); go('fpl'); return }
   const why=pushBlockedReason();
   if(why){ toast(why); return }
   const st=await pushStatus();
@@ -3809,20 +3958,20 @@ function vHome(){
               <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
               <div class="rt"><div class="r1">${esc(x.name)}</div>
                 <div class="r2">${(x.A/Math.max(1,x.P)).toFixed(2)} per game</div></div>
-              <div class="rv" style="font-weight:800">${x.A}</div></div>`).join('')
+              <div class="rv">${x.A}</div></div>`).join('')
               :`<div class="note" style="padding:14px">No assists logged yet.</div>`})()}
         </div></div>
         <div><div class="sechead">⚽ Top scorers</div><div class="card">
           ${scorers.length?scorers.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
             <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.gpg.toFixed(2)} per game</div></div>
-            <div class="rv" style="font-weight:800">${x.G}</div></div>`).join('')
+            <div class="rv">${x.G}</div></div>`).join('')
           :'<div class="row"><div class="rt"><div class="r2">No goals recorded yet</div></div></div>'}</div></div>
         <div><div class="sechead">📈 Form guide</div><div class="card">
           ${form.length?form.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
             <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${formDots(x.last5,true)}</div></div>
-            <div class="rv" style="font-weight:800;color:var(--green)">${x.form.toFixed(1)}</div></div>`).join('')
+            <div class="rv" style="color:var(--green)">${x.form.toFixed(1)}</div></div>`).join('')
           :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'}</div></div>
 
         <div><div class="sechead">🧱 Best defence</div><div class="card">
@@ -3832,7 +3981,7 @@ function vHome(){
               <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
               <div class="rt"><div class="r1">${shirtBadge(player(x.id))}${esc(x.name)}</div>
                 <div class="r2">${x.cs} shut-out${x.cs===1?'':'s'} · ${x.P} games</div></div>
-              <div class="rv" style="font-weight:800">${(x.GA/x.P).toFixed(1)}</div></div>`).join('')
+              <div class="rv">${(x.GA/x.P).toFixed(1)}</div></div>`).join('')
             :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'})()}</div>
           </div>
       </div>
@@ -3848,14 +3997,14 @@ function vHome(){
               ${avatar(player(r.m.pid)||{name:r.m.name},30)}
               <div class="rt"><div class="r1">${esc(r.m.teamName||r.m.name)}</div>
                 <div class="r2">${esc(r.m.name)}${last?` · ${r.gw} last week`:''}</div></div>
-              <div class="rv" style="font-weight:800">${r.total}</div></div>`).join('');
+              <div class="rv">${r.total}</div></div>`).join('');
           })()}</div></div>
         <div><div class="sechead">🎮 Career leaders <button class="act" onclick="go('career')">See all</button></div><div class="card">
           ${carTop.map(({x,c},i)=>`<div class="row tap" onclick="openCareer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
             <div class="lvbadge" style="width:30px;height:30px;flex:0 0 30px;border-radius:10px"><div class="le" style="font-size:13px">${c.lvl.e}</div><div class="ln" style="font-size:6px">LV${c.lvl.n}</div></div>
             <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${esc(c.lvl.t)}</div></div>
-            <div class="rv" style="font-weight:800">${c.xp>=1000?(c.xp/1000).toFixed(1)+'k':c.xp}</div></div>`).join('')}</div></div>
+            <div class="rv">${c.xp>=1000?(c.xp/1000).toFixed(1)+'k':c.xp}</div></div>`).join('')}</div></div>
       </div>
 
       <div class="sechead">Recent results <button class="act" onclick="shareGameweek()">📸 Share gameweek</button></div>
@@ -3958,7 +4107,7 @@ function gameRow(g){
     <div style="font-size:19px;flex:0 0 24px;text-align:center">${c?c.icon:'🏆'}</div>
     <div class="rt"><div class="r1">${esc(A)} <span style="color:var(--label3)">v</span> ${esc(B)}</div>
       <div class="r2">${fdate(g.date)}${g.round?' · '+esc(g.round):''}</div></div>
-    <div class="rv" style="font-weight:800;color:var(--label)">${g.scoreA??0}–${g.scoreB??0}</div>${chev}</div>`}
+    <div class="rv" style="color:var(--label)">${g.scoreA??0}–${g.scoreB??0}</div>${chev}</div>`}
 
 /* ============ COMPETITIONS ============ */
 function vComps(){ LMODE='comps'; go('league'); }
@@ -4058,7 +4207,7 @@ function grBlock(c){
     <div class="card">${(c.fixtures||[]).map((f,i)=>`<div class="row${isAdmin()?' tap':''}"${isAdmin()?` onclick="grResult(${i})"`:''}>
       <div style="width:26px;font-size:12px;color:var(--label2);font-weight:700">${f.g}</div>
       <div class="rt"><div class="r1">${teamChip(c,f.a)} <span style="color:var(--label3)">v</span> ${teamChip(c,f.b)}</div></div>
-      <div class="rv" style="font-weight:800;color:${f.done?'var(--label)':'var(--label3)'}">${f.done?`${f.sa}–${f.sb}`:'–'}</div>${isAdmin()?chev:''}</div>`).join('')}</div>
+      <div class="rv" style="color:${f.done?'var(--label)':'var(--label3)'}">${f.done?`${f.sa}–${f.sb}`:'–'}</div>${isAdmin()?chev:''}</div>`).join('')}</div>
     ${!c.bracket?`<div class="card pad" style="margin-top:14px;text-align:center">
       <div style="font-weight:700;font-size:16px;margin-bottom:5px">Knockout stage</div>
       <div class="note" style="padding:0 0 12px">${allDone?'All group games are done — draw the knockout bracket.':'Finish the group fixtures, or draw the bracket now with the current standings.'}</div>
@@ -4361,6 +4510,35 @@ function donut(parts,size){
 }
 
 /* ---- football intelligence: patterns worth telling someone about ---- */
+
+/* The old donut drew a full circle whenever a player had no assists, which
+   made it look like a decoration rather than a chart. This one always leaves a
+   gap, rounds the caps, and puts the headline number in the middle. */
+function donut2(g,a,p){
+  const S=132, C=S/2, R=48, TH=13, tot=g+a;
+  const GAP=0.06;                       /* radians of breathing space per slice */
+  const arc=(from,to,col)=>{
+    if(to-from<0.02)return '';
+    const x1=C+Math.cos(from)*R, y1=C+Math.sin(from)*R;
+    const x2=C+Math.cos(to)*R,   y2=C+Math.sin(to)*R;
+    const big=(to-from)>Math.PI?1:0;
+    return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A${R} ${R} 0 ${big} 1 ${x2.toFixed(1)} ${y2.toFixed(1)}"
+      fill="none" stroke="${col}" stroke-width="${TH}" stroke-linecap="round"/>`;
+  };
+  let out=`<circle cx="${C}" cy="${C}" r="${R}" fill="none" stroke="var(--sep)" stroke-width="${TH}"/>`;
+  if(tot>0){
+    const start=-Math.PI/2;
+    const gEnd=start+(g/tot)*Math.PI*2;
+    if(g>0) out+=arc(start+GAP, Math.max(start+GAP, gEnd-GAP), 'var(--tint)');
+    if(a>0) out+=arc(gEnd+GAP, start+Math.PI*2-GAP, '#F59E0B');
+  }
+  return `<svg viewBox="0 0 ${S} ${S}" class="dn2-svg">${out}
+    <text x="${C}" y="${C-4}" text-anchor="middle" dominant-baseline="middle"
+      font-size="30" font-weight="700" fill="var(--label)" letter-spacing="-1">${tot}</text>
+    <text x="${C}" y="${C+18}" text-anchor="middle" dominant-baseline="middle"
+      font-size="9.5" font-weight="700" fill="var(--label3)" letter-spacing="1">G+A</text></svg>`;
+}
+
 function playerInsights(pid){
   const out=[], games=allGames(), st=statsAll(), me=st.find(x=>x.id===pid);
   if(!me||!me.P)return out;
@@ -4606,12 +4784,14 @@ function vPlayer(pid){
         const better=league>0?Math.round(100*(league-conceded)/league):0;
         return `<div class="sechead">Contribution</div>
         <div class="card pad">
-          <div class="dn">
-            ${donut([{v:G,c:'var(--tint)'},{v:A,c:'#F59E0B'}],132)}
-            <div class="dn-k">
-              <div><i style="background:var(--tint)"></i>Goals <b>${G}</b></div>
-              <div><i style="background:#F59E0B"></i>Assists <b>${A}</b></div>
-              <div class="dn-x">${((G+A)/P).toFixed(2)} a game</div>
+          <div class="dn2">
+            ${donut2(G,A,P)}
+            <div class="dn2-k">
+              <div class="dn2-r"><i style="background:var(--tint)"></i>
+                <span>Goals</span><b>${G}</b></div>
+              <div class="dn2-r"><i style="background:#F59E0B"></i>
+                <span>Assists</span><b>${A}</b></div>
+              <div class="dn2-r tot"><i></i><span>Per game</span><b>${((G+A)/P).toFixed(2)}</b></div>
             </div>
           </div>
           <div class="dnstat">
@@ -4620,7 +4800,7 @@ function vPlayer(pid){
             <div><b style="color:${ratio>=1?'var(--green)':'var(--red)'}">${ratio.toFixed(2)}</b>
               <span>for / against</span></div>
           </div>
-          <div class="note" style="padding:10px 0 0">While you were on the pitch your side scored
+          <div class="note" style="padding:12px 0 0">While you were on the pitch your side scored
             ${m.GF} and let in ${m.GA}${better?` — ${Math.abs(better)}% ${better>0?'fewer':'more'} than the league average`:''}.</div>
         </div>`;
       })()}
@@ -4715,7 +4895,7 @@ function vPlayer(pid){
       <div class="row"><div class="rt"><div class="r1">Goals per game</div></div><div class="rv">${m.gpg.toFixed(2)}</div></div>
       <div class="row"><div class="rt"><div class="r1">Clean sheets</div></div><div class="rv">${m.cs}</div></div>
       ${m.streak.n>=2?`<div class="row"><div class="rt"><div class="r1">Current streak</div></div>
-        <div class="rv" style="color:${m.streak.type==='W'?'var(--green)':m.streak.type==='L'?'var(--red)':'var(--label2)'};font-weight:800">
+        <div class="rv" style="color:${m.streak.type==='W'?'var(--green)':m.streak.type==='L'?'var(--red)':'var(--label2)'}">
         ${m.streak.type==='W'?'🔥':m.streak.type==='L'?'❄️':'➖'} ${m.streak.n} ${m.streak.type==='W'?'wins':m.streak.type==='L'?'losses':'draws'}</div></div>`:''}
     </div>`}
     <div class="sechead">Recent games</div>
@@ -4740,6 +4920,78 @@ function vPlayer(pid){
     </div></div></div>`}
 
 
+
+
+/* ============ VENUES ============
+   Where you actually play. Each carries an indoor/outdoor flag, which decides
+   whether weather applies, and unlocks results split by pitch. Seeded with
+   Talal's list on first run; editable in Admin. */
+const VENUE_SEED=[
+  {id:'v_rad',   n:'RAD Sports',              t:'out'},
+  {id:'v_all',   n:'Allsports',               t:'in' },
+  {id:'v_scin',  n:'Sports City indoor',      t:'in' },
+  {id:'v_scout', n:'Sports City outdoor',     t:'out'},
+  {id:'v_gems',  n:'GEMS Founders Al Barsha', t:'out'},
+  {id:'v_ahd',   n:'Ahdaaf',                  t:'in' },
+  {id:'v_wtc',   n:'World Trade Centre',      t:'in' },
+];
+function venues(){
+  const d=DB; if(!d.venues){ d.venues=VENUE_SEED.map(v=>({...v})); }
+  return d.venues;
+}
+const venueBy=id=>venues().find(v=>v.id===id)||null;
+/* A game stores the venue id. Older games stored only 'in'/'out', and some
+   store nothing at all — resolve all three without guessing. */
+function gameVenue(g){
+  if(!g)return null;
+  if(g.venueId)return venueBy(g.venueId);
+  return null;
+}
+function venueType(g){
+  if(!g)return null;
+  const v=gameVenue(g); if(v)return v.t;
+  return (g.venue==='in'||g.venue==='out')?g.venue:null;   /* null = unknown */
+}
+const venueName=g=>{const v=gameVenue(g);return v?v.n:null};
+
+async function editVenue(id){
+  if(!requireAdmin())return;
+  const v=id?venueBy(id):null;
+  const n=await askText(v?'Edit venue':'Add venue','Name of the pitch',v?v.n:'','Next');
+  if(n==null||!n.trim())return;
+  const t=await askChoice('Indoor or outdoor?','This decides whether weather is recorded',
+    [{label:'Outdoor',value:'out'},{label:'Indoor',value:'in'}]);
+  if(!t)return;
+  const list=venues();
+  if(v){ v.n=n.trim(); v.t=t; }
+  else list.push({id:'v'+Date.now().toString(36),n:n.trim(),t});
+  await save(); toast('Saved'); render();
+}
+async function removeVenue(id){
+  if(!requireAdmin())return;
+  const v=venueBy(id); if(!v)return;
+  const used=allGames().filter(g=>g.venueId===id).length;
+  if(!await askConfirm('Remove '+v.n+'?',
+    used?`${used} game${used===1?'':'s'} were played here — they will keep the name but lose the link.`
+        :'It will no longer appear when logging a game.','Remove'))return;
+  DB.venues=venues().filter(x=>x.id!==id);
+  await save(); toast('Removed'); render();
+}
+function venuesBlock(){
+  const vs=venues();
+  return `<div class="sechead">📍 Venues</div>
+    <div class="card">
+      ${vs.map(v=>{
+        const n=allGames().filter(g=>g.venueId===v.id).length;
+        return `<div class="row tap" data-admin onclick="editVenue('${v.id}')">
+          <div class="rt"><div class="r1">${esc(v.n)}</div>
+            <div class="r2">${v.t==='in'?'Indoor':'Outdoor'}${n?` · ${n} game${n===1?'':'s'}`:''}</div></div>
+          <button class="pr-x" onclick="event.stopPropagation();removeVenue('${v.id}')">×</button></div>`;
+      }).join('')}
+      <div class="row tap" data-admin onclick="editVenue(null)">
+        <div class="rt"><div class="r1" style="color:var(--tint)">+ Add a venue</div></div></div>
+    </div>`;
+}
 
 /* ============ WEATHER ============
    Half the season is indoors, so this only ever applies to games marked
@@ -4783,7 +5035,7 @@ let WX_RUNNING=false;
 async function wxBackfill(limit){
   if(WX_RUNNING)return; WX_RUNNING=true;
   try{
-    const todo=allGames().filter(g=>g.venue==='out'&&!g.wx&&g.date).slice(0,limit||6);
+    const todo=allGames().filter(g=>venueType(g)==='out'&&!g.wx&&g.date).slice(0,limit||6);
     let got=0;
     for(const g of todo){
       const w=await wxFetch(g.date);
@@ -4795,7 +5047,7 @@ async function wxBackfill(limit){
 }
 /* one quiet line, never a heading */
 function wxLine(g){
-  if(!g||g.venue!=='out')return '';
+  if(!g||venueType(g)!=='out')return '';
   const w=g.wx; if(!w||w.none||w.t==null)return '';
   const bits=[`${w.t}°`];
   if(w.mm>=1)bits.push(w.mm>=6?'wet':'a bit of rain');
@@ -6563,7 +6815,7 @@ function gwSquadCard(m,gw){
         <div class="rt"><div class="r1">${esc(l.name)}${l.isCap?` <span class="pill" style="background:var(--tint-soft);color:var(--tint)">C${l.mult===3?'³':''}</span>`:''}
           ${l.pos?`<span class="pill ${l.pos}">${l.pos}</span>`:''}</div>
           <div class="r2">${l.played?(l.isCap?`${l.raw} × ${l.mult}`:'played'):'did not play'}</div></div>
-        <div class="rv" style="font-weight:800;color:${l.total>0?'var(--label)':'var(--label3)'}">${l.total}</div></div>
+        <div class="rv" style="color:${l.total>0?'var(--label)':'var(--label3)'}">${l.total}</div></div>
       ${TEAMOPEN===l.pid?`<div class="bdown">${l.rows.length?l.rows.map(r=>
           `<div class="bd-r"><span>${esc(r.k)}</span><b>${r.v>0?'+':''}${r.v}</b></div>`).join('')
         :'<div class="bd-r"><span>Did not play</span><b>0</b></div>'}
@@ -7422,9 +7674,9 @@ function viewManager(pid){
                 <div class="r2">${l.played
                   ?(l.rows||[]).map(r=>`${esc(r.l)} ${r.v>0?'+':''}${r.v}`).join(' · ')||'played'
                   :'did not play'}${l.isCap&&l.mult>1?` · captain ×${l.mult}`:''}</div></div>
-              <div class="rv" style="font-weight:800;${l.played?'':'opacity:.45'}">${l.total}</div></div>`;
+              <div class="rv" style="${l.played?'':'opacity:.45'}">${l.total}</div></div>`;
           }).join('')+`<div class="row"><div class="rt"><div class="r1"><b>Gameweek total</b></div></div>
-            <div class="rv" style="font-weight:800">${gwPts}</div></div>`;
+            <div class="rv">${gwPts}</div></div>`;
         })()}</div>`:''}
       <div class="tiles" style="margin-top:12px">
         ${tile(total,'Total','','var(--tint)')}${tile(gwPts,'Last GW')}
@@ -7434,7 +7686,7 @@ function viewManager(pid){
       ${gws.length>1?`<div class="sechead">Gameweek by gameweek</div>
         <div class="card">${gws.slice().reverse().slice(0,8).map(gw=>`<div class="row">
           <div class="rt"><div class="r1">GW${gw}</div></div>
-          <div class="rv" style="font-weight:800">${fplManagerGw(m,gw)}</div></div>`).join('')}</div>`:''}
+          <div class="rv">${fplManagerGw(m,gw)}</div></div>`).join('')}</div>`:''}
       <div style="height:10px"></div>
     </div>`;
   $('#sbg').classList.add('open');lockScroll(true);liftFormbar();
@@ -8044,17 +8296,17 @@ function fplHomeBlock(){
         <div style="font-size:21px;flex:0 0 26px">👑</div>
         <div class="rt"><div class="r1">${esc(lead.m.teamName)} lead</div>
           <div class="r2">${lead.total} points · ${esc(lead.m.name)}</div></div>
-        <div class="rv" style="font-weight:800">${lead.total}</div></div>
+        <div class="rv">${lead.total}</div></div>
       ${gwBest&&last?`<div class="row tap" onclick="go('fpl')">
         <div style="font-size:21px;flex:0 0 26px">⚡</div>
         <div class="rt"><div class="r1">Best of GW${last}</div>
           <div class="r2">${esc(gwBest.m.teamName)}</div></div>
-        <div class="rv" style="font-weight:800">${fplManagerGw(gwBest.m,last)}</div></div>`:''}
+        <div class="rv">${fplManagerGw(gwBest.m,last)}</div></div>`:''}
       ${mine?`<div class="row tap" onclick="go('fpl')">
         <div style="font-size:21px;flex:0 0 26px">📍</div>
         <div class="rt"><div class="r1">You are ${ordinal(teams.findIndex(t=>t.m.pid===me.pid)+1)}</div>
           <div class="r2">${esc(mine.m.teamName)} · ${mine.total} points</div></div>
-        <div class="rv" style="font-weight:800">${mine.total}</div></div>`
+        <div class="rv">${mine.total}</div></div>`
        :`<div class="row tap" onclick="go('fpl')">
         <div style="font-size:21px;flex:0 0 26px">➕</div>
         <div class="rt"><div class="r1">Not in the mini league yet</div>
@@ -8257,7 +8509,8 @@ function vMatch(gid){
         <div class="mc-n">${a}<span>–</span>${b}</div>
         <div class="mc-t ${b>a?'w':''}">Team B</div>
       </div>
-      <div class="mc-date">${fdate(g.date)}${g.venue==='in'?' · indoor':''}${wxLine(g)}</div>
+      <div class="mc-date">${fdate(g.date)}${venueName(g)?' · '+esc(venueName(g))
+        :(venueType(g)==='in'?' · indoor':'')}${wxLine(g)}</div>
       <div class="mc-res">${a===b?'Draw':`Team ${a>b?'A':'B'} won`}</div>
     </div>
     <div class="sechead">Report</div>
@@ -8285,7 +8538,7 @@ function vMatch(gid){
       .map(x=>`<div class="row tap" onclick="openPlayer('${x.pid}')">${avatar(player(x.pid),28)}
         <div class="rt"><div class="r1">${esc(player(x.pid).name)}
           <span class="pill ${player(x.pid).pos||'MID'}">${player(x.pid).pos||'—'}</span></div></div>
-        <div class="rv" style="font-weight:800;color:var(--tint)">${x.pts}</div></div>`).join('')}</div>
+        <div class="rv" style="color:var(--tint)">${x.pts}</div></div>`).join('')}</div>
     <div class="note">How this game scored in Sunday FPL.</div>
     </div></div>`;
 }
@@ -8337,33 +8590,45 @@ function radarChart(a,b){
   ];
   const all=statsAll().filter(x=>x.P>0);
   const max=k=>Math.max(...all.map(x=>x[k]||0),0.001);
-  const N=axes.length, R=78, CX=100, CY=95;
+  /* The labels sit at 1.24x the radius, so the viewBox has to allow for them —
+     at the old 0 0 200 200 the top label rendered at y=-1.7 and was clipped. */
+  const N=axes.length, R=74, CX=100, CY=100;
   const pt=(i,v)=>{
     const ang=(Math.PI*2*i)/N-Math.PI/2, r=Math.max(4,v*R);
     return [CX+Math.cos(ang)*r, CY+Math.sin(ang)*r];
   };
-  const poly=(m,col)=>{
+  /* blue against amber: the old tint-vs-blue pair were both blue and
+     indistinguishable once the fills overlapped */
+  const CA_='var(--tint)', CB_='#F59E0B';
+  const poly=(m,col,dash)=>{
     const pts=axes.map(([,k],i)=>pt(i,(m[k]||0)/max(k)).join(',')).join(' ');
-    return `<polygon points="${pts}" fill="${col}" fill-opacity=".22" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>`;
+    return `<polygon points="${pts}" fill="${col}" fill-opacity=".18" stroke="${col}"
+      stroke-width="2.4" stroke-linejoin="round"${dash?' stroke-dasharray="5 3"':''}/>`;
   };
+  const dots=(m,col)=>axes.map(([,k],i)=>{const [x,y]=pt(i,(m[k]||0)/max(k));
+    return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="2.6" fill="${col}"/>`}).join('');
   const grid=[0.25,0.5,0.75,1].map(f=>{
     const pts=axes.map((_,i)=>pt(i,f).join(',')).join(' ');
     return `<polygon points="${pts}" fill="none" stroke="var(--sep)" stroke-width="1"/>`;
   }).join('');
   const spokes=axes.map((_,i)=>{const [x,y]=pt(i,1);
     return `<line x1="${CX}" y1="${CY}" x2="${x}" y2="${y}" stroke="var(--sep)" stroke-width="1"/>`}).join('');
-  const labels=axes.map(([l],i)=>{const [x,y]=pt(i,1.24);
-    return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="middle"
-      font-size="9.5" font-weight="700" fill="var(--label3)">${l}</text>`}).join('');
+  const labels=axes.map(([l],i)=>{const [x,y]=pt(i,1.3);
+    return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
+      font-size="9" font-weight="700" fill="var(--label3)">${l}</text>`}).join('');
   return `<div class="sechead">Radar</div>
     <div class="card pad">
-      <svg viewBox="0 0 200 200" style="width:100%;max-width:340px;display:block;margin:0 auto">
-        ${grid}${spokes}${poly(a,'var(--tint)')}${poly(b,'var(--blue)')}${labels}
+      <svg viewBox="-16 -18 232 236" style="width:100%;max-width:340px;display:block;margin:0 auto;overflow:visible">
+        ${grid}${spokes}
+        ${poly(a,CA_)}${poly(b,CB_,true)}
+        ${dots(a,CA_)}${dots(b,CB_)}
+        ${labels}
       </svg>
       <div class="potsleg" style="justify-content:center">
-        <span><i style="background:var(--tint)"></i>${esc(a.name)}</span>
-        <span><i style="background:var(--blue)"></i>${esc(b.name)}</span></div>
-      <div class="note" style="padding:8px 0 0">Each axis is scaled against the best in the squad.</div>
+        <span><i style="background:${CA_}"></i>${esc(a.name)}</span>
+        <span><i style="background:${CB_}"></i>${esc(b.name)}</span></div>
+      <div class="note" style="padding:8px 0 0">Each axis is scaled against the best in the squad.
+        ${esc(b.name)} is the dashed outline.</div>
     </div>`;
 }
 
@@ -9179,7 +9444,7 @@ function momentCard(m,pid,full){
       ${chip('⚽',`${f.g.scoreA}–${f.g.scoreB}`)}
       ${chip('👥',`${f.played.length} played`)}
       ${f.goals?chip('🥅',`${f.goals} goal${f.goals===1?'':'s'}`):''}
-      ${f.g.venue==='out'&&f.g.wx&&!f.g.wx.none&&f.g.wx.t!=null
+      ${venueType(f.g)==='out'&&f.g.wx&&!f.g.wx.none&&f.g.wx.t!=null
         ? chip('🌡',`${f.g.wx.t}°${f.g.wx.mm>=1?' · rain':''}`) : ''}
       ${f.best?chip('⭐',`${esc(f.best.name)} ${f.best.r}`):''}
     </div>`:`<div class="mfoot"><span>${esc(fdate(m.date))}${m.round?' · '+esc(m.round):''} · ${m.score}</span></div>`}
@@ -9970,7 +10235,7 @@ function miniTable(game,label){
       <div style="flex:0 0 26px;text-align:center;font-weight:800;color:${i<3?'var(--tint)':'var(--label3)'}">${i+1}</div>
       <div class="rt"><div class="r1">${esc(r.name)}${r.name===me?' <span style="font-size:11px;color:var(--label3)">· you</span>':''}</div>
         ${r.detail?`<div class="r2">${esc(r.detail)}</div>`:''}</div>
-      <div class="rv" style="font-weight:800">${r.score}</div></div>`).join('')}</div>`;
+      <div class="rv">${r.score}</div></div>`).join('')}</div>`;
 }
 
 /* ---- Who Am I: guess the player from the clubs they played for ----
@@ -10136,10 +10401,9 @@ let SHTAB='card';
 function vShop(){
   $('#navMount').innerHTML=navbar();
   const me=fplMine();
-  if(!me){ app().innerHTML=`<div class="view active"><div class="largetitle">Shop</div>
+  if(!me){ app().innerHTML=`<div class="view active">
     <div class="wrap">${cloudBanner()}
       ${pageBanner('Shop','',fplMine()?{rv:usd(wallet(fplMine().pid)),rl:'WALLET'}:{meta:'Enter your code to spend'})}
-      ${pageBanner('Shop', 'SPEND YOUR WINNINGS')}
       <div class="sb-signin"><div class="sb-si-e">🔑</div>
         <div class="sb-si-t">Enter your code</div>
         <div class="sb-si-s">Same code as Sunday FPL and Betting — one sign-in covers all three.</div>
@@ -10434,7 +10698,7 @@ function vGameweeks(){
             <div class="pos" style="flex:0 0 26px;text-align:center;font-weight:800;color:var(--label3)">${i+1}</div>
             <div class="rt"><div class="r1">${esc(r.m.teamName||r.m.name)}</div>
               <div class="r2">${esc(r.m.name)} · ${r.tot} total</div></div>
-            <div class="rv" style="font-weight:800">${r.gwPts}</div>${chev}</div>`).join('')}</div>
+            <div class="rv">${r.gwPts}</div>${chev}</div>`).join('')}</div>
         <div class="note">Tap a manager to see how every point was earned.</div>
 
         <div class="sechead">Who won each gameweek</div>
@@ -10445,7 +10709,7 @@ function vGameweeks(){
           <div style="flex:0 0 30px;font-size:12px;font-weight:800;color:var(--label3)">GW${n}</div>
           <div class="rt"><div class="r1">${tied>1?`${tied} tied on ${top.p}`:esc(top.m.teamName||top.m.name)}</div>
             <div class="r2">${gamesInGw(n).map(g=>`${g.scoreA}–${g.scoreB}`).join(' · ')}</div></div>
-          <div class="rv" style="font-weight:800">${top.p}</div></div>`}).join('')}</div>
+          <div class="rv">${top.p}</div></div>`}).join('')}</div>
 
       <div class="sechead">Best players in GW${gw}</div>
         <div class="card">${(function(){
@@ -10456,7 +10720,7 @@ function vGameweeks(){
           return rows.map(r=>`<div class="row tap" onclick="openPlayerGw('${r.p.id}',${gw})">
             <div class="rt"><div class="r1">${esc(r.p.name)}${r.p.pos?` <span class="pill ${r.p.pos}">${r.p.pos}</span>`:''}</div>
               <div class="r2">${usdless(fplPrice(r.p.id))} · ${(r.pts/Math.max(0.1,fplPrice(r.p.id))).toFixed(1)} per £m</div></div>
-            <div class="rv" style="font-weight:800">${r.pts}</div>${chev}</div>`).join('')})()}</div>`}
+            <div class="rv">${r.pts}</div>${chev}</div>`).join('')})()}</div>`}
       <div style="height:20px"></div>
     </div></div>`;
 }
@@ -10470,7 +10734,7 @@ function managerGwCard(m,gw){
         <div class="rt"><div class="r1">${esc(l.name)}${l.isCap?` <span class="pill" style="background:var(--tint-soft);color:var(--tint)">C${l.mult===3?'³':''}</span>`:''}
           ${l.pos?`<span class="pill ${l.pos}">${l.pos}</span>`:''}</div>
           <div class="r2">${l.played?(l.isCap?`${l.raw} × ${l.mult}`:'played'):'did not play'}</div></div>
-        <div class="rv" style="font-weight:800;color:${l.total>0?'var(--label)':'var(--label3)'}">${l.total}</div></div>
+        <div class="rv" style="color:${l.total>0?'var(--label)':'var(--label3)'}">${l.total}</div></div>
       ${HOPEN===l.pid?`<div class="bdown">${l.rows.length?l.rows.map(r=>
           `<div class="bd-r"><span>${esc(r.k)}</span><b class="${r.v<0?'dn':''}">${r.v>0?'+':''}${r.v}</b></div>`).join('')
         :'<div class="bd-r"><span>Did not play</span><b>0</b></div>'}
@@ -10512,7 +10776,7 @@ function vPlayerGw(){
         <div class="row tap" onclick="HOPEN=HOPEN==='g${r.gw}'?null:'g${r.gw}';render()">
           <div class="rt"><div class="r1">Gameweek ${r.gw}</div>
             <div class="r2">${r.played?gamesInGw(r.gw).map(g=>`${g.scoreA}–${g.scoreB}`).join(' · '):'did not play'}</div></div>
-          <div class="rv" style="font-weight:800;color:${r.pts>0?'var(--label)':'var(--label3)'}">${r.pts}</div></div>
+          <div class="rv" style="color:${r.pts>0?'var(--label)':'var(--label3)'}">${r.pts}</div></div>
         ${HOPEN==='g'+r.gw?`<div class="bdown">${r.parts.length?r.parts[0].rows.map(x=>
             `<div class="bd-r"><span>${esc(x.k)}</span><b>${x.v>0?'+':''}${x.v}</b></div>`).join('')
           :'<div class="bd-r"><span>Did not play</span><b>0</b></div>'}
@@ -10668,7 +10932,7 @@ function predBlock(){
         <div class="row"><div class="rt">
           <div class="r1">${esc((player(pid)||{}).name||'—')}</div>
           <div class="r2">Called ${e.a}–${e.b}${e.actual?` · it finished ${e.actual.a}–${e.actual.b}`:''}</div></div>
-          <div class="rv" style="font-weight:800;color:${e.won?'var(--green)':'var(--label3)'}">
+          <div class="rv" style="color:${e.won?'var(--green)':'var(--label3)'}">
             ${e.won?usdSigned(PREDICT_PRIZE):'—'}</div></div>`).join('')}</div>
     </details>`:''}`;
 }
@@ -10772,7 +11036,7 @@ function vBets(){
         <div class="rt"><div class="r1">${esc(r.m.name)}</div>
           <div class="r2">${(function(){const P=pnl(r.m.pid),bo=bailoutCount(r.m.pid);
             return `${P.won} of ${P.played} won · wallet ${usd(r.total)}${bo?` · ${bo} top-up${bo===1?'':'s'}`:''}`})()}${r.open?` · ${usd(r.open)} riding`:''}</div></div>
-        <div class="rv" style="font-weight:800;color:${r.profit>0?'var(--green)':r.profit<0?'var(--red)':'var(--label2)'}">${usdSigned(r.profit)}</div></div>`).join('')}</div>
+        <div class="rv" style="color:${r.profit>0?'var(--green)':r.profit<0?'var(--red)':'var(--label2)'}">${usdSigned(r.profit)}</div></div>`).join('')}</div>
       <div class="note">Ranked by profit from betting alone, so buying things in the shop does not push you down the table. Everyone starts on ${usd(BET_RULES.start)}.</div>
       ${(function(){const w=biggestWins(5); if(!w.length)return '';
         return `<div class="sechead">🏅 Biggest wins</div>
@@ -10952,7 +11216,7 @@ function seasonReview(){
     </div>
     ${(function(){
       const h=wxHot(); if(!h)return '';
-      const out=allGames().filter(x=>x.venue==='out').length;
+      const out=allGames().filter(x=>venueType(x)==='out').length;
       if(!out)return '';
       return `<div class="note" style="padding:0 4px 10px">Hottest outing: ${h.wx.t}° for
         ${esc(h.round||fdate(h.date))}.</div>`;
@@ -10968,7 +11232,7 @@ function seasonReview(){
         <div class="row tap" onclick="openPlayer('${x.id}')">
           <div style="font-size:20px;flex:0 0 28px">${e}</div>
           <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${l}</div></div>
-          <div class="rv" style="font-weight:800">${esc(v)}</div></div>`).join('')}
+          <div class="rv">${esc(v)}</div></div>`).join('')}
     </div>`:''}
 
     ${team?`<div class="sechead">⭐ Team of the season</div>
@@ -11001,14 +11265,14 @@ function seasonReview(){
         <div style="font-size:20px;flex:0 0 28px">⚽</div>
         <div class="rt"><div class="r1">${x.scoreA}–${x.scoreB}</div>
           <div class="r2">${esc(x.round||'')}${x.round?' · ':''}${esc(fdate(x.date))}</div></div>
-        <div class="rv" style="font-weight:800">${Math.abs((x.scoreA||0)-(x.scoreB||0))} margin</div></div>`).join('')}</div>`:''}
+        <div class="rv">${Math.abs((x.scoreA||0)-(x.scoreB||0))} margin</div></div>`).join('')}</div>`:''}
 
     ${pairs.length?`<div class="sechead">🤝 Who wins together</div>
     <div class="card">${pairs.map(x=>`
       <div class="row"><div class="rt">
         <div class="r1">${esc(p(x.a).name)} <span style="color:var(--label3)">&amp;</span> ${esc(p(x.b).name)}</div>
         <div class="r2">${x.P} together · ${x.W}W ${x.D}D ${x.L}L</div></div>
-        <div class="rv" style="font-weight:800;color:var(--green)">${Math.round(x.wr*100)}%</div></div>`).join('')}</div>`:''}
+        <div class="rv" style="color:var(--green)">${Math.round(x.wr*100)}%</div></div>`).join('')}</div>`:''}
 
     ${sg.games?`<div class="sechead">🔥 Every scoreline</div>
     <div class="card pad">
@@ -11169,11 +11433,11 @@ function histFame(){
     ${rank(titles).length?`<div class="sechead">Most titles</div>
       <div class="card">${rank(titles).map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">🏆</div>
         <div class="rt"><div class="r1">${esc(n)}</div></div>
-        <div class="rv" style="font-weight:800">${c}</div></div>`).join('')}</div>`:''}
+        <div class="rv">${c}</div></div>`).join('')}</div>`:''}
     ${rank(boots).length?`<div class="sechead">Most Golden Boots</div>
       <div class="card">${rank(boots).map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">👟</div>
         <div class="rt"><div class="r1">${esc(n)}</div></div>
-        <div class="rv" style="font-weight:800">${c}</div></div>`).join('')}</div>`:''}`;
+        <div class="rv">${c}</div></div>`).join('')}</div>`:''}`;
 }
 
 /* ---------- RIVALRIES ---------- */
@@ -11252,7 +11516,7 @@ function histImproved(){
   const row=r=>`<div class="row tap" onclick="openPlayer('${r.id}')">
     <div class="rt"><div class="r1">${esc(r.name)}</div>
       <div class="r2">${r.before.toFixed(2)} → ${r.after.toFixed(2)} points per game</div></div>
-    <div class="rv" style="font-weight:800;color:${r.diff>0?'var(--green)':'var(--red)'}">
+    <div class="rv" style="color:${r.diff>0?'var(--green)':'var(--red)'}">
       ${r.diff>0?'▲':'▼'} ${Math.abs(r.diff).toFixed(2)}</div></div>`;
   return `<div class="note" style="padding:0 4px 12px">Comparing the first half of the season with the second — who has kicked on?</div>
     ${up.length?`<div class="sechead">📈 Kicked on</div><div class="card">${up.map(row).join('')}</div>`:''}
@@ -11336,7 +11600,7 @@ function chemRow(p){
     <div class="r1">${esc(a.name)} <span style="color:var(--label3)">+</span> ${esc(b.name)}</div>
     <div class="r2">${p.W}W · ${p.D}D · ${p.L}L in ${p.P} together</div>
     <div class="bar" style="margin-top:6px"><i style="width:${p.chem}%;background:${chemColor(p.chem)}"></i></div></div>
-    <div class="rv" style="font-weight:800;color:${chemColor(p.chem)}">${p.chem}</div></div>`;
+    <div class="rv" style="color:${chemColor(p.chem)}">${p.chem}</div></div>`;
 }
 
 /* ============ STATS ============ */
@@ -11455,14 +11719,14 @@ function insightsBody(){
       <div class="row"><div class="rt">
         <div class="r1">${nm(p.a)} <span style="color:var(--label3)">&amp;</span> ${nm(p.b)}</div>
         <div class="r2">${p.P} together · ${p.W}W ${p.D}D ${p.L}L · ${p.gd>0?'+':''}${p.gd} goal difference</div></div>
-        <div class="rv" style="font-weight:800;color:var(--green)">${Math.round(p.wr*100)}%</div></div>`).join('')
+        <div class="rv" style="color:var(--green)">${Math.round(p.wr*100)}%</div></div>`).join('')
       :`<div class="note" style="padding:14px">Nobody has played three together yet.</div>`}</div>
     ${worst.length?`<div class="sechead">😬 Struggle together</div>
       <div class="card">${worst.map(p=>`
         <div class="row"><div class="rt">
           <div class="r1">${nm(p.a)} <span style="color:var(--label3)">&amp;</span> ${nm(p.b)}</div>
           <div class="r2">${p.P} together · ${p.W}W ${p.D}D ${p.L}L</div></div>
-          <div class="rv" style="font-weight:800;color:var(--red)">${Math.round(p.wr*100)}%</div></div>`).join('')}</div>`:''}
+          <div class="rv" style="color:var(--red)">${Math.round(p.wr*100)}%</div></div>`).join('')}</div>`:''}
     <div class="note">Only counts games played on the same side, with at least three together.</div>
 
     <div class="sechead">🔥 Scoreline heatmap</div>
@@ -11618,7 +11882,7 @@ function statSplits(st,total){
       <div><div class="sechead">Current streaks</div>
         <div class="card">${streaks.length?streaks.map(x=>`<div class="row tap" onclick="openPlayer('${x.id}')">
           <div class="rt"><div class="r1">${esc(x.name)}</div></div>
-          <div class="rv" style="font-weight:800;color:${x.streak.type==='W'?'var(--green)':x.streak.type==='L'?'var(--red)':'var(--label2)'}">
+          <div class="rv" style="color:${x.streak.type==='W'?'var(--green)':x.streak.type==='L'?'var(--red)':'var(--label2)'}">
             ${x.streak.type==='W'?'🔥':x.streak.type==='L'?'❄️':'➖'} ${x.streak.n}${x.streak.type}</div></div>`).join('')
           :'<div class="row"><div class="rt"><div class="r2">No runs of two or more yet</div></div></div>'}</div></div>
       <div><div class="sechead">Attendance</div>
@@ -11626,7 +11890,7 @@ function statSplits(st,total){
           <div class="rt"><div class="r1">${esc(x.name)}</div>
             <div class="r2">${x.P} of ${total} games</div>
             <div class="bar" style="margin-top:6px"><i style="width:${Math.round(x.app*100)}%"></i></div></div>
-          <div class="rv" style="font-weight:800">${Math.round(x.app*100)}%</div></div>`).join('')}</div></div>
+          <div class="rv">${Math.round(x.app*100)}%</div></div>`).join('')}</div></div>
     </div>`;
 }
 
@@ -11683,10 +11947,10 @@ function compareBody(){
         <div class="row"><div class="rt"><div class="r1">Same team</div>
           <div class="r2">${t.tog?`${t.togW} of ${t.tog} won · ${Math.round(t.togW/t.tog*100)}%`:'Never on the same team'}</div>
           ${t.tog?`<div class="bar" style="margin-top:7px"><i style="width:${Math.round(t.togW/t.tog*100)}%"></i></div>`:''}</div>
-          <div class="rv" style="font-weight:800">${t.tog}</div></div>
+          <div class="rv">${t.tog}</div></div>
         <div class="row"><div class="rt"><div class="r1">Against each other</div>
           <div class="r2">${t.vs?`${esc(a.name)} ${t.aw} – ${t.bw} ${esc(b.name)}`:'Never faced off'}</div></div>
-          <div class="rv" style="font-weight:800">${t.vs}</div></div>
+          <div class="rv">${t.vs}</div></div>
         ${t.vs?`<div class="row"><div class="rt"><div class="r1">Head-to-head edge</div>
           <div class="r2">${t.aw===t.bw?'Dead even':`${esc(t.aw>t.bw?a.name:b.name)} leads by ${Math.abs(t.aw-t.bw)}`}</div></div></div>`:''}
       </div>
@@ -11767,7 +12031,7 @@ function adminPrices(){
       return `<div class="row tap" onclick="setBasePrice('${p.id}')">
         <div class="rt"><div class="r1">${esc(p.name)}${p.pos?` <span class="pill ${p.pos}">${p.pos}</span>`:''}${p.basePrice!=null?' <span class="pill" style="background:var(--tint-soft);color:var(--tint)">SET</span>':''}</div>
           <div class="r2">opens £${base}m · can move £${band.lo}m–£${band.hi}m</div></div>
-        <div class="rv" style="font-weight:800;color:${moved?(now>base?'var(--green)':'var(--red)'):'var(--label)'}">£${(+now).toFixed(1)}m</div>
+        <div class="rv" style="color:${moved?(now>base?'var(--green)':'var(--red)'):'var(--label)'}">£${(+now).toFixed(1)}m</div>
         ${chev}</div>`}).join('')}</div>
     <div class="note">Cheapest legal five right now: <b>£${cheapest}m</b> of the £${FPL_RULES.budget}m budget.<br><br>Tap anyone to set their opening price — useful for a new player, or to correct something mid-season. Weekly movement carries on from whatever you set. Changing a price never affects a confirmed squad's budget, because teams are valued at what they paid.</div>`;
 }
@@ -11857,6 +12121,8 @@ function vAdmin(){
           <div class="row tap" onclick="backupJSON()"><div class="rt"><div class="r1">⬇️ Download a backup now</div>
             <div class="r2">Keep one somewhere safe — recommended monthly</div></div>${chev}</div>
         </div>`})()}
+
+      ${venuesBlock()}
 
       <div class="sechead">Undo &amp; history</div>
       <div class="card">
@@ -12425,7 +12691,7 @@ function vLeague(){
             ${rows.length?rows.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
               <div style="flex:0 0 22px;text-align:center;font-weight:800;color:var(--label3)">${i+1}</div>
               ${avatar(x,28)}<div class="rt"><div class="r1">${esc(x.name)}</div></div>
-              <div class="rv" style="font-weight:800">${fmt(x)}</div></div>`).join('')
+              <div class="rv">${fmt(x)}</div></div>`).join('')
             :`<div class="note" style="padding:14px">Nothing yet.</div>`}</div></div>`;
           const assists=lead('A'), scorers=lead('G'), form=lead('form');
           /* show from game one — a single week is still a real number */
@@ -12531,7 +12797,7 @@ function nextRound(cid){
 function newGame(){ track('game_created');if(!requireAdmin())return;
   const cid=(comp().type==='league'?comp().id:lgComp().id);
   G={id:null,compId:cid,date:new Date().toISOString().slice(0,10),round:nextRound(cid),
-     venue:(season().lastVenue||'out'),
+     venueId:(season().lastVenueId||null), venue:(season().lastVenue||'out'),
      A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},assists:{},sa:0,sb:0,q:'',__sel:new Set()};
   gameSheet()}
 function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x.id===id);if(!g)return;
@@ -12585,10 +12851,9 @@ function _paintGame(){
       <div><div class="lbl" style="padding-top:0">Date</div><input type="date" value="${G.date}" onchange="G.date=this.value"></div>
       <div><div class="lbl" style="padding-top:0">Round</div><input value="${esc(G.round)}" placeholder="GW1" oninput="G.round=this.value"></div>
       <div style="grid-column:1/-1"><div class="lbl">Where</div>
-        <div class="seg venseg">
-          <button class="${(G.venue||'out')==='out'?'on':''}" onclick="G.venue='out';gameSheet()">Outdoor</button>
-          <button class="${G.venue==='in'?'on':''}" onclick="G.venue='in';gameSheet()">Indoor</button>
-        </div></div></div>
+        <div class="vpick">${venues().map(v=>`
+          <button class="${G.venueId===v.id?'on':''}" onclick="G.venueId='${v.id}';G.venue='${v.t}';gameSheet()">
+            ${esc(v.n)}<i>${v.t==='in'?'indoor':'outdoor'}</i></button>`).join('')}</div></div></div>
 
     <div class="lbl">Pick the sides <span style="text-transform:none;font-weight:400;color:var(--label3)">${cA} v ${cB}</span></div>
     <div class="pgteams">${teamCard('A')}${teamCard('B')}</div>
@@ -12752,8 +13017,8 @@ async function saveGame(){ track('game_completed');if(!requireAdmin())return;
   const g={id:G.id||uid(),compId:G.compId,created:G.id?(S.games.find(x=>x.id===G.id)?.created||Date.now()):Date.now(),
     date:G.date,round:(G.round||'').trim(),teamA:[...G.A],teamB:[...G.B],fillA:[...G.fillA],fillB:[...G.fillB],
     pos:posSnap,goals:{...G.goals},assists:{...(G.assists||{})},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D',
-    venue:G.venue||'out'};
-  S.lastVenue=g.venue;
+    venueId:G.venueId||null, venue:G.venue||'out'};
+  S.lastVenueId=g.venueId; S.lastVenue=g.venue;
   /* keep whatever weather was already fetched for this game */
   if(G.id){const old=S.games.find(x=>x.id===G.id); if(old&&old.wx)g.wx=old.wx}
   if(G.id)S.games[S.games.findIndex(x=>x.id===G.id)]=g;else S.games.push(g);
