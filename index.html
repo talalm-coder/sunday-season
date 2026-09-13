@@ -791,7 +791,11 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
   animation:nbIn .22s cubic-bezier(.32,.72,0,1) both}
 @keyframes nbIn{from{opacity:0;transform:translateX(-50%) translateY(7px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 .largetitle{transition:opacity .15s}
-.main{will-change:transform}
+/* will-change:transform makes .main a containing block, which stops every
+   sticky element inside it from sticking to the viewport — including the nav.
+   The bet slip and confirm bars stuck because they are sticky to the BOTTOM of
+   .main, which still works inside a containing block; the top nav did not. */
+.main{}
 
 /* nav menu list */
 .navlist .row.navon{background:var(--tint-soft)}
@@ -2843,6 +2847,11 @@ td.posc .pill{font-size:9.5px;padding:2px 5px}
 .fut-crest.ring{margin:9px}
 .fut-crest.ring:before,.fut-crest.ring:after{inset:-8px}
 .fut-crest.r_laurel:after{inset:-13px}
+
+/* ---- the top bar really does follow you down now ---- */
+#navMount{position:-webkit-sticky;position:sticky;top:0;z-index:60}
+/* Safari needs the sticky element's ancestors to be plain blocks */
+.shell,.main{transform:none;filter:none;perspective:none}
 </style>
 </head>
 <body>
@@ -4231,7 +4240,7 @@ function vHome(){
             return back.length?back.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
               <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
               <div class="rt"><div class="r1">${shirtBadge(player(x.id))}${esc(x.name)}</div>
-                <div class="r2">${x.cs} shut-out${x.cs===1?'':'s'} · ${x.P} games</div></div>
+                <div class="r2">${(x.GA/Math.max(1,x.P)).toFixed(1)} conceded a game · ${x.P} games</div></div>
               <div class="rv">${(x.GA/x.P).toFixed(1)}</div></div>`).join('')
             :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'})()}</div>
           </div>
@@ -8219,7 +8228,7 @@ function fplLeague(){
     <div class="card"><div class="tw"><table>
       <thead><tr><td style="padding-left:16px">#</td><td>Team</td><td class="c">GW</td><td class="pts">Total</td></tr></thead>
       <tbody>${rows.map((r,i)=>`<tr class="${me&&r.m.pid===me.pid?'z-ucl':''}" onclick="viewManager('${r.m.pid}')">
-        <td class="pos">${r.move>0?'<span class="mv up">▲</span>':r.move<0?'<span class="mv dn">▼</span>':'<span class="mv eq">·</span>'}<span class="posn" style="background:${i===0?'linear-gradient(150deg,#F5D76E,#C9A227)':'var(--fill2)'};color:${i===0?'#4a3a06':'var(--label2)'}">${i+1}</span></td>
+        <td class="pos">${mvA(r.move||0)}<span class="posn" style="background:${i===0?'linear-gradient(150deg,#F5D76E,#C9A227)':'var(--fill2)'};color:${i===0?'#4a3a06':'var(--label2)'}">${i+1}</span></td>
         <td class="nm"><div style="font-weight:700">${esc(r.m.teamName||'—')}</div>
           <div style="font-size:11.5px;color:var(--label3)">${esc(r.m.name)}${r.from>1?` · joined GW${r.from}`:''}</div></td>
         <td class="c">${r.gw}</td><td class="pts">${r.total}</td></tr>`).join('')}</tbody></table></div></div>
@@ -13540,7 +13549,22 @@ function setAssist(pid,d){
 function setGoal(pid,d){G.goals[pid]=Math.max(0,(G.goals[pid]||0)+d);if(!G.goals[pid])delete G.goals[pid];
   const sd=G.A.has(pid)?'A':'B',t=goalSum(sd);
   if(sd==='A'&&t>G.sa)G.sa=t;if(sd==='B'&&t>G.sb)G.sb=t;paintGame()}
-async function saveGame(){ track('game_completed');if(!requireAdmin())return;
+async function saveGame(){ track('game_completed');
+  /* A round label typed twice is almost always a mis-log rather than a genuine
+     double-header, so say so before it goes in. */
+  if(!G.id && G.round && String(G.round).trim()){
+    const clash=season().games.filter(g=>g.id!==G.id &&
+      String(g.round||'').trim().toLowerCase()===String(G.round).trim().toLowerCase());
+    if(clash.length){
+      const sameDay=clash.some(g=>g.date===G.date);
+      const okGo=await askConfirm(`${esc(G.round)} already exists`,
+        sameDay
+          ? `There is already a game logged as ${esc(G.round)} on this date. Save this as a second game of the day?`
+          : `${clash.length} game${clash.length===1?' is':'s are'} already logged as ${esc(G.round)}. Save anyway?`,
+        'Save it');
+      if(!okGo)return;
+    }
+  }if(!requireAdmin())return;
   snapshot(G.id?'editing a game':'logging a game');
   const _lvlBefore=levelSnapshot();
   if(!teamCount('A')||!teamCount('B')){toast('Both teams need at least one player');return}
