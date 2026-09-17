@@ -3172,7 +3172,7 @@ html{scroll-padding-top:var(--navh,48px)}
   background:var(--bc-navy);color:#fff;border-radius:16px;overflow:hidden;padding:16px 14px 14px;text-align:center;
   background-image:repeating-linear-gradient(118deg,rgba(255,255,255,.045) 0 2px,transparent 2px 9px);
   box-shadow:var(--shadow);position:relative}
-.pm-card:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:var(--bc-gold)}
+.pm-card{border:3px solid var(--bc-gold)}
 .pm-eyebrow{font-family:var(--bc-font);font-weight:700;font-size:12px;letter-spacing:.24em;color:var(--bc-gold);margin-bottom:12px}
 .pm-win{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
 .pm-av{position:relative;display:inline-block}
@@ -3182,7 +3182,7 @@ html{scroll-padding-top:var(--navh,48px)}
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pm-sub{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--bc-font);font-weight:700;font-size:13px;letter-spacing:.16em;color:rgba(255,255,255,.7)}
 .pm-tiles{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 6px;margin:16px 0 4px}
-.pm-tile{background:#fff;color:var(--bc-navy);min-width:64px;padding:7px 12px 6px;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%)}
+.pm-tile{background:#fff;color:var(--bc-navy);min-width:64px;padding:7px 12px 6px;border-radius:10px}
 .pm-tile b{display:block;font-family:var(--bc-font);font-weight:700;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
 .pm-tile span{display:block;font-family:var(--bc-font);font-weight:700;font-size:9.5px;letter-spacing:.14em;color:var(--bc-navy2);opacity:.8;margin-top:3px;white-space:nowrap}
 .pm-tile:first-child{background:var(--bc-gold)}
@@ -3195,6 +3195,11 @@ html{scroll-padding-top:var(--navh,48px)}
 .pm-past-r b{font-family:var(--bc-font);font-weight:700;font-size:16px;letter-spacing:.03em;transform:skewX(-10deg);display:inline-block}
 .pm-past-r i{font-style:normal;margin-left:auto;color:rgba(255,255,255,.6);font-size:12px;white-space:nowrap}
 @media(max-width:370px){.pm-tile{min-width:56px;padding:6px 9px 5px}.pm-tile b{font-size:21px}}
+/* Team of the Week on Home: rounded, gold-bordered, like Player of the Month */
+.bc-pitch.bc-home{border-radius:16px;border:3px solid var(--bc-gold);padding:14px 8px 12px}
+.bc-pitch.bc-home .totw-row{gap:6px}
+.bc-pitch.bc-home .bc-pp{width:auto;flex:1 1 0;max-width:84px;min-width:0}
+.bc-pitch.bc-home .bc-rt{padding:6px 10px 4px}
 
 </style>
 </head>
@@ -3950,7 +3955,7 @@ function potmBlock(){
         <div class="pm-sub">${w.pos?`<span class="pill ${w.pos}">${w.pos}</span>`:''}<span>${w.W}W – ${w.D}D – ${w.L}L</span></div>
       </div>
       <div class="pm-tiles">
-        ${tile(w.pts,'PTS')}${tile(w.G,'⚽ GOALS')}${tile(w.A,'🅰️ ASSISTS')}${tile((w.GA/Math.max(1,w.P)).toFixed(1),'CONCEDED / GAME')}${tile(w.cs,'🧤 CLEAN SHEETS')}
+        ${tile(w.pts,'PTS')}${tile(w.G,'⚽ GOALS')}${tile(w.A,'🅰️ ASSISTS')}${tile((w.GA/Math.max(1,w.P)).toFixed(1),'CONCEDED / GAME')}
       </div>
       ${cur.runners.length?`<div class="pm-runners">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')">${i===0?'🥈':'🥉'} ${esc(String(r.name).toUpperCase())}</span>`).join('')}</div>`:''}
       ${pm.length>1?`<button class="lvltoggle pm-toggle" onclick="POTMOPEN=!POTMOPEN;render()">${POTMOPEN?'Hide past months ▲':`See ${pm.length-1} past month${pm.length-1===1?'':'s'} ▼`}</button>
@@ -9650,26 +9655,12 @@ function monthsPlayed(){
   return [...seen].sort();
 }
 function potmFor(ym){
-  const gs=allGames().filter(g=>String(g.date||'').slice(0,7)===ym);
-  if(!gs.length)return null;
-  const tally={};
-  gs.forEach(g=>{
-    [...(g.teamA||[]),...(g.teamB||[])].forEach(id=>{
-      const r=ratingFor(id,g); if(r==null)return;
-      if(!tally[id])tally[id]={id,P:0,sum:0,G:0,W:0};
-      tally[id].P++; tally[id].sum+=r;
-      tally[id].G+=(g.goals||{})[id]||0;
-      const onA=(g.teamA||[]).includes(id);
-      if((onA&&g.result==='A')||(!onA&&g.result==='B'))tally[id].W++;
-    });
-  });
-  const rows=Object.values(tally).filter(x=>x.P>=2)
-    .map(x=>({...x,avg:x.sum/x.P,score:x.sum/x.P + x.G*0.12 + x.W*0.1}))
-    .sort((a,b)=>b.score-a.score);
-  if(!rows.length)return null;
-  const w=rows[0];
-  return {ym,id:w.id,name:(player(w.id)||{}).name||'—',avg:Math.round(w.avg*10)/10,
-          P:w.P,G:w.G,W:w.W,games:gs.length};
+  /* the same winner Home shows — one formula, every surface */
+  const m=potm().find(x=>x.month===ym); if(!m)return null;
+  const w=m.win, gs=allGames().filter(g=>String(g.date||'').slice(0,7)===ym);
+  const rr=gs.map(g=>ratingFor(w.id,g)).filter(v=>v!=null);
+  const avg=rr.length?Math.round(rr.reduce((a,b)=>a+b,0)/rr.length*10)/10:null;
+  return {ym,id:w.id,name:w.name,avg:avg==null?'—':avg,P:w.P,G:w.G,A:w.A,W:w.W,games:m.games};
 }
 function potmHistory(){ return monthsPlayed().map(potmFor).filter(Boolean) }
 function ymLabel(ym){
@@ -10204,15 +10195,23 @@ function mpFplSheet(pid,gid){
 function totw(){
   const gws=playedGws(); if(!gws.length)return null;
   const gw=gws[gws.length-1];
+  const games=gamesInGw(gw);
+  /* the team is as big as the biggest side that Sunday: 7 for 7s, 9 for 9s */
+  const n=Math.max(5,...games.map(g=>Math.max((g.teamA||[]).length+(g.fillA||[]).length,(g.teamB||[]).length+(g.fillB||[]).length)));
   const pool=season().players.filter(p=>p.active!==false)
-    .map(p=>({p,pts:fplPlayerGw(p.id,gw)})).filter(x=>x.pts>0);
+    .map(p=>({p,pts:fplPlayerGw(p.id,gw),pos:(p.pos||'MID')})).filter(x=>x.pts>0)
+    .sort((a,b)=>b.pts-a.pts);
   if(pool.length<3)return null;
-  const pick=pos=>pool.filter(x=>(x.p.pos||'MID')===pos).sort((a,b)=>b.pts-a.pts)[0];
-  const gk=pick('GK'), def=pool.filter(x=>x.p.pos==='DEF').sort((a,b)=>b.pts-a.pts).slice(0,2);
-  const mid=pool.filter(x=>x.p.pos==='MID').sort((a,b)=>b.pts-a.pts).slice(0,2);
-  const att=pool.filter(x=>x.p.pos==='ATT').sort((a,b)=>b.pts-a.pts).slice(0,2);
-  const star=[...pool].sort((a,b)=>b.pts-a.pts)[0];
-  return {gw,gk,def,mid,att,star};
+  const out=n-1, nDef=Math.round(out*0.35), nAtt=Math.round(out*0.3), nMid=out-nDef-nAtt;
+  const used=new Set();
+  const take=(pos,k)=>{ const r=pool.filter(x=>x.pos===pos&&!used.has(x.p.id)).slice(0,k); r.forEach(x=>used.add(x.p.id)); return r };
+  const gk=take('GK',1), def=take('DEF',nDef), mid=take('MID',nMid), att=take('ATT',nAtt);
+  /* a position short of players that Sunday is filled from whoever is left,
+     best points first, so the team is always n strong when n played */
+  const fill=(arr,k)=>{ while(arr.length<k){ const nx=pool.find(x=>!used.has(x.p.id)); if(!nx)break; used.add(nx.p.id); arr.push(nx) } };
+  fill(gk,1); fill(def,nDef); fill(mid,nMid); fill(att,nAtt);
+  const star=pool[0];
+  return {gw,n,gk:gk[0]||null,def,mid,att,star};
 }
 function totwBlock(){
   const t=totw(); if(!t)return '';
@@ -10224,8 +10223,8 @@ function totwBlock(){
     return bcTile(x.p,av,star,`<span class="bc-pts">${x.pts} PTS</span>`,`openPlayer('${x.p.id}')`);
   };
   const row=arr=>`<div class="totw-row">${arr.map(cell).join('')}</div>`;
-  return `<div class="sechead">⭐ Team of the Week <span style="text-transform:none;font-weight:500;color:var(--label3)">GW${t.gw}</span></div>
-    <div class="totw bc-pitch">
+  return `<div class="sechead">⭐ Team of the Week <span style="text-transform:none;font-weight:500;color:var(--label3)">GW${t.gw} · ${t.n}-a-side</span></div>
+    <div class="totw bc-pitch bc-home">
       <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
         <rect x="2" y="2" width="96" height="96" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
         <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
@@ -10235,7 +10234,7 @@ function totwBlock(){
       </svg>
       <div class="totw-rows">${row(t.att)}${row(t.mid)}${row(t.def)}${row([t.gk])}</div>
     </div>
-    <div class="note">Best performers of the gameweek by FPL points, with their average rating. ★ is the standout.</div>`;
+    <div class="note">Best ${t.n} of the gameweek by FPL points (${t.att.length}-${t.mid.length}-${t.def.length} plus a keeper), with their average rating. ★ is the standout.</div>`;
 }
 
 /* ============ RADAR CHART (Compare) ============ */
@@ -10733,11 +10732,11 @@ function vAwards(){
             <div class="aw-n">${esc(r.name)}</div>
             <div class="aw-v" style="color:var(--green)">+${r.delta.toFixed(2)} ppg</div></div>`}).join('')}</div>
       </div>`:''}
-      ${hist.length>1?`<div class="sechead">Every Player of the Month</div>
+      ${hist.length?`<div class="sechead">Every Player of the Month</div>
         <div class="card">${hist.slice().reverse().map(x=>`
           <div class="row tap" onclick="openPlayer('${x.id}')">
             <div style="flex:0 0 auto">${avatar(p(x.id),30)}</div>
-            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${esc(ymLabel(x.ym))}</div></div>
+            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${esc(ymLabel(x.ym))} · ${x.G} ⚽ · ${x.A||0} 🅰️ · ${x.W}W</div></div>
             <div class="rv">${x.avg}</div></div>`).join('')}</div>`:''}
       <div style="height:20px"></div>
     </div></div>`;
@@ -13107,7 +13106,23 @@ function histFame(){
     ${rank(boots).length?`<div class="sechead">Most Golden Boots</div>
       <div class="card">${rank(boots).map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">👟</div>
         <div class="rt"><div class="r1">${esc(n)}</div></div>
-        <div class="rv">${c}</div></div>`).join('')}</div>`:''}`;
+        <div class="rv">${c}</div></div>`).join('')}</div>`:''}
+    ${(function(){
+      /* every Player of the Month since the first game — the same winners
+         Home announces, newest first */
+      const h=potmHistory(); if(!h.length)return '';
+      const counts={}; h.forEach(x=>counts[x.name]=(counts[x.name]||0)+1);
+      const multi=Object.entries(counts).filter(([,c])=>c>1).sort((a,b)=>b[1]-a[1]);
+      return `<div class="sechead">🏅 Every Player of the Month</div>
+      <div class="card">${h.slice().reverse().map(x=>`<div class="row tap" onclick="openPlayer('${x.id}')">
+        <div style="flex:0 0 auto">${avatar(player(x.id)||{name:x.name},30)}</div>
+        <div class="rt"><div class="r1">${esc(x.name)}</div>
+          <div class="r2">${esc(ymLabel(x.ym))} · ${x.G} ⚽ · ${x.A||0} 🅰️ · ${x.W}W in ${x.P}</div></div>
+        <div class="rv">${x.avg}</div></div>`).join('')}</div>
+      ${multi.length?`<div class="sechead">Most Player of the Month awards</div>
+      <div class="card">${multi.map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">🏅</div>
+        <div class="rt"><div class="r1">${esc(n)}</div></div><div class="rv">${c}</div></div>`).join('')}</div>`:''}`;
+    })()}`;
 }
 
 /* ---------- RIVALRIES ---------- */
