@@ -1163,7 +1163,7 @@ input,select,textarea{font-size:16px}          /* stops iOS zoom-on-focus */
 .sh-top{position:relative;width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;padding:0;
   background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;
   box-shadow:0 3px 8px rgba(0,0,0,.28)}
-.sh-top.empty{background:rgba(255,255,255,.16);border:2px dashed rgba(255,255,255,.55)}
+.sh-top.shempty{background:rgba(255,255,255,.16);border:2px dashed rgba(255,255,255,.55)}
 .sh-plus{font-size:26px;color:#fff;font-weight:300;line-height:1}
 .sh-new .sh-top{box-shadow:0 0 0 2.5px #00FF87,0 3px 8px rgba(0,0,0,.3)}
 .sh-cap{position:absolute;top:-4px;left:-4px;width:20px;height:20px;border-radius:50%;background:#37003C;
@@ -1283,12 +1283,12 @@ kbd{display:inline-block;background:var(--fill2);border-radius:5px;padding:1px 6
 .sh-x{position:absolute;top:-6px;right:2px;width:20px;height:20px;border-radius:50%;border:none;
   background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:800;cursor:pointer;line-height:1;
   display:flex;align-items:center;justify-content:center;z-index:2}
-.sh-name.empty{background:rgba(255,255,255,.22);color:#fff}
+.sh-name.shempty{background:rgba(255,255,255,.22);color:#fff}
 
 .sh-c{white-space:nowrap;padding:3px 9px;font-size:9px}
-.sh-top.empty.req{border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.24)}
+.sh-top.shempty.req{border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.24)}
 .sh-line.flexline{opacity:.96}
-.sh-line.flexline .sh-name.empty{background:rgba(255,255,255,.16);letter-spacing:.08em;font-size:9.5px}
+.sh-line.flexline .sh-name.shempty{background:rgba(255,255,255,.16);letter-spacing:.08em;font-size:9.5px}
 
 .row.chip-armed{background:color-mix(in srgb,var(--orange) 10%,transparent)}
 .chip-state.armed{background:color-mix(in srgb,var(--orange) 20%,transparent);color:#B36F00}
@@ -2873,6 +2873,64 @@ table.cm .cg-n{position:sticky;left:0;z-index:3;background:var(--card);
 table.cm .cg-corner{position:sticky;left:0;top:0;z-index:5;background:var(--card)}
 table.cm thead .cg-h{position:sticky;top:0;z-index:2;background:var(--card)}
 table.cm{border-spacing:2px;background:var(--card)}
+
+
+/* ---- the blurry header on newer iOS ----
+   backdrop-filter on a sticky bar makes Safari rasterise the text at the
+   composited layer's resolution, which is why it softened after the update.
+   A solid background costs nothing visually here and stays sharp. */
+#navMount{background:var(--bg)}
+.navbar{backdrop-filter:none;-webkit-backdrop-filter:none;
+  background:var(--bg);-webkit-font-smoothing:antialiased}
+html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
+
+/* ---- FPL empty slot ----
+   The dashed placeholder inherited no width, so it stretched to whatever the
+   row gave it and drew a tall ellipse instead of a shirt-sized circle. It now
+   matches a filled slot exactly. */
+.sh-top.shempty{width:54px!important;height:54px!important;min-height:0!important;
+  border-radius:50%!important;flex:0 0 auto!important;align-self:center!important;
+  display:flex;align-items:center;justify-content:center;margin:0 auto;
+  box-shadow:none;aspect-ratio:auto}
+.sh:has(.sh-top.shempty){justify-content:flex-start}
+.sh-top.shempty .sh-plus{font-size:26px;font-weight:300;line-height:1;color:rgba(255,255,255,.9)}
+.sh-name.shempty{max-width:76px;margin:6px auto 0;text-align:center}
+.sh-pts.need{max-width:76px;margin:0 auto;text-align:center}
+
+/* The FPL slot modifier was called .empty, which also matched the global
+   empty-state class and its padding-bottom:56px — that was the extra height
+   turning a 54px circle into a 116px ellipse. Renamed so they cannot collide. */
+.sh-top.shempty{width:54px;height:54px;border-radius:50%;padding:0;
+  display:flex;align-items:center;justify-content:center;margin:0 auto;flex:0 0 54px}
+
+/* ---- match page ----
+   It read as a plain list. The scoreline now gets the same broadcast treatment
+   as the shared graphic: a navy panel with the red wedge, the winning score in
+   white and the loser dimmed. */
+.mc-hero{position:relative;overflow:hidden;background:#0B1B33;color:#fff;
+  border-radius:20px;padding:22px 18px 18px;margin-bottom:16px}
+.mc-hero:before{content:"";position:absolute;inset:0;
+  background:linear-gradient(135deg,#E4002B 0%,#A8001F 100%);
+  clip-path:polygon(0 0,52% 0,38% 100%,0 100%)}
+.mc-hero:after{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+.mc-hero > *{position:relative;z-index:1}
+.mc-hero .mc-comp{font-size:11px;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:rgba(255,255,255,.8);margin-bottom:14px}
+.mc-hero .mc-score{display:flex;align-items:center;justify-content:center;gap:14px}
+.mc-hero .mc-t{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(255,255,255,.5);flex:1}
+.mc-hero .mc-t:first-child{text-align:right}
+.mc-hero .mc-t.w{color:#fff}
+.mc-hero .mc-n{display:flex;align-items:baseline;gap:8px;flex:0 0 auto}
+.mc-hero .mc-n b{font-size:52px;font-weight:900;letter-spacing:-.05em;color:rgba(255,255,255,.55)}
+.mc-hero .mc-n b.w{color:#fff}
+.mc-hero .mc-n span{font-size:28px;color:rgba(255,255,255,.3)}
+.mc-hero .mc-date{margin-top:14px;text-align:center;font-size:12.5px;
+  color:rgba(255,255,255,.65);font-weight:500}
+.mc-hero .mc-res{margin-top:6px;text-align:center;font-size:12px;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}
+.mc-hero .wx{color:rgba(255,255,255,.55)}
 </style>
 </head>
 <body>
@@ -3712,7 +3770,12 @@ function statsFor(games,upto){
   const S=season(),list=upto==null?games:games.slice(0,upto+1),m={};
   S.players.forEach(p=>m[p.id]={...p,P:0,W:0,D:0,L:0,G:0,A:0,GF:0,GA:0,pts:0,seq:[]});
   list.forEach(g=>{const a=g.scoreA??0,b=g.scoreB??0;
-    [['A',g.teamA,a,b],['B',g.teamB,b,a]].forEach(([sd,tm,gf,ga])=>(tm||[]).forEach(pid=>{
+    /* the same full squad the ratings use, so an appearance can never be
+       counted in one place and missed in the other */
+    const sq=(typeof gameSquad==='function')?gameSquad(g):null;
+    const tA = sq ? sq.filter(x=>x.side!=='B').map(x=>x.id) : (g.teamA||[]);
+    const tB = sq ? sq.filter(x=>x.side==='B').map(x=>x.id) : (g.teamB||[]);
+    [['A',tA,a,b],['B',tB,b,a]].forEach(([sd,tm,gf,ga])=>(tm||[]).forEach(pid=>{
       const x=m[pid];if(!x)return;x.P++;x.GF+=gf;x.GA+=ga;x.G+=(g.goals&&g.goals[pid])||0;
       x.A+=(g.assists&&g.assists[pid])||0;
       let r;if(g.result==='D'){x.D++;x.pts++;r='D'}else if(g.result===sd){x.W++;x.pts+=3;r='W'}else{x.L++;r='L'}
@@ -4062,7 +4125,6 @@ function downloadFile(name,content,type){
 /* ============ NAV ============ */
 const NAV=[
  ['home','Home','🏠','M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5'],
- ['league','League','📊','M4 20V9M10 20V4M16 20v-8M2 20h20'],
  ['squad','Squad','👥','M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16.5 7.2a3.5 3.5 0 0 1 0 6.6M18 20a6.5 6.5 0 0 0-1.6-4.3'],
  ['fpl','Sunday FPL','🕹️','M4 6h16v12H4zM9 6v12M15 6v12'],
  ['career','Career Mode','🏅','M12 2l2.4 5.9 6.1.5-4.6 4 1.4 6-5.3-3.2L6.7 18.4l1.4-6-4.6-4 6.1-.5z'],
@@ -4187,7 +4249,7 @@ function lockScroll(on){
 }
 
 function render(){ try{applySeasonTint()}catch(e){}
-  ({home:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,shop:vShop,gws:vGameweeks,pgw:vPlayerGw,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
+  ({home:(VIEW==='home'&&HTAB!=='home')?vHomeSeg:vHome,league:vLeague,tactics:vTactics,history:vHistory,sky:vSky,bets:vBets,shop:vShop,gws:vGameweeks,pgw:vPlayerGw,fpl:vFpl,admin:vAdmin,comps:vComps,fixtures:vFixtures,squad:vSquad,stats:vStats,compare:vCompare,
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
   try{ if(!paintAwards())paintSlip() }catch(e){}
   try{paintFab()}catch(e){}
@@ -4197,7 +4259,64 @@ function render(){ try{applySeasonTint()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
 
 /* ============ HOME — Premier-League-app style ============ */
+
+/* ---- the Home segment ----
+   Home keeps its own layout untouched; Table, Fixtures and Cups render through
+   here so the League tab could come out of the nav without burying anything. */
+const homeSeg=()=>`<div class="seg" style="margin-bottom:14px">
+  ${[['home','Home'],['table','Table'],['fixtures','Fixtures'],['cups','Cups']]
+    .map(([k,l])=>`<button class="${HTAB===k?'on':''}" onclick="HTAB='${k}';render()">${esc(l)}</button>`).join('')}
+</div>`;
+
+/* Home renders exactly as it always has, then the segment control is placed
+   under the banner. Doing it in the DOM rather than inside an 11,000-character
+   template keeps that template untouched. */
 function vHome(){
+  vHomeBody();
+  insertHomeSeg();
+}
+function insertHomeSeg(){
+  const wrap=document.querySelector('.view.active .wrap');
+  if(!wrap||wrap.querySelector('.homeseg'))return;
+  const hero=wrap.querySelector('.sky-hero');
+  const d=document.createElement('div');
+  d.innerHTML=homeSeg();
+  const el=d.firstElementChild; if(!el)return;
+  el.classList.add('homeseg');
+  if(hero&&hero.nextSibling) wrap.insertBefore(el,hero.nextSibling);
+  else wrap.insertBefore(el,wrap.firstChild);
+}
+
+function vHomeSeg(){
+  /* Table, Fixtures and Cups already have working views — this shows the
+     segment control above whichever one is selected rather than rebuilding
+     any of them. */
+  ({table:vLeague, fixtures:vFixtures, cups:vComps}[HTAB]||vLeague)();
+  insertHomeSeg();
+  window.scrollTo(0,0);
+}
+
+
+
+/* Player of the Month on Home. The original was lost when the sections were
+   reordered, so this is a clean helper — a function call is safe to move
+   around, unlike a chunk of an 11,000-character template. */
+function potmHomeBlock(){
+  const pm=potm(); if(!pm||!pm.length)return '';
+  const cur=pm[0]; if(!cur||!cur.win)return '';
+  const p=player(cur.win.id)||cur.win;
+  return `<div class="sechead">🏅 Player of the Month</div>
+    <div class="card">
+      <div class="row tap" onclick="openPlayer('${cur.win.id}')">
+        <div style="font-size:23px;flex:0 0 30px">🏅</div>
+        ${avatar(p,34)}
+        <div class="rt"><div class="r1">${esc(cur.win.name)}</div>
+          <div class="r2">${MONTHNAME(cur.month)} · ${cur.win.pts} pts · ${cur.win.W}W-${cur.win.D}D-${cur.win.L}L</div></div>
+        <div class="rv">${cur.win.G}${cur.win.G===1?' goal':' goals'}</div></div>
+    </div>`;
+}
+
+function vHomeBody(){
   const S=season(),lc=lgComp(),st=lgStats(),g=compGames(lc.id),ag=allGames(),m=movement(lc.id);
   const tbl=[...st].filter(x=>x.P>0).sort(tableSort);
   const goals=g.reduce((t,x)=>t+(x.scoreA||0)+(x.scoreB||0),0);
@@ -4267,30 +4386,47 @@ function vHome(){
           </div>
       </div>
 
-      <div class="grid g2">
-        <div><div class="sechead">🕹️ Sunday FPL</div><div class="card">
-          ${(function(){
-            const t=fplTable().slice(0,5);
-            if(!t.length)return `<div class="row"><div class="rt"><div class="r2">No teams picked yet</div></div></div>`;
-            const gws=playedGws(), last=gws[gws.length-1];
-            return t.map((r,i)=>`<div class="row tap" onclick="go('fpl');FTAB='league';render()">
-              <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
-              ${avatar(player(r.m.pid)||{name:r.m.name},30)}
-              <div class="rt"><div class="r1">${esc(r.m.teamName||r.m.name)}</div>
-                <div class="r2">${esc(r.m.name)}${last?` · ${r.gw} last week`:''}</div></div>
-              <div class="rv">${r.total}</div></div>`).join('');
-          })()}</div></div>
-        <div><div class="sechead">🎮 Career leaders <button class="act" onclick="go('career')">See all</button></div><div class="card">
+      <div class="sechead">Recent results <button class="act" onclick="shareGameweek()">📸 Share gameweek</button></div>
+      <div class="card">${recent.map(gameRow).join('')}</div>
+      <div style="padding:10px 4px 2px">
+        <button class="lnk" onclick="HTAB='fixtures';render()">See all results →</button></div>
+      ${totwBlock()}
+      ${potmHomeBlock()}
+      <div><div class="sechead">🎮 Career leaders <button class="act" onclick="go('career')">See all</button></div><div class="card">
           ${carTop.map(({x,c},i)=>`<div class="row tap" onclick="openCareer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
             <div class="lvbadge" style="width:30px;height:30px;flex:0 0 30px;border-radius:10px"><div class="le" style="font-size:13px">${c.lvl.e}</div><div class="ln" style="font-size:6px">LV${c.lvl.n}</div></div>
             <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${esc(c.lvl.t)}</div></div>
             <div class="rv">${c.xp>=1000?(c.xp/1000).toFixed(1)+'k':c.xp}</div></div>`).join('')}</div></div>
-      </div>
-
-      <div class="sechead">Recent results <button class="act" onclick="shareGameweek()">📸 Share gameweek</button></div>
-      <div class="card">${recent.map(gameRow).join('')}</div>
-      ${totwBlock()}
+      ${(function(){const pm=potm(); if(!pm.length)return '';
+        const cur=pm[0];
+        return `
+          <div class="card potm pop">
+            <div class="potm-h">${MONTHNAME(cur.month)} · ${cur.games} game${cur.games===1?'':'s'}</div>
+            <div class="potm-w" onclick="openPlayer('${cur.win.id}')">
+              <div class="potm-medal">🏅</div>
+              ${avatar(player(cur.win.id)||cur.win,52)}
+              <div class="potm-t"><div class="potm-n">${esc(cur.win.name)}</div>
+                <div class="potm-s">${cur.win.pts} pts · ${cur.win.W}W-${cur.win.D}D-${cur.win.L}L${cur.win.G?` · ${cur.win.G} ⚽`:''}${cur.win.cs?` · ${cur.win.cs} 🧤`:''}</div></div>
+              ${chev}</div>
+            ${cur.runners.length?`<div class="potm-r">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')">${i===0?'🥈':'🥉'} ${esc(r.name)}</span>`).join('')}</div>`:''}
+            ${pm.length>1?`<button class="lvltoggle" onclick="POTMOPEN=!POTMOPEN;render()">${POTMOPEN?'Hide past months ▲':`See ${pm.length-1} past month${pm.length-1===1?'':'s'} ▼`}</button>
+              ${POTMOPEN?pm.slice(1).map(x=>`<div class="row tap" onclick="openPlayer('${x.win.id}')">
+                <div style="font-size:19px;flex:0 0 26px">🏅</div>
+                <div class="rt"><div class="r1">${esc(x.win.name)}</div>
+                  <div class="r2">${MONTHNAME(x.month)} · ${x.win.pts} pts${x.win.G?` · ${x.win.G} ⚽`:''}${x.win.cs?` · ${x.win.cs} 🧤`:''}</div></div>${chev}</div>`).join(''):''}`:''}
+          </div>`})()}
+      ${(function(){
+            const t=fplTable().slice(0,5);
+            if(!t.length)return `<div class="card"><div class="row"><div class="rt"><div class="r2">No teams picked yet</div></div></div></div>`;
+            const gws=playedGws(), last=gws[gws.length-1];
+            return `<div class="card">`+t.map((r,i)=>`<div class="row tap" onclick="go('fpl');FTAB='league';render()">
+              <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
+              ${avatar(player(r.m.pid)||{name:r.m.name},30)}
+              <div class="rt"><div class="r1">${esc(r.m.teamName||r.m.name)}</div>
+                <div class="r2">${esc(r.m.name)}${last?` · ${r.gw} last week`:''}</div></div>
+              <div class="rv">${r.total}</div></div>`).join('')+`</div>`;
+          })()}
       ${comps().length>1?`<div class="sechead">Other competitions <button class="act" onclick="go('comps')">Manage</button></div>
         <div class="card">${comps().filter(c=>c.type!=='league').map(c=>{
           const w=c.bracket?bracketWinner(c.bracket):null;
@@ -4304,7 +4440,7 @@ function vHome(){
         <div class="card">${fd.map(e=>{const p=player(e.pid);return `<div class="row"><div style="font-size:21px;flex:0 0 26px">${e.e}</div>
           <div class="rt"><div class="r1">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
           <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
-        ${near.length?`<div class="note" style="padding:${fd.length?'12px':'0'} 4px 8px;font-size:12px">⏳ Almost there — a few games or goals away</div>
+        ${false?`<div class="note" style="padding:${fd.length?'12px':'0'} 4px 8px;font-size:12px">⏳ Almost there — a few games or goals away</div>
         <div class="card">${near.map(o=>`<div class="row tap" onclick="openCareer('${o.id}')">
           <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
           <div class="rt"><div class="r1">${esc(o.name)}</div>
@@ -4322,24 +4458,7 @@ function vHome(){
               <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>`})()}
       ${rotationWatch()}
 
-      ${(function(){const pm=potm(); if(!pm.length)return '';
-        const cur=pm[0];
-        return `<div class="sechead">🏅 Player of the Month</div>
-          <div class="card potm pop">
-            <div class="potm-h">${MONTHNAME(cur.month)} · ${cur.games} game${cur.games===1?'':'s'}</div>
-            <div class="potm-w" onclick="openPlayer('${cur.win.id}')">
-              <div class="potm-medal">🏅</div>
-              ${avatar(player(cur.win.id)||cur.win,52)}
-              <div class="potm-t"><div class="potm-n">${esc(cur.win.name)}</div>
-                <div class="potm-s">${cur.win.pts} pts · ${cur.win.W}W-${cur.win.D}D-${cur.win.L}L${cur.win.G?` · ${cur.win.G} ⚽`:''}${cur.win.cs?` · ${cur.win.cs} 🧤`:''}</div></div>
-              ${chev}</div>
-            ${cur.runners.length?`<div class="potm-r">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')">${i===0?'🥈':'🥉'} ${esc(r.name)}</span>`).join('')}</div>`:''}
-            ${pm.length>1?`<button class="lvltoggle" onclick="POTMOPEN=!POTMOPEN;render()">${POTMOPEN?'Hide past months ▲':`See ${pm.length-1} past month${pm.length-1===1?'':'s'} ▼`}</button>
-              ${POTMOPEN?pm.slice(1).map(x=>`<div class="row tap" onclick="openPlayer('${x.win.id}')">
-                <div style="font-size:19px;flex:0 0 26px">🏅</div>
-                <div class="rt"><div class="r1">${esc(x.win.name)}</div>
-                  <div class="r2">${MONTHNAME(x.month)} · ${x.win.pts} pts${x.win.G?` · ${x.win.G} ⚽`:''}${x.win.cs?` · ${x.win.cs} 🧤`:''}</div></div>${chev}</div>`).join(''):''}`:''}
-          </div>`})()}
+      
 
     </div></div>`;
 }
@@ -6001,6 +6120,37 @@ async function pushCustom(){
 /* Someone who joined late but should count from the start — their squad is
    applied to the earlier gameweeks too, so they score for those weeks as if
    they had been in all along. */
+
+/* Names anyone who turned out but has no rating, and says why. Guessing at this
+   from the outside has not worked, so this reports rather than assumes. */
+async function ratingAudit(){
+  if(!requireAdmin())return;
+  const moved=repairFillers();
+  if(moved){ await save(); recordOvr(); await fplAfterGame(); }
+  const miss=[];
+  allGames().forEach(g=>{
+    const rated=new Set(matchRatings(g).map(r=>r.id));
+    [...(g.teamA||[]),...(g.teamB||[])].forEach(id=>{
+      if(!rated.has(id)){
+        miss.push({who:(player(id)||{}).name||('unknown id '+id), gw:g.round||fdate(g.date),
+          why:player(id)?'on the sheet but unrated':'no player record for this id'});
+      }
+    });
+    [...(g.fillA||[]),...(g.fillB||[])].forEach(f=>{
+      miss.push({who:String(f), gw:g.round||fdate(g.date), why:'logged as a guest filler'});
+    });
+  });
+  const body = miss.length
+    ? `<div class="card">${miss.map(m=>`<div class="row"><div class="rt">
+        <div class="r1">${esc(m.who)}</div><div class="r2">${esc(m.gw)} · ${esc(m.why)}</div></div></div>`).join('')}</div>
+       <div class="note">A guest filler has no player record, so there is nothing to rate.
+         If one of these is a squad member, add them to the teamsheet instead.</div>`
+    : `<div class="note" style="padding:20px 4px">Everyone who played has a rating.</div>`;
+  openViewer('Rating check',
+    `${moved?`<div class="note" style="padding:0 4px 12px">${moved} player${moved===1?'':'s'} moved off the filler list just now.</div>`:''}${body}`);
+  render();
+}
+
 async function fixJoinGw(){
   if(!requireAdmin())return;
   const f=fpl();
@@ -6574,6 +6724,23 @@ async function downloadCardPNG(pid){
 }
 
 /* ============ GAMEWEEK GRAPHIC ============ */
+/* The button that turns the SVG into a shareable PNG. This was lost when the
+   graphic was rewritten, so the button called a function that no longer
+   existed and nothing happened. */
+async function shareGameweek(){
+  const svg=gameweekSVG();
+  if(!svg){ toast('Log a game first'); return }
+  toast('Making the graphic…');
+  try{
+    const m=svg.match(/width="(\d+)" height="(\d+)"/);
+    const blob=await svgToPng(svg, m?+m[1]:1080, m?+m[2]:1602, 2);
+    const s2=season();
+    const g=allGames(); const last=g[g.length-1];
+    const label=(last&&last.round?String(last.round):'gameweek').replace(/\s+/g,'-').toLowerCase();
+    await shareOrSave(blob, `super-sunday-${label}.png`, `Super Sunday — ${last&&last.round?last.round:'Gameweek'}`);
+  }catch(e){ toast('Could not make the image'); }
+}
+
 /* Team of the week, from the games just played rather than the whole season —
    a 2-2-2 plus a keeper, which is what a 7-a-side actually looks like. */
 function gwTeamOfWeek(games){
@@ -7479,6 +7646,7 @@ function fplLogout(){ fplForget(); fplReset(); render(); toast('Signed out'); }
 /* ---------- my team ---------- */
 /* A left/right gameweek pager on My Team, the way FPL does it. */
 let SQTAB='people', PCAR='season', PUSH_ON='off';
+let HTAB='home';   /* which Home segment: home | table | fixtures | cups */
 let TEAMGW=null, PREDOPEN=false, PREDPASTOPEN=false, WAGEOPEN=false, BOOTOPEN=false, SPONOPEN=false, LADDEROPEN=false;
 /* My Team has two jobs — showing what a past gameweek scored, and picking the
    side for the next one. Real FPL splits these; ours did not, which made it
@@ -7619,9 +7787,9 @@ function fplMyTeam(m,locked){
     </div>`;
   };
   const emptySlot=(pos,required)=>`<div class="sh">
-      <button class="sh-top empty ${required?'req':''}" onclick="fplSwap('${pos||''}')">
+      <button class="sh-top shempty ${required?'req':''}" onclick="fplSwap('${pos||''}')">
         <span class="sh-plus">+</span></button>
-      <div class="sh-name empty">${pos||'ANY'}</div>
+      <div class="sh-name shempty">${pos||'ANY'}</div>
       <div class="sh-pts need">${required?'needed':'free pick'}</div>
     </div>`;
   /* Work out where the empty shirts belong so the pitch ALWAYS shows five.
@@ -8708,10 +8876,21 @@ function leagueConceded(){
   if(!gs.length)return 4.6;
   return gs.reduce((t,g)=>t+((g.scoreA||0)+(g.scoreB||0)),0)/(gs.length*2);
 }
-function ratingFor(pid,g){
+function ratingFor(pid,g,sideHint){
   if(!g)return null;
-  const onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
-  if(!onA&&!onB)return null;
+  let onA=(g.teamA||[]).includes(pid), onB=(g.teamB||[]).includes(pid);
+  /* gameSquad knows about fillers and orphaned credits; trust it when it says
+     which side someone was on, rather than returning null and dropping them */
+  if(!onA&&!onB){
+    if(sideHint==='A')onA=true;
+    else if(sideHint==='B')onB=true;
+    else if(sideHint===null||sideHint===undefined){
+      const sq=(typeof gameSquad==='function')?gameSquad(g):[];
+      const f=sq.find(x=>x.id===pid);
+      if(!f)return null;
+      if(f.side==='B')onB=true; else onA=true;
+    } else return null;
+  }
   const pos=(g.pos&&g.pos[pid])||(player(pid)||{}).pos||'MID';
   const goals=(g.goals||{})[pid]||0;
   const asts=(g.assists||{})[pid]||0;
@@ -8788,10 +8967,42 @@ function repairFillers(){
   return moved;
 }
 
+/* Everyone who appears anywhere on a game record, and which side they were on.
+   Ratings used to read teamA and teamB only, so anyone who ended up in a filler
+   slot — or who was credited with a goal or a position without making it onto
+   the teamsheet — silently vanished from ratings, appearances and every stat.
+   This derives the squad from every field the game holds, so a player cannot be
+   half-recorded. */
+function gameSquad(g){
+  if(!g)return [];
+  const out=new Map();
+  const add=(id,side)=>{
+    if(!id)return;
+    const pid=player(id)?id:null;
+    if(!pid)return;
+    if(!out.has(pid))out.set(pid,side);
+    else if(out.get(pid)==null&&side)out.set(pid,side);
+  };
+  (g.teamA||[]).forEach(id=>add(id,'A'));
+  (g.teamB||[]).forEach(id=>add(id,'B'));
+  /* fillers hold names as often as ids, so resolve both */
+  const byName={};
+  (season().players||[]).forEach(p=>{ if(p&&p.name)byName[String(p.name).trim().toLowerCase()]=p.id });
+  (g.fillA||[]).forEach(f=>add(player(String(f))?String(f):byName[String(f||'').trim().toLowerCase()],'A'));
+  (g.fillB||[]).forEach(f=>add(player(String(f))?String(f):byName[String(f||'').trim().toLowerCase()],'B'));
+  /* anyone credited with a goal, an assist or a position but never added to a
+     side — put them on the side their goals went to, or A as a last resort */
+  const orphan=id=>{ if(!out.has(id)&&player(id))out.set(id,null) };
+  Object.keys(g.goals||{}).forEach(orphan);
+  Object.keys(g.assists||{}).forEach(orphan);
+  Object.keys(g.pos||{}).forEach(orphan);
+  return [...out.entries()].map(([id,side])=>({id,side}));
+}
+
 function matchRatings(g){
-  const ids=[...(g.teamA||[]),...(g.teamB||[])];
-  return ids.map(id=>({id,name:(player(id)||{}).name||'—',r:ratingFor(id,g)}))
-            .filter(x=>x.r!=null).sort((a,b)=>b.r-a.r);
+  return gameSquad(g)
+    .map(({id,side})=>({id,name:(player(id)||{}).name||'—',r:ratingFor(id,g,side)}))
+    .filter(x=>x.r!=null).sort((a,b)=>b.r-a.r);
 }
 
 /* ============ SQUAD NUMBERS ============ */
@@ -9222,11 +9433,11 @@ function vMatch(gid){
     .filter(x=>x.name).sort((x,y)=>y.n-x.n);
   $('#navMount').innerHTML=navbar({label:backLabel(),on:"goBack()"},isAdmin()?{label:'Edit',on:`openGame('${g.id}')`}:null);
   app().innerHTML=`<div class="view active"><div class="wrap" style="padding-top:8px">${cloudBanner()}
-    <div class="mc-head">
+    <div class="mc-head mc-hero">
       <div class="mc-comp">${c?c.icon+' '+esc(c.name):''}${g.round?' · '+esc(g.round):''}</div>
       <div class="mc-score">
         <div class="mc-t ${a>b?'w':''}">Team A</div>
-        <div class="mc-n">${a}<span>–</span>${b}</div>
+        <div class="mc-n"><b class="${a>b?'w':''}">${a}</b><span>–</span><b class="${b>a?'w':''}">${b}</b></div>
         <div class="mc-t ${b>a?'w':''}">Team B</div>
       </div>
       <div class="mc-date">${fdate(g.date)}${venueName(g)?' · '+esc(venueName(g))
@@ -12879,6 +13090,9 @@ function vAdmin(){
         <div class="row tap" onclick="undoLast()"><div class="rt">
           <div class="r1" style="color:${canUndo()?'var(--tint)':'var(--label3)'}">↩︎ Undo last change</div>
           <div class="r2">${canUndo()?esc(UNDO.label)+' · '+fmtWhen(UNDO.t):'Nothing to undo right now'}</div></div></div>
+        <div class="row tap" data-admin onclick="ratingAudit()"><div class="rt">
+          <div class="r1">🔍 Rating check</div>
+          <div class="r2">Who played but has no rating, and why</div></div>${chev}</div>
         <div class="row tap" data-admin onclick="fixJoinGw()"><div class="rt">
           <div class="r1">📅 Backdate a late joiner</div>
           <div class="r2">Count someone's team from the first gameweek instead</div></div>${chev}</div>
