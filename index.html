@@ -2936,8 +2936,19 @@ html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
    but #navMount is the element that is actually sticky and it was still
    compositing. Both are now solid. */
 #navMount,#navMount .navbar{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  background:var(--bg)!important;-webkit-font-smoothing:antialiased;
-  transform:translateZ(0);will-change:auto}
+  background:var(--bg)!important;-webkit-font-smoothing:antialiased}
+
+/* Third pass on the soft header. With no blur left in the cascade, what
+   remained was the sticky layer itself: iOS re-rasterises a sticky element at
+   whatever fractional scroll offset it is pinned at, and translateZ(0) forced
+   it onto its own layer permanently. A fixed bar is anchored to the viewport
+   at integer pixels and never re-rasterises. The content is padded down by
+   the bar's measured height (--navh, set from the small script at the end). */
+#navMount{position:fixed;top:0;left:0;right:0;z-index:60;transform:none!important;will-change:auto}
+#navMount .navbar{max-width:1440px;margin:0 auto;transition:padding-left .28s cubic-bezier(.32,.72,0,1)}
+.main{padding-top:var(--navh,48px)}
+html{scroll-padding-top:var(--navh,48px)}
+@media(min-width:900px){ body.drawer #navMount .navbar{padding-left:calc(16px + 252px)} }
 
 /* runners-up now carry their numbers */
 .potm-r span i{display:block;font-style:normal;font-size:11px;color:var(--label3);
@@ -2953,6 +2964,33 @@ html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
 .mp-mid i{flex:1;height:1px;background:rgba(255,255,255,.3)}
 .mp-ga{display:block;font-size:8.5px;line-height:1;margin-top:1px;letter-spacing:-1px}
 @media(max-width:370px){.mp-pitch .totw-row{gap:6px}}
+
+/* Ratings pitch, second pass. Each half is its own block with a coloured
+   team tag at its own goal line — red for A at the top, blue for B at the
+   bottom, the same colours as the line-ups — and a ring on every shirt in
+   that colour. Rows are spread evenly through the half and B is mirrored, so
+   the two halves are symmetric about the halfway line. */
+.mp-pitch{padding:12px 8px 12px;display:flex;flex-direction:column;gap:0}
+.mp-half{position:relative;z-index:1;display:flex;flex-direction:column;gap:14px;
+  min-height:150px;justify-content:space-between}
+.mp-a{padding-bottom:18px}
+.mp-b{padding-top:18px}
+.mp-half .totw-rows{gap:18px;flex:1;justify-content:space-evenly}
+.mp-pitch .totw-row{gap:20px}
+.mp-pitch .totw-p{min-width:64px}
+.mp-tag{display:flex;align-items:center;gap:6px;align-self:center;padding:3px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;
+  box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.mp-tag span{font-variant-numeric:tabular-nums;opacity:.85;letter-spacing:0}
+/* team colours come from the score hero — A on the red wedge, B on the navy —
+   so the tags, the rings and the line-up headers all say the same thing */
+.mc-hero,.mc-teams,.mp-pitch{--teamA:#E4002B;--teamB:#0B1B33}
+.mc-h.a{background:var(--teamA)} .mc-h.b{background:var(--teamB)}
+.mp-tag.a{background:var(--teamA)} .mp-tag.b{background:var(--teamB)}
+.mp-a .totw-p .av{box-shadow:0 0 0 2px var(--teamA),0 2px 6px rgba(0,0,0,.35)}
+.mp-b .totw-p .av{box-shadow:0 0 0 2px var(--teamB),0 2px 6px rgba(0,0,0,.35)}
+.mp-mid{display:none}
+@media(max-width:370px){.mp-pitch .totw-row{gap:10px}.mp-pitch .totw-p{min-width:58px}}
 </style>
 </head>
 <body>
@@ -4281,7 +4319,7 @@ function render(){ try{applySeasonTint()}catch(e){}
     career:vCareer,settings:vAdmin,match:()=>vMatch(app()._gid),player:()=>vPlayer(app()._pid),pcareer:()=>vPCareer(app()._pid),seasonView:()=>vSeason(app()._sid)}[VIEW]||vHome)();
   try{ if(!paintAwards())paintSlip() }catch(e){}
   try{paintFab()}catch(e){}
-  try{ if(VIEW==='league'&&LMODE==='fixtures')focusFixtureSearch() }catch(e){}
+  try{ if((VIEW==='league'&&LMODE==='fixtures')||(VIEW==='home'&&HTAB==='fixtures'))focusFixtureSearch() }catch(e){}
   try{injectStyleCSS();applyShopTheme();syncThemeColour()}catch(e){}
   try{applyEvent()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
@@ -4293,7 +4331,7 @@ function render(){ try{applySeasonTint()}catch(e){}
    here so the League tab could come out of the nav without burying anything. */
 const homeSeg=()=>`<div class="seg" style="margin-bottom:14px">
   ${[['home','Home'],['fixtures','Fixtures'],['cups','Cups']]
-    .map(([k,l])=>`<button class="${HTAB===k?'on':''}" onclick="HTAB='${k}';render()">${esc(l)}</button>`).join('')}
+    .map(([k,l])=>`<button class="${HTAB===k?'on':''}" onclick="HTAB='${k}';render();window.scrollTo(0,0)">${esc(l)}</button>`).join('')}
 </div>`;
 
 /* Home renders exactly as it always has, then the segment control is placed
@@ -4316,12 +4354,27 @@ function insertHomeSeg(){
 }
 
 function vHomeSeg(){
-  /* Table, Fixtures and Cups already have working views — this shows the
-     segment control above whichever one is selected rather than rebuilding
-     any of them. */
   ({fixtures:vFixtures, cups:vComps}[HTAB]||vFixtures)();
+}
+/* Fixtures and Cups are Home segments. They used to route through the old
+   League page (LMODE + go('league')), which is no longer in the nav — so the
+   segment control vanished and the page had no way back. Each now renders its
+   own page under the Home view with the segment control in place. */
+function homeSegPage(kind){
+  VIEW='home'; HTAB=kind;
+  const S=season(), ag=allGames();
+  const title=kind==='cups'?'Cups':'Fixtures';
+  const meta=kind==='cups'
+    ?`${comps().length} competition${comps().length===1?'':'s'} · ${esc(S.name||'')}`
+    :`${ag.length} game${ag.length===1?'':'s'} · MATCHDAY ${fplNextGw()} · ${esc(S.name||'')}`;
+  $('#navMount').innerHTML=navbar();
+  app().innerHTML=`<div class="view active">
+    <div class="wrap">${cloudBanner()}
+      ${pageBanner(title,'',{meta})}
+      ${kind==='cups'?compsBody():fixturesBody()}
+    </div></div>`;
   insertHomeSeg();
-  window.scrollTo(0,0);
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('on',b.dataset.nav==='home'));
 }
 
 
@@ -4514,7 +4567,7 @@ function gameRow(g){
     <div class="rv" style="color:var(--label)">${g.scoreA??0}–${g.scoreB??0}</div>${chev}</div>`}
 
 /* ============ COMPETITIONS ============ */
-function vComps(){ LMODE='comps'; go('league'); }
+function vComps(){ homeSegPage('cups'); }
 function compsBody(){
   const c=comp();
   let body='';
@@ -4634,7 +4687,7 @@ const tile=(v,l,c,col)=>`<div class="tile"><div class="tv" style="color:${col||'
 /* ============ FIXTURES ============ */
 let FF='all';
 let FSORT='new', FPLAYER='all', FRESULT='all', FSEARCH='';
-function vFixtures(){ LMODE='fixtures'; go('league'); }
+function vFixtures(){ homeSegPage('fixtures'); }
 function fixturesBody(){
   let g=allGames();
   if(FF!=='all')g=g.filter(x=>x.compId===FF);
@@ -9512,15 +9565,27 @@ function matchPitch(g){
       <span class="totw-r ${ratingClass(r.r)}">${r.r.toFixed(1)}</span>
     </div>`;
   };
-  /* spread a side across rows that suit its size, so 4 and 9 both look right */
+  /* Rows that suit the side's size, never wider than four so nothing crowds,
+     ordered by position so a half reads like a formation: goalkeeper and
+     defenders nearest their own goal line, attackers nearest halfway. */
+  const ORD={GK:0,DEF:1,MID:2,ATT:3};
+  const byPos=list=>[...list].sort((x,y)=>{
+    const px=ORD[(player(x.id)||{}).pos]??2, py=ORD[(player(y.id)||{}).pos]??2;
+    return px-py||y.r-x.r; });
+  const shapeFor=n=>{
+    if(n<=0)return[]; if(n<=4)return n<=3?[n]:[2,2];
+    const rows=Math.ceil(n/4), base=Math.floor(n/rows), extra=n%rows;
+    /* smallest rows at the goal end, fuller rows towards halfway */
+    return Array.from({length:rows},(_,i)=>base+(i>=rows-extra?1:0));
+  };
   const rows=list=>{
-    const n=list.length;
-    const shape = n<=3?[n] : n<=4?[2,2] : n<=6?[3,3] : n<=8?[3,3,n-6] : [3,3,3,n-9];
-    const out=[]; let k=0;
-    shape.filter(Boolean).forEach(c=>{ out.push(list.slice(k,k+c)); k+=c });
+    const ordered=byPos(list); const out=[]; let k=0;
+    shapeFor(list.length).forEach(c=>{ out.push(ordered.slice(k,k+c)); k+=c });
     return out;
   };
   const row=arr=>`<div class="totw-row">${arr.map(cell).join('')}</div>`;
+  const a=g.scoreA??0,b=g.scoreB??0;
+  const rowsA=rows(A), rowsB=rows(B).reverse();   /* B mirrors A across halfway */
 
   return `<div class="sechead">Player ratings</div>
     <div class="totw mp-pitch">
@@ -9531,9 +9596,14 @@ function matchPitch(g){
         <rect x="32" y="2" width="36" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
         <rect x="32" y="84" width="36" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
       </svg>
-      <div class="totw-rows mp-a">${rows(A).map(row).join('')}</div>
-      <div class="mp-mid"><span>Team A</span><i></i><span>Team B</span></div>
-      <div class="totw-rows mp-b">${rows(B).map(row).join('')}</div>
+      <div class="mp-half mp-a">
+        <div class="mp-tag a"><b>Team A</b><span>${a}</span></div>
+        <div class="totw-rows">${rowsA.map(row).join('')}</div>
+      </div>
+      <div class="mp-half mp-b">
+        <div class="totw-rows">${rowsB.map(row).join('')}</div>
+        <div class="mp-tag b"><b>Team B</b><span>${b}</span></div>
+      </div>
     </div>
     <div class="note">Every player who turned out, rated. ★ is the star man.</div>`;
 }
@@ -14790,6 +14860,12 @@ document.addEventListener('keydown',e=>{
     if(y!==t){t=y;document.documentElement.classList.toggle('scrolled',y)}};
   window.addEventListener('scroll',on,{passive:true});
   window.addEventListener('load',on);
+  /* the fixed header's height feeds --navh so the page starts below it */
+  const nm=document.getElementById('navMount');
+  const fit=()=>{const h=nm?Math.round(nm.getBoundingClientRect().height):0;
+    if(h)document.documentElement.style.setProperty('--navh',h+'px')};
+  if(nm&&window.ResizeObserver)new ResizeObserver(fit).observe(nm);
+  window.addEventListener('load',fit);window.addEventListener('resize',fit);fit();
 })();
 </script>
 </body>
