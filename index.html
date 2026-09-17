@@ -2982,13 +2982,53 @@ html{scroll-padding-top:var(--navh,48px)}
   font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#fff;
   box-shadow:0 1px 4px rgba(0,0,0,.3)}
 .mp-tag span{font-variant-numeric:tabular-nums;opacity:.85;letter-spacing:0}
-/* team colours come from the score hero — A on the red wedge, B on the navy —
-   so the tags, the rings and the line-up headers all say the same thing */
-.mc-hero,.mc-teams,.mp-pitch{--teamA:#E4002B;--teamB:#0B1B33}
-.mc-h.a{background:var(--teamA)} .mc-h.b{background:var(--teamB)}
-.mp-tag.a{background:var(--teamA)} .mp-tag.b{background:var(--teamB)}
-.mp-a .totw-p .av{box-shadow:0 0 0 2px var(--teamA),0 2px 6px rgba(0,0,0,.35)}
-.mp-b .totw-p .av{box-shadow:0 0 0 2px var(--teamB),0 2px 6px rgba(0,0,0,.35)}
+/* winners in gold, everyone else in black — tags, shirt rings and the
+   line-up headers all follow the result rather than the side */
+.mc-teams,.mp-pitch{--gold:#F4C048;--gold-ink:#3B2D04;--ink:#111214}
+.mc-h.w{background:linear-gradient(150deg,#F5D76E,#C9A227);color:var(--gold-ink)}
+.mc-h.l{background:var(--ink);color:#fff}
+.mp-tag.w{background:linear-gradient(150deg,#F5D76E,#C9A227);color:var(--gold-ink)}
+.mp-tag.l{background:var(--ink);color:#fff}
+.mp-half.w .totw-p .av{box-shadow:0 0 0 2px var(--gold),0 2px 6px rgba(0,0,0,.35)}
+.mp-half.l .totw-p .av{box-shadow:0 0 0 2px var(--ink),0 2px 6px rgba(0,0,0,.35)}
+/* man of the match (everyone tied on the top rating): a dashed gold halo
+   around the shirt on top of the ★ */
+.mp-pitch .totw-p.star .av{outline:2px dashed var(--gold);outline-offset:3px}
+.mp-pitch .totw-p.star{padding-top:4px}
+.mp-pitch .totw-p.star .totw-star{top:-8px;right:-4px}
+.mp-pitch .totw-p.star .totw-r{top:-6px;left:-8px}
+
+/* goals & assists — one card, a column per team */
+.mc-ga-card{padding:8px 10px}
+.mc-ga-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+.mc-ga-col{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mc-ga-col+.mc-ga-col{border-left:.5px solid var(--sep);padding-left:12px}
+.mc-ga-r{display:flex;align-items:center;gap:6px;padding:4px 2px;font-size:13px;font-weight:600;cursor:pointer;min-width:0}
+.mc-ga-r i{font-style:normal;font-size:12px;flex:0 0 16px;text-align:center}
+.mc-ga-r span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-ga-r b{font-size:11px;color:var(--label3);font-weight:700}
+.mc-ga-none{padding:4px 2px;font-size:13px;color:var(--label3)}
+
+/* FPL points — two compact columns, tap for the breakdown */
+.mc-fpl-card{padding:6px 8px}
+.mc-fpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.mc-fpl-r{display:flex;align-items:center;gap:7px;padding:5px 4px;font-size:13px;cursor:pointer;border-radius:8px;min-width:0}
+.mc-fpl-r:nth-child(n+3){border-top:.5px solid var(--sep)}
+.mc-fpl-r span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.mc-fpl-r b{font-weight:800;color:var(--tint);font-variant-numeric:tabular-nums;font-size:14px}
+.bd-r.bd-t{border-top:.5px solid var(--sep);margin-top:4px;padding-top:8px;font-weight:800}
+
+/* score banner: three equal columns so the score sits dead centre and the
+   two team names mirror each other; one vertical rhythm from top to bottom */
+.mc-hero{padding:20px 18px 18px}
+.mc-hero .mc-comp{margin-bottom:12px;text-align:center;letter-spacing:.16em}
+.mc-hero .mc-score{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
+.mc-hero .mc-t,.mc-hero .mc-t:first-child{text-align:center;letter-spacing:.14em;font-size:11px;line-height:1.2}
+.mc-hero .mc-n{display:flex;align-items:center;justify-content:center;gap:10px;min-width:128px}
+.mc-hero .mc-n b{font-size:54px;line-height:1;min-width:1.05em;text-align:center;font-variant-numeric:tabular-nums;letter-spacing:-.04em}
+.mc-hero .mc-n span{font-size:26px;line-height:1;transform:translateY(-3px)}
+.mc-hero .mc-date{margin-top:14px;padding-top:12px;border-top:.5px solid rgba(255,255,255,.14);letter-spacing:.02em}
+.mc-hero .mc-res{margin-top:5px;letter-spacing:.16em}
 .mp-mid{display:none}
 @media(max-width:370px){.mp-pitch .totw-row{gap:10px}.mp-pitch .totw-p{min-width:58px}}
 </style>
@@ -9552,13 +9592,13 @@ function matchPitch(g){
   const sq=gameSquad(g);
   const sideOf=id=>{const f=sq.find(x=>x.id===id);return f&&f.side==='B'?'B':'A'};
   const A=rs.filter(r=>sideOf(r.id)==='A'), B=rs.filter(r=>sideOf(r.id)==='B');
-  const star=rs[0];
+  const top=rs[0].r, stars=new Set(rs.filter(r=>r.r===top).map(r=>r.id));   /* everyone tied on the top rating */
 
   const cell=r=>{
     const p=player(r.id)||{name:r.name};
     const gl=(g.goals||{})[r.id]||0, as=(g.assists||{})[r.id]||0;
-    return `<div class="totw-p ${star&&r.id===star.id?'star':''}" onclick="openPlayer('${r.id}')">
-      ${star&&r.id===star.id?'<span class="totw-star">★</span>':''}
+    return `<div class="totw-p ${stars.has(r.id)?'star':''}" onclick="openPlayer('${r.id}')">
+      ${stars.has(r.id)?'<span class="totw-star">★</span>':''}
       ${avatar(p,38)}
       <span class="totw-n">${esc(String(r.name).split(' ')[0])}</span>
       ${(gl||as)?`<span class="mp-ga">${gl?'⚽'.repeat(Math.min(gl,3)):''}${as?'🅰️'.repeat(Math.min(as,2)):''}</span>`:''}
@@ -9585,6 +9625,7 @@ function matchPitch(g){
   };
   const row=arr=>`<div class="totw-row">${arr.map(cell).join('')}</div>`;
   const a=g.scoreA??0,b=g.scoreB??0;
+  const wl=sd=>a===b?'l':((sd==='A'?a>b:b>a)?'w':'l');
   const rowsA=rows(A), rowsB=rows(B).reverse();   /* B mirrors A across halfway */
 
   return `<div class="sechead">Player ratings</div>
@@ -9596,22 +9637,23 @@ function matchPitch(g){
         <rect x="32" y="2" width="36" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
         <rect x="32" y="84" width="36" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
       </svg>
-      <div class="mp-half mp-a">
-        <div class="mp-tag a"><b>Team A</b><span>${a}</span></div>
+      <div class="mp-half mp-a ${wl('A')}">
+        <div class="mp-tag ${wl('A')}"><b>Team A</b><span>${a}</span></div>
         <div class="totw-rows">${rowsA.map(row).join('')}</div>
       </div>
-      <div class="mp-half mp-b">
+      <div class="mp-half mp-b ${wl('B')}">
         <div class="totw-rows">${rowsB.map(row).join('')}</div>
-        <div class="mp-tag b"><b>Team B</b><span>${b}</span></div>
+        <div class="mp-tag ${wl('B')}"><b>Team B</b><span>${b}</span></div>
       </div>
     </div>
-    <div class="note">Every player who turned out, rated. ★ is the star man.</div>`;
+    <div class="note">Every player who turned out, rated. ★ is the man of the match — gold ring for the winners.</div>`;
 }
 
 function vMatch(gid){
   const g=allGames().find(x=>x.id===gid); if(!g){go('fixtures');return}
   const c=comps().find(x=>x.id===g.compId);
   const a=g.scoreA??0,b=g.scoreB??0;
+  const wl=sd=>a===b?'l':((sd==='A'?a>b:b>a)?'w':'l');   /* gold for the winners, black otherwise */
   const side=(list,fills,sd)=>{
     const ids=(list||[]).filter(p=>player(p));
     return `<div class="mc-side">
@@ -9639,38 +9681,48 @@ function vMatch(gid){
     </div>
     <div class="sechead">Line-ups</div>
     <div class="mc-teams">
-      <div class="mc-col"><div class="mc-h a">Team A · ${a}</div>${side(g.teamA,g.fillA,'A')}</div>
-      <div class="mc-col"><div class="mc-h b">Team B · ${b}</div>${side(g.teamB,g.fillB,'B')}</div>
+      <div class="mc-col"><div class="mc-h ${wl('A')}">Team A · ${a}</div>${side(g.teamA,g.fillA,'A')}</div>
+      <div class="mc-col"><div class="mc-h ${wl('B')}">Team B · ${b}</div>${side(g.teamB,g.fillB,'B')}</div>
     </div>
-    ${scorers.length?`<div class="sechead">Scorers</div>
-      <div class="card">${scorers.map(x=>`<div class="row tap" onclick="openPlayer('${x.pid}')">
-        <div style="font-size:19px;flex:0 0 26px">⚽</div>
-        <div class="rt"><div class="r1">${esc(x.name)}</div>
-          <div class="r2">Team ${x.onA?'A':'B'}${x.n>1?` · ${x.n} goals`:''}</div></div></div>`).join('')}</div>`:''}
+    ${matchPitch(g)}
     ${(function(){
-      /* assists had no home on the match page — the goals were credited but
-         whoever set them up was invisible */
+      /* goals and assists share one compact card, a column per team, so they
+         take a few lines instead of a row-per-player list each */
       const as=Object.entries(g.assists||{}).filter(([,n])=>n>0)
         .map(([pid,n])=>({pid,n,name:(player(pid)||{}).name,onA:(g.teamA||[]).includes(pid)}))
         .filter(x=>x.name).sort((x,y)=>y.n-x.n);
-      if(!as.length)return '';
-      return `<div class="sechead">Assists</div>
-      <div class="card">${as.map(x=>`<div class="row tap" onclick="openPlayer('${x.pid}')">
-        <div style="font-size:19px;flex:0 0 26px">🅰️</div>
-        <div class="rt"><div class="r1">${esc(x.name)}</div>
-          <div class="r2">Team ${x.onA?'A':'B'}${x.n>1?` · ${x.n} assists`:''}</div></div></div>`).join('')}</div>`;
+      if(!scorers.length&&!as.length)return '';
+      const col=onA=>{
+        const gs=scorers.filter(x=>x.onA===onA), aa=as.filter(x=>x.onA===onA);
+        if(!gs.length&&!aa.length)return `<div class="mc-ga-col"><div class="mc-ga-none">—</div></div>`;
+        return `<div class="mc-ga-col">
+          ${gs.map(x=>`<div class="mc-ga-r" onclick="openPlayer('${x.pid}')"><i>⚽</i><span>${esc(x.name)}</span>${x.n>1?`<b>×${x.n}</b>`:''}</div>`).join('')}
+          ${aa.map(x=>`<div class="mc-ga-r" onclick="openPlayer('${x.pid}')"><i>🅰️</i><span>${esc(x.name)}</span>${x.n>1?`<b>×${x.n}</b>`:''}</div>`).join('')}
+        </div>`;
+      };
+      return `<div class="sechead">Goals &amp; assists</div>
+      <div class="card mc-ga-card"><div class="mc-ga-grid">${col(true)}${col(false)}</div></div>`;
     })()}
-    ${matchPitch(g)}
 
     <div class="sechead">FPL points</div>
-    <div class="card">${[...(g.teamA||[]),...(g.teamB||[])].filter(p=>player(p))
+    <div class="card mc-fpl-card"><div class="mc-fpl-grid">${[...(g.teamA||[]),...(g.teamB||[])].filter(p=>player(p))
       .map(pid=>({pid,pts:fplGamePoints(pid,g)})).sort((x,y)=>y.pts-x.pts)
-      .map(x=>`<div class="row tap" onclick="openPlayer('${x.pid}')">${avatar(player(x.pid),28)}
-        <div class="rt"><div class="r1">${esc(player(x.pid).name)}
-          <span class="pill ${player(x.pid).pos||'MID'}">${player(x.pid).pos||'—'}</span></div></div>
-        <div class="rv" style="color:var(--tint)">${x.pts}</div></div>`).join('')}</div>
-    <div class="note">How this game scored in Sunday FPL.</div>
+      .map(x=>`<div class="mc-fpl-r" onclick="mpFplSheet('${x.pid}','${g.id}')">${avatar(player(x.pid),22)}
+        <span>${esc(player(x.pid).name)}</span><b>${x.pts}</b></div>`).join('')}</div></div>
+    <div class="note">How this game scored in Sunday FPL. Tap a player for the breakdown.</div>
     </div></div>`;
+}
+
+/* tap a player in the match FPL list: the same itemised sum the gameweek
+   history shows, in a sheet */
+function mpFplSheet(pid,gid){
+  const g=allGames().find(x=>x.id===gid), p=player(pid); if(!g||!p)return;
+  const bd=fplBreakdown(pid,g); if(!bd)return;
+  openSheet(p.name,`<div class="note" style="margin:0 0 10px">${esc(bd.pos)} · ${g.scoreA??0}–${g.scoreB??0} · ${fdate(g.date)}</div>
+    <div class="card"><div class="bdown" style="padding:4px 12px">${bd.rows.map(x=>
+      `<div class="bd-r"><span>${esc(x.k)}</span><b>${x.v>0?'+':''}${x.v}</b></div>`).join('')}
+      <div class="bd-r bd-t"><span>Total</span><b>${bd.total}</b></div></div></div>
+    <div class="note">Tap the name in the FPL tab for every gameweek.</div>`);
 }
 
 /* ============ TEAM OF THE WEEK ============ */
