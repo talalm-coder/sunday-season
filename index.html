@@ -3177,12 +3177,13 @@ html{scroll-padding-top:var(--navh,48px)}
 .pm-win{cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px}
 .pm-av{position:relative;display:inline-block}
 .pm-av .av{box-shadow:0 0 0 3px var(--bc-gold),0 4px 14px rgba(0,0,0,.4);background:#fff;color:var(--bc-navy);font-weight:800}
-.pm-medal{position:absolute;right:-10px;bottom:-6px;font-size:22px;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+.pm-medal{position:absolute;left:50%;bottom:-12px;transform:translateX(-50%);font-size:22px;line-height:1;filter:drop-shadow(0 2px 3px rgba(0,0,0,.4))}
+.pm-av{margin-bottom:8px}
 .pm-name{font-family:var(--bc-font);font-weight:700;font-size:38px;line-height:1;text-transform:uppercase;transform:skewX(-10deg);margin-top:6px;
   max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pm-sub{display:flex;align-items:center;justify-content:center;gap:8px;font-family:var(--bc-font);font-weight:700;font-size:13px;letter-spacing:.16em;color:rgba(255,255,255,.7)}
-.pm-tiles{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 6px;margin:16px 0 4px}
-.pm-tile{background:#fff;color:var(--bc-navy);min-width:64px;padding:7px 12px 6px;border-radius:10px}
+.pm-tiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px auto 4px;max-width:300px}
+.pm-tile{background:#fff;color:var(--bc-navy);padding:9px 8px 8px;border-radius:10px}
 .pm-tile b{display:block;font-family:var(--bc-font);font-weight:700;font-size:24px;line-height:1;font-variant-numeric:tabular-nums}
 .pm-tile span{display:block;font-family:var(--bc-font);font-weight:700;font-size:9.5px;letter-spacing:.14em;color:var(--bc-navy2);opacity:.8;margin-top:3px;white-space:nowrap}
 .pm-tile:first-child{background:var(--bc-gold)}
@@ -3194,7 +3195,7 @@ html{scroll-padding-top:var(--navh,48px)}
 .pm-past-m{flex:0 0 72px;font-family:var(--bc-font);font-weight:700;letter-spacing:.1em;font-size:12px;color:var(--bc-gold)}
 .pm-past-r b{font-family:var(--bc-font);font-weight:700;font-size:16px;letter-spacing:.03em;transform:skewX(-10deg);display:inline-block}
 .pm-past-r i{font-style:normal;margin-left:auto;color:rgba(255,255,255,.6);font-size:12px;white-space:nowrap}
-@media(max-width:370px){.pm-tile{min-width:56px;padding:6px 9px 5px}.pm-tile b{font-size:21px}}
+@media(max-width:370px){.pm-tile b{font-size:21px}}
 /* Team of the Week on Home: rounded, gold-bordered, like Player of the Month */
 .bc-pitch.bc-home{border-radius:16px;border:3px solid var(--bc-gold);padding:14px 8px 12px}
 .bc-pitch.bc-home .totw-row{gap:6px}
@@ -10220,7 +10221,7 @@ function totwBlock(){
     const rr=gs.map(y=>ratingFor(x.p.id,y)).filter(v=>v!=null);
     const av=rr.length?Math.round(rr.reduce((a,b)=>a+b,0)/rr.length*10)/10:null;
     const star=t.star&&x.p.id===t.star.p.id;
-    return bcTile(x.p,av,star,`<span class="bc-pts">${x.pts} PTS</span>`,`openPlayer('${x.p.id}')`);
+    return bcTile(x.p,av,star,'',`openPlayer('${x.p.id}')`);
   };
   const row=arr=>`<div class="totw-row">${arr.map(cell).join('')}</div>`;
   return `<div class="sechead">⭐ Team of the Week <span style="text-transform:none;font-weight:500;color:var(--label3)">GW${t.gw} · ${t.n}-a-side</span></div>
@@ -10234,7 +10235,7 @@ function totwBlock(){
       </svg>
       <div class="totw-rows">${row(t.att)}${row(t.mid)}${row(t.def)}${row([t.gk])}</div>
     </div>
-    <div class="note">Best ${t.n} of the gameweek by FPL points (${t.att.length}-${t.mid.length}-${t.def.length} plus a keeper), with their average rating. ★ is the standout.</div>`;
+    <div class="note">Best of the gameweek. ★ is the standout.</div>`;
 }
 
 /* ============ RADAR CHART (Compare) ============ */
