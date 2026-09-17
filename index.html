@@ -2931,6 +2931,18 @@ html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
 .mc-hero .mc-res{margin-top:6px;text-align:center;font-size:12px;font-weight:700;
   letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .mc-hero .wx{color:rgba(255,255,255,.55)}
+
+/* The header blur again. The earlier fix removed backdrop-filter from .navbar,
+   but #navMount is the element that is actually sticky and it was still
+   compositing. Both are now solid. */
+#navMount,#navMount .navbar{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  background:var(--bg)!important;-webkit-font-smoothing:antialiased;
+  transform:translateZ(0);will-change:auto}
+
+/* runners-up now carry their numbers */
+.potm-r span i{display:block;font-style:normal;font-size:11px;color:var(--label3);
+  font-weight:500;margin-top:2px}
+.potm-r span{line-height:1.25}
 </style>
 </head>
 <body>
@@ -3646,11 +3658,17 @@ function potm(){
   Object.keys(months).sort().forEach(k=>{
     const gl=months[k], m={};
     gl.forEach(x=>{
-      [['A',x.teamA,x.scoreA,x.scoreB],['B',x.teamB,x.scoreB,x.scoreA]].forEach(([sd,team,gf,ga])=>{
+      /* the same full squad the ratings use, so nobody is missed */
+      const sq=(typeof gameSquad==='function')?gameSquad(x):null;
+      const tA=sq?sq.filter(v=>v.side!=='B').map(v=>v.id):(x.teamA||[]);
+      const tB=sq?sq.filter(v=>v.side==='B').map(v=>v.id):(x.teamB||[]);
+      [['A',tA,x.scoreA,x.scoreB],['B',tB,x.scoreB,x.scoreA]].forEach(([sd,team,gf,ga])=>{
         (team||[]).forEach(pid=>{
           const p=player(pid); if(!p)return;
-          const e=m[pid]=m[pid]||{id:pid,name:p.name,pos:p.pos,P:0,W:0,D:0,L:0,G:0,cs:0,pts:0};
+          const e=m[pid]=m[pid]||{id:pid,name:p.name,pos:p.pos,P:0,W:0,D:0,L:0,G:0,A:0,GF:0,GA:0,cs:0,pts:0};
           e.P++; e.G+=(x.goals&&x.goals[pid])||0;
+          e.A+=(x.assists&&x.assists[pid])||0;
+          e.GF+=(gf??0); e.GA+=(ga??0);
           if((ga??0)===0)e.cs++;
           if(x.result==='D'){e.D++;e.pts++} else if(x.result===sd){e.W++;e.pts+=3} else e.L++;
         })});
@@ -4264,7 +4282,7 @@ function render(){ try{applySeasonTint()}catch(e){}
    Home keeps its own layout untouched; Table, Fixtures and Cups render through
    here so the League tab could come out of the nav without burying anything. */
 const homeSeg=()=>`<div class="seg" style="margin-bottom:14px">
-  ${[['home','Home'],['table','Table'],['fixtures','Fixtures'],['cups','Cups']]
+  ${[['home','Home'],['fixtures','Fixtures'],['cups','Cups']]
     .map(([k,l])=>`<button class="${HTAB===k?'on':''}" onclick="HTAB='${k}';render()">${esc(l)}</button>`).join('')}
 </div>`;
 
@@ -4291,30 +4309,12 @@ function vHomeSeg(){
   /* Table, Fixtures and Cups already have working views — this shows the
      segment control above whichever one is selected rather than rebuilding
      any of them. */
-  ({table:vLeague, fixtures:vFixtures, cups:vComps}[HTAB]||vLeague)();
+  ({fixtures:vFixtures, cups:vComps}[HTAB]||vFixtures)();
   insertHomeSeg();
   window.scrollTo(0,0);
 }
 
 
-
-/* Player of the Month on Home. The original was lost when the sections were
-   reordered, so this is a clean helper — a function call is safe to move
-   around, unlike a chunk of an 11,000-character template. */
-function potmHomeBlock(){
-  const pm=potm(); if(!pm||!pm.length)return '';
-  const cur=pm[0]; if(!cur||!cur.win)return '';
-  const p=player(cur.win.id)||cur.win;
-  return `<div class="sechead">🏅 Player of the Month</div>
-    <div class="card">
-      <div class="row tap" onclick="openPlayer('${cur.win.id}')">
-        <div style="font-size:23px;flex:0 0 30px">🏅</div>
-        ${avatar(p,34)}
-        <div class="rt"><div class="r1">${esc(cur.win.name)}</div>
-          <div class="r2">${MONTHNAME(cur.month)} · ${cur.win.pts} pts · ${cur.win.W}W-${cur.win.D}D-${cur.win.L}L</div></div>
-        <div class="rv">${cur.win.G}${cur.win.G===1?' goal':' goals'}</div></div>
-    </div>`;
-}
 
 function vHomeBody(){
   const S=season(),lc=lgComp(),st=lgStats(),g=compGames(lc.id),ag=allGames(),m=movement(lc.id);
@@ -4352,6 +4352,12 @@ function vHomeBody(){
         <button class="lnk" onclick="go('league')">See the full table →</button></div>
 
       <div class="grid g2">
+        <div><div class="sechead">⚽ Top scorers</div><div class="card">
+          ${scorers.length?scorers.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
+            <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
+            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.gpg.toFixed(2)} per game</div></div>
+            <div class="rv">${x.G}</div></div>`).join('')
+          :'<div class="row"><div class="rt"><div class="r2">No goals recorded yet</div></div></div>'}</div></div>
         <div><div class="sechead">🅰️ Most assists</div><div class="card">
           ${(function(){const a=[...st].filter(x=>(x.A||0)>0).sort((p,q)=>q.A-p.A).slice(0,5);
             return a.length?a.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
@@ -4361,12 +4367,6 @@ function vHomeBody(){
               <div class="rv">${x.A}</div></div>`).join('')
               :`<div class="note" style="padding:14px">No assists logged yet.</div>`})()}
         </div></div>
-        <div><div class="sechead">⚽ Top scorers</div><div class="card">
-          ${scorers.length?scorers.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
-            <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
-            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.gpg.toFixed(2)} per game</div></div>
-            <div class="rv">${x.G}</div></div>`).join('')
-          :'<div class="row"><div class="rt"><div class="r2">No goals recorded yet</div></div></div>'}</div></div>
         <div><div class="sechead">📈 Form guide</div><div class="card">
           ${form.length?form.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
@@ -4391,7 +4391,6 @@ function vHomeBody(){
       <div style="padding:10px 4px 2px">
         <button class="lnk" onclick="HTAB='fixtures';render()">See all results →</button></div>
       ${totwBlock()}
-      ${potmHomeBlock()}
       <div><div class="sechead">🎮 Career leaders <button class="act" onclick="go('career')">See all</button></div><div class="card">
           ${carTop.map(({x,c},i)=>`<div class="row tap" onclick="openCareer('${x.id}')">
             <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
@@ -4407,26 +4406,21 @@ function vHomeBody(){
               <div class="potm-medal">🏅</div>
               ${avatar(player(cur.win.id)||cur.win,52)}
               <div class="potm-t"><div class="potm-n">${esc(cur.win.name)}</div>
-                <div class="potm-s">${cur.win.pts} pts · ${cur.win.W}W-${cur.win.D}D-${cur.win.L}L${cur.win.G?` · ${cur.win.G} ⚽`:''}${cur.win.cs?` · ${cur.win.cs} 🧤`:''}</div></div>
+                <div class="potm-s">${cur.win.pts} pts · ${cur.win.W}W-${cur.win.D}D-${cur.win.L}L${
+                  cur.win.G?` · ${cur.win.G} ⚽`:''}${cur.win.A?` · ${cur.win.A} 🅰️`:''}${
+                  cur.win.P?` · ${(cur.win.GA/cur.win.P).toFixed(1)} conceded`:''}${
+                  cur.win.cs?` · ${cur.win.cs} 🧤`:''}</div></div>
               ${chev}</div>
-            ${cur.runners.length?`<div class="potm-r">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')">${i===0?'🥈':'🥉'} ${esc(r.name)}</span>`).join('')}</div>`:''}
+            ${cur.runners.length?`<div class="potm-r">${cur.runners.map((r,i)=>`
+              <span onclick="openPlayer('${r.id}')">${i===0?'🥈':'🥉'} ${esc(r.name)}
+                <i>${r.pts} pts${r.G?` · ${r.G}⚽`:''}${r.A?` · ${r.A}🅰️`:''}</i></span>`).join('')}</div>`:''}
             ${pm.length>1?`<button class="lvltoggle" onclick="POTMOPEN=!POTMOPEN;render()">${POTMOPEN?'Hide past months ▲':`See ${pm.length-1} past month${pm.length-1===1?'':'s'} ▼`}</button>
               ${POTMOPEN?pm.slice(1).map(x=>`<div class="row tap" onclick="openPlayer('${x.win.id}')">
                 <div style="font-size:19px;flex:0 0 26px">🏅</div>
                 <div class="rt"><div class="r1">${esc(x.win.name)}</div>
                   <div class="r2">${MONTHNAME(x.month)} · ${x.win.pts} pts${x.win.G?` · ${x.win.G} ⚽`:''}${x.win.cs?` · ${x.win.cs} 🧤`:''}</div></div>${chev}</div>`).join(''):''}`:''}
           </div>`})()}
-      ${(function(){
-            const t=fplTable().slice(0,5);
-            if(!t.length)return `<div class="card"><div class="row"><div class="rt"><div class="r2">No teams picked yet</div></div></div></div>`;
-            const gws=playedGws(), last=gws[gws.length-1];
-            return `<div class="card">`+t.map((r,i)=>`<div class="row tap" onclick="go('fpl');FTAB='league';render()">
-              <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>
-              ${avatar(player(r.m.pid)||{name:r.m.name},30)}
-              <div class="rt"><div class="r1">${esc(r.m.teamName||r.m.name)}</div>
-                <div class="r2">${esc(r.m.name)}${last?` · ${r.gw} last week`:''}</div></div>
-              <div class="rv">${r.total}</div></div>`).join('')+`</div>`;
-          })()}
+      
       ${comps().length>1?`<div class="sechead">Other competitions <button class="act" onclick="go('comps')">Manage</button></div>
         <div class="card">${comps().filter(c=>c.type!=='league').map(c=>{
           const w=c.bracket?bracketWinner(c.bracket):null;
@@ -6324,6 +6318,7 @@ function dealsBlock(){
 
 
 function vCareer(){
+  try{ levelCelebrateMine() }catch(e){}
   const st=statsAll().filter(x=>x.P>0);
   const board=st.map(m=>({m,c:careerOf(m.id)})).sort((a,b)=>b.c.xp-a.c.xp);
   const fd=feed();
@@ -8796,6 +8791,70 @@ function levelUps(before){
   });
   return out.sort((a,b)=>b.to-a.to);
 }
+
+/* ---- Player of the Month announcement ----
+   On the first of a new month the previous month's winner is announced once,
+   with the same confetti burst the level-ups use. Shown per device and only
+   once per month, so it is an event rather than a nag. */
+const POTM_SEEN='ss_potm_seen';
+const LVL_PENDING='ss_lvl_pending';
+/* Shown once, on your own Career page, the next time you open it. */
+function levelCelebrateMine(){
+  try{
+    const me=fplMine(); if(!me)return;
+    const pend=JSON.parse(localStorage.getItem(LVL_PENDING)||'[]');
+    const mine=pend.filter(u=>u.pid===me.pid);
+    if(!mine.length)return;
+    localStorage.setItem(LVL_PENDING,JSON.stringify(pend.filter(u=>u.pid!==me.pid)));
+    /* celebrate() wants {p, from, to, lvl} — rebuild it from the stored ids */
+    const live=mine.map(u=>{
+      const p=player(u.pid); if(!p)return null;
+      const c=careerOf(u.pid);
+      return {p, from:u.from, to:u.to, lvl:(c&&c.lvl)||null};
+    }).filter(x=>x&&x.lvl);
+    if(live.length)setTimeout(()=>celebrate(live),380);
+  }catch(e){}
+}
+function potmAnnounce(){
+  try{
+    /* one completed month is enough to announce — waiting for two meant the
+       first award of a season never fired */
+    const pm=potm(); if(!pm||!pm.length)return;
+    const now=new Date();
+    const thisMonth=now.toISOString().slice(0,7);
+    /* the most recent COMPLETED month */
+    const done=pm.filter(x=>x.month<thisMonth);
+    if(!done.length)return;
+    const last=done[done.length-1];
+    if(!last||!last.win)return;
+    if(localStorage.getItem(POTM_SEEN)===last.month)return;
+    localStorage.setItem(POTM_SEEN,last.month);
+    const w=last.win;
+    const el=document.createElement('div');
+    el.className='cele';
+    el.innerHTML=`
+      <div class="cele-burst">${Array.from({length:42},(_,i)=>{
+        const a=(i/42)*360, d=90+Math.random()*120;
+        const c=['#C9A227','#FFE500','#E4002B','#2E9BFF','#12D178'][i%5];
+        return `<i style="--a:${a}deg;--d:${d}px;background:${c};animation-delay:${(i%7)*0.03}s"></i>`;
+      }).join('')}</div>
+      <div class="cele-card gold">
+        <div class="potm-medal" style="font-size:44px">🏅</div>
+        <div style="font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+          color:var(--label3);margin-top:6px">Player of the Month</div>
+        <div style="font-size:15px;font-weight:700;color:var(--label2);margin-top:2px">${MONTHNAME(last.month)}</div>
+        <div style="font-size:34px;font-weight:800;letter-spacing:-.03em;margin:12px 0 4px">${esc(w.name)}</div>
+        <div style="font-size:14px;color:var(--label3)">${w.pts} pts · ${w.W}W-${w.D}D-${w.L}L${
+          w.G?` · ${w.G} ⚽`:''}${w.A?` · ${w.A} 🅰️`:''}${
+          w.P?` · ${(w.GA/w.P).toFixed(1)} conceded`:''}</div>
+        <button class="btn pri full" style="margin-top:18px"
+          onclick="this.closest('.cele').remove()">Nice one</button>
+      </div>`;
+    document.body.appendChild(el);
+    try{haptic('heavy')}catch(e){}
+  }catch(e){}
+}
+
 function celebrate(ups){
   if(!ups||!ups.length)return;
   const u=ups[0], more=ups.length-1;
@@ -8916,6 +8975,11 @@ function ratingFor(pid,g,sideHint){
   r += Math.max(-1.6,Math.min(2.2,(avg-ga)*0.55))*dw;
   if(ga===0)r+=0.8*dw;
   if(gf===0&&pos==='ATT')r-=0.4;
+  /* leagueConceded() has nothing to average in a cup-only or brand-new season,
+     which made avg NaN and poisoned the whole sum. A non-finite result used to
+     pass the !=null filter and render as an empty pill — a player with a name,
+     a number and no rating, which is exactly what was showing. */
+  if(!isFinite(r))r=6.0;
   return Math.max(4.0,Math.min(10,Math.round(r*10)/10));
 }
 /* Ratings for a whole gameweek, not just the last game logged in it. A Sunday
@@ -9415,6 +9479,56 @@ function mnfNotes(){
 /* ============ MATCH CENTRE ============ */
 function openMatch(id){ try{wxBackfill(3)}catch(e){}
  pushBack(); app()._gid=id; VIEW='match'; render(); window.scrollTo(0,0); }
+
+/* Both sides on one pitch, the way a match graphic shows it: Team A defending
+   the top, Team B the bottom, each player a disc carrying their rating. */
+function matchPitch(g){
+  const rs=matchRatings(g);
+  if(!rs.length)return '';
+  const sq=gameSquad(g);
+  const sideOf=id=>{const f=sq.find(x=>x.id===id);return f&&f.side==='B'?'B':'A'};
+  const A=rs.filter(r=>sideOf(r.id)==='A'), B=rs.filter(r=>sideOf(r.id)==='B');
+  const W=340, H=440;
+  const rowsFor=n=> n<=3?[n] : n<=5?[Math.ceil(n/2),Math.floor(n/2)]
+                  : [Math.ceil(n/3),Math.ceil((n-Math.ceil(n/3))/2),n-Math.ceil(n/3)-Math.ceil((n-Math.ceil(n/3))/2)];
+  const disc=(r,x,y,col)=>`
+    <circle cx="${x}" cy="${y}" r="17" fill="#fff"/>
+    <text x="${x}" y="${y+5}" text-anchor="middle" font-size="13" font-weight="800"
+      fill="${col}">${r.r.toFixed(1)}</text>
+    <text x="${x}" y="${y+31}" text-anchor="middle" font-size="10.5" font-weight="700"
+      fill="#fff">${esc(String(r.name).split(' ')[0]).slice(0,9)}</text>`;
+  const lay=(list,topY,dir,col)=>{
+    const rows=rowsFor(list.length).filter(Boolean);
+    let out='', k=0;
+    rows.forEach((cnt,ri)=>{
+      const y=topY+dir*(ri*52);
+      for(let i=0;i<cnt;i++){
+        const x=(W*(i+1))/(cnt+1);
+        if(list[k])out+=disc(list[k],x,y,col);
+        k++;
+      }
+    });
+    return out;
+  };
+  return `<div class="sechead">Player ratings</div>
+    <div class="card pad" style="padding:14px">
+      <svg viewBox="0 0 ${W} ${H}" style="width:100%;display:block">
+        <rect width="${W}" height="${H}" rx="14" fill="#17693F"/>
+        ${[0,1,2,3,4,5,6,7].map(i=>`<rect y="${i*(H/8)}" width="${W}" height="${H/16}" fill="#fff" opacity=".04"/>`).join('')}
+        <rect x="8" y="8" width="${W-16}" height="${H-16}" rx="10" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+        <line x1="8" y1="${H/2}" x2="${W-8}" y2="${H/2}" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+        <circle cx="${W/2}" cy="${H/2}" r="40" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+        <rect x="${W/2-58}" y="8" width="116" height="48" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+        <rect x="${W/2-58}" y="${H-56}" width="116" height="48" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="2"/>
+        ${lay(A, 52, 1, '#0B1B33')}
+        ${lay(B, H-64, -1, '#7A1020')}
+      </svg>
+      <div class="potsleg" style="justify-content:center;margin-top:10px">
+        <span><i style="background:#0B1B33"></i>Team A</span>
+        <span><i style="background:#7A1020"></i>Team B</span></div>
+    </div>`;
+}
+
 function vMatch(gid){
   const g=allGames().find(x=>x.id===gid); if(!g){go('fixtures');return}
   const c=comps().find(x=>x.id===g.compId);
@@ -9444,8 +9558,11 @@ function vMatch(gid){
         :(venueType(g)==='in'?' · indoor':'')}${wxLine(g)}</div>
       <div class="mc-res">${a===b?'Draw':`Team ${a>b?'A':'B'} won`}</div>
     </div>
-    <div class="sechead">Report</div>
-    <div class="card pad report">${esc(matchReport(g))}</div>
+    <div class="sechead">Line-ups</div>
+    <div class="mc-teams">
+      <div class="mc-col"><div class="mc-h a">Team A · ${a}</div>${side(g.teamA,g.fillA,'A')}</div>
+      <div class="mc-col"><div class="mc-h b">Team B · ${b}</div>${side(g.teamB,g.fillB,'B')}</div>
+    </div>
     ${scorers.length?`<div class="sechead">Scorers</div>
       <div class="card">${scorers.map(x=>`<div class="row tap" onclick="openPlayer('${x.pid}')">
         <div style="font-size:19px;flex:0 0 26px">⚽</div>
@@ -9464,18 +9581,8 @@ function vMatch(gid){
         <div class="rt"><div class="r1">${esc(x.name)}</div>
           <div class="r2">Team ${x.onA?'A':'B'}${x.n>1?` · ${x.n} assists`:''}</div></div></div>`).join('')}</div>`;
     })()}
-    ${(function(){const rs=matchRatings(g); if(!rs.length)return '';
-      return `<div class="sechead">Player ratings</div>
-      <div class="card">${rs.map((x,i)=>`
-        <div class="row tap" onclick="openPlayer('${x.id}')">
-          <div class="rt"><div class="r1">${shirtBadge(player(x.id))}${esc(x.name)}${i===0?' <span style="font-size:11px;color:var(--label3)">· star man</span>':''}</div></div>
-          <div class="rv">${ratingPill(x.r)}</div></div>`).join('')}</div>`})()}
+    ${matchPitch(g)}
 
-    <div class="sechead">Line-ups</div>
-    <div class="mc-teams">
-      <div class="mc-col"><div class="mc-h a">Team A · ${a}</div>${side(g.teamA,g.fillA,'A')}</div>
-      <div class="mc-col"><div class="mc-h b">Team B · ${b}</div>${side(g.teamB,g.fillB,'B')}</div>
-    </div>
     <div class="sechead">FPL points</div>
     <div class="card">${[...(g.teamA||[]),...(g.teamB||[])].filter(p=>player(p))
       .map(pid=>({pid,pts:fplGamePoints(pid,g)})).sort((x,y)=>y.pts-x.pts)
@@ -14031,7 +14138,22 @@ async function saveGame(){ track('game_completed');
   try{ await save() }catch(e){}
   const _ups=levelUps(_lvlBefore);
   logEntry(G.id?'edit':'add',`${G.id?'Edited':'Logged'} ${G.round||'a game'} \u2014 ${G.sa}\u2013${G.sb}`);
-  if(_ups.length){ setTimeout(()=>celebrate(_ups),260); }
+  if(_ups.length){
+    /* A level-up belongs to the player it happened to, not to whoever happened
+       to be logging the game. Note it and let them see it on their own Career
+       page; everyone else just gets a line in the toast. */
+    try{
+      const pend=JSON.parse(localStorage.getItem(LVL_PENDING)||'[]');
+      const me=fplMine();
+      /* store ids only — the player and level objects are rebuilt on the way out */
+      _ups.forEach(u=>{ const pid=u.p&&u.p.id;
+        if(me&&pid===me.pid&&!pend.some(x=>x.pid===pid&&x.to===u.to))
+          pend.push({pid,from:u.from,to:u.to}) });
+      localStorage.setItem(LVL_PENDING,JSON.stringify(pend));
+    }catch(e){}
+    const names=_ups.map(u=>(player(u.pid)||{}).name).filter(Boolean);
+    toast(`\u2b06\ufe0f ${names.slice(0,3).join(', ')}${names.length>3?` +${names.length-3}`:''} levelled up`);
+  }
   else if(ms.length){const p=player(ms[0].pid);toast(`${ms[0].e} ${p?p.name:''} — ${ms[0].t}!`)}
   else toast(G.id?'Game saved':'Game logged');
   /* tell the group, but never the person who just did the saving */
@@ -14597,6 +14719,7 @@ document.addEventListener('keydown',e=>{
   }catch(e){}
   try{ await loadStrava(); stravaAfterRedirect(); }catch(e){}
   try{ setTimeout(()=>wxBackfill(8),2500) }catch(e){}
+  try{ setTimeout(potmAnnounce,1800) }catch(e){}
   try{ refreshPushState(); }catch(e){}
   try{
     if(playedGws().length){
