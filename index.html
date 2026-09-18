@@ -3197,10 +3197,34 @@ html{scroll-padding-top:var(--navh,48px)}
 .pm-past-r i{font-style:normal;margin-left:auto;color:rgba(255,255,255,.6);font-size:12px;white-space:nowrap}
 @media(max-width:370px){.pm-tile b{font-size:21px}}
 /* Team of the Week on Home: rounded, gold-bordered, like Player of the Month */
-.bc-pitch.bc-home{border-radius:16px;border:3px solid var(--bc-gold);padding:14px 8px 12px}
+.bc-pitch.bc-home{border-radius:16px;border:3px solid var(--bc-gold);padding:18px 8px 16px}
+.bc-pitch.bc-home .totw-rows{min-height:330px;justify-content:space-evenly;gap:0}
 .bc-pitch.bc-home .totw-row{gap:6px}
 .bc-pitch.bc-home .bc-pp{width:auto;flex:1 1 0;max-width:84px;min-width:0}
 .bc-pitch.bc-home .bc-rt{padding:6px 10px 4px}
+
+/* ---- results, broadcast style (Home recent results + Fixtures) ---- */
+.fx-row{--bc-navy:#0B1B33;--bc-navy2:#15294A;--bc-red:#E4002B;--bc-red2:#A8001F;--bc-gold:#C9A227;--bc-gold2:#F5D76E;
+  --bc-font:'DIN Condensed','D-DIN Condensed','Avenir Next Condensed','Roboto Condensed','Arial Narrow',Impact,sans-serif;
+  background:var(--bc-navy);color:#fff;padding:10px 12px 9px;cursor:pointer;
+  background-image:repeating-linear-gradient(118deg,rgba(255,255,255,.045) 0 2px,transparent 2px 9px)}
+.fx-row+.fx-row{border-top:1px solid rgba(201,162,39,.45)}
+.card>.fx-row:first-child{border-radius:14px 14px 0 0} .card>.fx-row:last-child{border-radius:0 0 14px 14px}
+.card>.fx-row:only-child{border-radius:14px}
+.fx-strip{display:grid;grid-template-columns:1fr auto 1fr;align-items:stretch;height:44px}
+.fx-side{display:flex;align-items:center;justify-content:center;background:var(--bc-navy2);font-family:var(--bc-font);font-weight:700;
+  font-size:17px;letter-spacing:.06em;text-transform:uppercase;transform:none}
+.fx-side.a{clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%);padding-right:10px}
+.fx-side.b{clip-path:polygon(10px 0,100% 0,100% 100%,0 100%);padding-left:10px}
+.fx-side.w{background:linear-gradient(135deg,var(--bc-red),var(--bc-red2))}
+.fx-side.l{color:rgba(255,255,255,.55)}
+.fx-score{display:flex;align-items:center;justify-content:center;gap:4px;background:#fff;color:var(--bc-navy);margin:0 -10px;padding:0 18px;min-width:88px;
+  z-index:1;position:relative;clip-path:polygon(10px 0,100% 0,calc(100% - 10px) 100%,0 100%)}
+.fx-score b{font-family:var(--bc-font);font-weight:700;font-size:28px;line-height:1;font-variant-numeric:tabular-nums;min-width:1ch;text-align:center;transform:skewX(-10deg)}
+.fx-score i{font-style:normal;font-family:var(--bc-font);font-weight:700;font-size:18px;color:var(--bc-red);transform:translateY(-1px)}
+.fx-meta{display:flex;align-items:center;gap:10px;margin-top:7px;font-family:var(--bc-font);font-weight:700;font-size:11.5px;letter-spacing:.16em;color:rgba(255,255,255,.7)}
+.fx-gw{background:var(--bc-gold);color:var(--bc-navy);padding:3px 9px 2px;clip-path:polygon(6px 0,100% 0,calc(100% - 6px) 100%,0 100%);letter-spacing:.14em}
+.fx-motm{margin-left:auto;color:var(--bc-gold2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 
 </style>
 </head>
@@ -4678,7 +4702,7 @@ function vHomeBody(){
               .sort((a,b)=>(a.GA/a.P)-(b.GA/b.P)).slice(0,5);
             return back.length?back.map((x,i)=>`<div class="row tap" onclick="openPlayer('${x.id}')">
               <div style="width:18px;color:var(--label2);font-size:14px">${i+1}</div>${avatar(x,30)}
-              <div class="rt"><div class="r1">${shirtBadge(player(x.id))}${esc(x.name)}</div>
+              <div class="rt"><div class="r1">${esc(x.name)}</div>
                 <div class="r2">${(x.GA/Math.max(1,x.P)).toFixed(1)} conceded a game · ${x.P} games</div></div>
               <div class="rv">${(x.GA/x.P).toFixed(1)}</div></div>`).join('')
             :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'})()}</div>
@@ -4703,20 +4727,6 @@ function vHomeBody(){
           const w=c.bracket?bracketWinner(c.bracket):null;
           return `<div class="row tap" onclick="COMP='${c.id}';go('comps')"><div style="font-size:22px;flex:0 0 26px">${c.icon}</div>
           <div class="rt"><div class="r1">${esc(c.name)}</div><div class="r2">${CT[c.type].label} · ${(c.teams||[]).length} teams${w?` · 🏆 ${esc(teamName(c,w))}`:''}</div></div>${chev}</div>`}).join('')}</div>`:''}
-      ${(function(){
-        const near=closingInRows();
-        if(!fd.length&&!near.length)return '';
-        return `<div class="sechead">Milestones <button class="act" onclick="go('career')">Career</button></div>
-        ${fd.length?`<div class="note" style="padding:0 4px 8px;font-size:12px">Just reached</div>
-        <div class="card">${fd.map(e=>{const p=player(e.pid);return `<div class="row"><div style="font-size:21px;flex:0 0 26px">${e.e}</div>
-          <div class="rt"><div class="r1">${esc(p?p.name:'—')}</div><div class="r2">${esc(e.t)}</div></div>
-          <div class="rv" style="font-size:12.5px">${fdate(e.date)}</div></div>`}).join('')}</div>`:''}
-        ${false?`<div class="note" style="padding:${fd.length?'12px':'0'} 4px 8px;font-size:12px">⏳ Almost there — a few games or goals away</div>
-        <div class="card">${near.map(o=>`<div class="row tap" onclick="openCareer('${o.id}')">
-          <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
-          <div class="rt"><div class="r1">${esc(o.name)}</div>
-            <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>`:''}`;
-      })()}
 
       ${eventBanner()}
       ${potsRace()}
@@ -4769,16 +4779,32 @@ function closingIn(){
         <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>
     <div class="note">Within touching distance next Sunday.</div>`;
 }
+/* Man of the match for one game: everyone tied on the top rating */
+function motmOf(g){
+  const rs=matchRatings(g); if(!rs.length)return null;
+  const top=rs[0].r; return {r:top,names:rs.filter(x=>x.r===top).map(x=>x.name),ids:rs.filter(x=>x.r===top).map(x=>x.id)};
+}
+/* A result, broadcast style: the scoreline with the winner on the red wedge,
+   then GW · full date · ★ man of the match. Used on Home and in Fixtures. */
 function gameRow(g){
-  const c=comps().find(x=>x.id===g.compId);
-  const nm=(l,f)=>{const n=(l||[]).map(p=>player(p)?.name).filter(Boolean).concat(f||[]);
-    return n.length>2?n.slice(0,2).join(', ')+' +'+(n.length-2):n.join(', ')||'—'};
-  const A=nm(g.teamA,g.fillA),B=nm(g.teamB,g.fillB),ed=isAdmin();
-  return `<div class="row tap" onclick="openMatch('${g.id}')">
-    <div style="font-size:19px;flex:0 0 24px;text-align:center">${c?c.icon:'🏆'}</div>
-    <div class="rt"><div class="r1">${esc(A)} <span style="color:var(--label3)">v</span> ${esc(B)}</div>
-      <div class="r2">${fdate(g.date)}${g.round?' · '+esc(g.round):''}</div></div>
-    <div class="rv" style="color:var(--label)">${g.scoreA??0}–${g.scoreB??0}</div>${chev}</div>`}
+  const a=g.scoreA??0,b=g.scoreB??0, gw=gwOf(g);
+  const wl=sd=>a===b?'':((sd==='A'?a>b:b>a)?' w':' l');
+  const d=new Date(g.date);
+  const date=isNaN(d)?String(g.date||''):d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const m=motmOf(g);
+  const first=n=>String(n||'').split(' ')[0];
+  return `<div class="fx-row tap" onclick="openMatch('${g.id}')">
+    <div class="fx-strip">
+      <div class="fx-side a${wl('A')}">TEAM A</div>
+      <div class="fx-score"><b>${a}</b><i>–</i><b>${b}</b></div>
+      <div class="fx-side b${wl('B')}">TEAM B</div>
+    </div>
+    <div class="fx-meta">
+      <span class="fx-gw">${gw!=null?`GW${gw}`:(g.round?esc(g.round):'')}</span>
+      <span class="fx-date">${esc(date).toUpperCase()}</span>
+      ${m?`<span class="fx-motm">★ ${esc(m.names.map(first).join(' & ')).toUpperCase()}</span>`:''}
+    </div>
+  </div>`}
 
 /* ============ COMPETITIONS ============ */
 function vComps(){ homeSegPage('cups'); }
@@ -10197,22 +10223,27 @@ function totw(){
   const gws=playedGws(); if(!gws.length)return null;
   const gw=gws[gws.length-1];
   const games=gamesInGw(gw);
-  /* the team is as big as the biggest side that Sunday: 7 for 7s, 9 for 9s */
+  /* as many players as the biggest side that Sunday, outfield only */
   const n=Math.max(5,...games.map(g=>Math.max((g.teamA||[]).length+(g.fillA||[]).length,(g.teamB||[]).length+(g.fillB||[]).length)));
   const pool=season().players.filter(p=>p.active!==false)
     .map(p=>({p,pts:fplPlayerGw(p.id,gw),pos:(p.pos||'MID')})).filter(x=>x.pts>0)
     .sort((a,b)=>b.pts-a.pts);
   if(pool.length<3)return null;
-  const out=n-1, nDef=Math.round(out*0.35), nAtt=Math.round(out*0.3), nMid=out-nDef-nAtt;
+  const nDef=Math.round(n*0.35), nAtt=Math.round(n*0.3), nMid=n-nDef-nAtt;
   const used=new Set();
   const take=(pos,k)=>{ const r=pool.filter(x=>x.pos===pos&&!used.has(x.p.id)).slice(0,k); r.forEach(x=>used.add(x.p.id)); return r };
-  const gk=take('GK',1), def=take('DEF',nDef), mid=take('MID',nMid), att=take('ATT',nAtt);
-  /* a position short of players that Sunday is filled from whoever is left,
-     best points first, so the team is always n strong when n played */
+  const def=take('DEF',nDef), mid=take('MID',nMid), att=take('ATT',nAtt);
+  /* a position short of players that Sunday is filled from whoever is left
+     (keepers included), best points first, so the team is always n strong */
   const fill=(arr,k)=>{ while(arr.length<k){ const nx=pool.find(x=>!used.has(x.p.id)); if(!nx)break; used.add(nx.p.id); arr.push(nx) } };
-  fill(gk,1); fill(def,nDef); fill(mid,nMid); fill(att,nAtt);
+  fill(def,nDef); fill(mid,nMid); fill(att,nAtt);
   const star=pool[0];
-  return {gw,n,gk:gk[0]||null,def,mid,att,star};
+  /* rows never wider than four: attack at the top, defence at the bottom */
+  const ordered=[...att,...mid,...def];
+  const rowsN=Math.ceil(n/4), base=Math.floor(ordered.length/rowsN), extra=ordered.length%rowsN;
+  const rows=[]; let k=0;
+  for(let r=0;r<rowsN;r++){ const c=base+(r<extra?1:0); rows.push(ordered.slice(k,k+c)); k+=c }
+  return {gw,n,rows:rows.filter(r=>r.length),def,mid,att,star};
 }
 function totwBlock(){
   const t=totw(); if(!t)return '';
@@ -10233,7 +10264,7 @@ function totwBlock(){
         <rect x="32" y="2" width="36" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
         <rect x="32" y="84" width="36" height="14" fill="none" stroke="rgba(255,255,255,.4)" stroke-width=".6"/>
       </svg>
-      <div class="totw-rows">${row(t.att)}${row(t.mid)}${row(t.def)}${row([t.gk])}</div>
+      <div class="totw-rows">${t.rows.map(row).join('')}</div>
     </div>
     <div class="note">Best of the gameweek. ★ is the standout.</div>`;
 }
@@ -13123,6 +13154,24 @@ function histFame(){
       ${multi.length?`<div class="sechead">Most Player of the Month awards</div>
       <div class="card">${multi.map(([n,c])=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">🏅</div>
         <div class="rt"><div class="r1">${esc(n)}</div></div><div class="rv">${c}</div></div>`).join('')}</div>`:''}`;
+    })()}
+    ${(function(){
+      /* man of the match for every game, newest first, each linking to its
+         match centre; then who has the most */
+      const gs=allGames().slice().reverse().map(g=>({g,m:motmOf(g)})).filter(x=>x.m);
+      if(!gs.length)return '';
+      const counts={}; gs.forEach(({m})=>m.ids.forEach((id,k)=>{counts[id]=counts[id]||{n:0,name:m.names[k]};counts[id].n++}));
+      const most=Object.values(counts).sort((a,b)=>b.n-a.n).slice(0,5);
+      const d=g=>{const x=new Date(g.date);return isNaN(x)?String(g.date||''):x.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})};
+      return `<div class="sechead">⭐ Man of the Match · every game</div>
+      <div class="card">${gs.map(({g,m})=>`<div class="row tap" onclick="openMatch('${g.id}')">
+        <div style="flex:0 0 auto">${avatar(player(m.ids[0])||{name:m.names[0]},30)}</div>
+        <div class="rt"><div class="r1">${esc(m.names.join(' & '))}</div>
+          <div class="r2">${gwOf(g)!=null?`GW${gwOf(g)} · `:''}${esc(d(g))} · ${g.scoreA??0}–${g.scoreB??0}</div></div>
+        <div class="rv"><span class="rpill ${ratingClass(m.r)}">${m.r.toFixed(1)}</span></div>${chev}</div>`).join('')}</div>
+      ${most.length?`<div class="sechead">Most Man of the Match awards</div>
+      <div class="card">${most.map(x=>`<div class="row"><div style="font-size:20px;flex:0 0 26px">⭐</div>
+        <div class="rt"><div class="r1">${esc(x.name)}</div></div><div class="rv">${x.n}</div></div>`).join('')}</div>`:''}`;
     })()}`;
 }
 
