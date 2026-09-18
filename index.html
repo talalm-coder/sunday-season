@@ -3628,6 +3628,41 @@ html[data-theme="dark"] .chips button{background:#1C1C1E;color:var(--ss-label)} 
 .ss-gl{display:inline-flex;vertical-align:middle} .ss-gl .ss-tile{vertical-align:middle}
 .ss-gi .ss-ball{width:1em;height:1em;vertical-align:-.15em;margin:0 .1em}
 .sechead .ss-sl+*{margin-left:auto}
+
+/* ============ follow-ups: leader slabs, gold scoreline, FPL header + pitch ============ */
+.lead-n.lead-form{gap:2px;padding-left:10px;flex:0 0 132px}
+.lead-n.lead-form .wdl{margin:0;gap:3px} .lead-n.lead-form .wdl i{width:20px;height:20px;font-size:10.5px;border-radius:5px}
+.lead-n.lead-form .flame{margin:0 0 2px;font-size:13px}
+.fx-row .fx-score{background:var(--ss-gold);color:#fff;border-radius:6px}
+.fx-row .fx-score i{color:var(--ss-navy)}
+.fh{background:var(--ss-navy);box-shadow:none;border-radius:16px;border-bottom:3px solid var(--ss-gold)}
+html[data-theme="dark"] .fh{background:#12213A}
+.fh-tn{font-size:22px} .fh-mn{font-size:13.5px;color:rgba(255,255,255,.7)}
+.fh-gw{background:var(--ss-gold);border-radius:12px;padding:8px 14px}
+.fh-gw b{color:#fff;font-size:26px;font-weight:800} .fh-gw span{color:#fff;opacity:.9;font-size:10px;letter-spacing:1.5px}
+.fh-stats{border-top:1px solid rgba(255,255,255,.14)}
+.fh-stats b{font-size:17px} .fh-stats b.neg{color:#FF7A8A} .fh-stats span{font-size:10px;letter-spacing:1px;color:rgba(255,255,255,.6)}
+.gwpager button{background:rgba(255,255,255,.14);color:#fff} .gwp-mid b{font-size:15px} .gwp-mid span{color:var(--ss-gold);opacity:1;font-weight:700}
+.fh .chiprow-gw{color:rgba(255,255,255,.7)}
+.tmode button{background:var(--card);border:1px solid var(--ss-hair);color:var(--ss-ink);font-weight:800;font-size:16px}
+.tmode button i{color:var(--ss-muted)} .tmode button.on{background:var(--ss-blue);border-color:var(--ss-blue);color:#fff} .tmode button.on i{color:rgba(255,255,255,.8)}
+html[data-theme="dark"] .tmode button{background:#1C1C1E}
+.fpitch{background:#0D6637;background-image:repeating-linear-gradient(180deg,#0F7440 0 30px,#0D6637 30px 60px);box-shadow:none;border-radius:14px;border:3px solid var(--ss-gold);padding:18px 8px 16px}
+.fp-lines{background:radial-gradient(circle at 50% 50%,transparent 52px,rgba(255,255,255,.45) 53px,transparent 54px);border:1.5px solid rgba(255,255,255,.45);border-radius:10px;margin:8px}
+.fp-rows{gap:18px}
+.sh-top{box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.sh-cap{background:var(--ss-gold);color:var(--ss-navy);font-weight:900;box-shadow:0 0 0 2px #fff}
+.sh-name{background:#fff;color:var(--ss-navy);font-weight:800;font-size:11px;border-radius:6px 6px 0 0;padding:4px 3px}
+.sh-pts{background:var(--ss-navy);color:var(--ss-gold);font-weight:800;font-size:12px;border-radius:0 0 6px 6px;padding:3px}
+.sh-pts.need{color:#fff}
+.sh.sh-view .sh-pts{color:#fff;font-size:13px}
+.sh-sub{color:rgba(255,255,255,.7)}
+.sh-new .sh-top{box-shadow:0 0 0 2.5px var(--ss-green),0 3px 8px rgba(0,0,0,.3)}
+.sh-badge{background:var(--ss-green)!important;color:#fff!important}
+.sh-c{background:#fff;color:var(--ss-navy);font-weight:800} .sh-c.on{background:var(--ss-gold);color:var(--ss-navy)}
+.sh-x{background:var(--ss-red);color:#fff}
+.fpl-chipbar{background:color-mix(in srgb,var(--ss-plum) 16%,var(--card));color:var(--ss-ink)}
+
 </style>
 </head>
 <body>
@@ -10372,16 +10407,26 @@ function hmLeaders(key,label,list,val,per,unit,empty){
 }
 /* form guide: W/D/L chips, flame only on a run of three or more wins */
 function hmForm(form){
+  const L=form[0], rest=form.slice(1);
+  const hot=x=>x.streak&&x.streak.type==='W'&&x.streak.n>=3;
+  const line=x=>x.streak&&x.streak.n>=2?`${x.streak.n} ${x.streak.type==='W'?'wins':x.streak.type==='L'?'losses':'draws'} in a row`:'Last 5 games';
   return `${ssSec("form-guide","Form guide",'<span class="ss-note">Last 5 · flame = 3+ wins</span>')}<div class="card">
-    ${form.length?form.map((x,i)=>`<div class="row tap lrow" onclick="openPlayer('${x.id}')">${rankPill(i)}${avatar(x,34)}
+    ${form.length?`<div class="lead tap" onclick="openPlayer('${L.id}')">
+      <div class="lead-g">${avatar(L,44)}<div class="lead-t"><span>LEADER</span><b>${esc(L.name)}</b><i>${line(L)}</i></div></div>
+      <div class="lead-n lead-form">${hot(L)?'<span class="flame">🔥</span>':''}${wdlChips(L.last5)}<span>LAST 5</span></div>
+    </div>`+rest.map((x,i)=>`<div class="row tap lrow" onclick="openPlayer('${x.id}')">${rankPill(i)}${avatar(x,34)}
       <div class="rt"><div class="r1">${esc(x.name)}</div></div>
-      ${x.streak&&x.streak.type==='W'&&x.streak.n>=3?'<span class="flame">🔥</span>':''}${wdlChips(x.last5)}</div>`).join('')
+      ${hot(x)?'<span class="flame">🔥</span>':''}${wdlChips(x.last5)}</div>`).join('')
     :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'}</div>`;
 }
 /* best defence: conceded per game, games played; no clean-sheet element */
 function hmDefence(back){
+  const L=back[0], rest=back.slice(1);
   return `${ssSec("best-defence","Best defence",'<span class="ss-note">Conceded per game</span>')}<div class="card">
-    ${back.length?back.map((x,i)=>`<div class="row tap lrow" onclick="openPlayer('${x.id}')">${rankPill(i)}${avatar(x,34)}
+    ${back.length?`<div class="lead tap" onclick="openPlayer('${L.id}')">
+      <div class="lead-g">${avatar(L,44)}<div class="lead-t"><span>LEADER</span><b>${esc(L.name)}</b><i>${L.P} game${L.P===1?'':'s'}</i></div></div>
+      <div class="lead-n"><b>${(L.GA/L.P).toFixed(1)}</b><span>CONCEDED</span></div>
+    </div>`+rest.map((x,i)=>`<div class="row tap lrow" onclick="openPlayer('${x.id}')">${rankPill(i)}${avatar(x,34)}
       <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.P} game${x.P===1?'':'s'}</div></div>
       <div class="def-v"><b>${(x.GA/x.P).toFixed(1)}</b><span>conceded / game</span></div></div>`).join('')
     :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'}</div>`;
