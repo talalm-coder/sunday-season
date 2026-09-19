@@ -1788,7 +1788,6 @@ body.drawer::after{background:var(--card)}
     linear-gradient(168deg,#22242C,#0D0E12)}
 .fut.cb-night{background-image:radial-gradient(70% 45% at 50% 0,rgba(120,180,255,.3),transparent 60%),linear-gradient(160deg,#0B1B33,#132B4D)}
 .fut.cb-stands{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 3px,transparent 3px 8px),linear-gradient(160deg,#2b2b30,#16161a)}
-.fut.cb-retro{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 3px,transparent 3px 6px),linear-gradient(160deg,#1a2b1a,#0d160d)}
 .fut.cb-smoke{background-image:radial-gradient(60% 70% at 30% 30%,rgba(255,255,255,.22),transparent 62%),linear-gradient(160deg,#3a3a40,#141416)}
 .fut.cb-sunset{background-image:linear-gradient(160deg,rgba(255,149,0,.55),rgba(255,55,95,.4) 55%,rgba(0,0,0,.9))}
 
@@ -1863,12 +1862,9 @@ body[data-shop="arcade"]{--bg:#0B0620;--card:#170F35;--label:#FFD60A;--label2:#F
 .evb-xmas{background:linear-gradient(110deg,#C8102E,#0B6E3F)}
 .evb-newyear{background:linear-gradient(110deg,#1c1c1e,#5E5CE6)}
 .evb-finale{background:linear-gradient(110deg,#F4C048,#8A6E13);color:#3B2D04}
-.evb-retro{background:repeating-linear-gradient(90deg,#000 0 10px,#008 10px 20px)}
 body[data-event="halloween"]{--tint:#FF6B00}
 body[data-event="xmas"]{--tint:#C8102E}
 body[data-event="finale"]{--tint:#C9A227}
-body[data-event="retro"]{--bg:#000;--card:#000080;--label:#fff;--label2:#0f0;--label3:#ff0;--sep:rgba(255,255,255,.3)}
-body[data-event="retro"] *{font-family:'Courier New',monospace!important}
 /* ---- awards night ---- */
 .awn{position:fixed;inset:0;z-index:200;background:radial-gradient(120% 80% at 50% 0,#2a1c00,#0b0b0d 72%);
   display:flex;align-items:center;justify-content:center;padding:24px;animation:in .3s ease;cursor:pointer}
@@ -2124,7 +2120,6 @@ details.drop>.card:last-child{border-radius:18px}
 .carhead.carhead-skin .carhead-lv span{color:rgba(255,255,255,.62)}
 .carhead.carhead-skin.cb-night{background-image:radial-gradient(70% 45% at 50% 0,rgba(120,180,255,.3),transparent 60%),linear-gradient(160deg,#0B1B33,#132B4D)}
 .carhead.carhead-skin.cb-stands{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 3px,transparent 3px 8px),linear-gradient(160deg,#2b2b30,#16161a)}
-.carhead.carhead-skin.cb-retro{background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.045) 0 3px,transparent 3px 6px),linear-gradient(160deg,#1a2b1a,#0d160d)}
 .carhead.carhead-skin.cb-smoke{background-image:radial-gradient(60% 70% at 30% 30%,rgba(255,255,255,.22),transparent 62%),linear-gradient(160deg,#3a3a40,#141416)}
 .carhead.carhead-skin.cb-sunset{background-image:linear-gradient(160deg,rgba(255,149,0,.55),rgba(255,55,95,.4) 55%,rgba(0,0,0,.9))}
 .carhead.carhead-skin.cb-base{background-image:linear-gradient(160deg,#2b2b30,#141416)}
@@ -12382,19 +12377,13 @@ const EVENTS=[
    line:'The run-in. Everything is decided from here.'},
 ];
 function mmdd(d){ return String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') }
+/* Only the four dated events below. There is no surprise day — nothing here
+   may ever restyle the app on a date the calendar above does not name. */
 function activeEvent(){
   if(typeof EVENT_FORCE!=='undefined'&&EVENT_FORCE)
-    return EVENTS.find(x=>x.id===EVENT_FORCE)||retroToday();
+    return EVENTS.find(x=>x.id===EVENT_FORCE)||null;
   const t=mmdd(new Date());
-  const hit=EVENTS.find(e=>e.from<=e.to ? (t>=e.from&&t<=e.to) : (t>=e.from||t<=e.to));
-  return hit||retroToday();
-}
-/* one retro day a month, picked deterministically from the month itself */
-function retroToday(){
-  const d=new Date();
-  const day=1+Math.floor(seedRand('retro|'+d.getFullYear()+'|'+d.getMonth())*27);
-  if(d.getDate()!==day)return null;
-  return {id:'retro',n:'Retro Day',e:'📺',line:'One day a month the app goes back to 1974.',retro:true};
+  return EVENTS.find(e=>e.from<=e.to ? (t>=e.from&&t<=e.to) : (t>=e.from||t<=e.to))||null;
 }
 let EVENT_FORCE=null;
 function applyEvent(){
