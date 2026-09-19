@@ -4155,6 +4155,20 @@ html[data-theme="dark"] .lg6-warn{background:#2A1418;color:#FF9AAB;border-color:
 html[data-theme="dark"] .lg6-tag.b{background:#33507F} html[data-theme="dark"] .lg6-ss.b{background:#12213A}
 html[data-theme="dark"] .lg6-venue.add{background:#1C1C1E}
 html[data-theme="dark"] .lg6 .lg6-comp button.on{background:var(--ss-blue);border-color:var(--ss-blue);color:#fff}
+/* round 5: career hero gold outline + market row tap-to-expand */
+.carhead{border:2px solid var(--ss-gold)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--ss-gold) 12%,transparent)}
+html[data-theme="dark"] .carhead{border-color:var(--ss-gold)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--ss-gold) 18%,transparent)}
+.mk2 .mk-row{cursor:pointer}
+.mk2 .mk-spark{pointer-events:none}
+.mk2 .mk-row{gap:8px;padding-right:10px}
+.mk2 .mk-spark{flex:0 0 44px}
+.mk2 .mk-r.stk-px{min-width:58px}
+.mk2 .mk-pick{flex:0 0 30px;width:30px;height:30px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;background:var(--ss-blue);color:#fff;margin-left:2px}
+.mk2 .mk-pick svg{width:15px;height:15px}
+.mk2.open .mk-spark{display:none}
+.mk2 .mk-pick.in{background:color-mix(in srgb,var(--ss-green) 16%,transparent);color:var(--ss-green)}
+.mk2 .mk-row.poor .mk-pick{background:var(--ss-soft);color:var(--ss-muted)}
+html[data-theme="dark"] .mk2 .mk-row.poor .mk-pick{background:#2A2A2D}
 /* round 4 item 2 */
 .vsplit span.ss-gi{display:inline-flex;font-size:13px}
 .fx-w{position:relative;flex:1 1 calc(50% - 4px);min-width:0;display:flex}
@@ -4554,7 +4568,7 @@ function ssSec(key,label,extra){ const e=ssSecIcon(label); return `<div class="s
 function ssLevelTile(n,size){
   const e=SS_ICONS.levels[Math.max(1,Math.min(40,n))-1]; if(!e)return '';
   const col=ssDark()?e.dark:e.light;
-  return `<span class="ss-lvl" style="--ss-ring:${col}">${SS_ICONS.tile(e,size||40,ssDark(),true)}<b>${n}</b></span>`;
+  return `<span class="ss-lvl" style="--ss-ring:${col}">${SS_ICONS.tile(e,size||40,ssDark(),true)}${(size||40)>=24?`<b>${n}</b>`:''}</span>`;
 }
 /* milestone tile: group colour when done, grey when not */
 function ssChTile(ch,size,done){
@@ -5841,8 +5855,8 @@ function ssSegPass(){
    dropped and the label wrapped in .ss-sl. Heads that the design leaves plain
    (Season by season / This season / Your season, formation names, dates) are
    skipped. */
-const SS_VIEWS=['home','squad','career','bets','stats','fpl','shop','player','pcareer','history','sky','comps'];
-const SS_HEAD=[[/milestone/i,'career-leaders'],[/earning|wage|money|wallet|cosmetic|shop/i,'shop'],[/leaderboard|level|career/i,'career-mode'],
+const SS_VIEWS=['home','squad','career','bets','stats','fpl','shop','player','pcareer','history','sky','comps','admin','games','gws','tactics','match'];
+const SS_HEAD=[[/^sync$/i,'admin'],[/^appearance$/i,'shop'],[/^season$|^seasons$/i,'fixtures'],[/export|share the app/i,'@Preview card'],[/monitoring|alerts|safety net|session|your data|undo/i,'admin'],[/codes/i,'sunday-fpl'],[/rotation/i,'squad'],[/who am i/i,'@Who Am I?'],[/milestone/i,'career-leaders'],[/earning|wage|money|wallet|cosmetic|shop/i,'shop'],[/leaderboard|level|career/i,'career-mode'],
   [/strava|physical|form curve|streak|form/i,'form-guide'],[/trophy|honour|award|record/i,'hall-of-fame'],[/bet|open bets|settled|predict/i,'betting'],
   [/partner|chemistry|struggle|matrix|squad|team|manager/i,'squad'],[/heatmap|position|attendance|split|insight|compare|table|stat/i,'stats'],
   [/venue|indoor|outdoor|fixture|gameweek|game/i,'fixtures'],[/keeping|price|transfer|chips|good to know|rule|fpl|points/i,'sunday-fpl'],
@@ -5858,7 +5872,7 @@ function ssHeadPass(){
     if(!txt)return;
     const ex=ssSecIcon(txt); if(!ex&&skip.test(txt))return;
     const hit=SS_HEAD.find(([re])=>re.test(txt)); const key=hit?hit[1]:(SS_NAV[VIEW]||'home');
-    const w=document.createElement('span'); w.className='ss-sl'; w.innerHTML=(ex?SS_ICONS.tile(ex,22,ssDark(),true):ssTile(key,22))+'<span>'+esc(txt)+'</span>';
+    const w=document.createElement('span'); w.className='ss-sl'; w.innerHTML=(ex?SS_ICONS.tile(ex,22,ssDark(),true):(key[0]==='@'?(ssNamed(key.slice(1),22)||ssTile('home',22)):ssTile(key,22)))+'<span>'+esc(txt)+'</span>';
     h.replaceChild(w,t); h.classList.add('ss-done');
   });
 }
@@ -5869,9 +5883,9 @@ function ssHeadPass(){
 const SS_GLYPH={'⚽':['top-scorers'],'🅰️':['most-assists'],'🅰':['most-assists'],'👟':['top-scorers'],'⭐':['player-of-the-month'],'🏆':['hall-of-fame'],
   '🏅':['player-of-the-month'],'🥇':['player-of-the-month'],'🎖':['team-of-the-week'],'🎖️':['team-of-the-week'],'👑':['career-leaders'],
   '💰':['shop'],'💷':['shop'],'💵':['shop'],'⚡':['career-mode'],'🔥':['form-guide','#E4002B'],'📈':['form-guide'],'📉':['form-guide','#E4002B'],
-  '🤝':['squad'],'🔒':['admin'],'🧤':['admin'],'🛡️':['best-defence'],'🛡':['best-defence'],'🎯':['most-assists'],'📅':['fixtures'],
+  '🤝':['squad'],'🔒':['admin'],'🧤':['best-defence'],'🛡️':['best-defence'],'🛡':['best-defence'],'🎯':['most-assists'],'📅':['fixtures'],
   '🏃':['form-guide'],'🎩':['career-mode'],'👻':['career-mode'],'🦖':['career-mode'],'🔺':['career-mode'],'🎮':['career-mode'],'🪜':['career-mode'],
-  '📊':['stats'],'🏟':['fixtures'],'🏟️':['fixtures'],'☀️':['fixtures'],'🎰':['betting'],'💸':['betting'],'🧱':['best-defence'],'🚀':['form-guide'],'👥':['squad'],'🥅':['top-scorers'],'🌅':['@First ever game'],'🗓️':['fixtures'],'🗓':['fixtures'],'✨':['@Every moment'],'🎉':['@Days to remember']};
+  '📊':['stats'],'🏟':['fixtures'],'🏟️':['fixtures'],'☀️':['fixtures'],'🎰':['betting'],'💸':['betting'],'🧱':['best-defence'],'🚀':['form-guide'],'👥':['squad'],'🥅':['top-scorers'],'🌅':['@First ever game'],'🗓️':['fixtures'],'🗓':['fixtures'],'✨':['@Every moment'],'🎉':['@Days to remember'],'✅':['form-guide'],'💪':['@Best win rate'],'💎':['@Player ratings'],'🧊':['@Struggle together','#2F6BF6'],'☁️':['admin'],'📄':['stats'],'📸':['@Preview card'],'💾':['admin'],'✏️':['sunday-fpl'],'👀':['stats'],'🔁':['form-guide'],'🎽':['squad'],'📋':['stats'],'⚔️':['@Rivalries'],'⚔':['@Rivalries'],'⚖️':['squad'],'⛳':['top-scorers'],'📐':['stats'],'🧠':['@Insights'],'🧩':['squad'],'🛠️':['admin'],'💥':['@Kicked on'],'🌍':['@Everyone']};
 const SS_GLYPH_RE=new RegExp('('+Object.keys(SS_GLYPH).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gu');
 function ssGlyphSvg(key){ const e=key[0]==='@'?ssSecIcon(key.slice(1)):(SS_ICONS.sections[key]||SS_ICONS.menu[key]); return e?`<svg class="ss-ball" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${e.svg}</svg>`:'' }
 function ssGlyphPass(){
@@ -5993,19 +6007,18 @@ function vHomeBody(){
       
       <div class="card lg4-card"><div class="tw"><table class="lg4">${LG4_HEAD}<tbody>${lg4Rows(tbl,m)}</tbody></table></div></div>
       ${lg4Key(tbl.length)}
-      <div class="note lg4-note">Win 3 · Draw 1 · Loss 0. Level on points is split by win rate, then player rating.</div>
-
-      <div class="grid g2">
-        <div>${hmLeaders("top-scorers","Top scorers",scorers,x=>x.G,x=>x.gpg.toFixed(2),"GOALS","No goals recorded yet")}</div>
-        <div>${hmLeaders("most-assists","Most assists",[...st].filter(x=>(x.A||0)>0).sort((p,q)=>q.A-p.A).slice(0,5),x=>x.A,x=>(x.A/Math.max(1,x.P)).toFixed(2),"ASSISTS","No assists logged yet")}</div>
-        <div>${hmForm(form)}</div>
-        <div>${hmDefence(statsAll().filter(x=>x.P>=2).sort((a,b)=>(a.GA/a.P)-(b.GA/b.P)).slice(0,5))}
-          </div>
-      </div>
+      <div class="note lg4-note">Win 3 · Draw 1 · Loss 0 · ties split by win rate.</div>
 
       ${ssSec("fixtures","Recent results",`<button class="act ss-act" onclick="shareGameweek()">${ssTile("share-gameweek",18)}Share gameweek</button>`)}
       <div class="card">${recent.map(gameRow).join('')}
         <button class="seeall" onclick="HTAB='fixtures';render()">See all fixtures ›</button></div>
+
+      <div class="grid g2">
+        <div>${hmLeaders("top-scorers","Top scorers",scorers,x=>x.G,x=>x.gpg.toFixed(2),"GOALS","No goals recorded yet")}</div>
+        <div>${hmLeaders("most-assists","Most assists",[...st].filter(x=>(x.A||0)>0).sort((p,q)=>q.A-p.A).slice(0,5),x=>x.A,x=>(x.A/Math.max(1,x.P)).toFixed(2),"ASSISTS","No assists logged yet")}</div>
+        <div>${hmDefence(statsAll().filter(x=>x.P>=2).sort((a,b)=>(a.GA/a.P)-(b.GA/b.P)).slice(0,5))}</div>
+        <div>${hmForm(form)}</div>
+      </div>
       ${totwBlock()}
       ${potmBlock()}
       ${potsRace()}
@@ -6020,9 +6033,9 @@ function vHomeBody(){
       ${eventBanner()}
       ${fplHomeBlock()}
       ${(function(){const cd=countdowns(); if(!cd.length)return '';
-        return `<div class="sechead">🔜 Next milestones</div>
+        return `<div class="sechead">Next milestones</div>
           <div class="card">${cd.map(o=>`<div class="row tap" onclick="openPlayer('${o.id}')">
-            <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
+            ${o.ico||`<div style="font-size:21px;flex:0 0 26px">${o.e}</div>`}
             <div class="rt"><div class="r1">${esc(o.name)}</div>
               <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>`})()}
       ${rotationWatch()}
@@ -6042,13 +6055,13 @@ function closingInRows(){
     // next level
     if(car.lvl.next){
       const need=car.lvl.next.xp-car.xp;
-      if(need>0&&need<=180)out.push({id:x.id,name:x.name,e:car.lvl.next.e,
+      if(need>0&&need<=180)out.push({id:x.id,name:x.name,e:car.lvl.next.e,ico:ssLevelTile(car.lvl.next.n,30),
         t:`${need} XP from ${car.lvl.next.t}`,v:need,k:'lvl'});
     }
     // next unfinished challenge that's close
     car.ch.filter(c=>!c.done).forEach(c=>{
       const [cur,tot]=c.f(x); const left=tot-cur;
-      if(left>0&&left<=3)out.push({id:x.id,name:x.name,e:c.e,t:`${left} from “${c.n}”`,v:left,k:'ch'});
+      if(left>0&&left<=3)out.push({id:x.id,name:x.name,e:c.e,ico:ssChTile(c,30,false),t:`${left} from “${c.n}”`,v:left,k:'ch'});
     });
   });
   if(!out.length)return [];
@@ -6060,9 +6073,9 @@ function closingInRows(){
 function closingIn(){
   const list=closingInRows();
   if(!list.length)return '';
-  return `<div class="sechead">⏳ Almost there</div>\n    <div class="note" style="padding:0 4px 8px;font-size:12px">A few games or goals away from the next milestone</div>
+  return `<div class="sechead">Almost there</div>\n    <div class="note" style="padding:0 4px 8px;font-size:12px">A few games or goals away from the next milestone</div>
     <div class="card">${list.map(o=>`<div class="row tap" onclick="openCareer('${o.id}')">
-      <div style="font-size:21px;flex:0 0 26px">${o.e}</div>
+      ${o.ico||`<div style="font-size:21px;flex:0 0 26px">${o.e}</div>`}
       <div class="rt"><div class="r1">${esc(o.name)}</div>
         <div class="r2">${esc(o.t)}</div></div>${chev}</div>`).join('')}</div>
     <div class="note">Within touching distance next Sunday.</div>`;
@@ -8033,7 +8046,7 @@ function vPCareer(pid){
       <div style="max-width:320px;margin:18px auto 0"><div class="xpbar"><i style="width:${car.lvl.pct}%"></i></div>
         <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--label2);margin-top:8px">
           <span><b style="color:var(--label)">${car.xp.toLocaleString()}</b> XP</span>
-          <span>${car.lvl.next?`${car.lvl.need-car.lvl.into} to ${car.lvl.next.e} ${car.lvl.next.t}`:'Max level'}</span></div></div></div>
+          <span style="display:inline-flex;align-items:center;gap:5px">${car.lvl.next?`${car.lvl.need-car.lvl.into} to ${ssLevelTile(car.lvl.next.n,18)} ${car.lvl.next.t}`:'Max level'}</span></div></div></div>
     <div class="tiles">${tile(car.xp.toLocaleString(),'Total XP','','var(--tint)')}${tile('LV'+car.lvl.n,'Level')}
       ${tile(`${done}/${car.ch.length}`,'Challenges done','','var(--green)')}
       ${tile(car.lvl.next?(car.lvl.next.xp-car.xp).toLocaleString():'—','XP to next')}</div>
@@ -10199,17 +10212,20 @@ function fplMarket(m,locked){
     const afford = owned || (left - x.price + (swapping?fplPrice(FSWAP):0)) >= 0;
     const st=stockOf(x.id), open=SOPEN===x.id;
     return `<div class="stk mk2 ${open?'open':''}">
-      <button class="mk-row ${owned?'own':''} ${afford?'':'poor'}" onclick="fplPick('${x.id}')">
+      <button class="mk-row ${owned?'own':''} ${afford?'':'poor'}" aria-expanded="${open?'true':'false'}" onclick="SOPEN=SOPEN==='${x.id}'?null:'${x.id}';render()">
       <span class="mk-kit">${avatar(player(x.id),36)}</span>
       <span class="mk-mid">
         <span class="mk-n">${esc(x.name)}<span class="pill sq-pos ${x.pos}">${x.pos}</span>${owned?'<i class="mk-in">IN TEAM</i>':''}</span>
-        <span class="mk-sub">${x.ownedPct}% owned · form ${x.form} · threat ${x.threat}% · ${x.total} pts</span>
+        <span class="mk-sub">${x.ownedPct}% owned · ${x.total} pts</span>
       </span>
-      <span class="stk-spark mk-spark" onclick="event.stopPropagation();SOPEN=SOPEN==='${x.id}'?null:'${x.id}';render()" title="Price chart">${sparkline(x.id,64,24)}</span>
+      <span class="stk-spark mk-spark">${sparkline(x.id,44,22)}</span>
       <span class="mk-r stk-px">
         <b>£${x.price.toFixed(1)}m</b>
         <i class="${st.chg>0?'up':st.chg<0?'dn':'flat'}">${st.chg?sign(st.chg):'—'}</i>
-      </span></button>
+      </span>
+      <span class="mk-pick ${owned?'in':''}" role="button" aria-label="${owned?'In your team':'Pick '+esc(x.name)}" title="${owned?'In your team':'Pick'}"
+        onclick="event.stopPropagation();fplPick('${x.id}')">${owned?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>'}</span>
+      </button>
       ${open?expanded({...x,...st}):''}
     </div>`;
   };
@@ -10332,7 +10348,7 @@ function viewManager(pid){
         ${tile((FPL_RULES.chips-(m.wildcards||0))+'·'+(FPL_RULES.chips-(m.tripleCaps||0))+'·'+(FPL_RULES.chips-(m.doublePts||0)),'Chips left')}
       </div>
       ${gws.length>1?`<div class="sechead">Gameweek by gameweek</div>
-        <div class="card">${gws.slice().reverse().slice(0,8).map(gw=>`<div class="row">
+        <div class="card">${gws.slice().reverse().map(gw=>`<div class="row">
           <div class="rt"><div class="r1">GW${gw}</div></div>
           <div class="rv">${fplManagerGw(m,gw)}</div></div>`).join('')}</div>`:''}
       <div style="height:10px"></div>
@@ -11072,9 +11088,9 @@ const rankPill=(i)=>`<span class="rk${i===0?' gold':''}">${i+1}</span>`;
 const wdlChips=(seq)=>`<span class="wdl">${(seq||[]).map(r=>`<i class="${r}">${r}</i>`).join('')}</span>`;
 /* leader slab + ranked rows (Top scorers / Most assists) */
 function hmLeaders(key,label,list,val,per,unit,empty){
-  if(!list.length)return `${ssSec(key,label,'<span class="ss-note">Season</span>')}<div class="card"><div class="row"><div class="rt"><div class="r2">${empty}</div></div></div></div>`;
+  if(!list.length)return `${ssSec(key,label)}<div class="card"><div class="row"><div class="rt"><div class="r2">${empty}</div></div></div></div>`;
   const L=list[0], rest=list.slice(1);
-  return `${ssSec(key,label,'<span class="ss-note">Season</span>')}<div class="card">
+  return `${ssSec(key,label)}<div class="card">
     <div class="lead tap" onclick="openPlayer('${L.id}')">
       <div class="lead-g">${avatar(L,44)}<div class="lead-t"><span>LEADER</span><b>${esc(L.name)}</b><i>${per(L)} per game</i></div></div>
       <div class="lead-n"><b>${val(L)}</b><span>${unit}</span></div>
@@ -11088,7 +11104,7 @@ function hmForm(form){
   const L=form[0], rest=form.slice(1);
   const hot=x=>x.streak&&x.streak.type==='W'&&x.streak.n>=3;
   const line=x=>x.streak&&x.streak.n>=2?`${x.streak.n} ${x.streak.type==='W'?'wins':x.streak.type==='L'?'losses':'draws'} in a row`:'Last 5 games';
-  return `${ssSec("form-guide","Form guide",'<span class="ss-note">Last 5 · flame = 3+ wins</span>')}<div class="card">
+  return `${ssSec("form-guide","Form guide")}<div class="card">
     ${form.length?`<div class="lead tap" onclick="openPlayer('${L.id}')">
       <div class="lead-g">${avatar(L,44)}<div class="lead-t"><span>LEADER</span><b>${esc(L.name)}</b><i>${line(L)}</i></div></div>
       <div class="lead-n lead-form">${hot(L)?'<span class="flame">🔥</span>':''}${wdlChips(L.last5)}<span>LAST 5</span></div>
@@ -11100,13 +11116,13 @@ function hmForm(form){
 /* best defence: conceded per game, games played; no clean-sheet element */
 function hmDefence(back){
   const L=back[0], rest=back.slice(1);
-  return `${ssSec("best-defence","Best defence",'<span class="ss-note">Conceded per game</span>')}<div class="card">
+  return `${ssSec("best-defence","Best defence")}<div class="card">
     ${back.length?`<div class="lead tap" onclick="openPlayer('${L.id}')">
       <div class="lead-g">${avatar(L,44)}<div class="lead-t"><span>LEADER</span><b>${esc(L.name)}</b><i>${L.P} game${L.P===1?'':'s'}</i></div></div>
       <div class="lead-n"><b>${(L.GA/L.P).toFixed(1)}</b><span>CONCEDED</span></div>
     </div>`+rest.map((x,i)=>`<div class="row tap lrow" onclick="openPlayer('${x.id}')">${rankPill(i+1)}${avatar(x,34)}
       <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.P} game${x.P===1?'':'s'}</div></div>
-      <div class="def-v"><b>${(x.GA/x.P).toFixed(1)}</b><span>conceded / game</span></div></div>`).join('')
+      <div class="def-v"><b>${(x.GA/x.P).toFixed(1)}</b></div></div>`).join('')
     :'<div class="row"><div class="rt"><div class="r2">Not enough games yet</div></div></div>'}</div>`;
 }
 /* career leaders: rank pill, crest, level line, LV tag */
@@ -13508,10 +13524,6 @@ function vShop(){
       </div></div>`; return; }
 
   const bal=wallet(me.pid), earned=wagesEarned(me.pid), spent=spentInShop(me.pid), net=bettingNet(me.pid);
-  const boot=bootFor(me.pid), sp=sponsorProgress(me.pid);
-  const c=careerOf(me.pid);
-  const wage=weeklyWage(me.pid)+(boot?boot.bonus:0);
-
   const tile=(cat,it)=>{
     const own=owns(me.pid,it.id), on=equipped(me.pid,cat)===it.id;
     const afford=bal>=it.p;
@@ -13539,8 +13551,6 @@ function vShop(){
         <div><b class="${net>=0?'up':'dn'}">${usdSigned(net)}</b><span>betting</span></div>
         <div><b>${usd(spent)}</b><span>spent</span></div>
       </div>
-      <div class="wal-note">Wages, winnings and losses all share one balance. ${usd(wage)} a week at Level ${c?c.lvl.n:1}${boot?` including your ${esc(boot.n)} deal`:''}.</div>
-
       ${ssSec('shop','Cosmetics',`<span class="ss-note">${SHOP_CAT.map(x=>x[1]).join(' · ')}</span>`)}
       <div class="seg pp-seg" style="margin-bottom:12px">${SHOP_CAT.map(([k,l])=>
         `<button class="${SHTAB===k?'on':''}" onclick="SHTAB='${k}';render()">${l.split(' ')[0]}</button>`).join('')}</div>
@@ -15317,7 +15327,7 @@ function vAdmin(){
           <div class="r1" style="color:${canUndo()?'var(--tint)':'var(--label3)'}">↩︎ Undo last change</div>
           <div class="r2">${canUndo()?esc(UNDO.label)+' · '+fmtWhen(UNDO.t):'Nothing to undo right now'}</div></div></div>
         <div class="row tap" data-admin onclick="ratingAudit()"><div class="rt">
-          <div class="r1">🔍 Rating check</div>
+          <div class="r1">Rating check</div>
           <div class="r2">Who played but has no rating, and why</div></div>${chev}</div>
         <div class="row tap" data-admin onclick="fixJoinGw()"><div class="rt">
           <div class="r1">📅 Backdate a late joiner</div>
@@ -15332,7 +15342,7 @@ function vAdmin(){
           <div class="r1">✏️ Send your own message</div>
           <div class="r2">Type anything and it goes to the group</div></div>${chev}</div>
         <div class="row tap" onclick="pushTest()"><div class="rt">
-          <div class="r1">🔔 Send a test alert</div>
+          <div class="r1">Send a test alert</div>
           <div class="r2">Goes to every device that has alerts on</div></div>${chev}</div>
         <div class="row tap" onclick="pushDeadline()"><div class="rt">
           <div class="r1">⏰ Nudge the team pickers</div>
@@ -15801,7 +15811,7 @@ function lifePlayer(name){const k=String(name).trim().toLowerCase(); const ss=[.
 const lg4Me=x=>{const me=fplMine(); return me&&me.pid===x.id?' me':''};
 function lg4Key(total){
   const z=zoneBands(total), items=[['z-champ','Champion']];
-  if(z.ucl>=2)items.push(['z-ucl','UCL']); if(z.eur>z.ucl)items.push(['z-eur','EL']); if(z.con>z.eur)items.push(['z-con','UECL']); if(z.rel)items.push(['z-rel','Relegation']);
+  if(z.ucl>=2)items.push(['z-ucl','Champions League']); if(z.eur>z.ucl)items.push(['z-eur','Europa League']); if(z.con>z.eur)items.push(['z-con','Conference League']); if(z.rel)items.push(['z-rel','Relegation']);
   return `<div class="lg4-key">${items.map(([c,l])=>`<span><i class="${c}"></i>${l}</span>`).join('')}</div>`;
 }
 const LG4_HEAD=`<thead><tr><td class="lg4-r">#</td><td class="lg4-n">Player</td><td class="c">P</td><td class="c">W</td><td class="c">D</td><td class="c">L</td>
