@@ -4033,7 +4033,11 @@ html[data-theme="dark"] .row.lrow.bt-lb .rv.dn{color:#FF7A8A}
 .lg4 tbody td.lg4-r::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:transparent}
 .lg4 td.lg4-r.z-champ::before{background:var(--ss-gold)} .lg4 td.lg4-r.z-ucl::before{background:var(--ss-blue)} .lg4 td.lg4-r.z-eur::before{background:#7A1F2E} .lg4 td.lg4-r.z-con::before{background:var(--ss-green)} .lg4 td.lg4-r.z-rel::before{background:var(--ss-red)}
 .lg4-rk{display:inline-flex;width:28px;height:28px;border-radius:8px;align-items:center;justify-content:center;font-size:12px;font-weight:800;background:var(--ss-soft);color:var(--ss-muted);font-variant-numeric:tabular-nums}
-.lg4-rk.gold{background:linear-gradient(150deg,#D8B45A,#BD9A38);color:#fff} .lg4-rk.blue{background:var(--ss-blue);color:#fff}
+.lg4-rk.rk-champ{background:linear-gradient(150deg,#D8B45A,#BD9A38);color:#fff}
+.lg4-rk.rk-ucl{background:var(--ss-blue);color:#fff}
+.lg4-rk.rk-eur{background:#7A1F2E;color:#fff}
+.lg4-rk.rk-con{background:var(--ss-green);color:#fff}
+.lg4-rk.rk-rel{background:var(--ss-red);color:#fff}
 .lg4 td.lg4-n{max-width:0;width:100%;padding-left:2px} .lg4-nw{display:flex;align-items:center;gap:8px;min-width:0}
 .lg4-nw .av{flex:0 0 auto} .lg4-nw b{font-size:15px;font-weight:800;color:var(--ss-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 .lg4-nw .mv{flex:0 0 auto;margin:0} .lg4-nw .pill{flex:0 0 auto}
@@ -4049,7 +4053,8 @@ html[data-theme="dark"] .row.lrow.bt-lb .rv.dn{color:#FF7A8A}
 .note.lg4-note{padding-top:6px;text-align:center}
 @media(max-width:820px){.lg4 .opt2{display:none}} @media(max-width:640px){.lg4 .opt{display:none}}
 html[data-theme="dark"] .lg4 thead td{background:#1C1C1E} html[data-theme="dark"] .lg4-rk,html[data-theme="dark"] .lg4-pts{background:#2A2A2D;color:#C7CBD3}
-html[data-theme="dark"] .lg4-rk.gold,html[data-theme="dark"] .lg4-pts.gold{background:linear-gradient(150deg,#D8B45A,#BD9A38)} html[data-theme="dark"] .lg4-rk.gold{color:#fff} html[data-theme="dark"] .lg4-rk.blue{background:var(--ss-blue);color:#fff} html[data-theme="dark"] .lg4-pts{color:#fff} html[data-theme="dark"] .lg4-pts.gold{color:var(--ss-navy)}
+html[data-theme="dark"] .lg4-rk.rk-champ,html[data-theme="dark"] .lg4-pts.gold{background:linear-gradient(150deg,#D8B45A,#BD9A38)} html[data-theme="dark"] .lg4-rk.rk-champ{color:#fff}
+html[data-theme="dark"] .lg4-rk.rk-eur{background:#8E2438} html[data-theme="dark"] .lg4-rk.rk-rel{background:#E4002B} html[data-theme="dark"] .lg4-pts{color:#fff} html[data-theme="dark"] .lg4-pts.gold{color:var(--ss-navy)}
 html[data-theme="dark"] .lg4 tbody tr.me td{background:color-mix(in srgb,var(--ss-gold) 16%,#1C1C1E)}
 /* round 4 item 5: Log a game / Edit game button */
 .lg-btn{position:relative;display:flex;align-items:center;width:100%;min-height:62px;margin:0 0 12px;padding:0;border:0;border-radius:16px;overflow:hidden;cursor:pointer;text-align:left;
@@ -4164,6 +4169,80 @@ html[data-theme="dark"] .carhead{border-color:var(--ss-gold)!important;box-shado
 .mk2 .mk-pick.in{background:color-mix(in srgb,var(--ss-green) 16%,transparent);color:var(--ss-green)}
 .mk2 .mk-row.poor .mk-pick{background:var(--ss-soft);color:var(--ss-muted)}
 html[data-theme="dark"] .mk2 .mk-row.poor .mk-pick{background:#2A2A2D}
+/* Sunday lock banner on the fantasy team tab */
+.fpl-lock{display:flex;align-items:center;gap:12px;background:color-mix(in srgb,var(--ss-gold) 12%,var(--card));border:1.5px solid var(--ss-gold);border-radius:14px;padding:12px 14px;margin-bottom:14px}
+.fpl-lock b{display:block;font-size:15px;font-weight:800;color:var(--ss-ink)}
+.fpl-lock i{display:block;font-style:normal;font-size:12.5px;line-height:1.4;color:var(--ss-muted);margin-top:2px}
+.fpl-lock-i{flex:0 0 auto;display:flex}
+html[data-theme="dark"] .fpl-lock{background:color-mix(in srgb,var(--ss-gold) 16%,#1C1C1E)}
+/* ---- whiteboard: both teams on one pitch, broadcast-green ---- */
+.wb-ctl{margin-bottom:12px}
+.wb-ctl .lbl{padding:12px 0 6px}
+.wb-seg{margin-bottom:0}
+.wb-seg button{font-size:14.5px;padding:10px 8px}
+.wb-sides button em{font-style:normal;font-weight:800;opacity:.6;margin-left:4px;font-size:12.5px}
+.wb-sides button.a.on{background:linear-gradient(135deg,#E4002B,#A8001F);color:#fff}
+.wb-sides button.b.on{background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .seg.pp-seg.wb-sides button.a.on{background:linear-gradient(135deg,#E4002B,#A8001F)}
+html[data-theme="dark"] .seg.pp-seg.wb-sides button.b.on{background:#33507F}
+.wb-wrap{margin-bottom:12px}
+.wb-tag{display:flex;align-items:center;justify-content:center;gap:8px;font-size:11.5px;font-weight:900;letter-spacing:.14em;
+  color:var(--ss-muted);padding:7px 10px;border-radius:10px;background:var(--ss-soft);margin:0 0 8px}
+.wb-tag.a.on{background:linear-gradient(135deg,#E4002B,#A8001F);color:#fff}
+.wb-tag.b.on{background:var(--ss-navy);color:#fff}
+.wb-tag.a{margin:8px 0 0}
+html[data-theme="dark"] .wb-tag{background:#1C1C1E} html[data-theme="dark"] .wb-tag.b.on{background:#12213A}
+.wb-pitch{aspect-ratio:3/4;border-radius:16px;border:2px solid var(--ss-gold);
+  background:#0D6637;background-image:repeating-linear-gradient(180deg,#0F7440 0 30px,#0D6637 30px 60px);box-shadow:none}
+@media(min-width:760px){.wb-pitch{aspect-ratio:4/3}}
+/* bigger games need more room and smaller shirts */
+.wb-pitch.n9,.wb-pitch.n11{aspect-ratio:2/3}
+@media(min-width:760px){.wb-pitch.n9,.wb-pitch.n11{aspect-ratio:1/1}}
+.wb-pitch.n9 .wb-tok .wb-av .av,.wb-pitch.n11 .wb-tok .wb-av .av{width:28px;height:28px}
+.wb-pitch.n9 .wb-tok .wb-empty,.wb-pitch.n11 .wb-tok .wb-empty{width:28px;height:28px;font-size:8.5px}
+.wb-pitch.n9 .wb-tok .wb-nm,.wb-pitch.n11 .wb-tok .wb-nm{font-size:8.5px;padding:1px 5px;max-width:62px}
+.wb-tok{gap:3px}
+.wb-tok .wb-av{display:flex}
+.wb-tok .wb-av .av{width:34px;height:34px;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.wb-tok .wb-empty{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:1.5px dashed rgba(255,255,255,.55);color:rgba(255,255,255,.8);font-size:9.5px;font-weight:800;letter-spacing:.04em}
+.wb-tok .wb-nm{font-size:9.5px;font-weight:800;letter-spacing:.04em;color:#fff;padding:2px 6px;border-radius:5px;
+  max-width:72px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wb-tok.a .wb-nm{background:linear-gradient(135deg,#E4002B,#A8001F)}
+.wb-tok.b .wb-nm{background:var(--ss-navy)}
+.wb-tok.dim{opacity:.82}
+.wb-tok.live .wb-av .av{outline:2px solid rgba(255,255,255,.9);outline-offset:1px}
+.wb-tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.wb-tools button{background:var(--ss-soft);border:0;border-radius:12px;padding:11px 6px;font-size:13.5px;font-weight:800;color:var(--ss-ink);white-space:nowrap}
+html[data-theme="dark"] .wb-tools button{background:#2A2A2D}
+.chips.ch-picks.wb-pos{margin-bottom:8px}
+.chips.ch-picks.wb-pos button{padding:6px 12px;font-size:13.5px}
+/* a guest's row in Who scored / Who assisted */
+.lg6-guest{width:30px;height:30px;border-radius:50%;background:var(--ss-soft);display:inline-flex;align-items:center;justify-content:center;color:var(--ss-muted);flex:0 0 30px}
+.lg6-guest svg{width:16px;height:16px}
+html[data-theme="dark"] .lg6-guest{background:#2A2A2D}
+.lg6-ln .lg6-g{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--ss-muted);margin-left:4px}
+/* admin: teams counted per gameweek */
+.gwt{background:var(--card);border:1px solid var(--ss-hair);border-radius:14px;padding:12px 14px;margin-bottom:10px}
+.gwt-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.gwt-h b{font-size:15.5px;font-weight:800;color:var(--ss-ink)} .gwt-h i{font-style:normal;font-size:12.5px;color:var(--ss-muted)}
+.gwt-tag{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:6px}
+.gwt-tag.ok{background:color-mix(in srgb,var(--ss-green) 16%,transparent);color:var(--ss-green)}
+.gwt-tag.diff{background:color-mix(in srgb,var(--ss-gold) 22%,transparent);color:#7A5D0E}
+html[data-theme="dark"] .gwt{background:#1C1C1E;border-color:#2C2C2E} html[data-theme="dark"] .gwt-tag.diff{color:#F0D27A}
+.gwt-n{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0 6px}
+.gwt-p{font-size:12.5px;font-weight:700;background:var(--ss-soft);color:var(--ss-ink);padding:3px 8px;border-radius:7px}
+.gwt-p.cap{background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .gwt-p{background:#2A2A2D}
+.gwt-s{font-size:12px;color:var(--ss-muted);margin-bottom:8px}
+/* players the table does not rank */
+.lg4-also{margin-top:10px}
+.lg4-also>span{display:block;font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ss-muted);margin-bottom:8px}
+.lg4-also-l{display:flex;flex-wrap:wrap;gap:8px}
+.lg4-also-p{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--ss-hair);border-radius:22px;padding:5px 12px 5px 5px}
+.lg4-also-p b{font-size:13.5px;font-weight:800;color:var(--ss-ink)}
+.lg4-also-p i{font-style:normal;font-size:11.5px;color:var(--ss-muted)}
+html[data-theme="dark"] .lg4-also-p{background:#1C1C1E;border-color:#2C2C2E}
 /* round 4 item 2 */
 .vsplit span.ss-gi{display:inline-flex;font-size:13px}
 .fx-w{position:relative;flex:1 1 calc(50% - 4px);min-width:0;display:flex}
@@ -4947,12 +5026,16 @@ const Store={
     if(this.hasWS){try{const r=await window.storage.get(k);if(r)return JSON.parse(r.value)}catch(e){}}
     if(this.hasLS){try{const v=localStorage.getItem('st_'+k);if(v!==null)return JSON.parse(v)}catch(e){}}
     return (k in this.mem)?JSON.parse(this.mem[k]):null},
+  /* Every refusal below used to return quietly, so the caller carried on as if
+     the write had landed. It now reports {ok,reason,detail} and the callers
+     that matter check it. */
   async set(k,v){const s=JSON.stringify(v);this.mem[k]=s;
     if(supaConfigured&&supa&&k===MAIN_KEY){
-      if(CLOUD_FAIL){ toast('⛔️ Not saved — the database is unreachable, so your data is protected'); return; }
+      if(CLOUD_FAIL){ toast('⛔️ Not saved — the database is unreachable, so your data is protected');
+        return {ok:false,reason:'unreachable',detail:CLOUD_FAIL}; }
       if(!writeIsSafe(v)&&!WIPE_OK){
         toast('🛑 Blocked: that would erase most of your season. Use Admin → Restore if this was intended.');
-        return;
+        return {ok:false,reason:'unsafe',detail:'The write would have erased most of the season'};
       }
       try{
         /* concurrency guard: if someone else saved after we loaded, don't clobber it */
@@ -4960,19 +5043,20 @@ const Store={
           const chk=await supa.from('tracker_kv').select('updated_at').eq('key',k).maybeSingle();
           if(!chk.error&&chk.data&&chk.data.updated_at&&chk.data.updated_at>REMOTE_STAMP){
             CONFLICT=chk.data.updated_at;
-            toast('⚠️ Someone else saved a change — reload before editing so nothing is lost');
-            return;
+            return {ok:false,reason:'conflict',detail:'Someone else saved while this was open'};
           }
         }
         const stamp=new Date().toISOString();
         const {error}=await supa.from('tracker_kv').upsert({key:k,value:v,updated_at:stamp});
-        if(!error){ REMOTE_STAMP=stamp; CONFLICT=null; saveMirror(v); markSync(); return; }
-        toast('⚠️ Could not save to the cloud — check your connection'); return;
-      }catch(e){ toast('⚠️ Cloud save failed — check your connection'); return; }
+        if(!error){ REMOTE_STAMP=stamp; CONFLICT=null; saveMirror(v); markSync(); return {ok:true}; }
+        return {ok:false,reason:'cloud',detail:error.message||'The database refused the write'};
+      }catch(e){ return {ok:false,reason:'cloud',detail:String(e&&e.message||e)}; }
     }
     if(k===MAIN_KEY)saveMirror(v);
-    if(this.hasWS){try{await window.storage.set(k,s)}catch(e){}}
-    if(this.hasLS){try{localStorage.setItem('st_'+k,s)}catch(e){}}}
+    let wrote=!this.hasWS&&!this.hasLS;
+    if(this.hasWS){try{await window.storage.set(k,s);wrote=true}catch(e){}}
+    if(this.hasLS){try{localStorage.setItem('st_'+k,s);wrote=true}catch(e){}}
+    return wrote?{ok:true}:{ok:false,reason:'storage',detail:'This browser refused to store the data'}}
 };
 
 /* ============ MODEL ============ */
@@ -5007,7 +5091,30 @@ async function loadDB(){
   CUR=DB.current;const t=await Store.get('st_theme');if(t)setTheme(t,true);
   COMP=season().comps[0].id;
 }
-async function save(){DB.current=CUR;await Store.set('st_db_v7',DB)}
+/* save() now answers whether the write actually landed. Callers that must not
+   lie to the user (logging a game above all) check it; the rest ignore it. */
+let SAVE_FAIL=null;                /* set when a write was refused, cleared when one lands */
+async function save(){DB.current=CUR;
+  const r=await Store.set('st_db_v7',DB);
+  const res=(r&&r.ok!==undefined)?r:{ok:true};
+  SAVE_FAIL=res.ok?null:{reason:res.reason,detail:res.detail,at:Date.now()};
+  return res}
+/* Pull whatever is in the database right now, drop our change on top of it and
+   write again. A logged game only ever adds, so replaying it on the newest copy
+   is safe and beats telling someone to reload and type it all in again. */
+async function saveMerging(apply){
+  let r=await save();
+  if(r.ok||r.reason!=='conflict')return r;
+  try{
+    const fresh=await Store.get(MAIN_KEY);
+    if(!fresh)return r;
+    DB=fresh; CUR=DB.current||CUR; CONFLICT=null;
+    apply();                                   /* re-apply our change to the fresh copy */
+    const again=await save();
+    if(again.ok)return {ok:true,merged:true};
+    return again;
+  }catch(e){ return r }
+}
 const season=()=>DB.seasons.find(s=>s.id===CUR)||DB.seasons[0];
 
 const MONTHNAME=k=>{const [y,mo]=String(k).split('-');
@@ -5117,6 +5224,14 @@ async function runHealthCheck(){
 
 /* ---- connection banner: makes a failed cloud read impossible to miss ---- */
 function cloudBanner(){
+  /* A refused write used to pass unnoticed. Now it says so on every page until
+     something saves properly again. */
+  if(!CLOUD_FAIL&&SAVE_FAIL)return `<div class="cloudwarn">
+    <div class="cw-i">⚠️</div>
+    <div class="cw-t"><b>Your last change was not saved</b>
+      <div>${esc(SAVE_FAIL.detail||'The database refused the write')}. It is still on this screen, but it has not reached the database — reload to see what is actually stored, or try the change again.</div>
+    </div>
+    <button class="cw-b" onclick="retrySave()">Try again</button></div>`;
   if(!CLOUD_FAIL)return '';
   const rec=RECOVERED;
   return `<div class="cloudwarn">
@@ -5129,6 +5244,11 @@ function cloudBanner(){
       ${rec?`<button class="cw-b2" onclick="pushMirrorToCloud()">Put this copy back in the cloud</button>`:''}
     </div>
     <button class="cw-b" onclick="retryCloud()">Retry</button></div>`;
+}
+async function retrySave(){
+  const r=await save();
+  if(r.ok){toast('✅ Saved'); render()}
+  else toast('⚠️ Still not saved — '+(r.detail||'try again in a moment'));
 }
 async function restoreSnapshot(i){
   if(!requireAdmin())return;
@@ -5624,6 +5744,18 @@ function toast(m){ const t=$('#toast'); const s=String(m); const warn=/^(⚠️|
   t.innerHTML=`<span class="tk ${warn?'warn':''}">${warn?'!':'<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span class="tm">${esc(s.replace(/^(⚠️|❌|🚫|↻|✅|✓)\s*/,''))}</span>`;
   t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 const initials=n=>{const p=String(n||'?').trim().split(/\s+/);return((p[0]||'?')[0]+((p[1]||'')[0]||'')).toUpperCase()};
+/* Fillers are guests with no player record, so their goals are keyed by the
+   side and their slot: "~A0" is the first filler on Team A. player() never
+   matches one, so per-player stats ignore them; the name comes from the game. */
+const FILL_KEY=/^~([AB])(\d+)$/;
+const fillKey=(sd,i)=>'~'+sd+i;
+function fillNameFor(id,g){
+  const m=FILL_KEY.exec(String(id||'')); if(!m)return '';
+  const list=(g&&(m[1]==='A'?g.fillA:g.fillB))||[];
+  return list[+m[2]]||'';
+}
+/* the name to show for anyone credited in a game — squad member or guest */
+const creditName=(id,g)=>(player(id)||{}).name||fillNameFor(id,g)||'';
 const fdate=d=>{if(!d)return'—';const x=new Date(d);return isNaN(x)?esc(d):x.toLocaleDateString('en-GB',{day:'numeric',month:'short'})};
 const clubOf=p=>p&&p.club?CLUB_BY[p.club]:null;
 function avatar(p,s){s=s||38;const c=clubOf(p);
@@ -5982,11 +6114,13 @@ function homeSegPage(kind){
 function vHomeBody(){
   const S=season(),lc=lgComp(),st=lgStats(),g=compGames(lc.id),ag=allGames(),m=movement(lc.id);
   const tbl=[...st].filter(x=>x.P>0).sort(tableSort);
+  const ranked=tbl.filter(x=>ranksInTable(x.id));
+  const unranked=tbl.filter(x=>!ranksInTable(x.id));
   const goals=g.reduce((t,x)=>t+(x.scoreA||0)+(x.scoreB||0),0);
   const scorers=[...st].filter(x=>x.G>0).sort((a,b)=>b.G-a.G||b.gpg-a.gpg).slice(0,5);
   const form=[...st].filter(x=>x.P>=2).sort((a,b)=>b.form-a.form||b.pts-a.pts).slice(0,5);
   const cleans=[...st].filter(x=>x.cs>0).sort((a,b)=>b.cs-a.cs).slice(0,5);
-  const recent=ag.slice(-4).reverse();
+  const recent=ag.slice(-1);            /* Home shows the latest game only */
   const carTop=st.filter(x=>x.P>0).map(x=>({x,c:careerOf(x.id)})).sort((a,b)=>b.c.xp-a.c.xp).slice(0,5);
   $('#navMount').innerHTML=navbar();
   if(!ag.length){app().innerHTML=`<div class="view active"><div class="largetitle">${esc(S.name)}</div>
@@ -6000,11 +6134,16 @@ function vHomeBody(){
         <div class="sky-hero-b">Super Sunday</div>
       </div>
       
-      <div class="card lg4-card"><div class="tw"><table class="lg4">${LG4_HEAD}<tbody>${lg4Rows(tbl,m)}</tbody></table></div></div>
-      ${lg4Key(tbl.length)}
-      <div class="note lg4-note">Win 3 · Draw 1 · Loss 0 · ties split by win rate.</div>
+      <div class="card lg4-card"><div class="tw"><table class="lg4">${LG4_HEAD}<tbody>${lg4Rows(ranked,m)}</tbody></table></div></div>
+      ${lg4Key(ranked.length)}
 
-      ${ssSec("fixtures","Recent results",`<button class="act ss-act" onclick="shareGameweek()">${ssTile("share-gameweek",18)}Share gameweek</button>`)}
+      <div class="note lg4-note">Win 3 · Draw 1 · Loss 0 · ties split by win rate.</div>
+      ${unranked.length?`<div class="lg4-also"><span>Also played</span>
+        <div class="lg4-also-l">${unranked.map(x=>`<button class="lg4-also-p" onclick="openPlayer('${x.id}')">
+          ${avatar(x,22)}<b>${esc(x.name)}</b><i>${x.P} game${x.P===1?'':'s'} · ${x.pts} pt${x.pts===1?'':'s'}</i></button>`).join('')}</div>
+        <div class="note" style="padding:6px 0 0">Not ranked in the table${isAdmin()?' — change who counts in Admin → League table':''}. Every other stat still counts them.</div></div>`:''}
+
+      ${ssSec("fixtures","Latest result",`<button class="act ss-act" onclick="shareGameweek()">${ssTile("share-gameweek",18)}Share gameweek</button>`)}
       <div class="card">${recent.map(gameRow).join('')}
         <button class="seeall" onclick="HTAB='fixtures';render()">See all fixtures ›</button></div>
 
@@ -8855,6 +8994,20 @@ function syncManagers(){
         teamName:null,squad:[],captain:null,transfers:{},wildcards:0,tripleCaps:0,tcGws:[],doublePts:0,dpGws:[],history:[],joined:Date.now()});
     }
   });
+  /* Two slots for the same person would double them up in the mini league.
+     Nothing creates that today, but older data might carry it, so collapse any
+     duplicates onto the one that actually has a team. */
+  {
+    const byPid={};
+    f.managers.forEach(m=>{
+      const cur=byPid[m.pid];
+      if(!cur){byPid[m.pid]=m;return}
+      const score=x=>((x.teamName?2:0)+((x.squad||[]).length?1:0)+((x.history||[]).length?1:0));
+      if(score(m)>score(cur))byPid[m.pid]=m;
+    });
+    const kept=Object.values(byPid);
+    if(kept.length!==f.managers.length)f.managers=f.managers.filter(m=>kept.includes(m));
+  }
   /* Drop manager slots whose player no longer exists at all — otherwise a
      removed player keeps a private code and a row in the codes list forever.
      Someone merely marked inactive keeps their slot, so nothing is lost when
@@ -9165,7 +9318,18 @@ function fplResync(){
    The moment the admin logs a game, a snapshot of every team is taken, and that
    snapshot is what scores for that gameweek. Later edits only affect future
    gameweeks, so nobody can react to a result — and nobody gets shut out either. */
-function fplLocked(){ return false; }
+/* Teams freeze at the Sunday lock and open again the moment that week's game
+   is logged — the same window the bets use, so nobody can react to a result. */
+function fplLocked(){
+  const now=Date.now(), cut=sundayLockBefore(now);
+  const sunday=new Date(cut+DUBAI_OFF).toISOString().slice(0,10);
+  const weekEnd=new Date(cut+DUBAI_OFF+6*86400e3).toISOString().slice(0,10);
+  const logged=allGames().some(g=>{const d=String(g.date||'').slice(0,10); return d>=sunday&&d<=weekEnd});
+  return now>=cut&&!logged;
+}
+function fplLockNote(){
+  return `Teams locked at ${SUNDAY_LOCK_LABEL} on Sunday (Dubai time). They open again once this week's game is logged.`;
+}
 function fplNextGw(){
   const played=playedGws();
   return played.length?Math.max(...played)+1:1;
@@ -9185,6 +9349,164 @@ async function fplAfterGame(){
   });
   if(f.gw!==latest){ f.gw=latest; }
   updatePrices();
+}
+/* ---- one-off: Denis's GW3, agreed by hand after the double-log ----------
+   The squads froze from the wrong save. Everything else is being fixed in the
+   screen below; this is the single correction Talal asked for, prefilled so it
+   is one tap. It checks itself and vanishes once GW3 already reads this way,
+   so tapping twice changes nothing. Delete this block once it has been used. */
+const DENIS_GW3=['Nader','Denis','Seb','Talal','Ziyad'];
+function denisGw3(){
+  const f=(season().fpl||{}), mans=f.managers||[];
+  const m=mans.find(x=>String((player(x.pid)||{}).name||x.name||'').trim().toLowerCase()==='denis');
+  if(!m)return null;
+  const want=DENIS_GW3.map(n=>(season().players||[]).find(p=>String(p.name||'').trim().toLowerCase()===n.toLowerCase()))
+    .filter(Boolean).map(p=>p.id);
+  return want.length===DENIS_GW3.length?{m,want}:null;
+}
+function gw3FixNeeded(){
+  try{
+    if(!playedGws().includes(3))return false;
+    const d=denisGw3(); if(!d)return false;
+    const snap=(d.m.history||[]).find(h=>h.gw===3);
+    const now=[...((snap&&snap.squad)||[])].sort().join('|');
+    return now!==[...d.want].sort().join('|');
+  }catch(e){ return false }
+}
+async function applyDenisGw3(){
+  if(!requireAdmin())return;
+  const d=denisGw3();
+  if(!d){toast('Could not match those five names to the squad');return}
+  const {m,want}=d;
+  if(!gw3FixNeeded()){toast('GW3 already reads those five');return}
+  const keepCap=want.includes(m.captain)?m.captain:null;
+  if(!await askConfirm('Set Denis\'s GW3 team?',
+     `GW3 will score from ${DENIS_GW3.join(', ')}.\n\n${keepCap?`Captain stays ${(player(keepCap)||{}).name}.`:'No captain is set for that week — open Teams counted per gameweek and tap C if he had one.'}`,
+     'Apply'))return;
+  snapshot('Denis GW3 correction');
+  m.history=(m.history||[]).filter(h=>h.gw!==3);
+  m.history.push({gw:3,squad:[...want],captain:keepCap,at:Date.now(),byHand:true});
+  m.history.sort((a,b)=>a.gw-b.gw);
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  render(); toast('✅ Denis: GW3 set to those five');
+}
+/* ---- Teams counted per gameweek -------------------------------------------
+   A manager's squad is frozen for a gameweek at the moment its game is logged.
+   If a team was changed legitimately before kick-off but the freeze caught the
+   old one (or the game was logged twice), this is where it gets put right. */
+let GWTSEL=null;
+function gwTeamsSheet(gw){
+  const gws=playedGws(); if(!gws.length){toast('No gameweeks played yet');return}
+  GWTSEL=gw||GWTSEL||Math.max(...gws);
+  const f=fpl(), mans=(f.managers||[]).filter(m=>m.teamName&&(m.squad||[]).length);
+  const row=m=>{
+    const snap=(m.history||[]).find(h=>h.gw===GWTSEL);
+    const squad=snap?snap.squad:m.squad, cap=snap?snap.captain:m.captain;
+    const now=[...(m.squad||[])].sort().join('|'), then=[...(squad||[])].sort().join('|');
+    const same=now===then&&(snap?snap.captain:m.captain)===m.captain;
+    return `<div class="gwt">
+      <div class="gwt-h"><b>${esc(m.teamName)}</b><i>${esc(m.name)}</i>
+        <span class="gwt-tag ${same?'ok':'diff'}">${same?'matches now':'differs from now'}</span></div>
+      <div class="gwt-n">${(squad||[]).map(pid=>`<span class="gwt-p${pid===cap?' cap':''}">${esc((player(pid)||{}).name||'—')}${pid===cap?' (C)':''}</span>`).join('')}</div>
+      <div class="gwt-s">${snap?(snap.byHand?`Set by hand ${snap.at?fmtWhen(snap.at):''}`:`Frozen ${snap.at?fmtWhen(snap.at):'when the game was logged'}`):'Not frozen — scoring with their team as it stands'}</div>
+      <div class="btnrow">
+        ${same?'':`<button class="btn sec sm" onclick="useCurrentTeamFor('${m.pid}')">Use their team as it is now</button>`}
+        <button class="btn sec sm" onclick="gwTeamEdit('${m.pid}')">Choose the team by hand</button>
+      </div>
+    </div>`;
+  };
+  $('#sheet').innerHTML=`<div class="shead lg6-head"><span class="lg6-grab"></span>
+      <button class="sa lg6-cancel" onclick="closeSheet()">Close</button>
+      <div class="st">Teams counted<i>GW${GWTSEL}</i></div><span class="sa"></span></div>
+    <div class="sbody"><div class="lg6">
+      <div class="seg pp-seg wb-seg" style="margin-bottom:12px">${gws.map(n=>
+        `<button class="${n===GWTSEL?'on':''}" onclick="gwTeamsSheet(${n})">GW${n}</button>`).join('')}</div>
+      ${mans.map(row).join('')||'<div class="note">No teams yet.</div>'}
+      <button class="btn sec full" style="margin-top:14px" onclick="recountGw()">Recount GW${GWTSEL} from everyone's current teams</button>
+      <div class="note">Use this when the freeze caught the wrong squads — it replaces what GW${GWTSEL} counted with the teams exactly as they stand right now.</div>
+      <div style="height:16px"></div>
+    </div></div>`;
+  $('#sbg').classList.add('open');lockScroll(true);
+}
+/* Set exactly which squad a manager's gameweek is scored from. Needed when the
+   team that should have counted is neither the frozen one nor their current
+   one — a correction after the fact. */
+let GWTEDIT=null;
+function gwTeamEdit(pid){
+  const f=fpl(), m=(f.managers||[]).find(x=>x.pid===pid); if(!m)return;
+  const snap=(m.history||[]).find(h=>h.gw===GWTSEL);
+  if(!GWTEDIT||GWTEDIT.pid!==pid){
+    GWTEDIT={pid,squad:[...((snap?snap.squad:m.squad)||[])],captain:(snap?snap.captain:m.captain)||null};
+  }
+  const pool=season().players.filter(p=>p.active!==false&&FPL_RULES.eligible.includes(p.pos||'MID'))
+    .sort((a,b)=>a.name.localeCompare(b.name));
+  const n=GWTEDIT.squad.length, need=FPL_RULES.squadSize;
+  $('#sheet').innerHTML=`<div class="shead lg6-head"><span class="lg6-grab"></span>
+      <button class="sa lg6-cancel" onclick="GWTEDIT=null;gwTeamsSheet(${GWTSEL})">Back</button>
+      <div class="st">${esc(m.teamName||m.name)}<i>GW${GWTSEL} · pick ${need}</i></div><span class="sa"></span></div>
+    <div class="sbody"><div class="lg6">
+      <div class="note" style="padding:0 0 10px">Tap to pick the ${need} that should count. Tap <b>C</b> on one of them for the captain.</div>
+      <div class="lg6-selbar" style="margin-bottom:10px"><span><b>${n}</b> of ${need} picked${GWTEDIT.captain?` · C ${esc((player(GWTEDIT.captain)||{}).name||'')}`:' · no captain'}</span>
+        <button class="b" ${n===need?'':'style="opacity:.45"'} onclick="gwTeamEditSave()">Save</button></div>
+      <div class="lg6-pool">${pool.map(p=>{const on=GWTEDIT.squad.includes(p.id);
+        return `<div class="lg6-row ${on?'sel':''}">
+          <button class="lg6-pick" onclick="gwTeamEditTog('${p.id}')"><i class="lg6-cb">${on?'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>':''}</i>${avatar(p,28)}<span>${esc(p.name)}</span></button>
+          ${on?`<button class="lg6-ab ${GWTEDIT.captain===p.id?'b':'a'}" onclick="gwTeamEditCap('${p.id}')">C</button>`:''}
+        </div>`}).join('')}</div>
+      <div style="height:16px"></div>
+    </div></div>`;
+  $('#sbg').classList.add('open');lockScroll(true);
+}
+function gwTeamEditTog(pid){
+  if(!GWTEDIT)return;
+  const i=GWTEDIT.squad.indexOf(pid);
+  if(i>=0){ GWTEDIT.squad.splice(i,1); if(GWTEDIT.captain===pid)GWTEDIT.captain=null; }
+  else { if(GWTEDIT.squad.length>=FPL_RULES.squadSize){toast(`That is already ${FPL_RULES.squadSize} — take one out first`);return}
+    GWTEDIT.squad.push(pid); }
+  gwTeamEdit(GWTEDIT.pid);
+}
+function gwTeamEditCap(pid){ if(!GWTEDIT)return; GWTEDIT.captain=(GWTEDIT.captain===pid?null:pid); gwTeamEdit(GWTEDIT.pid) }
+async function gwTeamEditSave(){
+  if(!requireAdmin()||!GWTEDIT)return;
+  if(GWTEDIT.squad.length!==FPL_RULES.squadSize){toast(`Pick ${FPL_RULES.squadSize}`);return}
+  const f=fpl(), m=(f.managers||[]).find(x=>x.pid===GWTEDIT.pid); if(!m)return;
+  snapshot('setting a fantasy gameweek by hand');
+  m.history=(m.history||[]).filter(h=>h.gw!==GWTSEL);
+  m.history.push({gw:GWTSEL,squad:[...GWTEDIT.squad],captain:GWTEDIT.captain,at:Date.now(),byHand:true});
+  m.history.sort((a,b)=>a.gw-b.gw);
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  const nm=m.name; GWTEDIT=null;
+  gwTeamsSheet(GWTSEL); render(); toast(`${nm}: GW${GWTSEL} set`);
+}
+async function useCurrentTeamFor(pid){
+  if(!requireAdmin())return;
+  const f=fpl(), m=(f.managers||[]).find(x=>x.pid===pid); if(!m)return;
+  snapshot('fixing a fantasy gameweek');
+  m.history=(m.history||[]).filter(h=>h.gw!==GWTSEL);
+  m.history.push({gw:GWTSEL,squad:[...(m.squad||[])],captain:m.captain,at:Date.now()});
+  m.history.sort((a,b)=>a.gw-b.gw);
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  gwTeamsSheet(GWTSEL); render(); toast(`${m.name}: GW${GWTSEL} now counts their current team`);
+}
+async function recountGw(){
+  if(!requireAdmin())return;
+  const gw=GWTSEL;
+  if(!await askConfirm(`Recount GW${gw}?`,
+     `Every manager's GW${gw} score will be worked out from the team they have right now.`,'Recount'))return;
+  snapshot('recounting GW'+gw);
+  const f=fpl();
+  (f.managers||[]).forEach(m=>{
+    if(!(m.squad||[]).length)return;
+    m.history=(m.history||[]).filter(h=>h.gw!==gw);
+    m.history.push({gw,squad:[...m.squad],captain:m.captain,at:Date.now()});
+    m.history.sort((a,b)=>a.gw-b.gw);
+  });
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  gwTeamsSheet(gw); render(); toast(`GW${gw} recounted`);
 }
 /* open the next gameweek: unlocks teams for everyone */
 async function fplOpenNextGw(){
@@ -9625,7 +9947,9 @@ function fplMyTeam(m,locked){
         <div class="fpl-todo-i">🔄 <b>${esc(dup)}</b> is now a keeper, and keepers are not in the fantasy game. Swap them out to fix it.</div></div>`:''})()}
     ${probs.length?`<div class="fpl-todo">${probs.map(p=>`<div class="fpl-todo-i">⚠️ ${esc(p)}</div>`).join('')}</div>`:''}
 
-    ${dirty?`<div class="fpl-confirm">
+    ${locked?`<div class="fpl-lock"><span class="fpl-lock-i">${ssTileC('admin',30)}</span>
+        <div><b>Teams are locked</b><i>${esc(fplLockNote())}</i></div></div>`:''}
+    ${(!locked&&dirty)?`<div class="fpl-confirm">
         <div class="fpl-c-t">${confirmed?`${ch.count} change${ch.count===1?'':'s'} not saved`:'Team not saved yet'}</div>
         <div class="btnrow">
           <button class="btn sec" onclick="discardDraft()">Discard</button>
@@ -9806,6 +10130,8 @@ function draftProblems(m){
 }
 let FSWAP=null;   // the player being replaced, if any
 function fplSwapOut(pid){
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
+
   const p=player(pid); if(!p)return;
   haptic('light');
   FSWAP=pid; FPICK=null; FTAB='market'; render();
@@ -9822,6 +10148,8 @@ function fplDrop(pid){
 function fplSwap(pos){ FSWAP=null; FPICK=null; FTAB='market'; render(); }
 function fplPick(pid){
   haptic('light');
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
+
   const m=fplMine(); if(!m)return;
   const p=player(pid); if(!p)return;
   if(!FPL_RULES.eligible.includes(p.pos||'MID')){toast('Keepers aren\'t in the fantasy game');return}
@@ -9851,6 +10179,8 @@ function fplPick(pid){
 }
 function draftCaptain(pid){
   haptic('light');
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
+
   const m=fplMine(); if(!m)return;
   const d=draftOf(m);
   if(!d.squad.includes(pid)){toast('You can only captain someone in your team');return}
@@ -9858,6 +10188,7 @@ function draftCaptain(pid){
 }
 function discardDraft(){ FDRAFT=null; render(); toast('Changes discarded'); }
 async function confirmDraft(){
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
   const m=fplMine(); if(!m)return;
   const probs=draftProblems(m);
   if(probs.length){ toast('⚠️ '+probs[0]); render(); return; }
@@ -9883,16 +10214,21 @@ async function confirmDraft(){
   m.needsReview=false;                       /* migration prompt clears once they confirm */
   if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; }
   FDRAFT=null;
-  await fplSave();
+  const r=await fplSave();
+  if(r&&r.ok===false){
+    toast('⚠️ Not saved — '+(r.detail||'try again'));
+    render(); return;
+  }
   render();
   haptic('success');
   toast(firstTeam?'✅ Team confirmed — you\'re in the league':'✅ Transfers confirmed');
 }
 async function fplSave(){
-  if(CLOUD_FAIL){toast('⛔️ Not saved — database unreachable');return}
-  await save();
+  if(CLOUD_FAIL){toast('⛔️ Not saved — database unreachable');return {ok:false,detail:'Database unreachable'}}
+  return await save();
 }
 async function playWildcard(){
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
   const m=fplMine(); if(!m)return;
   if(m.wildcardActive){
     if(!await askConfirm('Cancel your wildcard?','Your team goes back to how it was and you keep the chip.','Cancel it',false))return;
@@ -9921,6 +10257,7 @@ function chipArmedFor(m,gw){
 }
 const tcArmed=m=>(m.tcGws||[]).includes(fplNextGw());
 async function playTripleCaptain(){
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
   const m=fplMine(); if(!m)return;
   const next=fplNextGw();
   if(tcArmed(m)){
@@ -9947,6 +10284,7 @@ async function playTripleCaptain(){
    it can be taken back off right up until that gameweek's first game is logged. */
 const dpArmed=m=>(m.dpGws||[]).includes(fplNextGw());
 async function playDoublePoints(){
+  if(fplLocked()){toast(`⚠️ ${fplLockNote()}`);return}
   const m=fplMine(); if(!m)return;
   const next=fplNextGw();
   if(dpArmed(m)){
@@ -10828,10 +11166,13 @@ function repairFillers(){
       const fk='fill'+side, tk='team'+side;
       const fill=g[fk]; if(!Array.isArray(fill)||!fill.length)return;
       const keep=[];
+      const gst=guestNames(g);
       fill.forEach(entry=>{
         const raw=String(entry==null?'':entry).trim();
-        /* an id already, or a name that matches somebody in the squad */
-        const id = (player(raw)&&raw) || byName[raw.toLowerCase()] || null;
+        /* an id already, or a name that matches somebody in the squad —
+           unless this game says that name is a guest on purpose */
+        const id = gst.has(raw.toLowerCase()) ? null
+          : ((player(raw)&&raw) || byName[raw.toLowerCase()] || null);
         if(id){
           g[tk]=g[tk]||[];
           const other = side==='A' ? (g.teamB||[]) : (g.teamA||[]);
@@ -10844,6 +11185,10 @@ function repairFillers(){
   return moved;
 }
 
+/* Names the admin has deliberately logged as guests in this game, even though
+   somebody in the squad has that name. Without this, all three of the
+   name-matching paths below would quietly turn the guest back into the player. */
+const guestNames=g=>new Set(((g&&g.guests)||[]).map(n=>String(n).trim().toLowerCase()));
 /* Everyone who appears anywhere on a game record, and which side they were on.
    Ratings used to read teamA and teamB only, so anyone who ended up in a filler
    slot — or who was credited with a goal or a position without making it onto
@@ -10865,8 +11210,12 @@ function gameSquad(g){
   /* fillers hold names as often as ids, so resolve both */
   const byName={};
   (season().players||[]).forEach(p=>{ if(p&&p.name)byName[String(p.name).trim().toLowerCase()]=p.id });
-  (g.fillA||[]).forEach(f=>add(player(String(f))?String(f):byName[String(f||'').trim().toLowerCase()],'A'));
-  (g.fillB||[]).forEach(f=>add(player(String(f))?String(f):byName[String(f||'').trim().toLowerCase()],'B'));
+  const gst=guestNames(g);
+  const resolve=f=>{ const raw=String(f||'').trim();
+    if(gst.has(raw.toLowerCase()))return null;          /* deliberately a guest */
+    return player(raw)?raw:byName[raw.toLowerCase()] };
+  (g.fillA||[]).forEach(f=>add(resolve(f),'A'));
+  (g.fillB||[]).forEach(f=>add(resolve(f),'B'));
   /* anyone credited with a goal, an assist or a position but never added to a
      side — put them on the side their goals went to, or A as a last resort */
   const orphan=id=>{ if(!out.has(id)&&player(id))out.set(id,null) };
@@ -11020,7 +11369,7 @@ function pressRoom(g){
   const top=rs[0], second=rs[1], worst=rs[rs.length-1];
   const total=(g.scoreA||0)+(g.scoreB||0), margin=Math.abs((g.scoreA||0)-(g.scoreB||0));
   const drew=g.result==='D', conc=Math.max(g.scoreA||0,g.scoreB||0);
-  const scorers=Object.entries(g.goals||{}).map(([id,n])=>({id,n,name:(player(id)||{}).name||'—'}))
+  const scorers=Object.entries(g.goals||{}).map(([id,n])=>({id,n,name:creditName(id,g)||'—'}))
     .sort((a,b)=>b.n-a.n);
   const hat=scorers.find(x=>x.n>=3);
   const sc1=scorers[0], sc2=scorers[1];
@@ -11432,7 +11781,7 @@ function vMatch(gid){
       +(fills||[]).map(n=>`<div class="bc-row dim guest"><span class="bc-name">${up(n)}</span><span class="bc-icons"></span></div>`).join('');
   };
   const scorers=Object.entries(g.goals||{}).filter(([,n])=>n>0)
-    .map(([pid,n])=>({pid,n,name:player(pid)?.name,onA:(g.teamA||[]).includes(pid)}))
+    .map(([pid,n])=>({pid,n,name:creditName(pid,g),onA:(g.teamA||[]).includes(pid)||FILL_KEY.exec(pid)?.[1]==='A'}))
     .filter(x=>x.name).sort((x,y)=>y.n-x.n);
   const assists=Object.entries(g.assists||{}).filter(([,n])=>n>0)
     .map(([pid,n])=>({pid,n,name:(player(pid)||{}).name,onA:(g.teamA||[]).includes(pid)}))
@@ -11614,7 +11963,7 @@ function matchReport(g){
   const A=nm(g.teamA,g.fillA), B=nm(g.teamB,g.fillB);
   const winners=a>b?A:B, losers=a>b?B:A;
   const scorers=Object.entries(g.goals||{}).filter(([,n])=>n>0)
-    .map(([pid,n])=>({name:player(pid)?.name,n})).filter(x=>x.name).sort((x,y)=>y.n-x.n);
+    .map(([pid,n])=>({name:creditName(pid,g),n})).filter(x=>x.name).sort((x,y)=>y.n-x.n);
   const top=scorers[0];
   const list=arr=>arr.length<=1?(arr[0]||'—'):arr.slice(0,-1).join(', ')+' and '+arr[arr.length-1];
   let open;
@@ -12278,7 +12627,7 @@ function moments(){
     if(idx===0)add('first','🌅','The First Sunday',
       `Where it started. ${g.scoreA}–${g.scoreB}, and nobody knew what they were beginning.`);
     Object.entries(g.goals||{}).forEach(([pid,n])=>{
-      const nm=(player(pid)||{}).name||'someone';
+      const nm=creditName(pid,g)||'someone';
       if(n>=3&&!seenHat){seenHat=true;add('hat','⚡','First Hat-Trick of the Season',
         `${nm} took the ball home. Three goals and no arguments.`)}
       if(n>=4)add('four_'+pid,'🎯',`${nm} scored four`,
@@ -12323,7 +12672,7 @@ function momentsFor(pid){ return moments().filter(m=>m.owners.includes(pid)) }
 function momentFacts(m){
   const g=allGames().find(x=>x.id===m.gid) || allGames().find(x=>x.date===m.date);
   if(!g)return null;
-  const nm=id=>(player(id)||{}).name||'—';
+  const nm=id=>creditName(id,g)||'—';
   const scorers=Object.entries(g.goals||{}).filter(([,n])=>n>0)
     .sort((a,b)=>b[1]-a[1]).map(([id,n])=>({id,n,name:nm(id)}));
   const makers=Object.entries(g.assists||{}).filter(([,n])=>n>0)
@@ -12707,7 +13056,28 @@ async function equipItem(id,cat){
    Play money only. Odds are priced from each player's own record, so a striker
    who scores in most games is genuinely short. Markets are per player because
    teams are not known until Sunday. */
-const BET_RULES={start:10000, min:10, max:2500, margin:0.90, bailout:1000};
+/* ---- The Sunday lock ----------------------------------------------------
+   One time governs both betting and fantasy team changes: Sunday 16:00 in
+   Dubai (Asia/Dubai is UTC+4 all year, no DST). Change the hour here and the
+   cut-off, every guard and every line of copy follow. */
+const SUNDAY_LOCK_HOUR=16, DUBAI_OFF=4*3600e3;
+const SUNDAY_LOCK_LABEL=(h=>{const ap=h<12?'am':'pm',t=h%12||12;return t+ap})(SUNDAY_LOCK_HOUR);
+const BET_LOCK_LABEL=SUNDAY_LOCK_LABEL;
+/* first Sunday lock strictly after ms */
+function sundayLockAfter(ms){
+  const d=new Date(ms+DUBAI_OFF), H=SUNDAY_LOCK_HOUR;
+  const dow=d.getUTCDay(), h=d.getUTCHours();
+  let add=(7-dow)%7; if(add===0&&h>=H)add=7;
+  return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+add,H,0,0)-DUBAI_OFF;
+}
+/* the most recent Sunday lock at or before ms */
+function sundayLockBefore(ms){
+  const d=new Date(ms+DUBAI_OFF), H=SUNDAY_LOCK_HOUR;
+  const dow=d.getUTCDay(), h=d.getUTCHours();
+  let back=dow; if(dow===0&&h<H)back=7;
+  return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-back,H,0,0)-DUBAI_OFF;
+}
+const BET_RULES={start:10000, min:10, max:2500, margin:0.90, bailout:1000, lockHour:SUNDAY_LOCK_HOUR};
 const usd=n=>'$'+Math.round(n).toLocaleString('en-US');
 const usdSigned=n=>(n>0?'+':n<0?'−':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
 function bets(){
@@ -12973,23 +13343,18 @@ async function placeBet(){
   haptic('success'); render();
   toast(legs.length>1?`${legs.length}-fold · ${usd(amt)} at ${combined.toFixed(2)}`:`${usd(amt)} at ${combined.toFixed(2)}`);
 }
-/* A bet can be pulled until the Sunday it rides on reaches midday in Dubai.
-   The cut-off is the first Sunday 12:00 (Asia/Dubai, UTC+4, no DST) after the
-   bet was placed — placing on a Sunday afternoon rides the following Sunday. */
+/* A bet can be pulled until the Sunday it rides on reaches the lock. The
+   cut-off is the first such Sunday after the bet was placed — place after the
+   lock and it rides next week. */
 function betCutoff(bet){
-  const placed=new Date(bet.at||0), OFF=4*3600e3;
-  const d=new Date(placed.getTime()+OFF);                 /* wall clock in Dubai */
-  const dow=d.getUTCDay(), h=d.getUTCHours();
-  let add=(7-dow)%7; if(add===0&&h>=12)add=7;             /* Sunday after midday → next week */
-  const cut=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()+add,12,0,0)-OFF;
-  return cut;
+  return sundayLockAfter(bet.at||0);
 }
 const betLocked=bet=>Date.now()>=betCutoff(bet);
 async function cancelBet(id){
   const b=bets(), i=b.open.findIndex(x=>x.id===id);
   if(i<0)return;
   const me=fplMine(); if(!me||b.open[i].by!==me.pid)return;
-  if(betLocked(b.open[i])){toast('⚠️ Too late to cancel — bets lock at 12pm on Sunday');return}
+  if(betLocked(b.open[i])){toast(`⚠️ Too late to cancel — bets lock at ${BET_LOCK_LABEL} on Sunday`);return}
   b.wallets[me.pid]=wallet(me.pid)+b.open[i].stake;
   b.open.splice(i,1);
   try{ if(!CLOUD_FAIL)await save() }catch(e){}
@@ -14133,7 +14498,7 @@ function vBets(){
           ${legLines(x)}
           <div class="r2">${usd(x.stake)} at ${x.odds.toFixed(2)} · GW${x.gw} · returns ${usd(x.stake*x.odds)}</div></div>
           ${betLocked(x)?`<span class="sb-lock">Locked</span>`:`<button class="sb-x" onclick="cancelBet('${x.id}')">Cancel</button>`}</div>`).join('')}</div>
-        <div class="note">Bets can be cancelled until 12pm on Sunday (Dubai time). After that they ride.</div>`
+        <div class="note">Bets can be cancelled until ${BET_LOCK_LABEL} on Sunday (Dubai time). After that they ride.</div>`
         :`<div class="note">Nothing riding on this week yet.</div>`}
       ${past.length?`${ssSec('betting','Previous bets','<span class="ss-note">Settled</span>')}
         <div class="card sb-past">${past.slice(0,40).map(x=>`
@@ -15253,6 +15618,18 @@ function vAdmin(){
       <div class="card"><div class="row"><div class="rt"><div class="r1">Dark mode</div></div>
         <button class="toggle ${dark?'on':''}" onclick="toggleTheme();render()"><i></i></button></div></div>
 
+      ${(function(){
+        const rows=statsAll().filter(x=>x.P>0).sort((a,b)=>b.P-a.P||a.name.localeCompare(b.name));
+        if(!rows.length)return '';
+        const out=rows.filter(x=>!ranksInTable(x.id)).length;
+        return `<div class="sechead">League table</div>
+        <div class="note" style="padding:0 4px 8px">Turn someone off and they drop out of the Home table and its zones — they keep every other stat, and appear under the table as "Also played". Turn them back on any time.${out?` <b>${out} off right now.</b>`:''}</div>
+        <div class="card">${rows.map(x=>{const on=ranksInTable(x.id);
+          return `<div class="row"><span class="ce">${avatar(player(x.id)||{name:x.name},30)}</span>
+            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.P} game${x.P===1?'':'s'} · ${x.pts} pt${x.pts===1?'':'s'}</div></div>
+            <button class="toggle ${on?'on':''}" onclick="setRanksInTable('${x.id}',${on?'false':'true'})"><i></i></button></div>`}).join('')}</div>`;
+      })()}
+
       <div class="sechead">Season</div>
       <div class="card">
         <div class="row"><div class="rt"><div class="r1">Current season</div></div>
@@ -15264,6 +15641,16 @@ function vAdmin(){
         ${DB.seasons.length>1?`<div class="row tap" onclick="deleteSeason(CUR)"><div class="rt"><div class="r1" style="color:var(--red)">Delete this season</div>
           <div class="r2">Removes the whole season — asks you to confirm</div></div></div>`:''}
       </div>
+
+      ${(fpl().managers||[]).some(m=>m.teamName)&&playedGws().length?`
+      <div class="sechead">Fantasy teams</div>
+      <div class="card">
+        ${gw3FixNeeded()?`<div class="row tap" onclick="applyDenisGw3()"><div class="rt">
+          <div class="r1" style="color:var(--ss-blue)">Apply Denis's GW3 correction</div>
+          <div class="r2">Sets GW3 to Nader, Denis, Seb, Talal and Ziyad — one tap, then this disappears</div></div>${chev}</div>`:''}
+        <div class="row tap" onclick="gwTeamsSheet()"><div class="rt"><div class="r1">Teams counted per gameweek</div>
+          <div class="r2">See the squad each manager scored with, and fix one if it was frozen wrong</div></div>${chev}</div>
+      </div>`:''}
 
       <div class="sechead">Export &amp; share</div>
       <div class="card">
@@ -15473,10 +15860,29 @@ const fmById=id=>FORMATIONS.find(f=>f.id===id)||FORMATIONS[0];
 /* ---- persisted tactics board state (per season) ---- */
 function board(){const S=season();
   if(!S.board)S.board={fid:'231',A:{},B:{},side:'A'};
-  if(!S.board.A)S.board.A={}; if(!S.board.B)S.board.B={};
-  return S.board}
+  const b=S.board;
+  if(!b.A)b.A={}; if(!b.B)b.B={};
+  /* v2 draws both teams at once, so each side carries its own shape and the
+     saved drags are whole-pitch coordinates. Older boards are reset once. */
+  if(b.v!==2){ b.v=2; b.fidA=b.fid||'231'; b.fidB=b.fid||'231'; b.pos={A:{},B:{}} }
+  if(!b.fidA)b.fidA=b.fid||'231'; if(!b.fidB)b.fidB=b.fid||'231';
+  if(!b.pos)b.pos={}; if(!b.pos.A)b.pos.A={}; if(!b.pos.B)b.pos.B={};
+  b.fid=b.fidA;
+  return b}
+const boardFm=sd=>fmById(board()[sd==='B'?'fidB':'fidA']);
+/* A formation is drawn attacking up the whole pitch. Team A keeps that shape in
+   the bottom half; Team B is turned around into the top half. */
+function boardXY(sd,slot,i){
+  const b=board(), saved=b.pos[sd]&&b.pos[sd][i];
+  if(saved)return saved;
+  const x=slot[0], y=slot[1];
+  /* the keeper hugs the goal line; everyone else is pulled in a little so the
+     rows do not collide when eleven of them share half a pitch */
+  const k=slot[2]==='GK'?0.47:0.42;
+  return sd==='A' ? [x, 50+y*k] : [100-x, 50-y*k];
+}
 
-let TAC='formations', TSEL=null, SPX='';
+let TAC='formations', TSEL=null, SPX='', WBQ='', WBPOS='ALL';
 /* repaint only the tactics body — full render() rebuilds the whole page and feels laggy */
 function paintTac(){ return keepFocus(()=>_paintTac()); }
 function _paintTac(){
@@ -15550,77 +15956,102 @@ function tacFormations(){
       <button class="btn pri full fm-go" style="margin-top:14px" onclick="TAC='board';paintTac()">Set this up on the whiteboard →</button>
     </div>`;
 }
-function setBoardSize(n){
-  const first=FORMATIONS.find(x=>(x.size||7)===n);
-  if(first)setFormation(first.id);
+async function setBoardSize(n){
+  const first=FORMATIONS.find(x=>(x.size||7)===n); if(!first)return;
+  const b=board();
+  b.fidA=first.id; b.fidB=first.id; b.fid=first.id;
+  b.A={}; b.B={}; b.pos={A:{},B:{}};
+  await saveBoard(); paintTac(); toast(`${n}-a-side · ${first.name} both sides`);
 }
 async function setFormation(id){
-  const b=board(); b.fid=id; b.A={}; b.B={};
-  await saveBoard(); paintTac(); toast(`Formation set to ${fmById(id).name}`);
+  const b=board(), sd=b.side||'A';
+  b[sd==='B'?'fidB':'fidA']=id; if(sd==='A')b.fid=id;
+  b[sd]={}; b.pos[sd]={};
+  await saveBoard(); paintTac(); toast(`Team ${sd}: ${fmById(id).name}`);
 }
 
 /* ---------- WHITEBOARD ---------- */
 function tacBoard(){
-  const b=board(),f=fmById(b.fid),side=b.side||'A';
-  const assigned=b[side]||{};
-  const usedIds=Object.values(assigned).filter(Boolean);
-  const pool=[...season().players].filter(p=>p.active!==false&&!usedIds.includes(p.id))
-    .sort((a,b2)=>a.name.localeCompare(b2.name));
-  const col=side==='A'?'var(--tint)':'var(--blue)';
+  const b=board(), side=b.side||'A', other=side==='A'?'B':'A';
+  const fA=boardFm('A'), fB=boardFm('B'), size=fA.size||7;
+  const used=[...Object.values(b.A||{}),...Object.values(b.B||{})].filter(Boolean);
+  const q=(WBQ||'').toLowerCase().trim();
+  let pool=[...season().players].filter(p=>p.active!==false&&!used.includes(p.id));
+  if(WBPOS!=='ALL')pool=pool.filter(p=>(p.pos||'MID')===WBPOS);
+  if(q)pool=pool.filter(p=>p.name.toLowerCase().includes(q));
+  pool.sort((x,y)=>x.name.localeCompare(y.name));
+  const poolAll=[...season().players].filter(p=>p.active!==false&&!used.includes(p.id));
+  const count=sd=>Object.values(b[sd]||{}).filter(Boolean).length;
+
+  const tokens=sd=>{
+    const f=boardFm(sd), live=sd===side;
+    return f.slots.map((sl,i)=>{
+      const pid=(b[sd]||{})[i], p=pid?player(pid):null;
+      const [x,y]=boardXY(sd,sl,i);
+      return `<div class="tok wb-tok ${sd.toLowerCase()} ${live?'live':'dim'}" data-slot="${i}" data-side="${sd}" style="left:${x}%;top:${y}%">
+        <span class="wb-av">${p?avatar(p,34):`<span class="wb-empty">${sl[2]}</span>`}</span>
+        ${p?`<span class="wb-nm">${esc(p.name.split(' ')[0].toUpperCase())}</span>`:''}</div>`}).join('');
+  };
+
   return `
-    <div class="card pad" style="margin-bottom:12px">
-      <div class="seg" style="margin-bottom:10px">
-        <button class="${side==='A'?'on':''}" onclick="setBoardSide('A')">Team A</button>
-        <button class="${side==='B'?'on':''}" onclick="setBoardSide('B')">Team B</button>
+    <div class="card pad wb-ctl">
+      <div class="lbl" style="padding-top:0">Team size</div>
+      <div class="seg pp-seg wb-seg">
+        ${[6,7,9,11].map(n=>`<button class="${size===n?'on':''}" onclick="setBoardSize(${n})">${n}</button>`).join('')}
       </div>
-      <div class="lbl">Team size</div>
-      <div class="seg" style="margin-bottom:10px">
-        ${[[7,'7-a-side'],[6,'6'],[9,'9'],[11,'11']].map(([n,l])=>{
-          const on=(f.size||7)===n;
-          return `<button class="${on?'on':''}" onclick="setBoardSize(${n})">${l}</button>`}).join('')}
+      <div class="lbl">Editing</div>
+      <div class="seg pp-seg wb-seg wb-sides">
+        <button class="a ${side==='A'?'on':''}" onclick="setBoardSide('A')">Team A <em>${count('A')}/${size}</em></button>
+        <button class="b ${side==='B'?'on':''}" onclick="setBoardSide('B')">Team B <em>${count('B')}/${size}</em></button>
       </div>
-      <div class="lbl">Shape</div>
-      <select style="width:100%;margin-bottom:10px" onchange="setFormation(this.value)">
-        ${FORMATIONS.filter(x=>(x.size||7)===(f.size||7)).map(x=>
-          `<option value="${x.id}" ${x.id===f.id?'selected':''}>${x.name}${x.wb?'':' · '+esc(x.tag)}</option>`).join('')}
+      <div class="lbl">Team ${side} shape</div>
+      <select class="lg6-in" onchange="setFormation(this.value)">
+        ${FORMATIONS.filter(x=>(x.size||7)===size).map(x=>
+          `<option value="${x.id}" ${x.id===(side==='A'?fA.id:fB.id)?'selected':''}>${x.name}${x.wb?'':' · '+esc(x.tag)}</option>`).join('')}
       </select>
-      <div class="note" style="padding:0 0 4px">Tap a player below, then tap a shirt on the pitch to place them. Drag any shirt to fine-tune the position.${isAdmin()?'':' <b>This is your own board</b> — plan and propose freely, it won\'t change anyone else\'s.'}</div>
+      <div class="note" style="padding:8px 0 0">Tap a player below, then tap a shirt to place them. Drag any shirt to fine-tune. Tap the other team's shirt to start editing that side.</div>
     </div>
-    <div class="pitch${pitchSkin()}" id="pitch" style="aspect-ratio:${window.innerWidth<640?'3/4':'4/3'}">
-      <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-        <rect x="2" y="2" width="96" height="96" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=".6"/>
-        <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(255,255,255,.5)" stroke-width=".6"/>
-        <circle cx="50" cy="50" r="11" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=".6"/>
-        <rect x="28" y="2" width="44" height="15" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".55"/>
-        <rect x="28" y="83" width="44" height="15" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".55"/>
-        <rect x="41" y="2" width="18" height="6" fill="none" stroke="rgba(255,255,255,.35)" stroke-width=".5"/>
-        <rect x="41" y="92" width="18" height="6" fill="none" stroke="rgba(255,255,255,.35)" stroke-width=".5"/>
-      </svg>
-      ${f.slots.map((sl,i)=>{
-        const pid=assigned[i],p=pid?player(pid):null;
-        const pos=(b.pos&&b.pos[side]&&b.pos[side][i])||null;
-        const x=pos?pos[0]:sl[0], y=pos?pos[1]:sl[1];
-        const c=clubOf(p);
-        const bg=p?(c?c.c1:col):'rgba(255,255,255,.22)';
-        return `<div class="tok" data-slot="${i}" style="left:${x}%;top:${y}%">
-          <div class="disc" style="background:${bg}">${p?esc(initials(p.name)):sl[2]}</div>
-          <div class="lab">${p?esc(p.name.split(' ')[0]):sl[2]}</div></div>`}).join('')}
+
+    <div class="wb-wrap">
+      <div class="wb-tag b ${side==='B'?'on':''}">TEAM B · ${esc(fB.name)}</div>
+      <div class="pitch wb-pitch n${size}${pitchSkin()}" id="pitch">
+        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <rect x="2" y="2" width="96" height="96" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=".6"/>
+          <line x1="2" y1="50" x2="98" y2="50" stroke="rgba(255,255,255,.5)" stroke-width=".6"/>
+          <circle cx="50" cy="50" r="10" fill="none" stroke="rgba(255,255,255,.5)" stroke-width=".6"/>
+          <circle cx="50" cy="50" r="1" fill="rgba(255,255,255,.5)"/>
+          <rect x="28" y="2" width="44" height="14" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".55"/>
+          <rect x="28" y="84" width="44" height="14" fill="none" stroke="rgba(255,255,255,.45)" stroke-width=".55"/>
+          <rect x="40" y="2" width="20" height="5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width=".5"/>
+          <rect x="40" y="93" width="20" height="5" fill="none" stroke="rgba(255,255,255,.35)" stroke-width=".5"/>
+        </svg>
+        ${tokens('B')}${tokens('A')}
+      </div>
+      <div class="wb-tag a ${side==='A'?'on':''}">TEAM A · ${esc(fA.name)}</div>
     </div>
-    <div class="sechead">Available players <span style="text-transform:none;font-weight:500;color:var(--label3)">${pool.length}</span></div>
+
+    <div class="wb-tools">
+      <button onclick="autoFillBoard()">Auto-fill ${side}</button>
+      <button onclick="clearBoard()">Clear ${side}</button>
+      <button onclick="clearBothBoards()">Clear both</button>
+    </div>
+
+    ${ssSec('squad','Available',`<span class="ss-note">${poolAll.length} left</span>`)}
+    <div class="lg6-search" style="margin-bottom:8px">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input placeholder="Search players…" value="${esc(WBQ||'')}" oninput="WBQ=this.value;paintTac()" id="wbq"></div>
+    <div class="chips ch-picks wb-pos">${['ALL','GK','DEF','MID','ATT'].map(k=>
+      `<button class="${WBPOS===k?'on':''}" onclick="WBPOS='${k}';paintTac()">${k==='ALL'?'Everyone':k}</button>`).join('')}</div>
     ${pool.length?`<div class="benchrow">${pool.map(p=>`<button class="bench ${TSEL===p.id?'sel':''}" onclick="pickTok('${p.id}')">
         ${avatar(p,30)}<span class="bn">${esc(p.name)}</span></button>`).join('')}</div>`
-      :`<div class="note">Everyone is on the pitch. Tap a shirt to take them off.</div>`}
-    <div class="btnrow" style="margin-top:6px">
-      <button class="btn sec sm" onclick="clearBoard()">Clear ${side}</button>
-      <button class="btn sec sm" onclick="autoFillBoard()">Auto-fill</button>
-    </div>
-    <div class="note">Formation: <b>${f.name}</b> · change it in the Formations tab.</div>`;
+      :`<div class="note">${poolAll.length?'Nobody matches that search.':'Everyone is on the pitch. Tap a shirt to take them off.'}</div>`}`;
 }
+async function clearBothBoards(){const b=board();b.A={};b.B={};b.pos={A:{},B:{}};TSEL=null;await saveBoard();paintTac();toast('Both teams cleared')}
 async function setBoardSide(s){board().side=s;TSEL=null;await saveBoard();paintTac()}
 function pickTok(pid){TSEL=(TSEL===pid)?null:pid;paintTac()}
-async function clearBoard(){const b=board();b[b.side||'A']={};if(b.pos)b.pos[b.side||'A']={};await saveBoard();paintTac()}
+async function clearBoard(){const b=board(),sd=b.side||'A';b[sd]={};b.pos[sd]={};TSEL=null;await saveBoard();paintTac();toast(`Team ${sd} cleared`)}
 async function autoFillBoard(){
-  const b=board(),side=b.side||'A',f=fmById(b.fid);
+  const b=board(),side=b.side||'A',f=boardFm(side);
   const other=side==='A'?'B':'A';
   const taken=Object.values(b[other]||{}).filter(Boolean);
   const order={GK:0,DEF:1,MID:2,ATT:3};
@@ -15637,9 +16068,11 @@ async function autoFillBoard(){
 }
 function wireBoard(){
   const pitch=$('#pitch'); if(!pitch)return;
-  const b=board(),side=b.side||'A';
+  const b=board();
   pitch.querySelectorAll('.tok').forEach(tok=>{
-    const slot=+tok.dataset.slot;
+    const slot=+tok.dataset.slot, sd=tok.dataset.side||'A', live=(b.side||'A')===sd;
+    /* the other team is on show, not in play — one tap moves editing over to it */
+    if(!live){ tok.addEventListener('click',async()=>{ b.side=sd; TSEL=null; await saveBoard(); paintTac() }); return }
     let dragging=false,moved=false,sx=0,sy=0,rect=null,raf=0,lastX=0,lastY=0;
     const put=(cx,cy)=>{
       const x=Math.max(5,Math.min(95,((cx-rect.left)/rect.width)*100));
@@ -15670,13 +16103,13 @@ function wireBoard(){
       try{tok.releasePointerCapture(e.pointerId)}catch(_){}
       if(moved){
         const [x,y]=put(e.clientX??lastX,e.clientY??lastY);
-        if(!b.pos)b.pos={}; if(!b.pos[side])b.pos[side]={};
-        b.pos[side][slot]=[Math.round(x),Math.round(y)];
+        if(!b.pos)b.pos={}; if(!b.pos[sd])b.pos[sd]={};
+        b.pos[sd][slot]=[Math.round(x),Math.round(y)];
         tok.style.left=Math.round(x)+'%'; tok.style.top=Math.round(y)+'%';
         await saveBoard();                          // no repaint — the token is already where it should be
       } else {
-        if(TSEL){ b[side][slot]=TSEL; TSEL=null; await saveBoard(); paintTac(); }
-        else if(b[side][slot]){ delete b[side][slot]; await saveBoard(); paintTac(); }
+        if(TSEL){ b[sd][slot]=TSEL; TSEL=null; await saveBoard(); paintTac(); }
+        else if(b[sd][slot]){ delete b[sd][slot]; await saveBoard(); paintTac(); }
         else { toast('Pick a player from the list first'); }
       }
     };
@@ -15793,7 +16226,9 @@ function tacSetpiece(){
    Zones scale down sensibly for small leagues so they never overlap. ---- */
 
 /* round 4 item 4: shared league-table pieces (Home, Cups, HoF Lifetime) */
-const lg4Rk=(i,zone)=>`<td class="lg4-r ${zone||''}"><span class="lg4-rk ${i===0?'gold':zone==='z-ucl'?'blue':'grey'}">${i+1}</span></td>`;
+/* the rank pill wears its zone's colour, so the number, the stripe beside it
+   and the key underneath all say the same thing */
+const lg4Rk=(i,zone)=>`<td class="lg4-r ${zone||''}"><span class="lg4-rk ${zone?'rk-'+zone.slice(2):'grey'}">${i+1}</span></td>`;
 const lg4Nm=(x,mv,extra)=>`<td class="lg4-n"><span class="lg4-nw">${avatar(x,24)}<b>${esc(x.name)}</b>${mv!=null?mvA(mv):''}${extra||''}</span></td>`;
 const lg4Pt=(v,i)=>`<td class="lg4-p"><span class="lg4-pts${i===0?' gold':''}">${v}</span></td>`;
 function lifePlayer(name){const k=String(name).trim().toLowerCase(); const ss=[...(DB.seasons||[])].reverse(); for(const sn of ss){const p=(sn.players||[]).find(p=>p.name.trim().toLowerCase()===k); if(p)return p} return {name}}
@@ -15810,6 +16245,18 @@ function lg4Rows(tbl,m){ return tbl.map((x,i)=>`<tr class="${lg4Me(x)}" onclick=
   <td class="c">${x.P}</td><td class="c">${x.W}</td><td class="c">${x.D}</td><td class="c">${x.L}</td>
   <td class="c opt">${x.GF}</td><td class="c opt">${x.GA}</td><td class="c opt">${x.GD>0?'+':''}${x.GD}</td>
   <td class="c opt2">${x.G}</td><td class="c opt2">${formDots(x.last5,true)}</td>${lg4Pt(x.pts,i)}</tr>`).join('') }
+/* Occasional players used to sink to the bottom of the table simply because
+   they turned up less — twenty games at 1.5 a game beats five at 3.0. The admin
+   decides who the table ranks; everyone keeps every other stat either way. */
+const ranksInTable=id=>{const x=typeof id==='string'?player(id):id; return !(x&&x.noTable)};
+async function setRanksInTable(pid,on){
+  if(!requireAdmin())return;
+  const p=player(pid); if(!p)return;
+  if(on)delete p.noTable; else p.noTable=true;
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  render(); toast(`${p.name} ${on?'is in the table':'is out of the table'}`);
+}
 function zoneOf(i,total){
   const z=zoneBands(total),pos=i+1;
   if(pos===1)return 'z-champ';
@@ -16021,12 +16468,12 @@ function newGame(){ track('game_created');if(!requireAdmin())return;
   const cid=(comp().type==='league'?comp().id:lgComp().id);
   G={id:null,compId:cid,date:new Date().toISOString().slice(0,10),round:nextRound(cid),
      venueId:(season().lastVenueId||null), venue:(season().lastVenue||'out'),
-     A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},assists:{},sa:0,sb:0,q:'',__sel:new Set()};
+     A:new Set(),B:new Set(),fillA:[],fillB:[],goals:{},assists:{},sa:0,sb:0,q:'',__sel:new Set(),guests:[]};
   gameSheet()}
 function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x.id===id);if(!g)return;
   G={id:g.id,compId:g.compId,date:g.date,round:g.round||'',A:new Set(g.teamA||[]),B:new Set(g.teamB||[]),
      fillA:[...(g.fillA||[])],fillB:[...(g.fillB||[])],goals:{...(g.goals||{})},assists:{...(g.assists||{})},
-     sa:g.scoreA??0,sb:g.scoreB??0,q:'',__sel:new Set()};gameSheet()}
+     sa:g.scoreA??0,sb:g.scoreB??0,q:'',__sel:new Set(),guests:[...(g.guests||[])]};gameSheet()}
 function gameSheet(){
   const dsub=(()=>{try{const d=new Date(G.date+'T12:00:00');return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}catch(e){return G.date}})();
   $('#sheet').innerHTML=`<div class="shead lg6-head"><span class="lg6-grab"></span><button class="sa lg6-cancel" onclick="closeSheet()">Cancel</button><div class="st">${G.id?'Edit game':'New game'}<i>${esc(dsub)}${G.round?' · '+esc(G.round):''}</i></div><span class="sa"></span></div>
@@ -16035,10 +16482,14 @@ function gameSheet(){
 const sideOf=pid=>G.A.has(pid)?'A':G.B.has(pid)?'B':'';
 function setSide(pid,sd){
   G.A.delete(pid);G.B.delete(pid);
-  if(sd)G[sd].add(pid);else delete G.goals[pid];
+  /* clearing goals but not assists left a credit behind, and a player credited
+     with an assist is pulled back into the game by gameSquad — so they kept an
+     appearance nobody could see or remove. Clear both. */
+  if(sd)G[sd].add(pid);else{delete G.goals[pid];if(G.assists)delete G.assists[pid]}
   paintGame()}
 const teamCount=sd=>G[sd].size+G['fill'+sd].length;
-const goalSum=sd=>[...G[sd]].reduce((t,p)=>t+(G.goals[p]||0),0);
+const goalSum=sd=>[...G[sd]].reduce((t,p)=>t+(G.goals[p]||0),0)
+  +G['fill'+sd].reduce((t,_,i)=>t+(G.goals[fillKey(sd,i)]||0),0);
 function paintGame(){
   if(!$('#gb'))return;              /* the game sheet is not open — nothing to paint */
   return keepFocus(()=>_paintGame());
@@ -16055,6 +16506,11 @@ function _paintGame(){
   const tag=sd=>`<i class="lg6-tag ${sd.toLowerCase()}">${sd}</i>`;
   const cnt=(pid,n,fn)=>`<div class="lg6-cnt"><button class="m" onclick="${fn}('${pid}',-1)">−</button><b>${n}</b><button class="p" onclick="${fn}('${pid}',1)">+</button></div>`;
   const inTeam=[...G.A,...G.B];
+  /* every name that can be credited: the squad on each side, then its guests */
+  const credits=[...[...G.A].map(id=>({id,sd:'A',nm:(player(id)||{}).name||''})),
+                 ...G.fillA.map((n,i)=>({id:fillKey('A',i),sd:'A',nm:n,guest:true})),
+                 ...[...G.B].map(id=>({id,sd:'B',nm:(player(id)||{}).name||''})),
+                 ...G.fillB.map((n,i)=>({id:fillKey('B',i),sd:'B',nm:n,guest:true}))];
   $('#gb').innerHTML=`
     ${sec(ssNamed('League',22),'Competition')}
     <div class="chips ch-picks lg-comp lg6-comp">${comps().map(c=>`<button class="${c.id===G.compId?'on':''}" onclick="pickComp('${c.id}')">${compTile(c,20)}<span>${esc(c.name)}</span></button>`).join('')}</div>
@@ -16111,17 +16567,17 @@ function _paintGame(){
     </div>
     <div class="lg6-res">${G.sa===G.sb?'Draw · 1 point each':`Team ${G.sa>G.sb?'A':'B'} wins · 3 points`}</div>
 
-    ${inTeam.length?`${sec(ssTileC('top-scorers',22),'Who scored?','optional')}
+    ${credits.length?`${sec(ssTileC('top-scorers',22),'Who scored?','optional')}
       ${mismatch?`<div class="lg6-warn"><div class="lg6-wt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>Goals don't add up to the score · A ${gA}/${G.sa}, B ${gB}/${G.sb}</div>
         <button onclick="pgScoreFromGoals()">Set the score to ${gA}–${gB}</button></div>`:''}
-      <div class="card lg6-list">${inTeam.map(pid=>{const p=player(pid),n=G.goals[pid]||0,sd=G.A.has(pid)?'A':'B';
-        return `<div class="lg6-lr">${avatar(p,30)}<span class="lg6-ln">${esc(p?p.name.split(' ')[0]:'')}</span>${tag(sd)}${cnt(pid,n,'setGoal')}</div>`}).join('')}</div>
+      <div class="card lg6-list">${credits.map(c=>{const p=c.guest?null:player(c.id),n=G.goals[c.id]||0;
+        return `<div class="lg6-lr">${p?avatar(p,30):`<span class="lg6-guest">${ssGlyphSvg('squad')}</span>`}<span class="lg6-ln">${esc((c.nm||'').split(' ')[0])}${c.guest?' <i class="lg6-g">guest</i>':''}</span>${tag(c.sd)}${cnt(c.id,n,'setGoal')}</div>`}).join('')}</div>
 
       ${sec(ssTileC('most-assists',22),'Who assisted?','optional')}
       ${assistWarn().replace('class="warn"','class="lg6-warn"')}
-      <div class="card lg6-list">${inTeam.map(pid=>{const p=player(pid),n=(G.assists||{})[pid]||0,sd=G.A.has(pid)?'A':'B';
-        return `<div class="lg6-lr">${avatar(p,30)}<span class="lg6-ln">${esc(p?p.name.split(' ')[0]:'')}</span>${tag(sd)}${cnt(pid,n,'setAssist')}</div>`}).join('')}</div>
-      <div class="note">Attributed: A ${gA} · B ${gB}. Leave blank when there was no assist${(G.fillA.length||G.fillB.length)?' (fillers\' goals go unattributed)':''}.</div>`:''}
+      <div class="card lg6-list">${credits.map(c=>{const p=c.guest?null:player(c.id),n=(G.assists||{})[c.id]||0;
+        return `<div class="lg6-lr">${p?avatar(p,30):`<span class="lg6-guest">${ssGlyphSvg('squad')}</span>`}<span class="lg6-ln">${esc((c.nm||'').split(' ')[0])}${c.guest?' <i class="lg6-g">guest</i>':''}</span>${tag(c.sd)}${cnt(c.id,n,'setAssist')}</div>`}).join('')}</div>
+      <div class="note">Attributed: A ${gA} · B ${gB}. Leave blank when there was no assist.</div>`:''}
 
     ${(G.sa||G.sb||G.A.size||G.B.size)?`${sec(ssNamed('The press room',22,'#B3122F'),'Match report')}
       <div class="card pad report lg6-report">${esc(matchReport({scoreA:G.sa,scoreB:G.sb,teamA:[...G.A],teamB:[...G.B],
@@ -16178,7 +16634,14 @@ function clearTeams(){G.A.clear();G.B.clear();G.fillA=[];G.fillB=[];G.goals={};p
 async function addFiller(sd){
   const n=await askText('Add a filler','Just for this game — they won\'t join the squad.','','Add');
   if(n===null)return;G['fill'+sd].push(n||'Filler');await 0;paintGame()}
-function rmFiller(sd,i){G['fill'+sd].splice(i,1);paintGame()}
+function rmFiller(sd,i){
+  const n=G['fill'+sd].length;
+  ['goals','assists'].forEach(k=>{
+    const m=G[k]||{}; delete m[fillKey(sd,i)];
+    for(let j=i+1;j<n;j++){ const from=fillKey(sd,j), to=fillKey(sd,j-1);
+      if(m[from]!=null){m[to]=m[from]; delete m[from]} }
+  });
+  G['fill'+sd].splice(i,1); paintGame()}
 function autoSplit(){
   const ids=[...G.A,...G.B];
   if(ids.length<2){toast('Pick some players first');return}
@@ -16187,7 +16650,9 @@ function autoSplit(){
 function setScore(sd,d){if(sd==='A')G.sa=Math.max(0,G.sa+d);else G.sb=Math.max(0,G.sb+d);paintGame()}
 /* a team can't assist more than it scored — warn rather than block */
 function assistSum(side){
-  return [...(side==='A'?G.A:G.B)].reduce((t,pid)=>t+((G.assists||{})[pid]||0),0);
+  const A=G.assists||{};
+  return [...(side==='A'?G.A:G.B)].reduce((t,pid)=>t+(A[pid]||0),0)
+    +G['fill'+side].reduce((t,_,i)=>t+(A[fillKey(side,i)]||0),0);
 }
 /* Only flags the impossible case — more assists than goals. Fewer is normal and
    never warned about, since plenty of goals are unassisted. */
@@ -16204,7 +16669,8 @@ function setAssist(pid,d){
   paintGame();
 }
 function setGoal(pid,d){G.goals[pid]=Math.max(0,(G.goals[pid]||0)+d);if(!G.goals[pid])delete G.goals[pid];
-  const sd=G.A.has(pid)?'A':'B',t=goalSum(sd);
+  const m=FILL_KEY.exec(pid);
+  const sd=m?m[1]:(G.A.has(pid)?'A':'B'), t=goalSum(sd);
   if(sd==='A'&&t>G.sa)G.sa=t;if(sd==='B'&&t>G.sb)G.sb=t;paintGame()}
 async function saveGame(){ track('game_completed');
   /* A filler with a squad member's name means that person gets no rating and no
@@ -16212,11 +16678,19 @@ async function saveGame(){ track('game_completed');
   {
     const byName={};
     season().players.forEach(p=>{ if(p&&p.name)byName[String(p.name).trim().toLowerCase()]=p.id });
+    const already=new Set((G.guests||[]).map(n=>String(n).trim().toLowerCase()));
     const clash=[...(G.fillA||[]),...(G.fillB||[])]
-      .filter(f=>byName[String(f||'').trim().toLowerCase()]);
+      .filter(f=>byName[String(f||'').trim().toLowerCase()]&&!already.has(String(f||'').trim().toLowerCase()));
     if(clash.length){
-      toast(`${clash.join(', ')} ${clash.length===1?'is':'are'} in the squad — add them properly, not as a filler`);
-      return;
+      /* Usually a mis-log: the squad member should be on the teamsheet, where
+         they get an appearance and a rating. Occasionally it is deliberate —
+         a regular who turned out as a one-off guest that week — so ask. */
+      const yes=await askConfirm(
+        `${clash.join(', ')} ${clash.length===1?'is':'are'} in the squad`,
+        `Add ${clash.length===1?'them':'they'} as a guest for this game anyway?\n\nA guest gets no appearance, no rating and nothing in the table for this game — their goals still count in the score. Say no to put them on the teamsheet properly instead.`,
+        'Count as guest');
+      if(!yes)return;
+      G.guests=[...(G.guests||[]),...clash.map(f=>String(f).trim())];
     }
   }
   /* A round label typed twice is almost always a mis-log rather than a genuine
@@ -16251,11 +16725,40 @@ async function saveGame(){ track('game_completed');
     date:G.date,round:(G.round||'').trim(),teamA:[...G.A],teamB:[...G.B],fillA:[...G.fillA],fillB:[...G.fillB],
     pos:posSnap,goals:{...G.goals},assists:{...(G.assists||{})},scoreA:G.sa,scoreB:G.sb,result:G.sa>G.sb?'A':G.sb>G.sa?'B':'D',
     venueId:G.venueId||null, venue:G.venue||'out'};
-  S.lastVenueId=g.venueId; S.lastVenue=g.venue;
+  if((G.guests||[]).length)g.guests=[...new Set(G.guests.map(n=>String(n).trim()))];
   /* keep whatever weather was already fetched for this game */
-  if(G.id){const old=S.games.find(x=>x.id===G.id); if(old&&old.wx)g.wx=old.wx}
-  if(G.id)S.games[S.games.findIndex(x=>x.id===G.id)]=g;else S.games.push(g);
-  await save();closeSheet();
+  const prev=G.id?S.games.find(x=>x.id===G.id):null;
+  if(prev&&prev.wx)g.wx=prev.wx;
+  const prevCopy=prev?JSON.parse(JSON.stringify(prev)):null;
+  /* Put the game into whichever copy of the season is current — after a merge
+     that is a freshly pulled one, so this has to look it up every time. */
+  const applyGame=()=>{
+    const S2=season(); if(!S2)return;
+    if(!S2.games)S2.games=[];
+    const i=S2.games.findIndex(x=>x.id===g.id);
+    if(i>=0)S2.games[i]=g; else S2.games.push(g);
+    S2.lastVenueId=g.venueId; S2.lastVenue=g.venue;
+  };
+  applyGame();
+  /* This is the bit that used to lie. A refused write returned quietly, the
+     sheet closed and the game looked logged — until the next reload, when it
+     was gone. Now the sheet stays open until the database confirms it. */
+  let res=await saveMerging(applyGame);
+  while(!res.ok){
+    const again=await askConfirm('Not saved yet',
+      `${res.detail||'The database did not take it'}.\n\nThe game is still here — nothing has been lost. Try again?`,
+      'Try again');
+    if(!again){
+      const S3=season();
+      if(S3&&!prevCopy){ const i=S3.games.findIndex(x=>x.id===g.id); if(i>=0)S3.games.splice(i,1); }
+      else if(S3&&prevCopy){ const i=S3.games.findIndex(x=>x.id===g.id); if(i>=0)S3.games[i]=prevCopy; }
+      toast('Nothing was saved — the game is still in the form');
+      return;
+    }
+    res=await saveMerging(applyGame);
+  }
+  if(res.merged)toast('Saved — someone else had changed something, so it was merged in');
+  closeSheet();
   const i=allGames().findIndex(x=>x.id===g.id),ms=feed().filter(e=>e.i===i);
   render();
   recordOvr();
