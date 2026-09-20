@@ -90,8 +90,7 @@ body.drawer .drawer-bg{opacity:1;pointer-events:auto}
 .tabbar{display:none!important}
 
 /* ---------- NAV BAR ---------- */
-.navbar{position:sticky;top:0;z-index:40;background:var(--nav-bg);backdrop-filter:saturate(180%) blur(20px);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);border-bottom:.5px solid var(--sep);
+.navbar{position:sticky;top:0;z-index:40;background:var(--nav-bg);border-bottom:.5px solid var(--sep);
   padding:calc(8px + env(safe-area-inset-top)) 16px 8px;display:flex;align-items:center;gap:10px;min-height:48px}
 .navbar .nb-t{font-size:17px;font-weight:600;letter-spacing:-.02em}
 .navbar .nb-r{margin-left:auto;display:flex;align-items:center;gap:6px}
@@ -2755,9 +2754,10 @@ td.pts{font-weight:700;font-size:16px}
    Menu, bell and theme were scrolling away, so getting back to them meant
    scrolling to the top of a long profile. Now pinned, with a blur and a
    hairline that only appears once you have moved. */
-.navbar{position:sticky;top:0;z-index:60;
-  background:color-mix(in srgb,var(--bg) 82%,transparent);
-  backdrop-filter:saturate(180%) blur(20px);-webkit-backdrop-filter:saturate(180%) blur(20px)}
+/* Opaque, and no backdrop-filter. A translucent bar with content sliding
+   under it reads as "blurry" even with the filter off, and the filter itself
+   makes Safari rasterise the text at the composited layer's resolution. */
+.navbar{position:sticky;top:0;z-index:60;background:var(--bg)}
 html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
 
 /* ---- home: the table follows the banner directly ---- */
@@ -3237,8 +3237,8 @@ html{scroll-padding-top:var(--navh,48px)}
 .bc-col.b .bc-name{text-align:right}
 .bc-row.dim .bc-name{opacity:.72}
 .bc-row.guest{cursor:default}
-.bc-icons{display:flex;gap:2px;flex:0 0 auto}
-.bc-col.b .bc-icons{flex-direction:row-reverse}
+.bc-icons{display:flex;gap:2px;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-end;max-width:58%}
+.bc-col.b .bc-icons{flex-direction:row-reverse;justify-content:flex-end}
 .bc-ic{width:17px;height:17px;display:block;flex:0 0 17px}
 .bc-x{font-style:normal;font-family:var(--bc-font);font-weight:700;font-size:15px;color:var(--bc-gold);line-height:17px;padding:0 2px}
 
@@ -3283,7 +3283,7 @@ html{scroll-padding-top:var(--navh,48px)}
 .bc-rt b{font-size:10px;line-height:1}
 .bc-np{font-family:var(--bc-font);font-weight:700;font-size:11.5px;letter-spacing:.03em;color:#fff;background:var(--bc-navy);
   width:100%;text-align:center;padding:5px 3px 4px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:-1px}
-.bc-pga{display:flex;gap:1px;margin-top:3px;align-items:center}
+.bc-pga{display:flex;gap:1px;margin-top:3px;align-items:center;flex-wrap:wrap;justify-content:center;max-width:100%}
 .bc-pga .bc-ic{width:14px;height:14px;flex-basis:14px}
 .bc-pga em{font-style:normal;font-family:var(--bc-font);font-weight:700;font-size:12px;color:var(--bc-gold2);padding-left:2px;line-height:14px}
 .bc-pts{font-family:var(--bc-font);font-weight:700;font-size:11px;letter-spacing:.12em;color:var(--bc-gold2);margin-top:4px;line-height:1}
@@ -4482,20 +4482,30 @@ html[data-theme="dark"] .bsl-empty{background:#1C1C1E;border-color:#2C2C2E}
 .bsl-go{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;background:var(--ss-blue);color:#fff;font-size:14px;font-weight:800;padding:9px 13px;border-radius:11px}
 .bsl-go svg{width:14px;height:14px}
 /* the slip, expanded */
-.bsl-bg{position:fixed;inset:0;z-index:70;background:rgba(11,27,51,.42)}
+/* The open slip is a panel, not a takeover: no scrim, capped at a little over
+   half the screen, and the markets behind it stay scrollable and tappable so a
+   second leg does not mean closing the slip first. */
 .bsl-sheet{position:fixed;left:0;right:0;bottom:0;z-index:71;background:var(--card);border-radius:20px 20px 0 0;
-  padding:8px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto;box-shadow:0 -12px 34px rgba(0,0,0,.28)}
+  padding:6px 16px calc(14px + env(safe-area-inset-bottom,0px));
+  max-height:min(46vh,400px);overflow:auto;-webkit-overflow-scrolling:touch;
+  box-shadow:0 -10px 30px rgba(11,27,51,.22);border-top:1px solid var(--ss-hair)}
+html[data-theme="dark"] .bsl-sheet{border-top-color:#2A2A2D}
+.bsl-min{display:flex;align-items:center;justify-content:center;width:100%;height:26px;border:0;
+  background:none;color:var(--ss-muted);margin-bottom:2px}
+.bsl-min svg{width:22px;height:22px}
 html[data-theme="dark"] .bsl-sheet{background:#1C1C1E}
 .bsl-grab{display:block;width:36px;height:4px;border-radius:2px;background:var(--ss-hair);margin:0 auto 12px}
-.bsl-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+body.slipopen #app .view.active .wrap{padding-bottom:min(46vh,400px)}
+.bsl-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}
 .bsl-h b{font-size:18px;font-weight:800;color:var(--ss-ink)}
 .bsl-cnt{width:22px;height:22px;border-radius:50%;background:var(--ss-blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
 .bsl-clear{margin-left:auto;background:none;border:0;color:#E4002B;font-size:14.5px;font-weight:800;padding:4px}
-.seg.pp-seg.bsl-mode{margin-bottom:12px}
+.seg.pp-seg.bsl-mode{margin-bottom:10px}
+.bsl-sheet .seg.pp-seg.bsl-mode button{padding:7px 10px;font-size:14px}
 .seg.pp-seg.bsl-mode button.on{background:#fff;color:var(--ss-ink);box-shadow:0 1px 3px rgba(11,27,51,.16)}
 html[data-theme="dark"] .seg.pp-seg.bsl-mode button.on{background:#3A3A3D;color:#fff;box-shadow:none}
 .bsl-legs{display:flex;flex-direction:column}
-.bsl-leg{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:.5px solid var(--sep)}
+.bsl-leg{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:.5px solid var(--sep)}
 .bsl-leg:first-child{border-top:0}
 .bsl-lt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
 .bsl-lt b{font-size:15px;font-weight:700;color:var(--ss-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -4503,10 +4513,10 @@ html[data-theme="dark"] .seg.pp-seg.bsl-mode button.on{background:#3A3A3D;color:
 .bsl-lo{flex:0 0 auto;font-size:15px;font-weight:800;color:var(--ss-ink);font-variant-numeric:tabular-nums}
 .bsl-x{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:0;background:var(--ss-soft);color:var(--ss-muted);font-size:13px}
 html[data-theme="dark"] .bsl-x{background:#2A2A2D}
-.bsl-stake{display:flex;align-items:stretch;gap:8px;margin:12px 0 10px}
-.bsl-amt{flex:1;display:flex;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:10px;background:var(--ss-soft);border:0;border-radius:12px;padding:8px 14px;text-align:left}
+.bsl-stake{display:flex;align-items:stretch;gap:7px;margin:10px 0 8px}
+.bsl-amt{flex:1;display:flex;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:9px;background:var(--ss-soft);border:0;border-radius:11px;padding:7px 12px;text-align:left}
 .bsl-amt i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--ss-muted)}
-.bsl-amt b{font-size:22px;font-weight:800;color:var(--ss-ink)}
+.bsl-amt b{font-size:19px;font-weight:800;color:var(--ss-ink)}
 .bsl-q{flex:0 0 auto;background:var(--ss-soft);border:0;border-radius:12px;padding:0 14px;font-size:14px;font-weight:800;color:var(--ss-ink)}
 .bsl-q.on{background:var(--ss-navy);color:#fff}
 html[data-theme="dark"] .bsl-amt,html[data-theme="dark"] .bsl-q{background:#2A2A2D}
@@ -4635,7 +4645,6 @@ html[data-theme="dark"] .bt-br.me{background:color-mix(in srgb,var(--ss-gold) 15
 .navbar .menubtn{width:36px;height:36px;flex:0 0 36px;padding:0;gap:0;background:none;border-radius:9px;
   display:flex;align-items:center;justify-content:center;color:var(--ss-ink);font-size:0}
 .navbar .menubtn svg{width:20px;height:20px;stroke:currentColor}
-.navbar .nb-name{font-size:16px;font-weight:800;color:var(--ss-ink);opacity:0;transform:translateX(-4px);
   transition:opacity .22s,transform .22s;pointer-events:none;
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 .navbar .nb-r{gap:2px}
@@ -4648,13 +4657,22 @@ html[data-theme="dark"] .bt-br.me{background:color-mix(in srgb,var(--ss-gold) 15
 /* --- scrolled: navy, a 2px gold hairline, and the page name --- */
 /* #navMount .navbar sets the background, so the scrolled state has to match
    that specificity to win */
-#navMount .navbar.scrolled{background:var(--ss-navy)!important;border-bottom:2px solid var(--ss-gold);--nav-ring:#0B1B33}
-.navbar.scrolled .menubtn,.navbar.scrolled .nb-name{color:#fff}
+#navMount .navbar.scrolled{background:var(--ss-navy)!important;border-bottom:2px solid var(--ss-gold);--nav-ring:#0B1B33;
+  -webkit-font-smoothing:auto}
 .navbar.scrolled .menubtn svg,.navbar.scrolled .iconbtn svg{stroke:rgba(255,255,255,.92)}
-.navbar.scrolled .nb-name{opacity:1;transform:none}
 html[data-theme="dark"] #navMount .navbar.scrolled{background:#12213A!important;--nav-ring:#12213A}
 
 
+/* ---- chart type: axis ticks and values wear text tokens, never the line's colour ---- */
+.lc-grid{stroke:var(--ss-hair);stroke-width:1}
+.lc-base{stroke:var(--ss-muted);stroke-width:1;opacity:.6}
+.lc-tick{font-size:9.5px;font-weight:700;fill:var(--ss-muted);font-variant-numeric:tabular-nums}
+.lc-val{font-size:11px;font-weight:800;fill:var(--ss-ink)}
+html[data-theme="dark"] .lc-grid{stroke:#2A2A2D}
+.fplchip{flex:0 0 30px;width:30px;height:30px;border-radius:9px;display:flex;align-items:center;
+  justify-content:center}
+.fplchip svg{width:18px;height:18px}
+.chip-ic{flex:0 0 auto;display:flex}
 </style>
 </head>
 <body>
@@ -6272,8 +6290,7 @@ const NAV_TITLE={home:'Super Sunday',squad:'Squad',league:'League',fpl:'Sunday F
   player:'Player',pcareer:'Career',match:'Match',comps:'Cups',games:'Who Am I?',seasonView:'Season'};
 const navTitle=()=>NAV_TITLE[VIEW]||'Super Sunday';
 function navbar(back,action){return `<div class="navbar">${back?`<button class="backbtn" onclick="${back.on}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>${esc(back.label)}</button>`
-    :`<button class="menubtn" aria-label="Menu" onclick="toggleDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
-      <span class="nb-name">${esc(navTitle())}</span>`}
+    :`<button class="menubtn" aria-label="Menu" onclick="toggleDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>`}
   <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}${bellIcon()}<button class="iconbtn themeIcon" aria-label="Theme" onclick="toggleTheme()"></button></div></div>`}
 /* The navy state comes in when the hero's bottom edge passes the top of the
    viewport, and goes back to the light bar when it returns. A page with no
@@ -6289,17 +6306,6 @@ let NAV_TICK=false;
 addEventListener('scroll',()=>{ if(NAV_TICK)return; NAV_TICK=true;
   requestAnimationFrame(()=>{NAV_TICK=false;try{navScrollPass()}catch(e){}}) },{passive:true});
 
-/* The red dot means there is something to read, not that alerts are switched
-   on — a permanently-on dot is a dot nobody looks at. It clears when the
-   notifications sheet is opened. */
-function unreadAlerts(){
-  try{
-    const last=+(localStorage.getItem('ss_alerts_seen')||0);
-    const n=(season().log||[]).filter(x=>x.t>last).length;
-    return n>0 && PUSH_ON==='on';
-  }catch(e){ return false }
-}
-function markAlertsSeen(){ try{localStorage.setItem('ss_alerts_seen',String(Date.now()))}catch(e){} }
 /* The bell sits next to the theme toggle. It only appears once you have
    signed in with your code, because there is nobody to notify otherwise. */
 function bellIcon(){
@@ -6308,14 +6314,14 @@ function bellIcon(){
   const on = PUSH_ON==='on';
   const off = !!pushBlockedReason();
   return `<button class="iconbtn bellbtn${on?' on':''}" title="${on?'Alerts are on':'Turn on match alerts'}"
-    onclick="markAlertsSeen();bellTap()" aria-label="${on?'Alerts are on':'Turn on match alerts'}">
+    onclick="bellTap()" aria-label="${on?'Alerts are on':'Turn on match alerts'}">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
       <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
       ${off?'<path d="M3 3l18 18" stroke-width="2.1"/>':''}
     </svg>
-    ${unreadAlerts()?'<i class="bell-dot"></i>':''}
+    ${on?'<i class="bell-dot"></i>':''}
   </button>`;
 }
 /* The bell only ever turns alerts ON. There is no off switch here on purpose —
@@ -6582,10 +6588,6 @@ function vHomeBody(){
       ${lg4Key(ranked.length)}
 
       <div class="note lg4-note">Win 3 · Draw 1 · Loss 0 · ties split by win rate.</div>
-      ${unranked.length?`<div class="lg4-also"><span>Also played</span>
-        <div class="lg4-also-l">${unranked.map(x=>`<button class="lg4-also-p" onclick="openPlayer('${x.id}')">
-          ${avatar(x,22)}<b>${esc(x.name)}</b><i>${x.P} game${x.P===1?'':'s'} · ${x.pts} pt${x.pts===1?'':'s'}</i></button>`).join('')}</div>
-        <div class="note" style="padding:6px 0 0">Not ranked in the table${isAdmin()?' — change who counts in Admin → League table':''}. Every other stat still counts them.</div></div>`:''}
 
       ${ssSec("fixtures","Latest result",`<button class="act ss-act" onclick="shareGameweek()">${ssTile("share-gameweek",18)}Share gameweek</button>`)}
       <div class="card">${recent.map(gameRow).join('')}
@@ -7056,12 +7058,19 @@ function playerAxes(pid){
     Availability:x=>x.P,
     Consistency:x=>consistencyOf(x.id)
   };
+  /* Every score is a PERCENTILE, not a min-max stretch of the raw number.
+     The old version divided by the squad's best, so one outlier squashed
+     everybody else: seven goals could read 39 while the same player was third
+     in the squad for goals a game. A percentile says exactly one thing — how
+     many of the others you are ahead of — so the bar and the label underneath
+     it can never disagree. Ties count as half, or a squad where everyone is
+     level reports each of them as mid-table. */
   const out={};
   Object.keys(raw).forEach(k=>{
     const vals=pool.map(raw[k]);
-    const lo=Math.min(...vals), hi=Math.max(...vals);
     const v=raw[k](me);
-    out[k]=hi===lo?60:Math.round(8+92*((v-lo)/(hi-lo)));
+    const below=vals.filter(x=>x<v).length, ties=vals.filter(x=>x===v).length;
+    out[k]=vals.length?Math.max(3,Math.round((below+ties/2)/vals.length*100)):50;
   });
   /* players with Strava data get two more axes; everyone else keeps six */
   const sx=stravaAxes(pid); if(sx)Object.assign(out,sx);
@@ -7137,21 +7146,93 @@ function sparkPath(vals,w,h){
   const lo=Math.min(...vals), hi=Math.max(...vals), sp=hi-lo||1;
   return vals.map((v,i)=>`${(i/Math.max(1,vals.length-1))*w},${h-((v-lo)/sp)*h}`).join(' ');
 }
-function lineChart(vals,label,baseline){
-  if(vals.length<2)return '';
-  const W=300,H=90;
-  const lo=Math.min(...vals,baseline??Infinity), hi=Math.max(...vals,baseline??-Infinity);
+/* A small line chart you can actually read a number off.
+   It used to be a bare line with no scale, no ticks and no values — pretty, and
+   completely uninformative. Now: a hairline grid with labelled ticks down the
+   left, the gameweek along the bottom, the average as a solid recessive rule
+   with its own value, and the latest reading and the best one labelled. Only
+   those two points carry a number — a value on every dot is unreadable. */
+function niceTicks(lo,hi,n){
+  if(hi<=lo)return [lo];
+  const raw=(hi-lo)/Math.max(1,n-1);
+  const mag=Math.pow(10,Math.floor(Math.log10(raw)));
+  const step=[1,2,2.5,5,10].map(m=>m*mag).find(x=>x>=raw)||10*mag;
+  const start=Math.floor(lo/step)*step, out=[];
+  for(let v=start;v<=hi+step*0.001;v+=step) if(v>=lo-step*0.001) out.push(+v.toFixed(6));
+  return out.length>1?out:[lo,hi];
+}
+const fmtN=v=>Math.abs(v)>=1000?Math.round(v).toLocaleString()
+  :Math.abs(v)>=10?String(Math.round(v)):(Math.round(v*10)/10).toString();
+function lineChart(vals,label,baseline,opt){
+  if(!vals||vals.length<2)return '';
+  const o=opt||{};
+  const W=300,H=96, PAD_L=34, PAD_B=18, PAD_T=12;
+  const rawLo=Math.min(...vals), rawHi=Math.max(...vals);
+  const padv=(rawHi-rawLo||Math.abs(rawHi)||1)*0.12;
+  let lo=rawLo-padv, hi=rawHi+padv;
+  if(baseline!=null){ lo=Math.min(lo,baseline); hi=Math.max(hi,baseline) }
+  const ticks=niceTicks(lo,hi,4);
+  lo=Math.min(lo,ticks[0]); hi=Math.max(hi,ticks[ticks.length-1]);
   const sp=(hi-lo)||1;
-  const y=v=>H-((v-lo)/sp)*H;
-  const pts=vals.map((v,i)=>`${(i/Math.max(1,vals.length-1))*W},${y(v).toFixed(1)}`).join(' ');
-  return `<svg viewBox="-2 -8 ${W+4} ${H+16}" style="width:100%;height:118px;overflow:visible">
-    ${baseline!=null?`<line x1="0" y1="${y(baseline).toFixed(1)}" x2="${W}" y2="${y(baseline).toFixed(1)}"
-      stroke="var(--label3)" stroke-width="1" stroke-dasharray="4 4" opacity=".55"/>`:''}
-    <polyline points="${pts}" fill="none" stroke="var(--ln,var(--tint))" stroke-width="3"
+  const y=v=>PAD_T+(H-PAD_T-PAD_B)*(1-(v-lo)/sp);
+  const x=i=>PAD_L+(W-PAD_L)*(i/Math.max(1,vals.length-1));
+  const pts=vals.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  const lastI=vals.length-1, bestI=vals.indexOf(rawHi);
+  const lab=(i,cls)=>{
+    const anchor=x(i)>W-40?'end':x(i)<PAD_L+18?'start':'middle';
+    return `<text x="${x(i).toFixed(1)}" y="${(y(vals[i])-10).toFixed(1)}" text-anchor="${anchor}"
+      class="lc-val ${cls||''}">${fmtN(vals[i])}${o.unit||''}</text>`;
+  };
+  const xlab=i=>o.xLabels&&o.xLabels[i]!=null?o.xLabels[i]:String(i+1);
+  return `<svg viewBox="0 -4 ${W+6} ${H+10}" style="width:100%;height:132px;overflow:visible"
+      role="img" aria-label="${esc(o.alt||label||'chart')}">
+    ${ticks.map(t=>`<line x1="${PAD_L}" y1="${y(t).toFixed(1)}" x2="${W}" y2="${y(t).toFixed(1)}" class="lc-grid"/>
+      <text x="${PAD_L-7}" y="${(y(t)+3.5).toFixed(1)}" text-anchor="end" class="lc-tick">${fmtN(t)}</text>`).join('')}
+    ${baseline!=null?`<line x1="${PAD_L}" y1="${y(baseline).toFixed(1)}" x2="${W}" y2="${y(baseline).toFixed(1)}" class="lc-base"/>
+      <text x="${PAD_L+4}" y="${(y(baseline)-5).toFixed(1)}" text-anchor="start" class="lc-tick">avg ${fmtN(baseline)}</text>`:''}
+    <polyline points="${pts}" fill="none" stroke="var(--ln,var(--ss-blue))" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round"/>
-    ${vals.map((v,i)=>`<circle cx="${((i/Math.max(1,vals.length-1))*W).toFixed(1)}" cy="${y(v).toFixed(1)}"
-      r="${i===vals.length-1?4.6:3.6}" fill="var(--ln,var(--tint))"/>`).join('')}
+    ${vals.map((v,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="4"
+      fill="var(--ln,var(--ss-blue))" stroke="var(--card)" stroke-width="2"/>`).join('')}
+    ${lab(lastI)}${bestI!==lastI?lab(bestI):''}
+    <text x="${PAD_L}" y="${H+2}" text-anchor="start" class="lc-tick">${esc(xlab(0))}</text>
+    <text x="${W}" y="${H+2}" text-anchor="end" class="lc-tick">${esc(xlab(lastI))}</text>
   </svg>${label?`<div class="note" style="padding:6px 0 0">${label}</div>`:''}`;
+}
+
+/* Average-to-maximum heart rate per game: a floating bar chart, which is what
+   a range actually is. It used to be a row of unlabelled sticks with no scale.
+   Bars are capped at 24px with rounded ends, a 2px surface gap between them, a
+   labelled bpm axis, and the last game's range spelled out. */
+function effortRange(acts){
+  const rows=(acts||[]).map(a=>({lo:+a.hr||0,hi:+a.maxHr||0})).filter(r=>r.lo&&r.hi&&r.hi>=r.lo);
+  if(rows.length<2)return '';
+  const W=300,H=104, PAD_L=34, PAD_B=18, PAD_T=12;
+  const rawLo=Math.min(...rows.map(r=>r.lo)), rawHi=Math.max(...rows.map(r=>r.hi));
+  const pad=(rawHi-rawLo||10)*0.15;
+  let lo=rawLo-pad, hi=rawHi+pad;
+  const ticks=niceTicks(lo,hi,4);
+  lo=Math.min(lo,ticks[0]); hi=Math.max(hi,ticks[ticks.length-1]);
+  const sp=(hi-lo)||1;
+  const y=v=>PAD_T+(H-PAD_T-PAD_B)*(1-(v-lo)/sp);
+  const band=(W-PAD_L)/rows.length;
+  const bw=Math.min(24,band-4);
+  const last=rows[rows.length-1];
+  return `<svg viewBox="0 -4 ${W+6} ${H+10}" style="width:100%;height:138px;overflow:visible"
+      role="img" aria-label="Average to maximum heart rate in each of the last ${rows.length} games">
+    ${ticks.map(t=>`<line x1="${PAD_L}" y1="${y(t).toFixed(1)}" x2="${W}" y2="${y(t).toFixed(1)}" class="lc-grid"/>
+      <text x="${PAD_L-7}" y="${(y(t)+3.5).toFixed(1)}" text-anchor="end" class="lc-tick">${fmtN(t)}</text>`).join('')}
+    ${rows.map((r,i)=>{
+      const cx=PAD_L+band*i+band/2, top=y(r.hi), h=Math.max(4,y(r.lo)-y(r.hi));
+      return `<rect x="${(cx-bw/2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}"
+        height="${h.toFixed(1)}" rx="4" fill="var(--ss-red)" opacity="${i===rows.length-1?'1':'.34'}">
+        <title>${Math.round(r.lo)}–${Math.round(r.hi)} bpm</title></rect>`}).join('')}
+    <text x="${W}" y="${(y(last.hi)-7).toFixed(1)}" text-anchor="end" class="lc-val">${Math.round(last.hi)}</text>
+    <text x="${PAD_L}" y="${H+2}" text-anchor="start" class="lc-tick">${rows.length} games ago</text>
+    <text x="${W}" y="${H+2}" text-anchor="end" class="lc-tick">latest</text>
+  </svg>
+  <div class="note" style="padding:6px 0 0">Each bar runs from your average heart rate that game to your
+    maximum, in beats per minute. The last game was ${Math.round(last.lo)}–${Math.round(last.hi)} bpm.</div>`;
 }
 
 /* a donut, for where someone's contributions come from */
@@ -7223,22 +7304,40 @@ function positionSeries(pid){
   return out.length>1?out:null;
 }
 /* a line where lower is better, so the axis is inverted */
+/* The league position chart, with a scale. 1st is at the top, the axis is
+   labelled in places rather than in nothing at all, and the current and best
+   positions carry their number. */
 function positionChart(series){
   if(!series||series.length<2)return '';
-  const W=300,H=96, worst=Math.max(...series.map(s=>s.of),...series.map(s=>s.pos));
-  const y=p=>((p-1)/Math.max(1,worst-1))*H;
-  const pts=series.map((s,i)=>`${(i/(series.length-1))*W},${y(s.pos).toFixed(1)}`).join(' ');
+  const W=300,H=96, PAD_L=34, PAD_B=18, PAD_T=12;
+  const worst=Math.max(...series.map(s=>s.pos)), of=series[series.length-1].of;
+  const lo=1, hi=Math.max(worst+1,3);
+  const y=p=>PAD_T+(H-PAD_T-PAD_B)*((p-lo)/Math.max(1,hi-lo));
+  const x=i=>PAD_L+(W-PAD_L)*(i/Math.max(1,series.length-1));
+  const pts=series.map((s,i)=>`${x(i).toFixed(1)},${y(s.pos).toFixed(1)}`).join(' ');
   const last=series[series.length-1], best=Math.min(...series.map(s=>s.pos));
-  return `<svg viewBox="-4 -10 ${W+8} ${H+20}" style="width:100%;height:120px;overflow:visible">
-    <line x1="0" y1="${y(1).toFixed(1)}" x2="${W}" y2="${y(1).toFixed(1)}"
-      stroke="var(--label3)" stroke-width="1" stroke-dasharray="4 4" opacity=".4"/>
-    <polyline points="${pts}" fill="none" stroke="var(--ln,var(--tint))" stroke-width="3"
+  const bestI=series.findIndex(s=>s.pos===best), lastI=series.length-1;
+  const ticks=[...new Set([1,Math.round((1+hi)/2),hi].filter(t=>t>=1))];
+  const lab=i=>{
+    const anchor=x(i)>W-34?'end':x(i)<PAD_L+16?'start':'middle';
+    return `<text x="${x(i).toFixed(1)}" y="${(y(series[i].pos)-10).toFixed(1)}"
+      text-anchor="${anchor}" class="lc-val">${ordinal(series[i].pos)}</text>`;
+  };
+  return `<svg viewBox="0 -4 ${W+6} ${H+10}" style="width:100%;height:132px;overflow:visible"
+      role="img" aria-label="League position after each gameweek">
+    ${ticks.map(t=>`<line x1="${PAD_L}" y1="${y(t).toFixed(1)}" x2="${W}" y2="${y(t).toFixed(1)}" class="lc-grid"/>
+      <text x="${PAD_L-7}" y="${(y(t)+3.5).toFixed(1)}" text-anchor="end" class="lc-tick">${t===1?'1st':t}</text>`).join('')}
+    <polyline points="${pts}" fill="none" stroke="var(--ln,var(--ss-blue))" stroke-width="2"
       stroke-linecap="round" stroke-linejoin="round"/>
-    ${series.map((sx,i)=>`<circle cx="${((i/(series.length-1))*W).toFixed(1)}" cy="${y(sx.pos).toFixed(1)}"
-      r="${i===series.length-1?4.6:3.6}" fill="var(--ln,var(--tint))"/>`).join('')}
+    ${series.map((sx,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y(sx.pos).toFixed(1)}" r="4"
+      fill="var(--ln,var(--ss-blue))" stroke="var(--card)" stroke-width="2"/>`).join('')}
+    ${lab(lastI)}${bestI!==lastI?lab(bestI):''}
+    <text x="${PAD_L}" y="${H+2}" text-anchor="start" class="lc-tick">GW${series[0].gw}</text>
+    <text x="${W}" y="${H+2}" text-anchor="end" class="lc-tick">GW${last.gw}</text>
   </svg>
-  <div class="note" style="padding:6px 0 0">Position after each gameweek — the dashed line is top.
-    Currently ${ordinal(last.pos)} of ${last.of}${best<last.pos?`, best was ${ordinal(best)}`:''}.</div>`;
+  <div class="note" style="padding:6px 0 0">Where they sat in the table after each gameweek —
+    higher on the chart is higher in the table. Currently ${ordinal(last.pos)} of ${of}${
+    best<last.pos?`, best was ${ordinal(best)}`:''}.</div>`;
 }
 
 
@@ -7271,23 +7370,23 @@ function compareRows(pid){
     <div class="note" style="padding:10px 0 0">The mark on each bar is the squad average.</div></div>`;
 }
 
-/* Where a score sits among everyone who has played, in words. A 94 means
-   little on its own; "top 15%" is immediately legible. */
+/* Where a score sits among everyone who has played.
+   It used to say "TOP 15%" for the good half and "BOTTOM 15%" for the bad one,
+   which describes the same place two different ways — being in the bottom 15%
+   is also being in the top 100%. It now always says the same thing: your place
+   out of everyone who has played. "3rd of 17" cannot be read two ways. */
 function rankBand(pid,key,axes){
   const all=statsAll().filter(x=>x.P>0).map(x=>x.id);
   const scores=all.map(id=>{const a=playerAxes(id);return a?a[key]:null}).filter(v=>v!=null);
   if(scores.length<3)return null;
   const mine=axes[key];
-  /* Ties have to count as half, or a squad where everyone scores 100 reports
-     each of them as mid-table. */
-  const below=scores.filter(v=>v<mine).length;
+  const above=scores.filter(v=>v>mine).length;
   const ties =scores.filter(v=>v===mine).length;
-  const rank=(below+ties/2)/scores.length;      /* 0 = worst, 1 = best */
-  const top=Math.max(1,Math.round((1-rank)*100));
-  if(top<=30) return {t:`TOP ${Math.max(5,Math.round(top/5)*5)}%`,c:'g'};
-  if(top<=60) return {t:`TOP ${Math.round(top/5)*5}%`,c:'b'};
-  return {t:`BOTTOM ${Math.max(5,Math.round((100-top)/5)*5)}%`,c:'a'};
+  const place=above+Math.ceil(ties/2);                 /* 1 = best */
+  const frac=place/scores.length;
+  return {t:`${ord(place)} OF ${scores.length}`, c: frac<=0.33?'g':frac<=0.66?'b':'a'};
 }
+const ord=n=>n+(n%100>=11&&n%100<=13?'TH':({1:'ST',2:'ND',3:'RD'}[n%10]||'TH'));
 
 let STATOPEN=null;
 function toggleStat(k){ STATOPEN = STATOPEN===k ? null : k; render(); }
@@ -7531,7 +7630,7 @@ function vPlayer(pid){
         const ent=Object.entries(ax).sort((a,b)=>b[1]-a[1]);
         const best=ent[0], worst=ent[ent.length-1];
         const tone=v=>v>=70?'var(--ss-green)':v>=45?'var(--ss-gold)':'var(--ss-red)';
-        return `${ssSec('best-defence','Attributes','<span class="ss-note">Out of 100</span>')}
+        return `${ssSec('best-defence','Attributes','<span class="ss-note">Against the squad</span>')}
         <div class="card pad pp-attr">
           ${radarSVG(ax,215)}
           <div class="axbars">${Object.entries(ax).map(([k,v])=>{
@@ -7546,8 +7645,9 @@ function vPlayer(pid){
             <div class="axn-t">${ssNamed('Strongest',24)}<div><span>Strongest</span><b style="color:var(--ss-green)">${best[0]} · ${best[1]}</b></div></div>
             <div class="axn-t">${ssNamed('To work on',24)}<div><span>To work on</span><b style="color:#7A1F2E">${worst[0]} · ${worst[1]}</b></div></div>
           </div>
-          <div class="note" style="padding:10px 0 0">Every score is out of 100, measured against
-            everyone else who has played this season.</div>
+          <div class="note" style="padding:10px 0 0">Each score is the percentage of the squad this
+            player is ahead of on that attribute — 100 is the best in the squad, 50 is mid-table.
+            The place beside it is out of everyone who has played this season.</div>
         </div>`;
       })():''}
 
@@ -7563,7 +7663,9 @@ function vPlayer(pid){
       })()}
 
       ${rs.length>1?`${ssSec('match-rating','Match rating')}
-      <div class="card pad pp-chart" style="--ln:var(--ss-green)">${lineChart(rs,`Each game this season. The dashed line is your average, ${avg.toFixed(1)}.`,avg)}</div>`:''}
+      <div class="card pad pp-chart" style="--ln:var(--ss-green)">${lineChart(rs,
+        `Their rating out of 10 in every game this season. The flat line is their ${avg.toFixed(1)} average.`,
+        +avg.toFixed(1),{xLabels:rs.map((_,i)=>'Game '+(i+1)),alt:'Match rating in each game'})}</div>`:''}
 
       ${(function(){
         const G=m.G, A=m.A||0, P=Math.max(1,m.P);
@@ -7656,21 +7758,16 @@ function vPlayer(pid){
               :`<div><b>${sv.n}</b><span>game${sv.n===1?'':'s'} logged</span></div>`}
           </div>
           ${hrs.length>1?`<div class="phhead">Heart rate ${arrow(tHr)}</div>
-            ${lineChart(hrs,`Average bpm each game. The dashed line is your ${Math.round(avg(hrs))} average.`,avg(hrs))}`:''}
+            <div style="--ln:var(--ss-red)">${lineChart(hrs,`Average beats per minute in each game.`,
+              Math.round(avg(hrs)),{xLabels:hrs.map((_,i)=>'Game '+(i+1)),alt:'Average heart rate each game'})}</div>`:''}
           ${kcals.length>1?`<div class="phhead">Calories ${arrow(tKcal)}</div>
-            ${lineChart(kcals,`What you burned each game.`,avg(kcals))}`:''}
+            <div style="--ln:#E08A00">${lineChart(kcals,`Calories burned in each game.`,
+              Math.round(avg(kcals)),{xLabels:kcals.map((_,i)=>'Game '+(i+1)),alt:'Calories burned each game'})}</div>`:''}
           ${kms.length>1?`<div class="phhead">Distance</div>
-            ${lineChart(kms,`Kilometres covered each game.`,avg(kms))}`:''}
+            <div style="--ln:var(--ss-green)">${lineChart(kms,`Kilometres covered in each game.`,
+              +avg(kms).toFixed(1),{xLabels:kms.map((_,i)=>'Game '+(i+1)),alt:'Kilometres covered each game'})}</div>`:''}
           ${mx.length>1&&hrs.length>1?`<div class="phhead">Effort range</div>
-            <div class="hrband">${acts.slice(-8).map(a=>{
-              const lo=+a.hr||0, hi=+a.maxHr||0;
-              if(!lo||!hi)return '';
-              const top=Math.max(...mx), base=Math.min(...hrs)*0.9;
-              const sp=Math.max(1,top-base);
-              return `<div class="hrb" title="${Math.round(lo)}–${Math.round(hi)} bpm">
-                <i style="bottom:${Math.max(0,100*(lo-base)/sp)}%;height:${Math.max(4,100*(hi-lo)/sp)}%"></i></div>`;
-            }).join('')}</div>
-            <div class="note" style="padding:6px 0 0">Average to maximum heart rate, last ${Math.min(8,acts.length)} games.</div>`:''}
+            ${effortRange(acts.slice(-8))}`:''}
           ${physRows(pid)}
           ${mine?`<button class="btn sec full" style="margin-top:12px" onclick="physAdd('${pid}')">
             + Add numbers for a game</button>`:''}
@@ -9625,9 +9722,17 @@ function walkPrices(){
        are judged against each other. Including the people who did not play
        dragged the average down so far that simply showing up looked elite and
        everybody rose every week. Anyone absent holds their price. */
+    /* THIS gameweek, not the window. The window is how form is measured — the
+       last three weeks of points — but only the people who actually turned out
+       THIS Sunday may be repriced by it. Using the window here meant someone
+       who played in GW1 and sat out GW2 and GW3 still had their price moved
+       every week, because they were still "in the window" and the pool they
+       were being compared against had shifted underneath them. Anyone who did
+       not play on the day holds their price, which is what was always intended
+       and what the note below has always claimed. */
     const appeared=new Set();
-    win.forEach(g=>gamesInGw(g).forEach(x=>
-      [...(x.teamA||[]),...(x.teamB||[])].forEach(pid=>appeared.add(pid))));
+    gamesInGw(gw).forEach(x=>
+      [...(x.teamA||[]),...(x.teamB||[])].forEach(pid=>appeared.add(pid)));
     /* Compare points PER GAME PLAYED, not totals. With ten of thirty out each
        week, a three-week window mixes someone who played once with someone who
        played three times — so totals rewarded turning up rather than playing
@@ -9905,6 +10010,49 @@ function denisGw3(){
   const want=DENIS_GW3.map(n=>(season().players||[]).find(p=>String(p.name||'').trim().toLowerCase()===n.toLowerCase()))
     .filter(Boolean).map(p=>p.id);
   return want.length===DENIS_GW3.length?{m,want}:null;
+}
+/* ---- one-off corrections -------------------------------------------------
+   One tap each, and each disappears the moment it has been applied. Delete an
+   entry from the list once its job is done — nothing else refers to it. */
+const ONE_OFFS=[
+  {id:'rayan12', who:'Rayan', gws:[1,2],
+   t:"Count Rayan's team for GW1 and GW2",
+   d:'He joined in GW3 — his current team gets scored for those two weeks too'}
+];
+function oneOffMgr(o){
+  const f=fpl(), q=String(o.who).toLowerCase();
+  return (f.managers||[]).find(m=>String(m.name||'').toLowerCase().startsWith(q))||null;
+}
+function oneOffNeeded(o){
+  try{
+    const m=oneOffMgr(o); if(!m||!(m.squad||[]).length)return false;
+    const played=playedGws();
+    const gws=o.gws.filter(g=>played.includes(g));
+    if(!gws.length)return false;
+    /* still needed while any of those weeks does not yet score for him */
+    return gws.some(g=>!inGw(m,g)||!(m.history||[]).some(h=>h.gw===g));
+  }catch(e){ return false }
+}
+async function applyOneOff(id){
+  if(!requireAdmin())return;
+  const o=ONE_OFFS.find(x=>x.id===id); if(!o)return;
+  const m=oneOffMgr(o);
+  if(!m){toast(`No fantasy manager called ${o.who}`);return}
+  if(!(m.squad||[]).length){toast(`${m.name} has not picked a team yet`);return}
+  const gws=o.gws.filter(g=>playedGws().includes(g));
+  if(!gws.length){toast('Those gameweeks have not been played yet');return}
+  const names=(m.squad||[]).map(x=>(player(x)||{}).name||'—').join(', ');
+  if(!await askConfirm(o.t,
+     `GW${gws.join(' and GW')} will score from ${names}.\n\nThis is exactly the team ${m.name} has now.`,
+     'Apply'))return;
+  snapshot(o.t);
+  m.firstGw=Math.min(firstGwOf(m),...gws);
+  m.history=(m.history||[]).filter(h=>!gws.includes(h.gw));
+  gws.forEach(g=>m.history.push({gw:g,squad:[...(m.squad||[])],captain:m.captain||null,at:Date.now(),byHand:true}));
+  m.history.sort((a,b)=>a.gw-b.gw);
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  render(); toast(`✅ ${m.name}: GW${gws.join(' and GW')} now count`);
 }
 function gw3FixNeeded(){
   try{
@@ -10513,7 +10661,7 @@ function fplMyTeam(m,locked){
         const blocked = !on && !!inPlay;                 // another chip already has this week
         const tap=on||(left>0&&!blocked);
         return `<div class="row ${tap?'tap':''} ${on?'chip-armed':''} ${blocked?'chip-blocked':''}" onclick="${tap?fn:''}">
-          <div style="font-size:21px;flex:0 0 28px">${icon}</div>
+          <span class="chip-ic">${icon}</span>
           <div class="rt"><div class="r1">${name} ${pips(left)}</div>
             <div class="r2">${on?onText
               :blocked?`${inPlay} is on for GW${next} — one chip a week`
@@ -10522,13 +10670,13 @@ function fplMyTeam(m,locked){
       };
       return `<div class="sechead">Chips <span style="text-transform:none;font-weight:500;color:var(--label3)">${FPL_RULES.chips} of each per season</span></div>
       <div class="card">
-        ${chipRow('🃏','Wildcard',wcL,wcOn,'playWildcard()',
+        ${chipRow(fplChip('wildcard'),'Wildcard',wcL,wcOn,'playWildcard()',
           'Active — tap to cancel and keep the chip',
           'Unlimited free transfers for one set of changes')}
-        ${chipRow('🔥','Triple Captain',tcL,tcOn,'playTripleCaptain()',
+        ${chipRow(fplChip('triple'),'Triple Captain',tcL,tcOn,'playTripleCaptain()',
           `Armed for GW${next} — tap to take it back off`,
           'Your captain scores ×3 instead of ×2', tcPast)}
-        ${chipRow('✨','Double Points',dpL,dpOn,'playDoublePoints()',
+        ${chipRow(fplChip('double'),'Double Points',dpL,dpOn,'playDoublePoints()',
           `Armed for GW${next} — tap to take it back off`,
           'Everything your five score that week counts twice', dpPast)}
       </div>
@@ -11156,6 +11304,16 @@ function chipsUsed(m,gw){
   if((m.wcGws||[]).includes(gw))out.push({e:'⭐',n:'Wildcard'});
   return out;
 }
+/* The three chips get drawn icons rather than emoji. 🔥 was being mapped by
+   the icon pass to the form-guide arrow, which says nothing about tripling a
+   captain. A captain's armband does. */
+const FPL_CHIP={
+  wildcard:['#7A5AF8','<path d="M3 7h3.6l3.2 4.2"/><path d="M14.2 17H21"/><path d="M3 17h3.6l3.2-4.2"/><path d="M14.2 7H21"/><path d="m18.4 4.2 2.6 2.8-2.6 2.8"/><path d="m18.4 14.2 2.6 2.8-2.6 2.8"/>'],
+  triple:['#E4002B','<path d="M4.6 6.8 12 4l7.4 2.8"/><path d="M4.6 6.8v8.4L12 20l7.4-4.8V6.8"/><path d="M14.3 9.6a3 3 0 1 0 0 5"/>'],
+  double:['#BD9A38','<path d="M12 3.2 14 8l5.2.4-4 3.4 1.3 5-4.5-2.7L7.5 16.8l1.3-5-4-3.4L10 8Z"/><path d="M19 17.4v3.4"/><path d="M17.3 19.1h3.4"/>']
+};
+const fplChip=k=>{const [c,d]=FPL_CHIP[k];
+  return `<span class="fplchip" style="background:${c}"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></span>`};
 function chipRow(m,gw){
   const c=chipsUsed(m,gw);
   if(!c.length)return '';
@@ -11661,11 +11819,23 @@ function ratingFor(pid,g,sideHint){
   const aw={ATT:0.55,MID:0.75,DEF:0.85,GK:1.0}[pos]||0.7;
   r += asts*aw;
   if(asts>=3)r+=0.3;
-  /* defending — measured against what a side normally concedes, so keeping it
-     to three in a league averaging five is properly rewarded */
-  const avg=leagueConceded();
+  /* Defending — judged against what THIS game was like, not only against the
+     season.
+     It used to be a flat (leagueAverage − conceded) × 0.55. In a 10-12 shootout
+     that reads as a defensive catastrophe for everyone on the losing side, even
+     though par for that game was eleven goals each: a defender who set up two
+     goals came out on 5.0 because the term hit its floor and cancelled him out.
+     Par is now mostly the game's own level with a pull toward the season's, and
+     the shortfall is PROPORTIONAL — one goal worse than par in a 22-goal game
+     is not the same as one goal worse than par in a 4-goal game. A clean sheet
+     still scores the maximum, and shipping double what the day was worth is
+     still properly punished. */
+  const lAvg=leagueConceded();
+  const gAvg=((g.scoreA||0)+(g.scoreB||0))/2;
+  const par=Math.max(1, 0.7*gAvg + 0.3*lAvg);
+  const rel=(par-ga)/par;                    /* +1 is a clean sheet, 0 is par */
   const dw={GK:1.15,DEF:1.0,MID:0.5,ATT:0.22}[pos]??0.5;
-  r += Math.max(-1.6,Math.min(2.2,(avg-ga)*0.55))*dw;
+  r += Math.max(-1.6,Math.min(2.2,rel*2.2))*dw;
   if(ga===0)r+=0.8*dw;
   if(gf===0&&pos==='ATT')r-=0.4;
   /* leagueConceded() has nothing to average in a cup-only or brand-new season,
@@ -12253,7 +12423,7 @@ function matchPitch(g){
   const cell=r=>{
     const gl=(g.goals||{})[r.id]||0, as=(g.assists||{})[r.id]||0;
     const p=player(r.id)||{name:r.name};
-    const under=(gl||as)?`<span class="bc-pga">${gl?(gl>3?`<svg class="bc-ic"><use href="#bc-ball"/></svg><em>×${gl}</em>`:'<svg class="bc-ic"><use href="#bc-ball"/></svg>'.repeat(gl)):''}${as?'<svg class="bc-ic"><use href="#bc-assist"/></svg>'.repeat(Math.min(as,3)):''}</span>`:'';
+    const under=(gl||as)?`<span class="bc-pga">${'<svg class="bc-ic"><use href="#bc-ball"/></svg>'.repeat(gl)}${'<svg class="bc-ic"><use href="#bc-assist"/></svg>'.repeat(as)}</span>`:'';
     return bcTile(p,r.r,stars.has(r.id),under,`openPlayer('${r.id}')`);
   };
   /* Rows that suit the side's size, never wider than four so nothing crowds,
@@ -12313,9 +12483,10 @@ function vMatch(gid){
     <symbol id="bc-assist" viewBox="-13 -13 26 26"><circle r="12" fill="#C9A227"/><text y="7" font-family="Arial,Helvetica,sans-serif" font-size="19" font-weight="700" fill="#0B1B33" text-anchor="middle">A</text></symbol>
   </defs></svg>`;
   const ball='<svg class="bc-ic"><use href="#bc-ball"/></svg>', ast='<svg class="bc-ic"><use href="#bc-assist"/></svg>';
-  /* phone columns are narrow: past two of a kind, one icon and a count */
-  const icons=(gl,as)=>(gl>2?ball+`<em class="bc-x">×${gl}</em>`:ball.repeat(gl))
-                      +(as>2?ast+`<em class="bc-x">×${as}</em>`:ast.repeat(as));
+  /* One icon per goal and one per assist — seven balls means seven goals.
+     A "×7" makes you stop and decode it; seven balls you just count. The row
+     wraps rather than overflowing when someone has a big day. */
+  const icons=(gl,as)=>ball.repeat(gl)+ast.repeat(as);
   const side=(list,fills,sd)=>{
     const ids=(list||[]).filter(p=>player(p));
     return ids.map(pid=>{const p=player(pid),n=(g.goals&&g.goals[pid])||0,as=(g.assists&&g.assists[pid])||0;
@@ -14763,6 +14934,7 @@ function pickBet(pid,k){
   const m=playerMarkets(pid).find(x=>x.k===k);
   if(!m)return;
   BSLIP.push({pid,k,odds:m.odds,l:m.l,d:m.d||''});
+  BSOPEN=true;                      /* picking something opens the slip */
   haptic('light'); render();
 }
 /* The slip lives outside the main container: .main uses will-change:transform,
@@ -14770,20 +14942,25 @@ function pickBet(pid,k){
    viewport, leaving the slip stranded at the bottom of the page. */
 function paintSlip(){
   const el=$('#slipMount'); if(!el)return;
-  if(VIEW!=='bets'||!BSLIP.length){el.innerHTML=''; BSOPEN=false; return}
+  if(VIEW!=='bets'||!BSLIP.length){el.innerHTML=''; BSOPEN=false; document.body.classList.remove('slipopen'); return}
+  /* The slip opens as soon as there is something on it. Docking is the thing
+     you choose, not the thing you start from — you should be able to see what
+     you have picked and keep picking at the same time. */
   const n=BSLIP.length, odds=slipOdds(), ret=slipReturns();
   const dock=`<button class="bsl-dock" onclick="BSOPEN=true;paintSlip()">
       <span class="bsl-n">${n}</span>
       <span class="bsl-dt"><b>Bet slip</b><i>${BSMODE==='singles'?`${n} single${n===1?'':'s'}`:slipName(n)} · ${odds.toFixed(2)} · returns ${usd(ret)}</i></span>
       <span class="bsl-go">Review <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></span>
     </button>`;
+  document.body.classList.toggle('slipopen',BSOPEN);
   if(!BSOPEN){ el.innerHTML=dock; return }
   const bonus=accaBonus(n);
-  el.innerHTML=`${dock}
-    <div class="bsl-bg" onclick="BSOPEN=false;paintSlip()"></div>
-    <div class="bsl-sheet">
-      <span class="bsl-grab"></span>
-      <div class="bsl-h">${ssTileC('betting',26)}<b>Bet slip</b><span class="bsl-cnt">${n}</span>
+  /* No scrim and no blur: the markets stay live behind the sheet so another
+     leg is one tap away without closing anything. */
+  el.innerHTML=`<div class="bsl-sheet">
+      <button class="bsl-min" onclick="BSOPEN=false;paintSlip()" aria-label="Minimise the slip">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+      <div class="bsl-h">${ssTileC('betting',24)}<b>Bet slip</b><span class="bsl-cnt">${n}</span>
         <button class="bsl-clear" onclick="clearSlip()">Clear all</button></div>
       <div class="seg pp-seg bsl-mode">
         <button class="${BSMODE==='singles'?'on':''}" onclick="BSMODE='singles';paintSlip()">Singles</button>
@@ -16695,8 +16872,8 @@ function vAdmin(){
       <div class="card adm-c">
         ${admRow('best-defence','#0B1B33','Rating check','Who played but has no rating, and why','ratingAudit()','',{attr:' data-admin'})}
         ${admRow('fixtures','#0B1B33','Backdate a late joiner',"Count someone's team from the first gameweek",'fixJoinGw()','',{attr:' data-admin'})}
-        ${mgrs.some(x=>x.teamName)&&playedGws().length?admRow('sunday-fpl','#0B1B33','Teams counted per gameweek',
-          'The squad each manager scored with','gwTeamsSheet()'):''}
+        ${ONE_OFFS.filter(oneOffNeeded).map(o=>admRow('sunday-fpl','#2F6BF6',
+          esc(o.t),esc(o.d),`applyOneOff('${o.id}')`,'',{c:'var(--ss-blue)'})).join('')}
         ${typeof gw3FixNeeded==='function'&&gw3FixNeeded()?admRow('sunday-fpl','#2F6BF6',
           "Apply Denis's GW3 correction",'Nader, Denis, Seb, Talal and Ziyad — one tap','applyDenisGw3()','',{c:'var(--ss-blue)'}):''}
         ${admRow('most-assists','#0B1B33','Who counts in the league table',
