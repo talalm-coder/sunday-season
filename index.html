@@ -1854,17 +1854,155 @@ body[data-shop="arcade"]{--bg:#0B0620;--card:#170F35;--label:#FFD60A;--label2:#F
 .sw-s_super{background:linear-gradient(115deg,#FFF6D8,#F4C048,#fbc2eb,#a1c4fd,#F4C048)}
 
 /* ---- event banner ---- */
-.evb{display:flex;align-items:center;gap:12px;border-radius:14px;padding:12px 14px;margin-bottom:14px;color:#fff}
-.evb-e{font-size:26px}
+/* ============ ADMIN ============ */
+.adm-lock{text-align:center;padding:26px 18px 20px}
+.adm-lock-i{display:flex;justify-content:center;margin-bottom:12px}
+.adm-lock-t{font-size:19px;font-weight:800;color:var(--ss-ink)}
+.adm-lock-s{font-size:13.5px;color:var(--ss-muted);margin:6px 0 20px;line-height:1.4}
+.adm-lab{display:block;text-align:left;font-size:10.5px;font-weight:800;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ss-muted);margin-bottom:7px}
+.adm-pw{position:relative;display:flex;align-items:center;margin-bottom:14px}
+.adm-pw input{padding:14px 44px;font-size:16px;letter-spacing:.14em;background:var(--ss-soft);
+  border:1.5px solid var(--ss-hair);border-radius:12px}
+.adm-pw input:focus{border-color:var(--ss-navy)}
+.adm-pw-i{position:absolute;left:14px;display:flex;color:var(--ss-muted);pointer-events:none}
+.adm-pw-e{position:absolute;right:8px;width:32px;height:32px;display:flex;align-items:center;
+  justify-content:center;border:0;background:none;color:var(--ss-muted);border-radius:8px}
+html[data-theme="dark"] .adm-pw input{background:#1C1C1E;border-color:#2A2A2D}
+.btn.pri.adm-unlock{margin-bottom:14px;background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .btn.pri.adm-unlock{background:#12213A}
+.adm-keep{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--ss-ink);
+  text-align:left}
+/* the global input reset strips the tick, so put it back */
+.adm-keep input[type="checkbox"]{width:19px;height:19px;flex:0 0 19px;margin:0;padding:0;border-radius:5px;
+  -webkit-appearance:none;appearance:none;background:var(--ss-soft);border:1.5px solid var(--ss-hair);
+  position:relative}
+.adm-keep input[type="checkbox"]:checked{background:var(--ss-blue);border-color:var(--ss-blue)}
+.adm-keep input[type="checkbox"]:checked:after{content:"";position:absolute;left:6px;top:2.5px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2.2px 2.2px 0;transform:rotate(42deg)}
+html[data-theme="dark"] .adm-keep input[type="checkbox"]{background:#1C1C1E;border-color:#3A3A3D}
+.adm-lock-n{padding:14px 0 0;text-align:left}
+
+.adm-out{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);color:#fff;
+  border:0;border-radius:20px;padding:7px 13px;font-size:12.5px;font-weight:800}
+.adm-out svg{width:14px;height:14px}
+
+.adm-strip{background:var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px);
+  border-radius:16px;overflow:hidden;margin-bottom:16px;color:#fff}
+.adm-strip-h{display:flex;align-items:flex-start;gap:11px;padding:13px 14px 11px}
+.adm-strip-h span{min-width:0}
+.adm-strip-h b{display:block;font-size:14.5px;font-weight:800}
+.adm-strip-h i{display:block;font-style:normal;font-size:12px;color:rgba(255,255,255,.66);margin-top:2px;line-height:1.35}
+.adm-strip-c{display:flex;border-top:1px solid rgba(255,255,255,.10)}
+.adm-strip-c>div{flex:1;padding:9px 6px 11px;text-align:center}
+.adm-strip-c>div+div{border-left:1px solid rgba(255,255,255,.10)}
+.adm-strip-c b{display:block;font-size:15px;font-weight:900;color:var(--ss-gold)}
+.adm-strip-c span{display:block;font-size:8.5px;font-weight:800;letter-spacing:.09em;
+  color:rgba(255,255,255,.58);margin-top:3px}
+
+.adm-c{margin-bottom:16px}
+.row.adm-r{display:flex;align-items:center;gap:12px;padding:12px 14px;min-height:58px}
+.row.adm-r+.row.adm-r{border-top:1px solid var(--ss-hair)}
+.row.adm-r .adm-t{flex:0 0 auto;display:flex}
+.row.adm-r .rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.row.adm-r .r1{font-size:15px;font-weight:700;color:var(--ss-ink)}
+.row.adm-r .r2{font-size:12.5px;color:var(--ss-muted);line-height:1.35}
+.adm-sel{width:auto;flex:0 0 auto;background:var(--ss-soft);font-size:13.5px;font-weight:700;
+  padding:7px 10px;border-radius:9px}
+html[data-theme="dark"] .adm-sel{background:#2A2A2D}
+.adm-chev{display:flex;transition:transform .2s}
+.adm-chev.open{transform:rotate(90deg)}
+.adm-chip{flex:0 0 auto;font-size:11px;font-weight:800;padding:4px 9px;border-radius:7px}
+.adm-chip.ok{background:color-mix(in srgb,var(--ss-green) 15%,transparent);color:var(--ss-green)}
+.adm-chip.warn{background:color-mix(in srgb,#E08A00 18%,transparent);color:#B36E00}
+.adm-chip.crit{background:color-mix(in srgb,var(--ss-red) 15%,transparent);color:var(--ss-red)}
+.adm-note{padding:0 4px 10px;margin-top:-6px}
+.adm-qr{text-align:center;margin-bottom:16px}
+.adm-qr-u{font-size:13px;font-weight:600;margin:10px 0 4px;word-break:break-all}
+.adm-foot{text-align:center;padding:22px 4px 8px}
+
+/* the danger zone sits on its own tint so it never reads as an ordinary group */
+.card.adm-danger{background:#FBF0F2}
+html[data-theme="dark"] .card.adm-danger{background:#2A1419}
+.card.adm-danger .row.adm-r+.row.adm-r{border-top-color:rgba(228,0,43,.18)}
+.adm-act{flex:0 0 auto;font-size:14px;font-weight:800;color:var(--ss-red)}
+
+/* ============ SEASONAL EVENTS ============
+   Decoration only. Nothing below sets a design token, so the app's palette is
+   the same on every day of the year. Every element here is aria-hidden and
+   cannot be clicked. */
+.evb{position:relative;display:flex;align-items:center;gap:12px;border-radius:14px;
+  padding:12px 14px;margin-bottom:14px;color:#fff;overflow:hidden}
+.evb-tile{flex:0 0 36px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;
+  justify-content:center;background:rgba(255,255,255,.16)}
+.evb-t{min-width:0}
 .evb-t b{display:block;font-size:15px;font-weight:800}
 .evb-t span{display:block;font-size:12.5px;opacity:.78;margin-top:1px}
-.evb-halloween{background:linear-gradient(110deg,#FF6B00,#4A1D6E)}
-.evb-xmas{background:linear-gradient(110deg,#C8102E,#0B6E3F)}
-.evb-newyear{background:linear-gradient(110deg,#1c1c1e,#5E5CE6)}
-.evb-finale{background:linear-gradient(110deg,#F4C048,#8A6E13);color:#3B2D04}
-body[data-event="halloween"]{--tint:#FF6B00}
-body[data-event="xmas"]{--tint:#C8102E}
-body[data-event="finale"]{--tint:#C9A227}
+.evb-finale .evb-tile{background:rgba(212,175,55,.18)}
+.evb-finale .evb-t span{opacity:.72}
+
+/* --- the hero layer: ornaments only in the safe bands --- */
+.ev-layer{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.ev-o{position:absolute;display:block;transform:translate(-50%,-50%);line-height:0}
+.ev-o .ev-g{display:block}
+.ev-scrim{position:absolute;inset:0;background:var(--ev-scrim);pointer-events:none}
+.ev-year{position:absolute;right:10px;bottom:2px;font-size:46px;font-weight:900;
+  letter-spacing:-.04em;color:rgba(255,255,255,.10);line-height:1}
+/* the hero's own text must stay above every ornament */
+.sky-hero-t,.sky-hero-b,.sky-hero-row,.sky-hero-r,.sky-hero-s,.sky-hero-meta{z-index:2}
+/* the engine-turned finish: concentric rings and a fine diagonal rule, so the
+   panel has a bevel rather than being flat */
+.sky-hero.ev-guil:after{content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:
+    repeating-radial-gradient(ellipse 150% 100% at 22% 50%,rgba(247,231,168,.08) 0 1px,transparent 1px 13px),
+    repeating-linear-gradient(115deg,rgba(247,231,168,.07) 0 1px,transparent 1px 26px)}
+body[data-event="finale"] .view.active .wrap > .sky-hero::after,
+body[data-event="finale"] .sky-hero.ev-guil::after{border-bottom:0}
+
+/* --- one ornament per section label --- */
+.ev-sec{display:inline-flex;align-items:center;margin-left:7px;line-height:0;pointer-events:none}
+
+/* --- the page pattern: behind every card, showing through the gaps --- */
+.ev-bg{position:fixed;inset:0;z-index:0;pointer-events:none;background-repeat:repeat;
+  background-position:0 0}
+/* only #app needs lifting: the nav, drawer, sheets and fab are already
+   positioned with their own z-index, well above the pattern */
+#app{position:relative;z-index:1}
+
+/* --- Christmas: a hat on every rank and position number ---
+   Centred on the pill, overlapping it by half the brim so the number stays
+   completely readable underneath. */
+.ev-hatted{position:relative;overflow:visible}
+.ev-hat{position:absolute;left:50%;top:0;transform:translate(-50%,-72%) rotate(-8deg);
+  transform-origin:50% 100%;pointer-events:none;z-index:3;overflow:visible}
+td.pos.ev-hatted,.ev-hatted{overflow:visible}
+
+/* --- falling snow --- */
+.ev-snow{position:fixed;inset:0;z-index:2;pointer-events:none;overflow:hidden}
+.ev-fl{position:absolute;top:-6%;line-height:0;animation:ev-fall linear infinite}
+@keyframes ev-fall{0%{transform:translateY(-8vh) translateX(0)}
+  50%{transform:translateY(46vh) translateX(14px)}
+  100%{transform:translateY(108vh) translateX(-8px)}}
+
+/* --- New Year confetti: one run, whole page --- */
+.ev-conf{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+.ev-conf i{position:absolute;top:-4%;border-radius:1px;animation:ev-conf 6s linear forwards}
+@keyframes ev-conf{0%{transform:translateY(-6vh) rotate(0deg);opacity:1}
+  100%{transform:translateY(106vh) rotate(720deg);opacity:.9}}
+
+@media(prefers-reduced-motion:reduce){
+  .ev-snow,.ev-conf{display:none!important}
+  .ev-fl,.ev-conf i{animation:none!important}
+}
+
+/* --- Season Finale: the two pieces of chrome that go metallic --- */
+body[data-event="finale"] .rk.gold,body[data-event="finale"] .rankpill.gold,
+body[data-event="finale"] .lg-pts.gold,body[data-event="finale"] .pts.gold{
+  background:linear-gradient(135deg,#F7E7A8 0%,#D4AF37 38%,#9A7526 62%,#EAD08A 100%)!important;
+  box-shadow:inset 0 0 0 1px #8A6820;color:#241C0B!important}
+body[data-event="finale"] .sky-lead,body[data-event="finale"] .lead-slab{
+  background:linear-gradient(135deg,#F7E7A8 0%,#D4AF37 38%,#9A7526 62%,#EAD08A 100%)!important;
+  color:#241C0B!important}
 /* ---- awards night ---- */
 .awn{position:fixed;inset:0;z-index:200;background:radial-gradient(120% 80% at 50% 0,#2a1c00,#0b0b0d 72%);
   display:flex;align-items:center;justify-content:center;padding:24px;animation:in .3s ease;cursor:pointer}
@@ -2932,8 +3070,9 @@ html.scrolled .navbar{border-bottom:.5px solid var(--sep)}
 /* The header blur again. The earlier fix removed backdrop-filter from .navbar,
    but #navMount is the element that is actually sticky and it was still
    compositing. Both are now solid. */
-#navMount,#navMount .navbar{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+#navMount,#navMount .navbar:not(.scrolled){backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
   background:var(--bg)!important;-webkit-font-smoothing:antialiased}
+#navMount .navbar.scrolled{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 
 /* Third pass on the soft header. With no blur left in the cascade, what
    remained was the sticky layer itself: iOS re-rasterises a sticky element at
@@ -3250,7 +3389,7 @@ html{scroll-padding-top:var(--navh,48px)}
 :root{--ss-gold:#BD9A38;--ss-navy:#0B1B33;--ss-blue:#2F6BF6;--ss-green:#22A25E;--ss-red:#E4002B;--ss-plum:#5B3A8C;
   --ss-ink:#111318;--ss-label:#3D4250;--ss-muted:#6B7080;--ss-hair:#E6E6EA;--ss-soft:#F4F4F7}
 [data-theme="dark"]{--ss-ink:#F2F2F5;--ss-label:#C7CAD3;--ss-muted:#8E93A1;--ss-hair:#2C2C2E;--ss-soft:#2A2A2D}
-.view.active .wrap > .sky-hero{border-bottom:3px solid #C9A227}
+.view.active .wrap > .sky-hero{border-bottom:3px solid var(--ev-rail,#C9A227)}
 .view.active .wrap > .sky-hero::after{display:none}
 .sechead{letter-spacing:1.2px;font-weight:700}
 .ss-note{text-transform:none;letter-spacing:0;font-weight:500;color:var(--ss-muted);font-size:12px}
@@ -3502,8 +3641,8 @@ html[data-theme="dark"] .formcard.fm2 .ftag{background:#1E3A6E;color:#9CBBFF}
 details.drop>summary .ss-tile{flex:0 0 auto}
 .sb-pick .sechead{padding-top:16px}
 .sb-chip{border:2px solid var(--ss-hair);background:var(--card);font-size:14.5px;font-weight:800;color:var(--ss-ink);padding:8px 14px 8px 9px;border-radius:24px}
-.sb-chip.on{border-color:var(--ss-green);background:#E9F6EE}
-html[data-theme="dark"] .sb-chip.on{background:#173824}
+.sb-chip.on{border-color:var(--ss-navy);background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .sb-chip.on{border-color:#243C63;background:#12213A;color:#fff}
 .sb-head{background:var(--ss-navy);border-radius:14px;padding:14px 16px}
 .sb-head .sb-h-av .av,.sb-head .crest{box-shadow:0 0 0 2px var(--ss-gold)}
 .sb-h-t b{font-size:20px} .sb-h-t span{font-size:13px}
@@ -4243,6 +4382,229 @@ html[data-theme="dark"] .gwt-p{background:#2A2A2D}
 .lg4-also-p b{font-size:13.5px;font-weight:800;color:var(--ss-ink)}
 .lg4-also-p i{font-style:normal;font-size:11.5px;color:var(--ss-muted)}
 html[data-theme="dark"] .lg4-also-p{background:#1C1C1E;border-color:#2C2C2E}
+/* ============ SQUAD · filters, sort and the grid ============ */
+.chips.sq-pos-chips{display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.chips.sq-pos-chips::-webkit-scrollbar{display:none}
+.chips.sq-pos-chips button{flex:0 0 auto;padding:9px 18px;border-radius:9px;border:0;background:var(--ss-soft);
+  font-size:14px;font-weight:800;color:var(--ss-ink)}
+.chips.sq-pos-chips button.on{background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .chips.sq-pos-chips button{background:#1C1C1E;color:var(--ss-ink)}
+html[data-theme="dark"] .chips.sq-pos-chips button.on{background:#12213A;color:#fff}
+
+.sq-tools{display:flex;align-items:stretch;gap:8px;margin-bottom:12px}
+.sq-tools .findbox{flex:1;margin:0}
+.sq-tb{flex:0 0 46px;width:46px;display:flex;align-items:center;justify-content:center;border:0;border-radius:11px;
+  background:var(--ss-soft);color:var(--ss-ink)}
+.sq-tb svg{width:21px;height:21px}
+.sq-tb.on{background:var(--ss-navy);color:#fff}
+.sq-tb.pri{background:var(--ss-blue);color:#fff}
+html[data-theme="dark"] .sq-tb:not(.pri){background:#1C1C1E}
+html[data-theme="dark"] .sq-tb.on{background:#12213A;color:#fff}
+
+.sq-sort{padding:6px 0;margin-bottom:14px}
+.sq-sort-h{font-size:10.5px;font-weight:800;letter-spacing:.11em;text-transform:uppercase;color:var(--ss-muted);padding:8px 14px 6px}
+.sq-so{display:flex;align-items:center;gap:12px;width:100%;border:0;background:transparent;padding:13px 14px;text-align:left;
+  font-size:15.5px;font-weight:700;color:var(--ss-ink)}
+.sq-so+.sq-so{border-top:1px solid var(--ss-hair)}
+.sq-so>span:not(.ss-tile){flex:1;min-width:0}
+.sq-so>svg{width:21px;height:21px;flex:0 0 21px;color:var(--ss-muted)}
+.sq-so.on>svg{color:var(--ss-blue)}
+.sq-so.on{color:var(--ss-blue)}
+.sq-so .sq-tick{display:flex;color:var(--ss-blue)}
+.sq-so .sq-tick svg{width:18px;height:18px}
+
+.sechead.sq-gh{margin-top:2px}
+.sq-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.sqc{position:relative;display:flex;flex-direction:column;align-items:center;border:0;border-radius:14px;overflow:hidden;
+  padding:12px 10px 0;min-height:186px;background-size:cover;background-position:center;color:#fff;text-align:center}
+.sqc-scrim{position:absolute;inset:0;background:rgba(0,0,0,.34);pointer-events:none}
+.sqc>*:not(.sqc-scrim):not(.sqc-tl):not(.sqc-tr){position:relative;z-index:1}
+.sqc-tl{position:absolute;left:11px;top:10px;display:flex;flex-direction:column;align-items:flex-start;line-height:1;z-index:2}
+.sqc-tl b{font-size:24px;font-weight:900;letter-spacing:-.02em}
+.sqc-tl i{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.08em;margin-top:3px;opacity:.86}
+.sqc-tr{position:absolute;right:11px;top:10px;display:flex;flex-direction:column;align-items:flex-end;gap:3px;z-index:2}
+.sqc-tr i{font-style:normal;font-size:10.5px;font-weight:800;opacity:.86}
+.sqc-av{margin-top:26px;display:flex;align-items:center;justify-content:center}
+.sqc-ini{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.22);font-size:20px;font-weight:800}
+.sqc-nm{margin-top:9px;font-size:13.5px;font-weight:900;letter-spacing:.02em;text-transform:uppercase;
+  max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sqc-like{font-size:11px;font-weight:600;opacity:.78;margin-top:1px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sqc-ft{margin-top:auto;width:calc(100% + 20px);margin-left:-10px;background:rgba(0,0,0,.34);
+  padding:7px 8px;font-size:11px;font-weight:800;color:rgba(255,255,255,.86)}
+/* a light finish flips every piece of ink, so nothing is ever white on white */
+.sqc.lite{color:#111318}
+.sqc.lite .sqc-tl i,.sqc.lite .sqc-tr i,.sqc.lite .sqc-like{color:rgba(17,19,24,.62);opacity:1}
+.sqc.lite .sqc-ini{background:rgba(17,19,24,.14);color:#111318}
+.sqc.lite .sqc-ft{background:rgba(255,255,255,.62);color:rgba(17,19,24,.78)}
+
+/* ============ BETTING · build round ============ */
+.bt-seg button.on{background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .seg.pp-seg.bt-seg button.on{background:var(--ss-navy);color:#fff}
+.bt-lab{font-size:11.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ss-muted);margin:0 0 8px}
+/* the selected player */
+.bt-head{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;margin:12px 0 4px;
+  background:var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px);color:#fff}
+.bt-head .bt-h-av{flex:0 0 auto;display:flex}
+.bt-head .bt-h-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.bt-head .bt-h-t b{font-size:20px;font-weight:800;color:#fff;display:flex;align-items:center;gap:7px}
+.bt-head .bt-h-t .shirtno{background:rgba(255,255,255,.18);color:#fff;font-size:12px;height:22px;min-width:26px;border-radius:6px}
+.bt-head .bt-h-t i{font-style:normal;font-size:12.5px;color:rgba(255,255,255,.72)}
+html[data-theme="dark"] .bt-head{background:#12213A repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+/* a market row */
+.card.bt-list{padding:0;overflow:hidden}
+.bt-row{display:flex;align-items:center;gap:10px;width:100%;min-height:62px;padding:10px 12px 10px 14px;background:none;border:0;border-top:.5px solid var(--sep);text-align:left}
+.card.bt-list .bt-row:first-child{border-top:0}
+.bt-m{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.bt-m b{font-size:16px;font-weight:700;color:var(--ss-ink)}
+.bt-m i{font-style:normal;font-size:13px;font-weight:500;color:var(--ss-muted)}
+.bt-o{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;min-width:74px;justify-content:center;
+  background:var(--ss-green);color:#fff;font-size:17px;font-weight:800;padding:9px 12px;border-radius:11px;font-variant-numeric:tabular-nums}
+.bt-o svg{width:14px;height:14px}
+.bt-row.on .bt-o{background:var(--ss-navy);box-shadow:inset 0 0 0 2px var(--ss-green);color:#fff}
+html[data-theme="dark"] .bt-row.on .bt-o{background:#0B1B33}
+/* the slip, empty */
+.bsl-empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;margin-top:14px;padding:26px 18px;
+  border:1.5px dashed var(--ss-hair);border-radius:16px;background:var(--ss-soft)}
+.bsl-empty b{font-size:17px;font-weight:800;color:var(--ss-ink)}
+.bsl-empty i{font-style:normal;font-size:13px;color:var(--ss-muted);line-height:1.5;max-width:300px}
+html[data-theme="dark"] .bsl-empty{background:#1C1C1E;border-color:#2C2C2E}
+/* the slip, docked */
+.bsl-dock{position:fixed;left:10px;right:10px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:60;
+  display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;border:0;border-radius:15px;text-align:left;
+  background:var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px);
+  box-shadow:0 10px 26px rgba(11,27,51,.34)}
+.bsl-n{flex:0 0 26px;width:26px;height:26px;border-radius:50%;background:linear-gradient(150deg,#D8B45A,#BD9A38);color:var(--ss-navy);
+  display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:900}
+.bsl-dt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bsl-dt b{font-size:15px;font-weight:800;color:#fff}
+.bsl-dt i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--ss-gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bsl-go{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;background:var(--ss-blue);color:#fff;font-size:14px;font-weight:800;padding:9px 13px;border-radius:11px}
+.bsl-go svg{width:14px;height:14px}
+/* the slip, expanded */
+.bsl-bg{position:fixed;inset:0;z-index:70;background:rgba(11,27,51,.42)}
+.bsl-sheet{position:fixed;left:0;right:0;bottom:0;z-index:71;background:var(--card);border-radius:20px 20px 0 0;
+  padding:8px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:88vh;overflow:auto;box-shadow:0 -12px 34px rgba(0,0,0,.28)}
+html[data-theme="dark"] .bsl-sheet{background:#1C1C1E}
+.bsl-grab{display:block;width:36px;height:4px;border-radius:2px;background:var(--ss-hair);margin:0 auto 12px}
+.bsl-h{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.bsl-h b{font-size:18px;font-weight:800;color:var(--ss-ink)}
+.bsl-cnt{width:22px;height:22px;border-radius:50%;background:var(--ss-blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800}
+.bsl-clear{margin-left:auto;background:none;border:0;color:#E4002B;font-size:14.5px;font-weight:800;padding:4px}
+.seg.pp-seg.bsl-mode{margin-bottom:12px}
+.seg.pp-seg.bsl-mode button.on{background:#fff;color:var(--ss-ink);box-shadow:0 1px 3px rgba(11,27,51,.16)}
+html[data-theme="dark"] .seg.pp-seg.bsl-mode button.on{background:#3A3A3D;color:#fff;box-shadow:none}
+.bsl-legs{display:flex;flex-direction:column}
+.bsl-leg{display:flex;align-items:center;gap:10px;padding:10px 0;border-top:.5px solid var(--sep)}
+.bsl-leg:first-child{border-top:0}
+.bsl-lt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bsl-lt b{font-size:15px;font-weight:700;color:var(--ss-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bsl-lt i{font-style:normal;font-size:12px;color:var(--ss-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bsl-lo{flex:0 0 auto;font-size:15px;font-weight:800;color:var(--ss-ink);font-variant-numeric:tabular-nums}
+.bsl-x{flex:0 0 26px;width:26px;height:26px;border-radius:50%;border:0;background:var(--ss-soft);color:var(--ss-muted);font-size:13px}
+html[data-theme="dark"] .bsl-x{background:#2A2A2D}
+.bsl-stake{display:flex;align-items:stretch;gap:8px;margin:12px 0 10px}
+.bsl-amt{flex:1;display:flex;flex-direction:row;align-items:baseline;justify-content:flex-start;gap:10px;background:var(--ss-soft);border:0;border-radius:12px;padding:8px 14px;text-align:left}
+.bsl-amt i{font-style:normal;font-size:11.5px;font-weight:700;color:var(--ss-muted)}
+.bsl-amt b{font-size:22px;font-weight:800;color:var(--ss-ink)}
+.bsl-q{flex:0 0 auto;background:var(--ss-soft);border:0;border-radius:12px;padding:0 14px;font-size:14px;font-weight:800;color:var(--ss-ink)}
+.bsl-q.on{background:var(--ss-navy);color:#fff}
+html[data-theme="dark"] .bsl-amt,html[data-theme="dark"] .bsl-q{background:#2A2A2D}
+.bsl-bonus{display:flex;align-items:center;gap:8px;background:color-mix(in srgb,var(--ss-gold) 16%,transparent);border-radius:11px;padding:10px 12px;margin-bottom:10px;min-height:40px}
+.bsl-bonus b{font-size:13.5px;font-weight:800;color:var(--ss-ink)}
+.bsl-bonus i{font-style:normal;margin-left:auto;font-size:13px;font-weight:800;color:#7A5D0E}
+html[data-theme="dark"] .bsl-bonus i{color:#F0D27A}
+.bsl-tot{display:flex;align-items:flex-end;justify-content:space-between;padding:8px 2px 12px;border-top:.5px solid var(--sep)}
+.bsl-tot span{display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;color:var(--ss-muted)}
+.bsl-tot b{font-size:24px;font-weight:800;color:var(--ss-ink);font-variant-numeric:tabular-nums}
+.bsl-tot .r{text-align:right} .bsl-tot b.up{color:var(--ss-green)}
+.bsl-go2{background:var(--ss-blue)}
+.bsl-note{font-size:12px;color:var(--ss-muted);text-align:center;padding:10px 4px 0;line-height:1.5}
+/* my bets */
+.bt-strip{display:flex;border-radius:14px;overflow:hidden;margin-bottom:10px;
+  background:var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px);border-bottom:2px solid var(--ss-gold)}
+.bt-strip>div{flex:1;padding:12px 8px;text-align:center;border-left:1px solid rgba(255,255,255,.12)}
+.bt-strip>div:first-child{border-left:0}
+.bt-strip b{display:block;font-size:19px;font-weight:800;color:#fff}
+.bt-strip b.up{color:#4ADE80} .bt-strip b.dn{color:#FF7A8A}
+.bt-strip span{display:block;font-size:9.5px;font-weight:800;letter-spacing:.1em;color:rgba(255,255,255,.62);margin-top:2px}
+html[data-theme="dark"] .bt-strip{background:#12213A repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+.card.bt-pnl{display:flex;padding:0;margin-bottom:10px}
+.bt-pnl>div{flex:1;padding:12px 6px;text-align:center;border-left:.5px solid var(--sep)}
+.bt-pnl>div:first-child{border-left:0}
+.bt-pnl b{display:block;font-size:19px;font-weight:800;color:var(--ss-ink)}
+.bt-pnl span{display:block;font-size:9.5px;font-weight:800;letter-spacing:.09em;color:var(--ss-muted);margin-top:2px}
+.bt-best{display:flex;align-items:center;flex-wrap:wrap;gap:8px;background:color-mix(in srgb,var(--ss-gold) 14%,transparent);border-radius:12px;padding:11px 13px;margin-bottom:6px}
+.bt-best b{font-size:13.5px;font-weight:800;color:var(--ss-ink)}
+.bt-best i{font-style:normal;margin-left:auto;font-size:15px;font-weight:800;order:2}
+.bt-best>span:not(.ss-tile){order:3}
+.bt-best i.up{color:var(--ss-green)}
+.bt-best>span:not(.ss-tile){font-size:12px;color:var(--ss-muted)}
+.card.bt-open,.card.bt-past{padding:0;overflow:hidden}
+.bt-ob{display:flex;align-items:center;gap:10px;padding:12px 14px;border-top:.5px solid var(--sep)}
+.bt-ob:first-child{border-top:0}
+.bt-obt{flex:1;min-width:0}
+.bt-obt .r1{font-size:16px;font-weight:700;color:var(--ss-ink)}
+.bt-obt .r2{font-size:12.5px;color:var(--ss-muted);margin-top:3px}
+.bt-cancel{flex:0 0 auto;background:none;border:1.5px solid #E4002B;color:#E4002B;font-size:13.5px;font-weight:800;padding:7px 14px;border-radius:20px}
+.bt-lock{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;background:var(--ss-soft);color:var(--ss-muted);font-size:13px;font-weight:800;padding:7px 12px;border-radius:20px}
+.bt-lock svg{width:13px;height:13px}
+html[data-theme="dark"] .bt-lock{background:#2A2A2D}
+.bt-res{flex:0 0 auto;font-size:14px;font-weight:800;padding:6px 11px;border-radius:9px}
+.bt-res.won{background:var(--ss-green);color:#fff}
+.bt-res.lost{background:#E4002B;color:#fff}
+.bt-res.void{background:var(--ss-soft);color:var(--ss-muted)}
+html[data-theme="dark"] .bt-res.void{background:#2A2A2D}
+.bt-chev{flex:0 0 auto;display:inline-flex;color:var(--ss-muted)}
+.bt-bust{background:color-mix(in srgb,#E4002B 8%,var(--card));border:1.5px solid color-mix(in srgb,#E4002B 40%,transparent);border-radius:14px;padding:14px;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.bt-bust b{font-size:16px;font-weight:800;color:var(--ss-ink)}
+.bt-bust i{flex:0 0 100%;font-style:normal;font-size:12.5px;color:var(--ss-muted)}
+.bt-top{background:#E4002B;color:#fff;margin-top:4px}
+html[data-theme="dark"] .bt-bust{background:#2A1418}
+/* week */
+.gwbar.bt-gwbar{margin-bottom:12px}
+.card.bt-week{padding:0;overflow:hidden}
+.bt-week .bw{padding:12px 14px;border-top:.5px solid var(--sep)}
+.bt-week .bw:first-child{border-top:0}
+.bt-week .bw-h{display:flex;align-items:center;gap:10px}
+.bw-ht{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bw-ht b{font-size:17px;font-weight:800;color:var(--ss-ink)}
+.bw-ht i{font-style:normal;font-size:12.5px;color:var(--ss-muted)}
+.bt-week .bw-tag{flex:0 0 auto;font-size:13.5px;font-weight:800;padding:5px 10px;border-radius:9px}
+.bt-week .bw-won .bw-tag{background:color-mix(in srgb,var(--ss-green) 18%,transparent);color:var(--ss-green)}
+.bt-week .bw-lost .bw-tag{background:color-mix(in srgb,#E4002B 16%,transparent);color:#B3122F}
+.bt-week .bw-open .bw-tag{background:color-mix(in srgb,var(--ss-blue) 16%,transparent);color:var(--ss-blue)}
+.bt-week .bw-void .bw-tag{background:var(--ss-soft);color:var(--ss-muted)}
+.bt-week .bw-legs{margin:8px 0 0;padding-left:40px;display:flex;flex-direction:column;gap:4px}
+.bt-week .bw-leg{display:flex;align-items:baseline;gap:8px;font-size:13.5px;font-weight:700;color:var(--ss-ink)}
+.bt-week .bw-leg span{flex:1;min-width:0}
+.bt-week .bw-leg i{font-style:normal;font-weight:800;color:var(--ss-muted);font-variant-numeric:tabular-nums}
+html[data-theme="dark"] .bt-week .bw-lost .bw-tag{color:#FF9AAB}
+/* leaders */
+.bt-lead{display:flex;align-items:stretch;border-radius:16px;overflow:hidden;margin-bottom:14px;border:2px solid var(--ss-gold);
+  background:var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+html[data-theme="dark"] .bt-lead{background:#12213A repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px)}
+.bt-lead-l{flex:1;min-width:0;padding:14px;display:flex;flex-direction:column;gap:3px}
+.bt-lead-k{font-size:10.5px;font-weight:800;letter-spacing:.12em;color:var(--ss-gold)}
+.bt-lead-l b{font-size:26px;font-weight:800;color:#fff;line-height:1.05}
+.bt-lead-r{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.78)}
+.bt-lead-s{flex:0 0 118px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(150deg,#D8B45A,#BD9A38);color:var(--ss-navy);clip-path:polygon(16px 0,100% 0,100% 100%,0 100%)}
+.bt-lead-s b{font-size:24px;font-weight:900} .bt-lead-s span{font-size:9.5px;font-weight:800;letter-spacing:.1em;opacity:.8}
+.card.bt-book{padding:0;overflow:hidden}
+.bt-br{display:flex;align-items:center;gap:10px;padding:11px 14px;border-top:.5px solid var(--sep)}
+.bt-br:first-child{border-top:0}
+.bt-br.me{background:color-mix(in srgb,var(--ss-gold) 11%,var(--card))}
+.bt-bt{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.bt-bt b{font-size:17px;font-weight:800;color:var(--ss-ink)}
+.bt-bt i{font-style:normal;font-size:12.5px;color:var(--ss-muted)}
+.bt-bt em{font-style:normal;color:var(--ss-blue);font-weight:700}
+.bt-bp{flex:0 0 auto;text-align:right}
+.bt-bp b{display:block;font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.bt-bp span{display:block;font-size:9px;font-weight:800;letter-spacing:.1em;color:var(--ss-muted)}
+.bt-bp.up b{color:var(--ss-green)} .bt-bp.dn b{color:#B3122F} .bt-bp.flat b{color:var(--ss-muted)}
+html[data-theme="dark"] .bt-bp.dn b{color:#FF7A8A}
+html[data-theme="dark"] .bt-br.me{background:color-mix(in srgb,var(--ss-gold) 15%,#1C1C1E)}
 /* round 4 item 2 */
 .vsplit span.ss-gi{display:inline-flex;font-size:13px}
 .fx-w{position:relative;flex:1 1 calc(50% - 4px);min-width:0;display:flex}
@@ -4251,6 +4613,48 @@ html[data-theme="dark"] .lg4-also-p{background:#1C1C1E;border-color:#2C2C2E}
 @media(min-width:641px){.fx-w{flex:1 1 calc(33.333% - 6px)}}
 .ss-ball{width:14px;height:14px}
 .chips.ch-picks.lg-comp button{padding:5px 12px 5px 5px;font-size:13.5px}
+
+/* ============ DRAWER AND TOP BAR ============ */
+/* The drawer is 70% of the viewport, capped at 300px on a wide phone. Same
+   header, same rows in the same order, same Log a game button — 22px narrower
+   with rows at 40px. */
+.side{width:70vw;flex-basis:70vw;max-width:300px}
+/* the header is unchanged, but at 70% the wordmark needs its second line back */
+.side .brand span{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.05}
+@media(min-width:900px){ .side{width:252px;flex-basis:252px;max-width:none} }
+.side nav button{min-height:40px;padding:0 12px;gap:11px}
+.side nav button>span,.side nav button>b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.side nav button{white-space:nowrap;overflow:hidden}
+@media(max-height:700px){ .side nav button{min-height:38px;padding:0 12px} }
+/* dimmed, not switched off */
+.drawer-bg{background:rgba(11,27,51,.42)}
+
+/* --- the bar: 48px, plain glyphs, no pills and no circles --- */
+.navbar{min-height:48px;padding:calc(4px + env(safe-area-inset-top)) 10px 4px;gap:4px;
+  transition:background .22s,border-color .22s}
+.navbar .menubtn{width:36px;height:36px;flex:0 0 36px;padding:0;gap:0;background:none;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;color:var(--ss-ink);font-size:0}
+.navbar .menubtn svg{width:20px;height:20px;stroke:currentColor}
+.navbar .nb-name{font-size:16px;font-weight:800;color:var(--ss-ink);opacity:0;transform:translateX(-4px);
+  transition:opacity .22s,transform .22s;pointer-events:none;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.navbar .nb-r{gap:2px}
+.navbar .iconbtn{width:36px;height:36px;flex:0 0 36px;border-radius:9px;background:none}
+.navbar .iconbtn svg{width:19px;height:19px;stroke:var(--ss-ink)}
+/* an 8px dot with a ring in the bar's own colour, so it reads as a badge */
+.bell-dot{position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;
+  background:var(--ss-red);box-shadow:0 0 0 1.5px var(--nav-ring,var(--card))}
+
+/* --- scrolled: navy, a 2px gold hairline, and the page name --- */
+/* #navMount .navbar sets the background, so the scrolled state has to match
+   that specificity to win */
+#navMount .navbar.scrolled{background:var(--ss-navy)!important;border-bottom:2px solid var(--ss-gold);--nav-ring:#0B1B33}
+.navbar.scrolled .menubtn,.navbar.scrolled .nb-name{color:#fff}
+.navbar.scrolled .menubtn svg,.navbar.scrolled .iconbtn svg{stroke:rgba(255,255,255,.92)}
+.navbar.scrolled .nb-name{opacity:1;transform:none}
+html[data-theme="dark"] #navMount .navbar.scrolled{background:#12213A!important;--nav-ring:#12213A}
+
+
 </style>
 </head>
 <body>
@@ -4637,7 +5041,7 @@ function ssSecIcon(label){
 const SS_NAV={home:'home',squad:'squad',fpl:'sunday-fpl',career:'career-mode',bets:'betting',shop:'shop',stats:'stats',sky:'sky-sports',history:'hall-of-fame',admin:'admin'};
 function ssTile(key,size,done){ const e=SS_ICONS.sections[key]||SS_ICONS.menu[key]; return e?SS_ICONS.tile(e,size||22,ssDark(),done!==false):'' }
 /* section label: 22px tile + the label text (the caps styling comes from .sechead) */
-function ssSec(key,label,extra){ const e=ssSecIcon(label); return `<div class="sechead"><span class="ss-sl">${e?SS_ICONS.tile(e,22,ssDark(),true):ssTile(key,22)}<span>${label}</span></span>${extra||''}</div>` }
+function ssSec(key,label,extra,col){ const e=ssSecIcon(label); const t=col?ssTileC(key,22,col,col==='#BD9A38'):(e?SS_ICONS.tile(e,22,ssDark(),true):ssTile(key,22)); return `<div class="sechead"><span class="ss-sl">${t}<span>${label}</span></span>${extra||''}</div>` }
 /* career level tile: tier colour by tens, the number in a small pill, ringed in the tile colour */
 function ssLevelTile(n,size){
   const e=SS_ICONS.levels[Math.max(1,Math.min(40,n))-1]; if(!e)return '';
@@ -5859,10 +6263,43 @@ function go(v){haptic('light');
   if(!wideScreen())closeDrawer();
   render();window.scrollTo(0,0)}
 const chev='<svg class="chev" viewBox="0 0 8 13"><path d="M1.5 1.5L6.5 6.5l-5 5"/></svg>';
+/* The bar is 48px: a plain hamburger in a 36px tap target on the left, and the
+   bell and the moon as plain glyphs in 36px targets on the right — no pills,
+   no circles. Once the hero has scrolled out of view the bar turns navy, takes
+   a 2px gold hairline and carries the page name beside the hamburger. */
+const NAV_TITLE={home:'Super Sunday',squad:'Squad',league:'League',fpl:'Sunday FPL',career:'Career',
+  bets:'Betting',shop:'Shop',stats:'Stats',sky:'Sky Sports',history:'Hall of Fame',admin:'Admin',
+  player:'Player',pcareer:'Career',match:'Match',comps:'Cups',games:'Who Am I?',seasonView:'Season'};
+const navTitle=()=>NAV_TITLE[VIEW]||'Super Sunday';
 function navbar(back,action){return `<div class="navbar">${back?`<button class="backbtn" onclick="${back.on}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>${esc(back.label)}</button>`
-    :`<button class="menubtn" onclick="toggleDrawer()"><svg viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>Menu</button>`}
-  <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}${bellIcon()}<button class="iconbtn themeIcon" onclick="toggleTheme()"></button></div></div>`}
+    :`<button class="menubtn" aria-label="Menu" onclick="toggleDrawer()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+      <span class="nb-name">${esc(navTitle())}</span>`}
+  <div class="nb-r">${action?`<button class="navaction" data-admin onclick="${action.on}">${esc(action.label)}</button>`:''}${bellIcon()}<button class="iconbtn themeIcon" aria-label="Theme" onclick="toggleTheme()"></button></div></div>`}
+/* The navy state comes in when the hero's bottom edge passes the top of the
+   viewport, and goes back to the light bar when it returns. A page with no
+   hero is navy from the start. */
+function navScrollPass(){
+  const bar=document.querySelector('.navbar'); if(!bar)return;
+  const hero=document.querySelector('.view.active .sky-hero');
+  const on = hero ? hero.getBoundingClientRect().bottom <= bar.getBoundingClientRect().bottom
+                  : !!document.querySelector('.view.active');
+  bar.classList.toggle('scrolled',on);
+}
+let NAV_TICK=false;
+addEventListener('scroll',()=>{ if(NAV_TICK)return; NAV_TICK=true;
+  requestAnimationFrame(()=>{NAV_TICK=false;try{navScrollPass()}catch(e){}}) },{passive:true});
 
+/* The red dot means there is something to read, not that alerts are switched
+   on — a permanently-on dot is a dot nobody looks at. It clears when the
+   notifications sheet is opened. */
+function unreadAlerts(){
+  try{
+    const last=+(localStorage.getItem('ss_alerts_seen')||0);
+    const n=(season().log||[]).filter(x=>x.t>last).length;
+    return n>0 && PUSH_ON==='on';
+  }catch(e){ return false }
+}
+function markAlertsSeen(){ try{localStorage.setItem('ss_alerts_seen',String(Date.now()))}catch(e){} }
 /* The bell sits next to the theme toggle. It only appears once you have
    signed in with your code, because there is nobody to notify otherwise. */
 function bellIcon(){
@@ -5871,14 +6308,14 @@ function bellIcon(){
   const on = PUSH_ON==='on';
   const off = !!pushBlockedReason();
   return `<button class="iconbtn bellbtn${on?' on':''}" title="${on?'Alerts are on':'Turn on match alerts'}"
-    onclick="bellTap()" aria-label="${on?'Alerts are on':'Turn on match alerts'}">
+    onclick="markAlertsSeen();bellTap()" aria-label="${on?'Alerts are on':'Turn on match alerts'}">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
       stroke-linecap="round" stroke-linejoin="round">
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
       <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
       ${off?'<path d="M3 3l18 18" stroke-width="2.1"/>':''}
     </svg>
-    ${on?'<i class="bell-dot"></i>':''}
+    ${unreadAlerts()?'<i class="bell-dot"></i>':''}
   </button>`;
 }
 /* The bell only ever turns alerts ON. There is no off switch here on purpose —
@@ -5963,9 +6400,10 @@ function render(){ try{applySeasonTint()}catch(e){}
   try{paintFab()}catch(e){}
   try{ if((VIEW==='league'&&LMODE==='fixtures')||(VIEW==='home'&&HTAB==='fixtures'))focusFixtureSearch() }catch(e){}
   try{injectStyleCSS();applyShopTheme();syncThemeColour()}catch(e){}
-  try{applyEvent()}catch(e){}
   try{ssEmptyPass()}catch(e){}
   try{ssHeadPass();ssGlyphPass();ssSegPass()}catch(e){}
+  try{applyEvent()}catch(e){}
+  try{navScrollPass()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
 /* segments that don't fit at 390 scroll sideways with a fade at the edge and keep the active tab in view */
 function ssSegPass(){
@@ -6014,6 +6452,12 @@ const SS_GLYPH={'⚽':['top-scorers'],'🅰️':['most-assists'],'🅰':['most-a
   '🏃':['form-guide'],'🎩':['career-mode'],'👻':['career-mode'],'🦖':['career-mode'],'🔺':['career-mode'],'🎮':['career-mode'],'🪜':['career-mode'],
   '📊':['stats'],'🏟':['fixtures'],'🏟️':['fixtures'],'☀️':['fixtures'],'🎰':['betting'],'💸':['betting'],'🧱':['best-defence'],'🚀':['form-guide'],'👥':['squad'],'🥅':['top-scorers'],'🌅':['@First ever game'],'🗓️':['fixtures'],'🗓':['fixtures'],'✨':['@Every moment'],'🎉':['@Days to remember'],'✅':['form-guide'],'💪':['@Best win rate'],'💎':['@Player ratings'],'🧊':['@Struggle together','#2F6BF6'],'☁️':['admin'],'📄':['stats'],'📸':['@Preview card'],'💾':['admin'],'✏️':['sunday-fpl'],'👀':['stats'],'🔁':['form-guide'],'🎽':['squad'],'📋':['stats'],'⚔️':['@Rivalries'],'⚔':['@Rivalries'],'⚖️':['squad'],'⛳':['top-scorers'],'📐':['stats'],'🧠':['@Insights'],'🧩':['squad'],'🛠️':['admin'],'💥':['@Kicked on'],'🌍':['@Everyone']};
 const SS_GLYPH_RE=new RegExp('('+Object.keys(SS_GLYPH).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')','gu');
+const ADM_GL={
+  lock:'<rect x="4.5" y="10.5" width="15" height="10.5" rx="2.4"/><path d="M8 10.5V7.4a4 4 0 0 1 8 0v3.1"/>',
+  eye:'<path d="M2.2 12s3.6-6.2 9.8-6.2S21.8 12 21.8 12s-3.6 6.2-9.8 6.2S2.2 12 2.2 12Z"/><circle cx="12" cy="12" r="2.9"/>',
+  eyeoff:'<path d="M3 3l18 18"/><path d="M10.2 6a9.8 9.8 0 0 1 1.8-.2c6.2 0 9.8 6.2 9.8 6.2a17 17 0 0 1-3.3 4"/><path d="M6.4 8.1A17.4 17.4 0 0 0 2.2 12s3.6 6.2 9.8 6.2a9.6 9.6 0 0 0 3.4-.6"/><path d="M9.6 9.8a2.9 2.9 0 0 0 4 4"/>'
+};
+const ssGlyph=k=>`<svg class="adm-gl" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ADM_GL[k]||''}</svg>`;
 function ssGlyphSvg(key){ const e=key[0]==='@'?ssSecIcon(key.slice(1)):(SS_ICONS.sections[key]||SS_ICONS.menu[key]); return e?`<svg class="ss-ball" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${e.svg}</svg>`:'' }
 function ssGlyphPass(){
   if(!SS_VIEWS.includes(VIEW))return;
@@ -6427,6 +6871,89 @@ function clearFilters(){FF='all';FPLAYER='all';FRESULT='all';FSEARCH='';FSORT='n
 
 /* ============ SQUAD ============ */
 let SQQ='';
+/* ---- Squad: position filter, sort and the grid of mini cards ----
+   The mini card is painted from the SAME two values the Shop's STYLES entry
+   already defines for the player's equipped finish — the gradient it uses for
+   the profile background and the rim it uses for the profile frame. Nothing is
+   added to STYLES and nothing in the Shop changes. */
+let SQPOS='All', SQSORT='rating', SQVIEW='list', SQSORTOPEN=false;
+const SQ_GL=(d)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const SQ_SORT_GL=SQ_GL('<path d="M4 6h16"/><path d="M7 12h10"/><path d="M10 18h4"/>');
+const SQ_GRID_GL=SQ_GL('<rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/>');
+const SQ_LIST_GL=SQ_GL('<path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>');
+const SQ_TICK_GL=SQ_GL('<path d="m5 12.5 4.5 4.5L19 7"/>');
+const SQ_SORTS=[
+  ['name','Name A–Z',  '<path d="M4 6h13"/><path d="M4 12h9"/><path d="M4 18h5"/>'],
+  ['rating','Rating',  '<polygon points="12,3.4 14.3,9.2 20.5,9.6 15.7,13.6 17.3,19.6 12,16.3 6.7,19.6 8.3,13.6 3.5,9.6 9.7,9.2"/>'],
+  ['form','Form',      '<path d="m3 17 6-6 4 4 7.5-7.5"/><path d="M15 7h6v6"/>'],
+  ['played','Games played','<rect x="3.5" y="5" width="17" height="16" rx="2.4"/><path d="M3.5 10h17"/><path d="M8 3v4"/><path d="M16 3v4"/>'],
+  ['goals','Goals',    '<circle cx="12" cy="12" r="8.6"/><polygon points="12,8.6 15.2,10.9 14,14.7 10,14.7 8.8,10.9"/>']];
+/* Whether a finish is light or dark. STYLES carries no ink field, so rather
+   than adding one this is read back out of the gradient's own colour stops. */
+let STYLE_LIGHT_C=null;
+function styleLight(){
+  if(STYLE_LIGHT_C)return STYLE_LIGHT_C;
+  const lum=h=>{const c=[1,3,5].map(k=>parseInt(h.substr(k,2),16));
+    const f=v=>{v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)};
+    return .2126*f(c[0])+.7152*f(c[1])+.0722*f(c[2])};
+  const o={};
+  STYLES.forEach(x=>{const h=((x.g+' '+x.rim).match(/#[0-9a-fA-F]{6}/g)||[]);
+    o[x.id]= h.length ? (h.reduce((t,c)=>t+lum(c),0)/h.length)>=0.50 : false});
+  /* Atomic and Logofractor are full-spectrum conics: no single ink reads on
+     every sector of them, so they keep the dark treatment the profile card
+     already uses — the 34% scrim and white — rather than a new colour. */
+  o.atomic=false; o.logo=false;
+  return (STYLE_LIGHT_C=o);
+}
+/* Nothing equipped falls back to the rating tier. Gold and Silver are the
+   Shop's own records; steel is the grid's own neutral for an unrated player. */
+const SQ_STEEL={g:'linear-gradient(150deg,#6E7683,#454C57 60%,#2C3039)',rim:'#8A919C'};
+function sqFinish(pid,m){
+  const c=equipped(pid,'card');
+  if(c){ const st=c.replace('s_',''); const sty=STYLE_BY[st];
+    if(sty)return {sty,light:!!styleLight()[st]} }
+  const o=m&&m.P?m.index:0;
+  if(o>=80)return {sty:STYLE_BY.gold,   light:true};
+  if(o>=60)return {sty:STYLE_BY.silver, light:true};
+  return {sty:SQ_STEEL, light:false};
+}
+function sqCard(p,m){
+  const f=sqFinish(p.id,m), c=clubOf(p), r=rtg(p), no=shirtOf(p);
+  const o=m&&m.P?m.index:'—', P=m?m.P:0;
+  const ps=p.ps&&PS_BY[p.ps]&&SS_ICONS.playstyles[p.ps];
+  return `<button class="sqc ${f.light?'lite':''}" onclick="openPlayer('${p.id}')"
+    aria-label="${esc(p.name)}"
+    style="background-image:${f.sty.g};box-shadow:0 0 0 2px ${f.sty.rim},0 6px 18px rgba(0,0,0,.16)">
+    ${f.light?'':'<i class="sqc-scrim" aria-hidden="true"></i>'}
+    <span class="sqc-tl"><b>${o}</b><i>${esc(p.pos||'--')}</i></span>
+    <span class="sqc-tr">${ps?SS_ICONS.diamond(SS_ICONS.playstyles[p.ps],24,f.light):''}${no?`<i>#${no}</i>`:''}</span>
+    <span class="sqc-av">${c?crest(c,56):`<span class="sqc-ini">${esc(initials(p.name))}</span>`}</span>
+    <span class="sqc-nm">${esc(p.name)}</span>
+    ${r?`<span class="sqc-like">${esc(r)}</span>`:''}
+    <span class="sqc-ft">${P} game${P===1?'':'s'} · ${m?m.pts:0} pts</span>
+  </button>`;
+}
+function sqSortSheet(){
+  if(!SQSORTOPEN)return '';
+  return `<div class="card sq-sort"><div class="sq-sort-h">Sort by</div>
+    ${SQ_SORTS.map(([k,l,ic])=>`<button class="sq-so ${SQSORT===k?'on':''}"
+      onclick="SQSORT='${k}';SQSORTOPEN=false;render()">${SQ_GL(ic)}
+      <span>${l}</span>${SQSORT===k?`<i class="sq-tick">${SQ_TICK_GL}</i>`:''}</button>`).join('')}
+  </div>`;
+}
+const sqSortLabel=()=>(SQ_SORTS.find(x=>x[0]===SQSORT)||SQ_SORTS[1])[1].toLowerCase();
+function sqSorted(list,st){
+  const of=id=>st.find(x=>x.id===id)||{P:0,pts:0,G:0,index:0,form:0};
+  const by={
+    name:(a,b)=>a.name.localeCompare(b.name),
+    rating:(a,b)=>(of(b.id).P?of(b.id).index:-1)-(of(a.id).P?of(a.id).index:-1)||a.name.localeCompare(b.name),
+    form:(a,b)=>of(b.id).form-of(a.id).form||a.name.localeCompare(b.name),
+    played:(a,b)=>of(b.id).P-of(a.id).P||a.name.localeCompare(b.name),
+    goals:(a,b)=>of(b.id).G-of(a.id).G||a.name.localeCompare(b.name)
+  }[SQSORT]||((a,b)=>a.name.localeCompare(b.name));
+  return list.slice().sort((a,b)=>(a.active===false)-(b.active===false)||by(a,b));
+}
+
 /* Every screen opens with the same broadcast-style banner instead of a plain
    black heading, then one line of live context underneath. The eyebrow carries
    whatever is current — the matchday, the season, the count. */
@@ -6439,6 +6966,7 @@ function pageBanner(title,eyebrow,opt){
     ${top?`<div class="sky-hero-t">${top}</div>`:''}
     <div class="sky-hero-row">
       <div class="sky-hero-b">${esc(title)}</div>
+      ${o.right?`<div class="sky-hero-r">${o.right}</div>`:''}
       ${o.rv!=null?`<div class="sky-hero-r">
         <div class="sky-hero-rv">${esc(String(o.rv))}</div>
         <div class="sky-hero-rl">${esc(o.rl||'')}</div></div>`:''}
@@ -6450,7 +6978,9 @@ function vSquad(){
   const S=season(),st=statsAll();
   const all=[...S.players].sort((a,b)=>(a.active===false)-(b.active===false)||a.name.localeCompare(b.name));
   const q=(SQQ||'').toLowerCase().trim();
-  const list=q?all.filter(p=>p.name.toLowerCase().includes(q)||(p.pos||'').toLowerCase()===q):all;
+  let list=q?all.filter(p=>p.name.toLowerCase().includes(q)||(p.pos||'').toLowerCase()===q):all;
+  if(SQPOS!=='All')list=list.filter(p=>(p.pos||'MID')===SQPOS);
+  list=sqSorted(list,st);
   $('#navMount').innerHTML=navbar();
   app().innerHTML=`<div class="view active">
     <div class="wrap">${cloudBanner()}
@@ -6466,16 +6996,29 @@ function vSquad(){
         <div id="tacBody">${TAC==='formations'?tacFormations():TAC==='board'?tacBoard():TAC==='balance'?tacBalance():TAC==='setpiece'?tacSetpiece():tacTips()}</div>
       `:`
       <button class="btn pri full" data-admin style="margin-bottom:16px" onclick="editPlayer(null)">Add player</button>
-      ${all.length>8?`<input class="findbox" id="sqfind" placeholder="Search by name or position…" value="${esc(SQQ)}"
-        oninput="SQQ=this.value;render();const e=$('#sqfind');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length)}" autocomplete="off">`:''}
+      <div class="chips sq-pos-chips">${['All','DEF','MID','ATT','GK'].map(k=>
+        `<button class="${SQPOS===k?'on':''}" onclick="SQPOS='${k}';render()">${k}</button>`).join('')}</div>
+      <div class="sq-tools">
+        ${all.length>8?`<input class="findbox" id="sqfind" placeholder="Search by name or position…" value="${esc(SQQ)}"
+          oninput="SQQ=this.value;render();const e=$('#sqfind');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length)}" autocomplete="off">`:'<span style="flex:1"></span>'}
+        <button class="sq-tb ${SQSORTOPEN?'on':''}" aria-label="Sort" title="Sort"
+          onclick="SQSORTOPEN=!SQSORTOPEN;render()">${SQ_SORT_GL}</button>
+        <button class="sq-tb pri" aria-label="${SQVIEW==='grid'?'List view':'Grid view'}"
+          title="${SQVIEW==='grid'?'List view':'Grid view'}"
+          onclick="SQVIEW='${SQVIEW==='grid'?'list':'grid'}';render()">${SQVIEW==='grid'?SQ_LIST_GL:SQ_GRID_GL}</button>
+      </div>
+      ${sqSortSheet()}
       ${q&&!list.length?`<div class="findnone">Nobody matches “${esc(SQQ)}”</div>`:''}
-      ${list.length?`<div class="card sq-list">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);const n=shirtOf(p);
+      ${list.length&&SQVIEW==='grid'?`<div class="sechead sq-gh"><span class="ss-sl"><span>Grid view</span></span><span class="ss-note">Sorted by ${sqSortLabel()}</span></div>
+        <div class="sq-grid">${list.map(p=>sqCard(p,st.find(x=>x.id===p.id))).join('')}</div>`:''}
+      ${list.length&&SQVIEW!=='grid'?`<div class="card sq-list">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);const n=shirtOf(p);
         return `<div class="row tap sq-row" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
         ${avatar(p,44)}<div class="rt"><div class="r1">${n?`<span class="sq-no">${n}</span>`:''}<span class="sq-name">${esc(p.name)}</span>${p.nation?' '+p.nation:''}${p.pos?` <span class="pill sq-pos ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
         <div class="r2">${r?`${esc(r)} · `:''}${m.P} game${m.P===1?'':'s'} · ${m.pts} pts${
           stravaFor(p.id).length?` · <span class="stmark">🏃 ${stravaFor(p.id).length}</span>`:''}</div></div>
-        ${p.ps&&PS_BY[p.ps]?`<span class="squadps" title="${esc(PS_BY[p.ps].name)}">${psDiamond(p.ps,40)}</span>`:''}${chev}</div>`}).join('')}</div>`
-      :`<div class="empty"><div class="ee">👥</div><h3>No players yet</h3><p>Add your regulars — more can be added at the venue.</p></div>`}
+        ${p.ps&&PS_BY[p.ps]?`<span class="squadps" title="${esc(PS_BY[p.ps].name)}">${psDiamond(p.ps,40)}</span>`:''}${chev}</div>`}).join('')}</div>`:''}
+      ${!list.length&&!q?(all.length?`<div class="findnone">Nobody in ${SQPOS}</div>`
+        :`<div class="empty"><div class="ee">👥</div><h3>No players yet</h3><p>Add your regulars — more can be added at the venue.</p></div>`):''}
       `}
     </div></div>`;
   if(SQTAB==='tactics'&&TAC==='board')wireBoard();
@@ -7920,7 +8463,7 @@ async function pushDeadline(){
     .map(m=>m.pid);
   if(!late.length){ toast('Everyone has picked'); return }
   await pushSend(`Pick your team · GW${gw}`,
-    'You have not set a side yet. Tap to sort it.','deadline',{url:'/',pids:late});
+    `You have not set a side yet — teams lock at ${SUNDAY_LOCK_LABEL} Sunday. Tap to sort it.`,'deadline',{url:'/',pids:late});
   toast(`Nudged ${late.length}`);
 }
 
@@ -9314,10 +9857,9 @@ function fplResync(){
 }
 
 /* ---------- how scoring is fixed in time ----------
-   There is no lock and no deadline. You can change your team whenever you like.
-   The moment the admin logs a game, a snapshot of every team is taken, and that
-   snapshot is what scores for that gameweek. Later edits only affect future
-   gameweeks, so nobody can react to a result — and nobody gets shut out either. */
+   Teams lock at SUNDAY_LOCK_HOUR on Sunday, Dubai time. The moment the admin
+   logs the game a snapshot of every team is taken, that snapshot is what scores
+   for the gameweek, and teams open again for the week after. */
 /* Teams freeze at the Sunday lock and open again the moment that week's game
    is logged — the same window the bets use, so nobody can react to a result. */
 function fplLocked(){
@@ -9650,11 +10192,11 @@ function fplRules(compact){
     <div class="sechead">Transfers &amp; deadlines</div>
     <div class="card pad">
       <div class="note" style="padding:0;line-height:1.75">
-        📅 <b>No deadline to miss.</b> Change your team whenever you like. Whatever you have confirmed when the admin logs the next game is the team that scores for it — later changes only count from the following game.<br><br>
+        📅 <b>Teams lock at ${SUNDAY_LOCK_LABEL} on Sunday, Dubai time.</b> Change your team as often as you like until then. Whatever is confirmed at the lock is the team that scores for that gameweek, and teams open again the moment the game is logged.<br><br>
         🔁 You get <b>${R.transfersPerWeek} free transfers every gameweek</b>.<br><br>
         <b>They roll over.</b> Don't use them and they stack up, to a maximum of <b>${R.transferBank} in the bank</b> — so you could sit still for two gameweeks and then make four changes at once. Once you're on ${R.transferBank} you stop accruing, so there's no point hoarding beyond that.<br><br>
         <b>Why it works this way:</b> prices move every week. A fixed weekly allowance would force you into a rushed swap the moment someone went cold. Banking lets you wait, watch a run develop, and then act properly.<br><br>
-        Building your first team is free, and transfers are <b>unlimited until the first game is logged</b> — so change your mind as often as you like before Sunday.<br><br>
+        Building your first team is free, and transfers are <b>unlimited until the first game is logged</b> — so change your mind as often as you like before the ${SUNDAY_LOCK_LABEL} lock.<br><br>
         💷 <b>Prices move every gameweek</b> based on how a player is scoring compared with everyone else. Range £${R.minPrice}m–£${R.maxPrice}m.
       </div>
     </div>
@@ -12714,38 +13256,414 @@ function momentCard(m,pid,full){
 }
 
 /* ============ SEASONAL EVENTS ============
-   Purely date-driven, so it turns itself on and off. */
-const EVENTS=[
-  {id:'halloween',n:'Halloween',e:'🎃',from:'10-25',to:'11-01',
-   line:'Spooky season. Score and the lights flicker.'},
-  {id:'xmas',     n:'Christmas', e:'🎄',from:'12-01',to:'12-31',
-   line:'Sunday football in December. The best kind.'},
-  {id:'newyear',  n:'New Year',  e:'🎆',from:'12-31',to:'01-02',
-   line:'New year, same excuses.'},
-  {id:'finale',   n:'Season Finale',e:'🏆',from:'05-15',to:'05-31',
-   line:'The run-in. Everything is decided from here.'},
-];
-function mmdd(d){ return String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0') }
-/* Only the four dated events below. There is no surprise day — nothing here
-   may ever restyle the app on a date the calendar above does not name. */
-function activeEvent(){
-  if(typeof EVENT_FORCE!=='undefined'&&EVENT_FORCE)
-    return EVENTS.find(x=>x.id===EVENT_FORCE)||null;
-  const t=mmdd(new Date());
-  return EVENTS.find(e=>e.from<=e.to ? (t>=e.from&&t<=e.to) : (t>=e.from||t<=e.to))||null;
+   Eight events on a fixed calendar, read in UAE time (UTC+4) so a Sunday in
+   Dubai is the Sunday the app decorates. An event runs 00:00 to 23:59 on its
+   own days.
+
+   THE APP NEVER CHANGES COLOUR. Nothing here touches a design token, a card,
+   a table, a chart, a button or a piece of text. An event may:
+     a. leave the palette exactly as it is                     — always
+     b. recolour the HERO, and nothing else                    — some events
+     c. put ornaments in the hero's safe bands                 — above y=20
+        (nothing may cross the title)                             or below y=92
+     d. put ONE ornament on a section label
+     e. tile a background pattern at 23px on a 44px grid, 15-18%, behind
+        every card at z-index 0, so it only shows through the gaps
+     f. be aria-hidden and pointer-events:none, all of it
+     g. stand still under prefers-reduced-motion
+   Everything runs off EVENTS and activeEvent()/applyEvent(). */
+
+/* Dubai is UTC+4 all year, so this needs no timezone database. */
+const EV_OFF=4*3600e3;
+function evNow(){ return new Date(Date.now()+EV_OFF) }
+function mmdd(d){ return String(d.getUTCMonth()+1).padStart(2,'0')+'-'+String(d.getUTCDate()).padStart(2,'0') }
+/* Easter is the one moveable feast: anonymous Gregorian computus. */
+function easterMmdd(y){
+  const a=y%19,b=Math.floor(y/100),c=y%100,d=Math.floor(b/4),e=b%4,
+        f=Math.floor((b+8)/25),g=Math.floor((b-f+1)/3),h=(19*a+b-d-g+15)%30,
+        i=Math.floor(c/4),k=c%4,l=(32+2*e+2*i-h-k)%7,m=Math.floor((a+11*h+22*l)/451),
+        mo=Math.floor((h+l-7*m+114)/31),da=((h+l-7*m+114)%31)+1;
+  return String(mo).padStart(2,'0')+'-'+String(da).padStart(2,'0');
 }
+const EVENTS=[
+  {id:'halloween',n:'Halloween',      e:'🎃',from:'10-24',to:'11-01',
+   line:'Relegation zone: the scariest place in the app.'},
+  {id:'natday',   n:'UAE National Day',e:'🇦🇪',from:'11-28',to:'12-04',
+   line:"55th anniversary of the nation's founding."},
+  {id:'xmas',     n:'Christmas',      e:'🎄',from:'12-05',to:'12-31',
+   line:'Sunday football in December. The best kind.'},
+  {id:'newyear',  n:'New Year',       e:'🎆',from:'01-01',to:'01-04',
+   line:'New year, same excuses.'},
+  {id:'ramadan',  n:'Ramadan',        e:'🌙',from:'02-06',to:'03-07',
+   line:'Kick-off moves to post-sunset.'},
+  {id:'eid',      n:'Eid Mubarak',    e:'🌙',from:'03-08',to:'03-15',
+   line:'Same time, same pitch. Bring whoever is visiting.'},
+  {id:'easter',   n:'Easter Sunday',  e:'🐰',easter:true,
+   line:'Happy Easter.'},
+  {id:'finale',   n:'Season Finale',  e:'🏆',from:'05-01',to:'05-31',
+   line:'Two weeks. Everything is decided from here.'},
+];
 let EVENT_FORCE=null;
+function activeEvent(){
+  if(EVENT_FORCE) return EVENTS.find(x=>x.id===EVENT_FORCE)||null;
+  const d=evNow(), t=mmdd(d), ey=easterMmdd(d.getUTCFullYear());
+  return EVENTS.find(e=>e.easter ? t===ey
+    : (e.from<=e.to ? (t>=e.from&&t<=e.to) : (t>=e.from||t<=e.to)))||null;
+}
 function applyEvent(){
   const ev=activeEvent();
   document.body.dataset.event=ev?ev.id:'';
+  evPaint();
   return ev;
 }
+function evReduced(){ try{return matchMedia('(prefers-reduced-motion: reduce)').matches}catch(_){return false} }
+
+/* ---- the ornament set ---- (24-unit box, stroke or fill as marked) */
+const EV_GL={
+  /* Halloween */
+  cobweb:['s','M1 1v22M1 1h22M1 1 23 23','M1 7a18 18 0 0 1 16 16M1 13a10 10 0 0 1 10 10M1 19a4 4 0 0 1 4 4'],
+  skull:['f','M12 2a8 8 0 0 0-8 8v4l2 2v3a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2v-3l2-2v-4a8 8 0 0 0-8-8Zm-3.2 8.6a1.9 1.9 0 1 1 0 3.8 1.9 1.9 0 0 1 0-3.8Zm6.4 0a1.9 1.9 0 1 1 0 3.8 1.9 1.9 0 0 1 0-3.8ZM12 15.4l1.2 2.2h-2.4Z'],
+  headstone:['f','M6 22V9a6 6 0 0 1 12 0v13Zm5-11v2H9v2h2v3h2v-3h2v-2h-2v-2Z'],
+  moon:['f','M12 3a9 9 0 1 0 9 9 9 9 0 0 0-9-9Zm-2.6 3.3a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2Zm5.8 1.4a2.3 2.3 0 1 1 0 4.6 2.3 2.3 0 0 1 0-4.6Zm-4.4 6.1a1.9 1.9 0 1 1 0 3.8 1.9 1.9 0 0 1 0-3.8Z'],
+  candle:['f','M12 1c1.6 1.8 2.4 3 2.4 4A2.4 2.4 0 0 1 12 7.4 2.4 2.4 0 0 1 9.6 5c0-1 .8-2.2 2.4-4ZM8 9h8v13H8Z'],
+  cauldron:['f','M3 10h18v2a9 9 0 0 1-18 0Zm3-3h12v2H6Zm1.5-4 1.7 3H7.4Zm9 0 1.7 3h-1.8Z'],
+  cat:['f','M5 9 4 3l4 3h8l4-3-1 6a8 8 0 0 1-14 0Zm3.6.8a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8Zm6.8 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8ZM12 13.6l1 1.6h-2Z'],
+  bat:['f','M12 8c1.2 0 2 1 2 2.2V16l-2-1.6L10 16v-5.8C10 9 10.8 8 12 8ZM10 10 6 6.6 5.4 10 1 9.6l3 3.4-1.4 2.6L8 15Zm4 0 4-3.4.6 3.4L23 9.6l-3 3.4 1.4 2.6L16 15Z'],
+  pumpkin:['f','M12 5c-1 0-1.6.5-2.2 1C8.2 5.1 5 6.2 5 11.5S8.2 21 12 21s7-4.2 7-9.5S15.8 5.1 14.2 6C13.6 5.5 13 5 12 5Zm-.7-4h1.4v3.2h-1.4Z'],
+  ghost:['f','M12 2a7 7 0 0 0-7 7v13l2.3-2 2.4 2 2.3-2 2.3 2 2.4-2 2.3 2V9a7 7 0 0 0-7-7ZM9.6 8.4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm4.8 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z'],
+  spider:['s','M12 9a3.4 3.4 0 1 1 0 6.8A3.4 3.4 0 0 1 12 9ZM12 0v9M8.6 10 3 6M8.6 12.4H2M9 14.8 4 19M15.4 10 21 6M15.4 12.4H22M15 14.8 20 19'],
+  /* Christmas */
+  flake6:['s','M12 1v22M2.5 6.5l19 11M2.5 17.5l19-11M12 5l-2.6-2.6M12 5l2.6-2.6M12 19l-2.6 2.6M12 19l2.6 2.6M6.4 8.2 2.8 8M6.4 8.2 4.6 4.9M17.6 15.8l3.6.2M17.6 15.8l1.8 3.3M6.4 15.8l-3.6.2M6.4 15.8l-1.8 3.3M17.6 8.2l3.6-.2M17.6 8.2l1.8-3.3'],
+  flake4:['s','M12 2v20M2 12h20M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4'],
+  fir:['s','M12 2v20M12 6l5 3M12 6 7 9M12 11l6 3.4M12 11l-6 3.4M12 16l5 3M12 16l-5 3'],
+  tree:['f','M12 1.5 16.6 9h-2.3l3.9 6h-2.4l4.2 6.4H4L8.2 15H5.8l3.9-6H7.4ZM10.9 20h2.2v3h-2.2Z'],
+  treeline:['f','M5 3.5 9 10H7.4l2.6 4.4H0L2.6 10H1Zm14 0L23 10h-1.6l2.6 4.4H14L16.6 10H15Zm-7 2.4 4.6 7.6h-1.9l3 5.1H6.3l3-5.1H7.4Z'],
+  snowcap:['f','M2 16c2.6 0 3.4-3 6-3s3.4 3 6 3 3.4-3 6-3 2 3 4 3v5H2Z'],
+  hat:['h',''],
+  /* New Year */
+  firework:['s','M12 12V2M12 12l7.1-7.1M12 12h10M12 12l7.1 7.1M12 12v10M12 12l-7.1 7.1M12 12H2M12 12 4.9 4.9'],
+  burst:['s','M12 3v5M12 16v5M3 12h5M16 12h5M6 6l3 3M15 15l3 3M18 6l-3 3M9 15l-3 3'],
+  sparkle:['f','M12 1.5c.7 5.6 2.4 8.3 9 10.5-6.6 2.2-8.3 4.9-9 10.5-.7-5.6-2.4-8.3-9-10.5 6.6-2.2 8.3-4.9 9-10.5Z'],
+  star4:['f','M12 2c.6 5 2.2 7.4 8 9-5.8 1.6-7.4 4-8 9-.6-5-2.2-7.4-8-9 5.8-1.6 7.4-4 8-9Z'],
+  streamer:['s','M3 21c4-1 5-4 4-7s0-6 4-7 5 2 5 5'],
+  clock:['s','M12 3a9 9 0 1 1 0 18 9 9 0 0 1 0-18ZM12 7v5.4l3.4 2'],
+  /* Season Finale */
+  trophy:['f','M7 2h10v6a5 5 0 0 1-4 4.9V17h3v2H8v-2h3v-4.1A5 5 0 0 1 7 8Zm-4 .8h3v3A3 3 0 0 1 3 2.8Zm15 0h3a3 3 0 0 1-3 3Z'],
+  ball:['s','M12 2.6a9.4 9.4 0 1 1 0 18.8 9.4 9.4 0 0 1 0-18.8ZM12 7.4l4.4 3.2-1.7 5.2H9.3L7.6 10.6ZM12 2.6v4.8M16.4 10.6l4.6-1.5M14.7 15.8l2.9 3.9M9.3 15.8l-2.9 3.9M7.6 10.6 3 9.1'],
+  medal:['f','M8 1h8l-2.6 6h-2.8Zm4 6.6a7.2 7.2 0 1 1 0 14.4 7.2 7.2 0 0 1 0-14.4Zm0 3.1 1.5 3 3.3.5-2.4 2.3.6 3.3-3-1.6-3 1.6.6-3.3L10 14.2l3.3-.5Z'],
+  crown:['f','M2 8l4.4 3.6L12 4l5.6 7.6L22 8l-1.8 11H3.8Zm1.8 12.2h16.4V22H3.8Z'],
+  rosette:['f','M12 1.6a5.6 5.6 0 1 1 0 11.2 5.6 5.6 0 0 1 0-11.2Zm0 2.3a3.3 3.3 0 1 0 0 6.6 3.3 3.3 0 0 0 0-6.6ZM8.4 13.6 6.6 22.4l5.4-2.8 5.4 2.8-1.8-8.8a7.7 7.7 0 0 1-7.2 0Z'],
+  /* Ramadan and Eid */
+  lantern:['f','M11.2 0h1.6v2.4h-1.6ZM7 3h10v1.8H7Zm1 2.6h8l1.4 5.4-1.4 5.4H8l-1.4-5.4Zm3 2.2v6.4h2V7.8ZM7 17.8h10V19H7Zm4.2 1.8h1.6V24h-1.6Z'],
+  crescent:['f','M16 2.5A9.5 9.5 0 1 0 16 21.5 12 12 0 0 1 16 2.5Z'],
+  star8:['f','M12 1.2l1.9 6 5.3-3.4-3.4 5.3 6 1.9-6 1.9 3.4 5.3-5.3-3.4-1.9 6-1.9-6-5.3 3.4 3.4-5.3-6-1.9 6-1.9-3.4-5.3 5.3 3.4Z'],
+  arch:['s','M5 22V10a7 7 0 0 1 14 0v12M9 22v-9a3 3 0 0 1 6 0v9'],
+  /* UAE National Day — the flag, and only the flag */
+  flag:['s','M4 2v20M4 3.4h16v13.2H4M4 7.8h16M4 12.2h16M4 3.4h4.4v13.2H4Z'],
+  /* Easter */
+  egg:['f','M12 1.6c3.9 0 7 5.6 7 10.2a7 7 0 0 1-14 0C5 7.2 8.1 1.6 12 1.6Z'],
+  bunny:['f','M8.2 1c1.1 0 1.8 1.9 1.8 4.6 0 1.4-.2 2.6-.5 3.4h4.9c-.3-.8-.4-2-.4-3.4C14 2.9 14.7 1 15.8 1s1.8 1.9 1.8 4.6c0 2-.4 3.7-1 4.5A6 6 0 0 1 18 14a6 6 0 0 1-6 6 6 6 0 0 1-6-6 6 6 0 0 1 1.4-3.9c-.6-.8-1-2.5-1-4.5C6.4 2.9 7.1 1 8.2 1Zm2 12.4a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Zm3.6 0a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4Z'],
+  basket:['s','M3 10h18l-1.6 10H4.6ZM7.5 10a4.5 4.5 0 0 1 9 0'],
+  sprig:['s','M12 22V7M12 11 8 8M12 11l4-3M12 16l-4-3M12 16l4-3M12 7a3 3 0 0 1 3-3'],
+};
+function evSvg(key,size,col,op,rot){
+  const g=EV_GL[key]; if(!g)return '';
+  const [kind,...d]=g;
+  const body=kind==='f'
+    ? d.map(p=>`<path d="${p}" fill="currentColor"/>`).join('')
+    : d.map(p=>`<path d="${p}"/>`).join('');
+  return `<svg class="ev-g" viewBox="0 0 24 24" width="${size}" height="${size}" fill="none"
+    stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+    aria-hidden="true" focusable="false"
+    style="color:${col};opacity:${op}${rot?`;transform:rotate(${rot}deg)`:''}">${body}</svg>`;
+}
+/* The santa hat is one shape, not three: a cap with a highlight down the left,
+   a brim across the bottom of the cap with no gap, and the pom at the end of
+   the tip, top right — not resting on the brim. */
+function evHat(size){
+  const s=size||18;
+  return `<svg class="ev-hat" viewBox="0 0 28 22" width="${s*1.27}" height="${s}" aria-hidden="true" focusable="false">
+    <path d="M3.6 15.4C3.6 8.6 8 3.2 14.4 2.2c3.4-.5 6.2.1 8 1.4 1.1.8.7 2-.6 2.3-3 .7-4.9 2.6-6.1 5-1 2-1.6 3.4-1.8 4.5Z" fill="#D8232A"/>
+    <path d="M3.6 15.4C3.6 8.6 8 3.2 14.4 2.2c-3 2.3-5 6.6-5.6 13.2Z" fill="#F2565C"/>
+    <rect x="2" y="15" width="14" height="4.6" rx="2.3" fill="#fff"/>
+    <circle cx="23.2" cy="4.4" r="3" fill="#fff"/>
+  </svg>`;
+}
+
+/* ---- what each event is allowed to do ----
+   hero:   a gradient that replaces the hero's own, or null to leave it alone
+   rail:   the colour of the 2px line under the hero, or null for the gold one
+   orn:    [glyph, x%, y%, px, opacity, colour, rotation] — y must be <20 or >82
+   sec:    one glyph for every section label
+   bg:     the page pattern: glyphs, then [colour, alpha] light and dark        */
+const EV_DECOR={
+  halloween:{
+    hero:null, rail:null,
+    banner:{g:'linear-gradient(110deg,#2A1140 0%,#4A1D6E 100%)',tile:'pumpkin',tc:'#FF7A1A'},
+    sec:['bat','#FF7A1A'],
+    orn:[['cobweb',-3,5,74,.26,'#fff',0],['cobweb',80,5,74,.26,'#fff',90],
+         ['spider',72,17,22,.42,'#fff',0],['pumpkin',58,84,40,.24,'#FF7A1A',0],
+         ['moon',86,84,30,.14,'#fff',0]],
+    bg:{gl:['skull','headstone','cobweb','moon','candle','cauldron','cat','bat','pumpkin','ghost'],
+        light:['#B4641E',.17], dark:['#FF7A1A',.15]}
+  },
+  /* The flag, and nothing else. No falcon, no tower, no second ornament. */
+  natday:{
+    /* the flag itself, the right way round: a red hoist on the left and green,
+       white and black as three horizontal bands across the rest. A navy scrim
+       sits over the left so the white title stays readable; the bands come
+       through at full strength on the right where there is nothing to read. */
+    hero:'linear-gradient(90deg,#C8102E 0 26%,rgba(0,0,0,0) 26%),'
+        +'linear-gradient(180deg,#00732F 0 33.34%,#FFFFFF 33.34% 66.67%,#111111 66.67% 100%)',
+    heroScrim:'linear-gradient(90deg,rgba(11,27,51,.72) 0%,rgba(11,27,51,.92) 26%,rgba(11,27,51,.92) 72%,rgba(11,27,51,.30) 88%,rgba(11,27,51,0) 99%)',
+    rail:'#00732F',
+    banner:{g:'linear-gradient(110deg,#00732F 0%,#046B35 100%)',tile:'flag',tc:'#fff'},
+    sec:['flag','#00732F'],
+    orn:[['flag',90,84,34,.30,'#fff',0]],
+    bg:{gl:['flag'], light:['#00732F',.15], dark:['#1E9B55',.15]}
+  },
+  xmas:{
+    hero:'linear-gradient(115deg,#C8102E 0%,#A50D26 42%,#0E5C36 42%,#0B4A2C 100%)',
+    rail:null,
+    banner:{g:'linear-gradient(110deg,#C8102E 0%,#0E5C36 100%)',tile:'tree',tc:'#fff'},
+    sec:['flake6','#1E8A50'],
+    orn:[['flake6',8,7,26,.34,'#fff',0],['flake4',22,17,15,.26,'#fff',0],
+         ['flake6',34,5,19,.22,'#fff',0],['flake4',52,15,13,.24,'#fff',0],
+         ['flake6',66,6,23,.30,'#fff',0],['flake4',80,16,16,.24,'#fff',0],
+         ['flake6',92,7,20,.26,'#fff',0],
+         ['flake6',4,86,22,.26,'#fff',0],['flake4',30,90,14,.22,'#fff',0],
+         ['flake6',58,86,25,.24,'#fff',0],['flake4',74,91,13,.22,'#fff',0],
+         ['flake6',90,85,19,.26,'#fff',0],
+         ['treeline',-2,80,46,.20,'#fff',0],['treeline',36,80,46,.18,'#fff',0],
+         ['treeline',70,80,46,.20,'#fff',0],['treeline',94,80,46,.18,'#fff',0]],
+    bg:{gl:['flake6','flake4','fir','tree'], light:['#0E5C36',.18], dark:['#B9E6CE',.16]},
+    snow:{light:[20,'#96B4D7'], dark:[34,'#FFFFFF']},
+    hats:true
+  },
+  newyear:{
+    hero:'linear-gradient(115deg,#5E5CE6 0%,#5E5CE6 40%,#0A0A14 40%,#0A0A14 100%)',
+    rail:'#BD9A38',
+    banner:{g:'linear-gradient(110deg,#5E5CE6 0%,#221F55 100%)',tile:'firework',tc:'#fff'},
+    sec:['sparkle','#BD9A38'],
+    orn:[['firework',14,7,30,.55,'#F4C048',0],['firework',30,17,20,.45,'#5E5CE6',0],
+         ['firework',46,5,26,.5,'#fff',0],['firework',62,15,22,.45,'#E4557A',0],
+         ['firework',78,7,28,.5,'#F4C048',0],['firework',90,17,18,.42,'#4FC684',0],
+         ['firework',8,86,24,.42,'#fff',0],['firework',68,88,20,.4,'#F4C048',0]],
+    bg:{gl:['sparkle','star4','streamer'], light:['#5E5CE6',.16], dark:['#9B99F0',.15]},
+    confetti:true, year:true
+  },
+  ramadan:{
+    hero:'linear-gradient(115deg,#0E2A5C 0%,#0B1F45 42%,#08182F 42%,#050F20 100%)',
+    rail:'#BD9A38',
+    banner:{g:'linear-gradient(110deg,#0E2A5C 0%,#08182F 100%)',tile:'lantern',tc:'#BD9A38'},
+    sec:['crescent','#BD9A38'],
+    orn:[['lantern',20,4,36,.55,'#BD9A38',0],['lantern',44,4,30,.45,'#BD9A38',0],
+         ['lantern',66,5,34,.5,'#BD9A38',0],['lantern',84,4,28,.42,'#BD9A38',0],
+         ['star8',10,17,12,.4,'#BD9A38',0],['star8',56,17,10,.34,'#BD9A38',0],
+         ['star8',92,15,13,.38,'#BD9A38',0],['star8',30,88,11,.32,'#BD9A38',0],
+         ['star8',62,90,10,.3,'#BD9A38',0],['crescent',86,84,30,.55,'#BD9A38',0]],
+    bg:{gl:['lantern','crescent','star8','arch'], light:['#0E2A5C',.16], dark:['#BD9A38',.15]}
+  },
+  eid:{
+    hero:'linear-gradient(115deg,#0F8D82 0%,#0B6F66 42%,#07463F 42%,#052E2A 100%)',
+    rail:'#BD9A38',
+    banner:{g:'linear-gradient(110deg,#0B6F66 0%,#07463F 100%)',tile:'crescent',tc:'#BD9A38'},
+    sec:['crescent','#BD9A38'],
+    orn:[['star8',12,9,14,.42,'#BD9A38',0],['star8',28,17,10,.34,'#BD9A38',0],
+         ['star8',46,7,13,.4,'#BD9A38',0],['star8',64,16,11,.34,'#BD9A38',0],
+         ['star8',82,8,14,.4,'#BD9A38',0],['star8',20,88,11,.3,'#BD9A38',0],
+         ['star8',52,90,10,.3,'#BD9A38',0],['crescent',86,84,30,.55,'#BD9A38',0]],
+    bg:{gl:['crescent','star8'], light:['#0B6F66',.16], dark:['#BD9A38',.15]}
+  },
+  easter:{
+    hero:'linear-gradient(115deg,#8E5BC8 0%,#7A4BB4 42%,#5E3A8C 42%,#4A2E70 100%)',
+    rail:'#E9A7C8',
+    banner:{g:'linear-gradient(110deg,#8E5BC8 0%,#E48FBE 100%)',tile:'bunny',tc:'#fff'},
+    sec:['egg','#8E5BC8'],
+    orn:[['sparkle',14,9,14,.4,'#fff',0],['sparkle',40,15,11,.34,'#fff',0],
+         ['sparkle',68,8,13,.36,'#fff',0],['sparkle',90,16,12,.34,'#fff',0],
+         ['egg',10,84,26,.5,'#FFD9E6',0],['egg',24,86,24,.46,'#FFF0B8',0],
+         ['egg',38,84,26,.5,'#CDE8FF',0],['egg',52,86,24,.46,'#D8F5DC',0],
+         ['egg',66,84,26,.5,'#E9D8FF',0],['bunny',88,82,30,.55,'#fff',0]],
+    bg:{gl:['egg','bunny','basket','sprig'], light:['#7A4BB4',.16], dark:['#D9BCF2',.15]}
+  },
+  /* The one event that gets a different FINISH rather than a different colour:
+     metal, not paint. Every gold surface is the same four-stop gradient, and
+     the far side is warm black — black with gold in it, not blue in it. */
+  finale:{
+    hero:'linear-gradient(115deg,#F7E7A8 0%,#D4AF37 20%,#9A7526 38%,#14110A 38%,#14110A 100%)',
+    rail:'metal',
+    banner:{g:'linear-gradient(110deg,#14110A 0%,#241C0B 100%)',tile:'trophy',tc:'#D4AF37',ink:'#F7E7A8'},
+    sec:['ball','#9A7526'],
+    guilloche:true,
+    orn:[['star4',10,9,13,.4,'#EAD08A',0],['star4',30,16,10,.32,'#EAD08A',0],
+         ['star4',52,8,12,.36,'#EAD08A',0],['star4',74,15,11,.32,'#EAD08A',0],
+         ['star4',92,9,13,.36,'#EAD08A',0],['star4',20,88,10,.3,'#EAD08A',0],
+         ['star4',64,90,11,.3,'#EAD08A',0],
+         ['ball',12,80,46,.18,'#EAD08A',0],['ball',40,86,30,.14,'#EAD08A',0],
+         ['trophy',86,78,44,.30,'#EAD08A',0]],
+    bg:{gl:['ball','trophy','medal','crown','rosette','star4'],
+        light:['#9A7526',.15], dark:['#D4AF37',.13]},
+    metalChrome:true
+  }
+};
+
+/* ---- the banner above the page ---- */
 function eventBanner(){
   const ev=activeEvent(); if(!ev)return '';
-  return `<div class="evb evb-${ev.id}">
-    <div class="evb-e">${ev.e}</div>
-    <div class="evb-t"><b>${esc(ev.n)}</b><span>${esc(ev.line)}</span></div>
+  const D=EV_DECOR[ev.id]||{}, b=D.banner||{};
+  return `<div class="evb evb-${ev.id}" style="${b.g?`background:${b.g};`:''}${b.ink?`color:${b.ink};`:''}">
+    <span class="evb-tile" aria-hidden="true">${evSvg(b.tile||'sparkle',20,b.tc||'#fff',1)}</span>
+    <span class="evb-t"><b>${esc(ev.n)}</b><span>${esc(ev.line)}</span></span>
   </div>`;
+}
+
+/* ---- the decoration passes, all run after render ----
+   Every node these add is aria-hidden and pointer-events:none, and none of
+   them is ever read back — removing the whole lot leaves the app identical. */
+let EV_STANDING='';
+function evClear(all){
+  document.querySelectorAll('.ev-layer,.ev-sec,.ev-hat').forEach(n=>n.remove());
+  document.querySelectorAll('.ev-hatted').forEach(n=>n.classList.remove('ev-hatted'));
+  document.querySelectorAll('.sky-hero').forEach(h=>{h.style.backgroundImage='';h.style.borderImage='';
+    h.style.removeProperty('--ev-rail');h.classList.remove('ev-guil')});
+  if(all!==false){ document.querySelectorAll('.ev-snow,.ev-conf,.ev-bg').forEach(n=>n.remove()); EV_STANDING=''; }
+}
+/* The background and the snow are standing layers: they survive a re-render so
+   the snow never jumps back to the top of the screen mid-scroll. They are
+   rebuilt only when the event or the theme changes. */
+function evPaint(){
+  const ev=activeEvent();
+  const theme=document.documentElement.getAttribute('data-theme')||'light';
+  const key=(ev?ev.id:'')+'|'+theme;
+  evClear(key!==EV_STANDING);
+  if(!ev)return;
+  const D=EV_DECOR[ev.id]; if(!D)return;
+  evHeroPass(D);
+  evSecPass(D);
+  if(D.hats)evHatPass();
+  if(key!==EV_STANDING){
+    EV_STANDING=key;
+    evBgPass(D);
+    if(D.snow)evSnowPass(D);
+  }
+  if(D.confetti)evConfPass();
+}
+function evHeroPass(D){
+  document.querySelectorAll('.sky-hero').forEach(h=>{
+    if(D.hero)h.style.backgroundImage=D.hero;
+    if(D.rail)h.style.setProperty('--ev-rail',D.rail==='metal'
+      ? 'transparent' : D.rail);
+    if(D.rail==='metal')h.style.borderImage='linear-gradient(90deg,#9A7526,#F7E7A8 35%,#D4AF37 60%,#9A7526) 1';
+    if(D.guilloche)h.classList.add('ev-guil');
+    const L=document.createElement('span');
+    L.className='ev-layer'; L.setAttribute('aria-hidden','true');
+    if(D.heroScrim)L.style.setProperty('--ev-scrim',D.heroScrim);
+    L.innerHTML=(D.heroScrim?'<i class="ev-scrim"></i>':'')
+      +(D.year?'<b class="ev-year">'+(evNow().getUTCFullYear())+'</b>':'')
+      +(D.orn||[]).map(([g,x,y,sz,o,c,r])=>{
+        /* Keep every ornament whole and inside its band. The hero is ~112px:
+           the top band is everything above a third of it, the bottom band
+           everything below 62% of it, and a glyph is never clipped by the
+           hero's own overflow. */
+        const H=h.getBoundingClientRect().height||112, half=sz/2+1;
+        const top=y<50;
+        const lo=top?half:Math.max(H*0.60,half), hi=top?Math.min(H*0.36,H-half):H-half;
+        const px=Math.max(Math.min(lo,hi),Math.min(Math.max(y/100*H,lo),hi));
+        return `<span class="ev-o" style="left:${x}%;top:${px}px">${evSvg(g,sz,c,o,r)}</span>`;
+      }).join('');
+    h.appendChild(L);
+  });
+}
+function evSecPass(D){
+  if(!D.sec)return;
+  const [g,c]=D.sec;
+  document.querySelectorAll('.sechead .ss-sl').forEach(n=>{
+    if(n.querySelector('.ev-sec'))return;
+    const s=document.createElement('span');
+    s.className='ev-sec'; s.setAttribute('aria-hidden','true');
+    s.innerHTML=evSvg(g,15,c,.55);
+    n.appendChild(s);
+  });
+}
+/* 23px motifs on a 44px grid, each at its own offset and rotation so the
+   repeat never lines up. Sits at z-index 0, behind every card. */
+function evBgPass(D){
+  if(!D.bg)return;
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  const [col,a]=dark?D.bg.dark:D.bg.light;
+  const gl=D.bg.gl, N=gl.length, T=44*Math.ceil(Math.sqrt(N))||44;
+  const cols=Math.ceil(Math.sqrt(N)), tile=cols*44;
+  let out='';
+  gl.forEach((k,i)=>{
+    const cx=(i%cols)*44+11+((i*7)%9)-4, cy=Math.floor(i/cols)*44+11+((i*5)%9)-4;
+    const rot=((i*37)%60)-30;
+    const g=EV_GL[k]; if(!g)return;
+    const [kind,...d]=g;
+    const inner=d.map(p=>kind==='f'
+      ? `<path d="${p}" fill="${col}"/>`
+      : `<path d="${p}" fill="none" stroke="${col}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>`).join('');
+    out+=`<g transform="translate(${cx} ${cy}) rotate(${rot} 11.5 11.5) scale(${23/24})">${inner}</g>`;
+  });
+  const svg=`<svg xmlns="http://www.w3.org/2000/svg" width="${tile}" height="${Math.ceil(N/cols)*44}" viewBox="0 0 ${tile} ${Math.ceil(N/cols)*44}">${out}</svg>`;
+  const el=document.createElement('div');
+  el.className='ev-bg'; el.setAttribute('aria-hidden','true');
+  el.style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
+  el.style.backgroundSize=`${tile}px ${Math.ceil(N/cols)*44}px`;
+  el.style.opacity=String(a);
+  document.body.appendChild(el);
+}
+/* A hat on every rank and position number, centred on the pill and overlapping
+   it by half the hat's height. */
+/* every rank and position number in the app */
+const EV_HAT_SEL='.rk,.lg4-rk,td.pos,.rankp,.bt-br .rk';
+function evHatPass(){
+  document.querySelectorAll(EV_HAT_SEL).forEach(n=>{
+    if(n.querySelector('.ev-hat'))return;
+    const h=n.getBoundingClientRect().height||22;
+    n.classList.add('ev-hatted');
+    n.insertAdjacentHTML('beforeend',evHat(Math.max(11,Math.round(h*.60))));
+  });
+}
+function evSnowPass(D){
+  if(evReduced())return;
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  const [n,col]=dark?D.snow.dark:D.snow.light;
+  const el=document.createElement('div');
+  el.className='ev-snow'; el.setAttribute('aria-hidden','true');
+  let h='';
+  for(let i=0;i<n;i++){
+    const s=7+Math.round(Math.random()*8), x=Math.random()*100,
+          d=9+Math.random()*10, dl=-Math.random()*18, o=.35+Math.random()*.45,
+          r=Math.round(Math.random()*360), k=Math.random()<.5?'flake6':'flake4';
+    h+=`<span class="ev-fl" style="left:${x}%;animation-duration:${d}s;animation-delay:${dl}s">${evSvg(k,s,col,o,r)}</span>`;
+  }
+  el.innerHTML=h; document.body.appendChild(el);
+}
+/* Confetti runs once when the app opens, and again the moment the clock passes
+   midnight if the app is still open. It never runs under reduced motion. */
+let EV_CONF_DONE=false, EV_CONF_T=null;
+function evConfPass(){
+  if(evReduced())return;
+  if(!EV_CONF_DONE){ EV_CONF_DONE=true; evConfBurst(); }
+  if(EV_CONF_T)return;
+  const now=evNow();
+  const mid=Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+1,0,0,0)-now.getTime();
+  if(mid>0&&mid<24*3600e3) EV_CONF_T=setTimeout(()=>{EV_CONF_T=null;evConfBurst()},mid+400);
+}
+function evConfBurst(){
+  const COL=['#F4C048','#5E5CE6','#E4557A','#4FC684','#2F6BF6','#FFFFFF'];
+  const el=document.createElement('div');
+  el.className='ev-conf'; el.setAttribute('aria-hidden','true');
+  let h='';
+  for(let i=0;i<30;i++){
+    const w=4+Math.round(Math.random()*3), ht=4+Math.round(Math.random()*3);
+    h+=`<i style="left:${Math.random()*100}%;width:${w}px;height:${ht}px;
+      background:${COL[i%COL.length]};animation-delay:${(Math.random()*1.2).toFixed(2)}s;
+      transform:rotate(${Math.round(Math.random()*360)}deg)"></i>`;
+  }
+  el.innerHTML=h; document.body.appendChild(el);
+  setTimeout(()=>el.remove(),7000);
 }
 
 /* ============ SHOP & WAGES ============
@@ -13274,8 +14192,8 @@ function playerMarkets(pid){
      Also a Poisson: how many the other lot are expected to put past you. The
      league average sets the rate, then the player's own record pulls it. */
   const lamC=xcOf(pid);
-  const CL=[[0,'Clean sheet','Their team concedes none']].concat(
-    [1,2,3,4,5,6,7].map(t=>[t,`Concede under ${t+1}`,`${t} or fewer against`]));
+  const CL=[[0,'Clean sheet','Nothing let in']].concat(
+    [1,2,3,4,5,6,7].map(t=>[t,`Under ${t+1} conceded`,t===1?'A tight one':`${t} or fewer against`]));
   const cOdds=priceLadder(CL.map(([t])=>atMost(lamC,t)).reverse()).reverse();
   CL.forEach(([t,l,d],i)=>M.push({k:'c'+t,l,d,grp:'Goals against',p:atMost(lamC,t),pid,odds:cOdds[i],n}));
   /* --- result ---
@@ -13284,14 +14202,14 @@ function playerMarkets(pid){
   const wp=Math.max(0.20,Math.min(0.72,0.45+(priceFactor(pid)-1)*0.11));
   const wRec=n?gs.filter(won).length/n:null;
   const winP=wRec==null?wp:(wRec*Math.min(1,n/6)+wp*(1-Math.min(1,n/6)));
-  M.push({k:'win',l:'To be on the winning side',d:'Their team wins',grp:'Result',
+  M.push({k:'win',l:'On the winning side',d:'Whoever he plays for',grp:'Result',
           p:winP,pid,odds:toOdds(winP),n});
   /* top rating scales with squad size — one of N, tilted by quality */
   const live=season().players.filter(p2=>p2.active!==false).length||10;
   const mBase=Math.max(0.03,Math.min(0.45,(1/Math.max(4,live/2))*priceFactor(pid)*1.5));
   const mRec=n?gs.filter(g=>{const r=matchRatings(g);return r.length&&r[0].id===pid}).length/n:null;
   const mP=mRec==null?mBase:(mRec*Math.min(1,n/6)+mBase*(1-Math.min(1,n/6)));
-  M.push({k:'motm',l:'Top rating of the day',d:'Highest rated on the pitch',grp:'Result',
+  M.push({k:'motm',l:'Man of the match',d:'Top rating of the day',grp:'Result',
           p:mP,pid,odds:toOdds(mP),n});
   return M.map(m=>({...m,edge}));
 }
@@ -13332,13 +14250,27 @@ async function placeBet(){
   if(amt>BET_RULES.max){toast(`Maximum stake is ${usd(BET_RULES.max)}`);return}
   if(amt>bal){toast('Not enough in your balance');return}
   const legs=BSLIP.map(x=>({pid:x.pid,k:x.k,odds:x.odds}));
+  const gw=fplNextGw();
+  if(BSMODE==='singles'&&legs.length>1){
+    /* one bet per leg, each staked separately — the total has to clear first */
+    const outlay=amt*legs.length;
+    if(outlay>bal){toast(`That is ${usd(outlay)} across ${legs.length} bets — more than your balance`);return}
+    b.wallets[me.pid]=bal-outlay;
+    legs.forEach(l=>b.open.push({id:uid(),by:me.pid,legs:[l],odds:Math.round(l.odds*100)/100,
+      stake:amt,gw,at:Date.now(),pid:l.pid,k:l.k}));
+    BSLIP=[]; BSOPEN=false;
+    try{ if(!CLOUD_FAIL)await save() }catch(e){}
+    haptic('success'); render();
+    toast(`${legs.length} singles · ${usd(amt)} each`);
+    return;
+  }
   /* the accumulator bonus has to be baked into the stored price, or the slip
      promises one return and the settlement pays another */
   const combined=Math.round(legs.reduce((t,x)=>t*x.odds,1)*accaBonus(legs.length)*100)/100;
   b.wallets[me.pid]=bal-amt;
-  b.open.push({id:uid(),by:me.pid,legs,odds:combined,stake:amt,gw:fplNextGw(),at:Date.now(),
+  b.open.push({id:uid(),by:me.pid,legs,odds:combined,stake:amt,gw,at:Date.now(),
                pid:legs[0].pid,k:legs[0].k});
-  BSLIP=[];
+  BSLIP=[]; BSOPEN=false;
   try{ if(!CLOUD_FAIL)await save() }catch(e){}
   haptic('success'); render();
   toast(legs.length>1?`${legs.length}-fold · ${usd(amt)} at ${combined.toFixed(2)}`:`${usd(amt)} at ${combined.toFixed(2)}`);
@@ -13367,8 +14299,8 @@ async function cancelBet(id){
    the same wallet as wages, betting and the shop. Trades are stored as a
    ledger; holdings, cost and profit are always derived from it. Dividends are
    paid once per gameweek when games are settled ($ per FPL point per share).
-   The market closes at 12:00 Sunday (Dubai) and reopens once that week's game
-   is logged, exactly like bets. Rules are fixed, like BET_RULES. */
+   The market closes at the Sunday lock (Dubai) and reopens once that week's
+   game is logged, exactly like bets. Rules are fixed, like BET_RULES. */
 const STOCK_RULES={mult:100, fee:0.01, cap:20, divPerPt:2};
 function stocks(){
   const S=season();
@@ -13410,12 +14342,10 @@ function stockDividendsPaid(by){
   Object.keys(p).forEach(gw=>{ t+=(p[gw][by]||0) });
   return t;
 }
-/* closed from Sunday 12:00 Dubai until a game dated that Sunday (or later) is logged */
+/* closed from the Sunday lock (Dubai) until a game dated that Sunday (or later) is logged */
 function marketClosed(){
-  const OFF=4*3600e3, now=Date.now(), d=new Date(now+OFF);
-  const dow=d.getUTCDay(), h=d.getUTCHours();
-  let back=dow; if(dow===0&&h<12)back=7;                       /* last Sunday 12:00 */
-  const lastCut=Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-back,12,0,0)-OFF;
+  const OFF=DUBAI_OFF, now=Date.now();
+  const lastCut=sundayLockBefore(now);
   const sunday=new Date(lastCut+OFF).toISOString().slice(0,10);
   const weekEnd=new Date(lastCut+OFF+6*86400e3).toISOString().slice(0,10);
   const logged=allGames().some(g=>{const d=String(g.date||'').slice(0,10); return d>=sunday&&d<=weekEnd});
@@ -13602,7 +14532,7 @@ function betTitle(x){
   const legs=x.legs||[{pid:x.pid,k:x.k}];
   if(legs.length===1)return `${esc((player(legs[0].pid)||{}).name||'—')} · ${esc(betLabel(legs[0].k))}`;
   const kind={2:'Double',3:'Treble',4:'Four-fold'}[legs.length]||`${legs.length}-fold`;
-  return `<b>${kind}</b> · ${legs.length} selections`;
+  return `<b>${kind}</b> · ${legs.length} legs`;
 }
 function legLines(x){
   const legs=x.legs||[];
@@ -13796,6 +14726,12 @@ async function submitTyped(){
 function giveUpGuess(){ if(!GUESS)return; GSTREAK=0; GUESSDONE={right:false,gave:true}; render(); }
 
 let BTAB='markets', BSLIP=[], BSTAKE=100, BPLAYER=null;
+let BSOPEN=false, BSMODE='acca';        /* the slip sheet; 'acca' or 'singles' */
+const slipName=n=>n===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[n]||n+'-fold');
+const slipReturns=()=>BSMODE==='singles'
+  ? BSLIP.reduce((t,x)=>t+BSTAKE*x.odds,0)
+  : BSTAKE*slipOdds();
+const slipOutlay=()=>BSMODE==='singles'?BSTAKE*BSLIP.length:BSTAKE;
 const BET_MAXLEGS=4;
 /* An accumulator multiplies, and every extra leg earns a bonus on top — the
    more you stack, the better the price, which is what makes a four-fold worth
@@ -13826,7 +14762,7 @@ function pickBet(pid,k){
   if(BSLIP.length>=BET_MAXLEGS){ toast(`Up to ${BET_MAXLEGS} selections`); return }
   const m=playerMarkets(pid).find(x=>x.k===k);
   if(!m)return;
-  BSLIP.push({pid,k,odds:m.odds,l:m.l});
+  BSLIP.push({pid,k,odds:m.odds,l:m.l,d:m.d||''});
   haptic('light'); render();
 }
 /* The slip lives outside the main container: .main uses will-change:transform,
@@ -13834,30 +14770,44 @@ function pickBet(pid,k){
    viewport, leaving the slip stranded at the bottom of the page. */
 function paintSlip(){
   const el=$('#slipMount'); if(!el)return;
-  if(VIEW!=='bets'||!BSLIP.length){el.innerHTML='';return}
-  el.innerHTML=`<div class="sb-slip">
-      <div class="sb-slip-h">
-        <b>${BSLIP.length===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[BSLIP.length])}</b>
-        <span class="sb-slip-odds">${slipOdds().toFixed(2)}${BSLIP.length>1?`<i class="acca">+${Math.round((accaBonus(BSLIP.length)-1)*100)}%</i>`:''}</span>
-        <button class="sb-clear" onclick="clearSlip()">Clear</button>
+  if(VIEW!=='bets'||!BSLIP.length){el.innerHTML=''; BSOPEN=false; return}
+  const n=BSLIP.length, odds=slipOdds(), ret=slipReturns();
+  const dock=`<button class="bsl-dock" onclick="BSOPEN=true;paintSlip()">
+      <span class="bsl-n">${n}</span>
+      <span class="bsl-dt"><b>Bet slip</b><i>${BSMODE==='singles'?`${n} single${n===1?'':'s'}`:slipName(n)} · ${odds.toFixed(2)} · returns ${usd(ret)}</i></span>
+      <span class="bsl-go">Review <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></span>
+    </button>`;
+  if(!BSOPEN){ el.innerHTML=dock; return }
+  const bonus=accaBonus(n);
+  el.innerHTML=`${dock}
+    <div class="bsl-bg" onclick="BSOPEN=false;paintSlip()"></div>
+    <div class="bsl-sheet">
+      <span class="bsl-grab"></span>
+      <div class="bsl-h">${ssTileC('betting',26)}<b>Bet slip</b><span class="bsl-cnt">${n}</span>
+        <button class="bsl-clear" onclick="clearSlip()">Clear all</button></div>
+      <div class="seg pp-seg bsl-mode">
+        <button class="${BSMODE==='singles'?'on':''}" onclick="BSMODE='singles';paintSlip()">Singles</button>
+        <button class="${BSMODE==='acca'?'on':''}" onclick="BSMODE='acca';paintSlip()">${slipName(n)}</button>
       </div>
-      <div class="sb-picks">${BSLIP.map(x=>`
-        <div class="sb-pk"><span>${esc((player(x.pid)||{}).name||'')} — ${esc(x.l)}</span>
-          <b>${x.odds.toFixed(2)}</b>
-          <button onclick="pickBet('${x.pid}','${x.k}')">✕</button></div>`).join('')}</div>
-      <div class="sb-stake">
-        ${[100,250,500,1000].map(v=>`<button class="${BSTAKE===v?'on':''}" onclick="BSTAKE=${v};render()">${usd(v)}</button>`).join('')}
-        <button onclick="customStake()">Custom</button>
-        <button onclick="maxStake()">Max</button>
+      <div class="bsl-legs">${BSLIP.map(x=>{const p=player(x.pid)||{name:'—'};
+        return `<div class="bsl-leg">${avatar(p,30)}
+          <span class="bsl-lt"><b>${esc(p.name)} · ${esc(x.l)}</b><i>${esc(x.d||'')} · GW${fplNextGw()}</i></span>
+          <span class="bsl-lo">${x.odds.toFixed(2)}</span>
+          <button class="bsl-x" onclick="pickBet('${x.pid}','${x.k}')">✕</button></div>`}).join('')}</div>
+      <div class="bsl-stake">
+        <button class="bsl-amt" onclick="customStake()"><i>Stake</i><b>${usd(BSTAKE)}</b></button>
+        ${[250,1000].map(v=>`<button class="bsl-q ${BSTAKE===v?'on':''}" onclick="BSTAKE=${v};paintSlip()">${v>=1000?'$'+(v/1000)+'k':'$'+v}</button>`).join('')}
+        <button class="bsl-q" onclick="maxStake();paintSlip()">Max</button>
       </div>
-      <div class="sb-slip-b">
-        <div>Returns <b>${usd(BSTAKE*slipOdds())}</b>${BSLIP.length>1?` <span style="font-size:11px;color:var(--green)">acca bonus included</span>`:''}</div>
-        <button class="btn pri" onclick="placeBet()">Place ${usd(BSTAKE)}</button>
+      ${(BSMODE==='acca'&&n>1)?`<div class="bsl-bonus">${ssTileC('hall-of-fame',18)}<b>${slipName(n)} bonus</b><i>+${Math.round((bonus-1)*100)}% on the price</i></div>`:''}
+      <div class="bsl-tot">
+        <div><span>${BSMODE==='singles'?'TOTAL STAKE':'TOTAL ODDS'}</span><b>${BSMODE==='singles'?usd(slipOutlay()):odds.toFixed(2)}</b></div>
+        <div class="r"><span>RETURNS</span><b class="up">${usd(ret)}</b></div>
       </div>
-      ${BSLIP.length<BET_MAXLEGS?`<div class="sb-tip">Add up to ${BET_MAXLEGS} selections — the odds multiply.</div>`:''}
+      <button class="btn pri full bsl-go2" onclick="placeBet()">Place bet · ${usd(slipOutlay())}</button>
+      <div class="bsl-note">Cancel any time before ${SUNDAY_LOCK_LABEL} Sunday, Dubai time. After that it rides.</div>
     </div>`;
 }
-
 let SHTAB='card';
 function vShop(){
   $('#navMount').innerHTML=navbar();
@@ -14272,29 +15222,29 @@ function betWeek(){
   const paid=won.reduce((t,x)=>t+(x.ret||0),0);
   const staked=all.reduce((t,x)=>t+(x.stake||0),0);
   const best=won.slice().sort((x,y)=>(y.ret-y.stake)-(x.ret-x.stake))[0];
-  return `<div class="gwbar">${gws.map(n=>`<button class="${n===gw?'on':''}"
+  return `<div class="gwbar bt-gwbar">${gws.map(n=>`<button class="${n===gw?'on':''}"
       onclick="BWGW=${n};render()">GW${n}</button>`).join('')}</div>
 
     <div class="tiles" style="margin-bottom:14px">
       ${tile(all.length,'Slips')}
       ${tile(usd(staked),'Staked')}
-      ${tile(usd(paid),'Paid out',won.length?`${won.length} winner${won.length===1?'':'s'}`:'nobody landed one','var(--green)')}
-      ${best?tile(usdSigned(best.ret-best.stake),'Biggest win',byName(best.by),'var(--green)'):tile('—','Biggest win')}
+      ${tile(usd(paid),'Paid out',won.length?`${won.length} winner${won.length===1?'':'s'}`:'nobody landed one','var(--ss-green)')}
+      ${best?tile(usdSigned(best.ret-best.stake),'Biggest win',byName(best.by),'var(--ss-green)'):tile('—','Biggest win')}
     </div>
 
-    ${all.length?`<div class="card">${all.map(x=>{
+    ${ssSec('betting','Every slip',`<span class="ss-note">GW${gw} · ${all.length} slip${all.length===1?'':'s'}</span>`)}
+    ${all.length?`<div class="card bt-week">${all.map(x=>{
       const legs=x.legs||[{pid:x.pid,k:x.k,odds:x.odds}];
       const res=x.res||'open';
       const cls=res==='won'?'bw-won':res==='void'?'bw-void':res==='open'?'bw-open':'bw-lost';
       const tag=res==='won'?`+${usd(x.ret-x.stake)}`:res==='void'?'Void':res==='open'?'Riding':`−${usd(x.stake)}`;
       return `<div class="bw ${cls}">
-        <div class="bw-h">
-          <b>${byName(x.by)}</b>
-          <span class="bw-meta">${legs.length===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[legs.length]||legs.length+'-fold')}
-            · ${usd(x.stake)} at ${(+x.odds).toFixed(2)}</span>
+        <div class="bw-h">${avatar(player(x.by)||{name:byName(x.by)},30)}
+          <span class="bw-ht"><b>${byName(x.by)}</b>
+            <i>${legs.length===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[legs.length]||legs.length+'-fold')} · ${usd(x.stake)} at ${(+x.odds).toFixed(2)}</i></span>
           <span class="bw-tag">${tag}</span>
         </div>
-        <div class="bw-legs">${legs.map(l=>`<div class="bw-leg">${legLabel(l)}
+        <div class="bw-legs">${legs.map(l=>`<div class="bw-leg"><span>${legLabel(l)}</span>
           <i>${(+l.odds).toFixed(2)}</i></div>`).join('')}</div>
       </div>`}).join('')}</div>`
     : `<div class="note" style="padding:18px;text-align:center">Nobody had a bet on in GW${gw}.</div>`}
@@ -14438,25 +15388,29 @@ function vBets(){
     body=`
       ${predUI}
       <div class="sb-pick">
-        <div class="sb-lab2">Choose a player</div>
+        <div class="bt-lab">Choose a player</div>
         <input class="findbox" id="bfind" placeholder="Search the squad…" value="${esc(BQ||'')}"
           oninput="BQ=this.value;paintBetPick()" autocomplete="off">
         <div class="sb-scroll" id="bchips">${betChips(players,sel)}</div>
       </div>
-      <div class="sb-head">
-        <div class="sb-h-av">${avatar(p,44)}</div>
-        <div class="sb-h-t"><b>${shirtBadge(p)}${esc(p.name)}</b>
-          <span>${p.pos} · ${mk[0].n} game${mk[0].n===1?'':'s'} of form</span></div>
+      <div class="bt-head">
+        <span class="bt-h-av">${avatar(p,44)}</span>
+        <span class="bt-h-t"><b>${shirtBadge(p)}${esc(p.name)}</b>
+          <i>${p.pos} · ${mk[0].n} game${mk[0].n===1?'':'s'} of form</i></span>
       </div>
       ${['Goals','Assists','Goals against','Result'].map(grp=>{
         const rows=mk.filter(m=>m.grp===grp); if(!rows.length)return '';
-        return ssSec(grp==='Goals'?'top-scorers':grp==='Assists'?'most-assists':grp==='Goals against'?'best-defence':'match-rating',grp)+`
-        <div class="sb-list">${rows.map(m=>{
+        const gk=grp==='Goals'?'top-scorers':grp==='Assists'?'most-assists':grp==='Goals against'?'best-defence':'match-rating';
+        return ssSec(gk,grp,'',grp==='Goals'||grp==='Assists'?null:'#BD9A38')+`
+        <div class="card bt-list">${rows.map(m=>{
           const on=inSlip(m.pid,m.k);
-          return `<button class="sb-row ${on?'on':''}" onclick="pickBet('${m.pid}','${m.k}')">
-            <span class="sb-m"><b>${esc(m.l)}</b><i>${esc(m.d)}</i></span>
-            <span class="sb-o">${m.odds.toFixed(2)}</span></button>`}).join('')}</div>`}).join('')}
-      <div class="note">Odds come from this player's own record. With few games the price sits nearer the opening line for their position.</div>`;
+          return `<button class="bt-row ${on?'on':''}" onclick="pickBet('${m.pid}','${m.k}')">
+            <span class="bt-m"><b>${esc(m.l)}</b><i>${esc(m.d)}</i></span>
+            <span class="bt-o">${on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></svg>':''}${m.odds.toFixed(2)}</span></button>`}).join('')}</div>`}).join('')}
+      <div class="note">Odds come from this player's own record. With few games the price sits nearer the opening line for their position.</div>
+      ${BSLIP.length?'':`<div class="bsl-empty">${ssTileC('betting',48)}
+        <b>Nothing picked yet</b>
+        <i>Tap any price to start a slip. Two or more legs gets an accumulator bonus.</i></div>`}`;
   } else if(BTAB==='week'){
     body=betWeek();
   } else if(BTAB==='slips'){
@@ -14474,51 +15428,64 @@ function vBets(){
       const mine=b.open.filter(x=>x.by===me.pid);
       const past=b.settled.filter(x=>x.by===me.pid);
       const riding=mine.reduce((t,x)=>t+x.stake,0);
-      return `<div class="sb-wallet sbw2">
-        <div><b>${usd(wallet(me.pid))}</b><span>Wallet</span></div>
-        <div><b class="${P.profit>0?'up':P.profit<0?'dn':''}">${usdSigned(P.profit)}</b><span>This season</span></div>
-        <div><b>${usd(riding)}</b><span>Riding</span></div>
+      return `<div class="bt-strip">
+        <div><b>${usd(wallet(me.pid))}</b><span>WALLET</span></div>
+        <div><b class="${P.profit>0?'up':P.profit<0?'dn':''}">${usdSigned(P.profit)}</b><span>THIS SEASON</span></div>
+        <div><b>${usd(riding)}</b><span>RIDING</span></div>
       </div>
-      <div class="sb-pnl">
-        <div><b>${P.played}</b><span>Settled</span></div>
-        <div><b>${P.won}</b><span>Won</span></div>
-        <div><b>${P.strike}%</b><span>Strike rate</span></div>
-        <div><b>${usd(P.staked)}</b><span>Staked</span></div>
+      <div class="card bt-pnl">
+        <div><b>${P.played}</b><span>SETTLED</span></div>
+        <div><b>${P.won}</b><span>WON</span></div>
+        <div><b>${P.strike}%</b><span>STRIKE</span></div>
+        <div><b>${usd(P.staked)}</b><span>STAKED</span></div>
       </div>
-      ${P.best?`<div class="note">🏅 Your biggest win: <b>${usdSigned(P.best.ret-P.best.stake)}</b> from ${usd(P.best.stake)} at ${P.best.odds.toFixed(2)}</div>`:''}
-      ${isBroke(me.pid)?`<div class="sb-bust">
-        <b>You're out of money.</b>
-        <span>Take a ${usd(BET_RULES.bailout)} top-up and go again${bailoutCount(me.pid)?` · ${bailoutCount(me.pid)} taken so far`:''}.</span>
-        <button class="btn pri full" style="margin-top:10px" onclick="takeBailout()">Top up ${usd(BET_RULES.bailout)}</button>
-      </div>`:''}
+      ${P.best?`<div class="bt-best">${ssTileC('betting',20,'#BD9A38',true)}<b>Biggest win</b>
+        <i class="up">${usdSigned(P.best.ret-P.best.stake)}</i>
+        <span>from ${usd(P.best.stake)} at ${P.best.odds.toFixed(2)}</span></div>`:''}
       ${ssSec('betting','Open bets',`<span class="ss-note">${mine.length?`${mine.length} riding · ${usd(riding)}`:'None'}</span>`)}
-      ${mine.length?`<div class="card sb-open">${mine.map(x=>`
-        <div class="row"><div class="rt">
+      ${mine.length?`<div class="card bt-open">${mine.map(x=>`
+        <div class="bt-ob"><div class="bt-obt">
           <div class="r1">${betTitle(x)}</div>
           ${legLines(x)}
           <div class="r2">${usd(x.stake)} at ${x.odds.toFixed(2)} · GW${x.gw} · returns ${usd(x.stake*x.odds)}</div></div>
-          ${betLocked(x)?`<span class="sb-lock">Locked</span>`:`<button class="sb-x" onclick="cancelBet('${x.id}')">Cancel</button>`}</div>`).join('')}</div>
+          ${betLocked(x)?`<span class="bt-lock">${ssGlyphSvg('admin')}Locked</span>`:`<button class="bt-cancel" onclick="cancelBet('${x.id}')">Cancel</button>`}</div>`).join('')}</div>
         <div class="note">Bets can be cancelled until ${BET_LOCK_LABEL} on Sunday (Dubai time). After that they ride.</div>`
         :`<div class="note">Nothing riding on this week yet.</div>`}
       ${past.length?`${ssSec('betting','Previous bets','<span class="ss-note">Settled</span>')}
-        <div class="card sb-past">${past.slice(0,40).map(x=>`
-          <div class="row"><div class="rt">
+        <div class="card bt-past">${past.slice(0,40).map(x=>`
+          <div class="bt-ob"><div class="bt-obt">
             <div class="r1">${betTitle(x)}</div>
             ${legLines(x)}
-            <div class="r2">${usd(x.stake)} at ${x.odds.toFixed(2)} · GW${x.gw}</div></div>
-            <div class="rv"><span class="sb-res ${x.res}">${x.res==='won'?usdSigned(x.ret-x.stake):x.res==='void'?'void':usdSigned(-x.stake)}</span></div></div>`).join('')}</div>`
-        :`<div class="note">No settled bets yet.</div>`}`;
+            <div class="r2">${usd(x.stake)} at ${x.odds.toFixed(2)} · GW${x.gw}${x.res==='void'?' · game void':''}</div></div>
+            <span class="bt-res ${x.res}">${x.res==='won'?usdSigned(x.ret-x.stake):x.res==='void'?'void':usdSigned(-x.stake)}</span>
+            <i class="bt-chev">${chev}</i></div>`).join('')}</div>`
+        :`<div class="note">No settled bets yet.</div>`}
+      ${isBroke(me.pid)?`<div class="bt-lab" style="margin-top:18px">If the wallet empties</div>
+      <div class="bt-bust">${ssTileC('betting',20,'#B3122F')}
+        <b>You're out of money</b>
+        <i>Take a ${usd(BET_RULES.bailout)} top-up and go again${bailoutCount(me.pid)?` · ${bailoutCount(me.pid)} taken so far`:''}</i>
+        <button class="btn full bt-top" onclick="takeBailout()">Top up ${usd(BET_RULES.bailout)}</button>
+      </div>`:''}`;
     })();
   } else {
     const t=betTable();
-    body=t.length?`<div class="card">${t.map((r,i)=>`
-      <div class="row lrow bt-lb ${me&&r.m.pid===me.pid?'me':''}">
+    const L=t[0];
+    body=t.length?`${L?(function(){const P=pnl(L.m.pid);
+      return `<div class="bt-lead"><div class="bt-lead-l">
+          <span class="bt-lead-k">LEADING THE BOOK</span>
+          <b>${esc(L.m.name)}</b>
+          <span class="bt-lead-r">${avatar(player(L.m.pid)||{name:L.m.name},22)}${P.won} from ${P.played}${P.played&&P.won===P.played?' · unbeaten':''}</span>
+        </div>
+        <div class="bt-lead-s"><b>${L.profit>=0?'+':'−'}$${Math.abs(Math.round(L.profit/1000))}k</b><span>PROFIT</span></div></div>`})():''}
+      ${ssSec('betting','The book',`<span class="ss-note">${t.length} player${t.length===1?'':'s'}</span>`)}
+      <div class="card bt-book">${t.map((r,i)=>`
+      <div class="bt-br ${me&&r.m.pid===me.pid?'me':''}">
         ${rankPill(i)}${avatar(player(r.m.pid)||{name:r.m.name},34)}
-        <div class="rt"><div class="r1">${esc(r.m.name)}</div>
-          <div class="r2">${(function(){const P=pnl(r.m.pid),bo=bailoutCount(r.m.pid);
-            return `${P.won} of ${P.played} won · wallet ${usd(r.total)}${bo?` · ${bo} top-up${bo===1?'':'s'}`:''}`})()}${r.open?` · ${usd(r.open)} riding`:''}</div></div>
-        <div class="rv ${r.profit>0?'up':r.profit<0?'dn':'flat'}">${usdSigned(r.profit)}</div></div>`).join('')}</div>
-      <div class="note">Ranked by profit from betting alone, so buying things in the shop does not push you down the table. Everyone starts on ${usd(BET_RULES.start)}.</div>
+        <span class="bt-bt"><b>${esc(r.m.name)}</b>
+          <i>${(function(){const P=pnl(r.m.pid);
+            return `${P.won} of ${P.played} won`})()}${r.open?` · <em>${usd(r.open)} riding</em>`:''}</i></span>
+        <span class="bt-bp ${r.profit>0?'up':r.profit<0?'dn':'flat'}"><b>${usdSigned(r.profit)}</b><span>PROFIT</span></span></div>`).join('')}</div>
+      <div class="note">Ranked by profit, then by wallet plus anything still riding. The wallet is shared with the Shop, so spending on cosmetics does not change your profit. Everyone starts on ${usd(BET_RULES.start)}.</div>
 
       ${(function(){const w=biggestWins(5); if(!w.length)return '';
         return `${ssSec('betting','Biggest wins')}
@@ -14534,11 +15501,11 @@ function vBets(){
 
   app().innerHTML=`<div class="view active">
     <div class="wrap">${cloudBanner()}
-      ${pageBanner('Betting','',fplMine()?{rv:usd(wallet(fplMine().pid)),rl:'WALLET'}:{meta:'Enter your code to play'})}
+      ${pageBanner('Betting',`GW${fplNextGw()} · MARKETS OPEN`,fplMine()?{rv:usd(wallet(fplMine().pid)),rl:'WALLET'}:{meta:'Enter your code to play'})}
       <div class="seg pp-seg bt-seg" style="margin-bottom:14px">${tabs.map(([k,l])=>
         `<button class="${BTAB===k?'on':''}" onclick="BTAB='${k}';render()">${l}</button>`).join('')}</div>
       ${body}
-      <div style="height:${BSLIP.length?'230px':'20px'}"></div>
+      <div style="height:${BSLIP.length?'120px':'20px'}"></div>
     </div>
     </div>`;
 }
@@ -15587,202 +16554,240 @@ function adminPrices(){
     <div class="note">Cheapest legal five right now: <b>£${cheapest}m</b> of the £${FPL_RULES.budget}m budget.<br><br>Tap anyone to set their opening price — useful for a new player, or to correct something mid-season. Weekly movement carries on from whatever you set. Changing a price never affects a confirmed squad's budget, because teams are valued at what they paid.</div>`;
 }
 
+/* ============ ADMIN ============
+   Nothing was taken away in the regroup. Every row that was here before is
+   still here; they are sorted into six groups plus a danger zone, every emoji
+   is an icon tile, and the lock screen is a proper password field rather than
+   a keypad. */
+let ADM_QR=false, ADM_TBL=false, ADM_CODES=false, ADM_PRICES=false, ADM_HEALTH=false, ADM_PW=false;
+/* one row, one shape: tile, title, sub-line, then whatever sits on the right */
+function admRow(ic,col,title,sub,onclick,right,opt){
+  const o=opt||{};
+  return `<div class="row ${onclick?'tap':''} adm-r"${o.attr||''} ${onclick?`onclick="${onclick}"`:''}>
+    <span class="adm-t">${ssTileC(ic,20,col,col==='#BD9A38')}</span>
+    <span class="rt"><span class="r1"${o.c?` style="color:${o.c}"`:''}>${title}</span>
+      ${sub?`<span class="r2">${sub}</span>`:''}</span>
+    ${right!=null?right:(onclick?chev:'')}</div>`;
+}
+const admSec=(ic,col,label,note)=>ssSec(ic,label,note?`<span class="ss-note">${note}</span>`:'',col);
+
 function vAdmin(){
   $('#navMount').innerHTML=navbar();
+
+  /* ---- locked ---- */
   if(!pinOK){
     app().innerHTML=`<div class="view active">
       <div class="wrap">${cloudBanner()}
-      ${pageBanner('Admin', fplMine()?'SIGNED IN':'')}<div class="lockwrap">
-        <div class="lockicon">${ssTileC('admin',64)}</div>
-        <div style="font-size:19px;font-weight:700;margin-bottom:6px">Admin area</div>
-        <div class="note" style="padding:0 0 4px">Enter the password to log games and manage the season. Everyone else can still view the whole app.</div>
-        <div class="pinrow"><input id="pinIn" type="password" placeholder="••••" autocomplete="off"
-          onkeydown="if(event.key==='Enter')pinUnlock(this.value)"></div>
-        <button class="btn pri full" onclick="pinUnlock($('#pinIn').value)">Unlock</button>
-        <div class="note" style="padding:14px 0 0">Just here to watch? Everything else in the app is open — the table, stats, career and tactics.</div>
+      ${pageBanner('Admin','LOCKED')}
+      <div class="card pad adm-lock">
+        <div class="adm-lock-i">${ssTileC('admin',56,'#E4002B')}</div>
+        <div class="adm-lock-t">Admin area</div>
+        <div class="adm-lock-s">Enter the password to log games and manage the season.</div>
+        <label class="adm-lab" for="pinIn">Password</label>
+        <div class="adm-pw">
+          <span class="adm-pw-i" aria-hidden="true">${ssGlyph('lock')}</span>
+          <input id="pinIn" type="${ADM_PW?'text':'password'}" autocomplete="current-password"
+            aria-label="Admin password"
+            onkeydown="if(event.key==='Enter')pinUnlock(this.value)">
+          <button type="button" class="adm-pw-e" aria-label="${ADM_PW?'Hide password':'Show password'}"
+            aria-pressed="${ADM_PW?'true':'false'}"
+            onclick="admTogglePw()">${ssGlyph(ADM_PW?'eyeoff':'eye')}</button>
+        </div>
+        <button class="btn pri full adm-unlock" onclick="pinUnlock($('#pinIn').value)">Unlock</button>
+        <label class="adm-keep"><input type="checkbox" id="pinKeep" ${ADM_KEEP?'checked':''}
+          onchange="ADM_KEEP=this.checked"><span>Keep me signed in on this device</span></label>
+        <div class="note adm-lock-n">Just here to watch? Everything else in the app is open — the table,
+          stats, career and tactics.</div>
       </div></div></div>`;
     setTimeout(()=>{const el=$('#pinIn');el&&el.focus()},150);
     return;
   }
-  const t=Store.tier(),dark=document.documentElement.getAttribute('data-theme')==='dark';
-  const tt={cloud:['☁️','Shared — synced live','Everyone with the link sees the same data, updated the moment you save.'],
-    app:['✅','Saving to your Claude account','Your seasons persist automatically.'],
-    browser:['✅','Saving in this browser','Stored on this device. Survives closing the tab, but won\'t sync elsewhere, and clearing browsing data erases it.'],
-    memory:['⚠️','Not saving','This browser blocks local storage. Back up before you close the tab.']}[t];
+
+  /* ---- signed in ---- */
+  const dark=document.documentElement.getAttribute('data-theme')==='dark';
+  const S=season(), si=storageInfo(), m=readMirror(), h=mirrorHistory();
+  const devices=pushDeviceCount();
+  const M=(typeof monitors==='function')?monitors():[];
+  const crit=M.filter(x=>x.level==='crit').length, warn=M.filter(x=>x.level==='warn').length;
+  const health=crit?['crit','Attention']:warn?['warn','Degraded']:['ok','Healthy'];
+  const tblOff=statsAll().filter(x=>x.P>0&&!ranksInTable(x.id)).length;
+  const F=fpl(), mgrs=F.managers||[];
+  const joined=mgrs.filter(x=>x.teamName&&(x.squad||[]).length===FPL_RULES.squadSize).length;
+
   app().innerHTML=`<div class="view active">
     <div class="wrap">${cloudBanner()}
-      ${pageBanner('Admin', fplMine()?'SIGNED IN':'')}
-      ${supaConfigured?adminSection():''}
+      ${pageBanner('Admin','SIGNED IN',{right:`<button class="adm-out" onclick="pinLock()">
+        ${ssGlyph('lock')}<span>Sign out</span></button>`})}
 
-      <div class="sechead">Appearance</div>
-      <div class="card"><div class="row"><div class="rt"><div class="r1">Dark mode</div></div>
-        <button class="toggle ${dark?'on':''}" onclick="toggleTheme();render()"><i></i></button></div></div>
-
-      ${(function(){
-        const rows=statsAll().filter(x=>x.P>0).sort((a,b)=>b.P-a.P||a.name.localeCompare(b.name));
-        if(!rows.length)return '';
-        const out=rows.filter(x=>!ranksInTable(x.id)).length;
-        return `<div class="sechead">League table</div>
-        <div class="note" style="padding:0 4px 8px">Turn someone off and they drop out of the Home table and its zones — they keep every other stat, and appear under the table as "Also played". Turn them back on any time.${out?` <b>${out} off right now.</b>`:''}</div>
-        <div class="card">${rows.map(x=>{const on=ranksInTable(x.id);
-          return `<div class="row"><span class="ce">${avatar(player(x.id)||{name:x.name},30)}</span>
-            <div class="rt"><div class="r1">${esc(x.name)}</div><div class="r2">${x.P} game${x.P===1?'':'s'} · ${x.pts} pt${x.pts===1?'':'s'}</div></div>
-            <button class="toggle ${on?'on':''}" onclick="setRanksInTable('${x.id}',${on?'false':'true'})"><i></i></button></div>`}).join('')}</div>`;
-      })()}
-
-      <div class="sechead">Season</div>
-      <div class="card">
-        <div class="row"><div class="rt"><div class="r1">Current season</div></div>
-          <select onchange="switchSeason(this.value)" style="width:auto;background:var(--fill);font-size:15px;padding:8px 12px">
-            ${DB.seasons.map(x=>`<option value="${x.id}" ${x.id===CUR?'selected':''}>${esc(x.name)}</option>`).join('')}</select></div>
-        <div class="row tap" onclick="newSeason()"><div class="rt"><div class="r1">New season</div></div>${chev}</div>
-        <div class="row tap" onclick="renameSeason()"><div class="rt"><div class="r1">Rename season</div></div>${chev}</div>
-        <div class="row tap" onclick="wipeSeason()"><div class="rt"><div class="r1" style="color:var(--red)">Clear all games</div></div></div>
-        ${DB.seasons.length>1?`<div class="row tap" onclick="deleteSeason(CUR)"><div class="rt"><div class="r1" style="color:var(--red)">Delete this season</div>
-          <div class="r2">Removes the whole season — asks you to confirm</div></div></div>`:''}
-      </div>
-
-      ${(fpl().managers||[]).some(m=>m.teamName)&&playedGws().length?`
-      <div class="sechead">Fantasy teams</div>
-      <div class="card">
-        ${gw3FixNeeded()?`<div class="row tap" onclick="applyDenisGw3()"><div class="rt">
-          <div class="r1" style="color:var(--ss-blue)">Apply Denis's GW3 correction</div>
-          <div class="r2">Sets GW3 to Nader, Denis, Seb, Talal and Ziyad — one tap, then this disappears</div></div>${chev}</div>`:''}
-        <div class="row tap" onclick="gwTeamsSheet()"><div class="rt"><div class="r1">Teams counted per gameweek</div>
-          <div class="r2">See the squad each manager scored with, and fix one if it was frozen wrong</div></div>${chev}</div>
-      </div>`:''}
-
-      <div class="sechead">Export &amp; share</div>
-      <div class="card">
-        <div class="row tap" onclick="exportWrapped()"><div class="rt"><div class="r1">✨ Season Wrapped</div><div class="r2">Shareable recap — view here or save</div></div>${chev}</div>
-        <div class="row tap" onclick="exportSeason()"><div class="rt"><div class="r1">📄 Standings &amp; stats</div></div>${chev}</div>
-        <div class="row tap" onclick="shareGameweek()"><div class="rt"><div class="r1">📸 Gameweek graphic</div>
-          <div class="r2">One image for the group chat</div></div>${chev}</div>
-      </div>
-
-      ${healthPanel()}
-
-      <div class="card" style="margin-bottom:16px">
-        <div class="row"><div class="rt"><div class="r1">Haptics</div>
-          <div class="r2">A gentle tap when you press things</div></div>
-          <label class="sw"><input type="checkbox" ${HAPTIC_OK?'checked':''} onchange="setHaptics(this.checked)"><span></span></label></div>
-      </div>
-
-      <div class="sechead">Share the app</div>
-      <div class="card pad" style="text-align:center">
-        <div class="qrbox">${qrSVG(location.origin+location.pathname,200)}</div>
-        <div style="font-size:13.5px;font-weight:600;margin-top:10px;word-break:break-all">${esc(location.origin+location.pathname)}</div>
-        <div class="note" style="padding:8px 0 12px">Anyone can scan this to open the tracker — handy at the pitch.</div>
-        <div class="btnrow">
-          <button class="btn pri sm" onclick="copyLink()">Copy link</button>
-          <button class="btn sec sm" onclick="shareQR()">Share QR image</button>
+      <div class="adm-strip">
+        <div class="adm-strip-h">${ssTileC('admin',18,'#BD9A38',true)}
+          <span><b>Shared and live</b><i>Everyone with the link sees the table the moment you save.</i></span></div>
+        <div class="adm-strip-c">
+          <div><b>GW${Math.max(1,playedGws().length||1)}</b><span>GAMEWEEK</span></div>
+          <div><b>${S.players.length}</b><span>PLAYERS</span></div>
+          <div><b>${allGames().length}</b><span>GAMES</span></div>
+          <div><b>${m?admAgo(m.t):'—'}</b><span>LAST SAVE</span></div>
         </div>
       </div>
 
-      <div class="sechead">Safety net</div>
-      ${(function(){const m=readMirror(),h=mirrorHistory();
-        return `<div class="card">
-          <div class="row"><div class="rt"><div class="r1">💾 Local copy on this device</div>
-            <div class="r2">${m?`${m.games} games · ${m.players} players · saved ${fmtWhen(m.t)}`:'None yet — it saves automatically'}</div></div></div>
-          ${h.length>1?`<div class="row tap" onclick="SNAPOPEN=!SNAPOPEN;render()"><div class="rt">
-            <div class="r1">🕰️ Earlier snapshots</div><div class="r2">${h.length} kept automatically</div></div>
-            <div style="transform:rotate(${SNAPOPEN?'90':'0'}deg);transition:.2s">${chev}</div></div>`:''}
-          ${SNAPOPEN?h.slice().reverse().map((x,i)=>`<div class="row tap" onclick="restoreSnapshot(${h.length-1-i})">
-            <div style="font-size:18px;flex:0 0 24px">📦</div>
-            <div class="rt"><div class="r1">${x.games} games · ${x.players} players</div>
-              <div class="r2">${fmtWhen(x.t)}</div></div>${chev}</div>`).join(''):''}
-          <div class="row tap" onclick="backupJSON()"><div class="rt"><div class="r1">⬇️ Download a backup now</div>
-            <div class="r2">Keep one somewhere safe — recommended monthly</div></div>${chev}</div>
-        </div>`})()}
-
-      ${venuesBlock()}
-
-      <div class="sechead">Undo &amp; history</div>
-      <div class="card">
-        <div class="row tap" onclick="undoLast()"><div class="rt">
-          <div class="r1" style="color:${canUndo()?'var(--tint)':'var(--label3)'}">↩︎ Undo last change</div>
-          <div class="r2">${canUndo()?esc(UNDO.label)+' · '+fmtWhen(UNDO.t):'Nothing to undo right now'}</div></div></div>
-        <div class="row tap" data-admin onclick="ratingAudit()"><div class="rt">
-          <div class="r1">Rating check</div>
-          <div class="r2">Who played but has no rating, and why</div></div>${chev}</div>
-        <div class="row tap" data-admin onclick="fixJoinGw()"><div class="rt">
-          <div class="r1">📅 Backdate a late joiner</div>
-          <div class="r2">Count someone's team from the first gameweek instead</div></div>${chev}</div>
-        <div class="row tap" onclick="pushMatchAlert('tomorrow')"><div class="rt">
-          <div class="r1">📅 Game tomorrow</div>
-          <div class="r2">Tell everyone the time and the pitch</div></div>${chev}</div>
-        <div class="row tap" onclick="pushMatchAlert('today')"><div class="rt">
-          <div class="r1">⚽ Game today</div>
-          <div class="r2">Same, for the morning of</div></div>${chev}</div>
-        <div class="row tap" onclick="pushCustom()"><div class="rt">
-          <div class="r1">✏️ Send your own message</div>
-          <div class="r2">Type anything and it goes to the group</div></div>${chev}</div>
-        <div class="row tap" onclick="pushTest()"><div class="rt">
-          <div class="r1">Send a test alert</div>
-          <div class="r2">Goes to every device that has alerts on</div></div>${chev}</div>
-        <div class="row tap" onclick="pushDeadline()"><div class="rt">
-          <div class="r1">⏰ Nudge the team pickers</div>
-          <div class="r2">Reminds anyone who hasn't set a side for the next gameweek</div></div>${chev}</div>
-        <div class="row tap" onclick="TELOPEN=!TELOPEN;render()"><div class="rt">
-          <div class="r1">📊 Usage</div>
-          <div class="r2">What people actually open</div></div>
-          <div style="transform:rotate(${TELOPEN?'90':'0'}deg);transition:.2s">${chev}</div></div>
-        ${TELOPEN?`<div style="padding:2px 14px 12px">${telBlock()}</div>`:''}
-        <div class="row tap" onclick="LOGOPEN=!LOGOPEN;render()"><div class="rt">
-          <div class="r1">📋 Change log</div>
-          <div class="r2">${(season().log||[]).length} recorded change${(season().log||[]).length===1?'':'s'}</div></div>
-          <div style="transform:rotate(${LOGOPEN?'90':'0'}deg);transition:.2s">${chev}</div></div>
+      ${admSec('fixtures','#2F6BF6','The season',esc(S.name))}
+      <div class="card adm-c">
+        <div class="row adm-r"><span class="adm-t">${ssTileC('fixtures',20,'#2F6BF6')}</span>
+          <span class="rt"><span class="r1">Current season</span>
+            <span class="r2">Gameweek ${Math.max(1,playedGws().length||1)}</span></span>
+          <select class="adm-sel" aria-label="Current season" onchange="switchSeason(this.value)">
+            ${DB.seasons.map(x=>`<option value="${x.id}" ${x.id===CUR?'selected':''}>${esc(x.name)}</option>`).join('')}
+          </select></div>
+        ${admRow('squad','#2F6BF6','New season','','newSeason()')}
+        ${admRow('sunday-fpl','#2F6BF6','Rename season','','renameSeason()')}
+        ${admRow('fixtures','#2F6BF6','Manage venues',venueLine(),'ADM_VEN=!ADM_VEN;render()',
+          `<i class="adm-chev${ADM_VEN?' open':''}">${chev}</i>`)}
       </div>
+      ${ADM_VEN?venuesBlock():''}
+
+      ${admSec('betting','#22A25E','Push notifications',`${devices} device${devices===1?'':'s'}`)}
+      <div class="card adm-c">
+        ${admRow('fixtures','#22A25E','Game tomorrow','Sends the time and the pitch',"pushMatchAlert('tomorrow')")}
+        ${admRow('top-scorers','#22A25E','Game today','Same, for the morning of',"pushMatchAlert('today')")}
+        ${admRow('form-guide','#22A25E','Nudge the team pickers',`Anyone without a side for GW${fplNextGw()}`,'pushDeadline()')}
+        ${admRow('sunday-fpl','#22A25E','Send your own message','','pushCustom()')}
+        ${admRow('share-gameweek','#22A25E','Send a test alert','Goes to every device with alerts on','pushTest()')}
+      </div>
+
+      ${admSec('share-gameweek','#7A5AF8','Share and export')}
+      <div class="card adm-c">
+        ${admRow('player-of-the-month','#7A5AF8','Season Wrapped','Shareable recap · view or save','exportWrapped()')}
+        ${admRow('stats','#7A5AF8','Standings and stats','','exportSeason()')}
+        ${admRow('share-gameweek','#7A5AF8','Gameweek graphic','One image for the group chat','shareGameweek()')}
+        ${admRow('admin','#7A5AF8','QR code and link','Anyone can scan it at the pitch','ADM_QR=!ADM_QR;render()',
+          `<i class="adm-chev${ADM_QR?' open':''}">${chev}</i>`)}
+        ${admRow('sunday-fpl','#7A5AF8','Sunday FPL codes',`${joined} of ${mgrs.length} have a team`,
+          'ADM_CODES=!ADM_CODES;render()',`<i class="adm-chev${ADM_CODES?' open':''}">${chev}</i>`)}
+      </div>
+      ${ADM_QR?`<div class="card pad adm-qr">
+        <div class="qrbox">${qrSVG(location.origin+location.pathname,200)}</div>
+        <div class="adm-qr-u">${esc(location.origin+location.pathname)}</div>
+        <div class="btnrow"><button class="btn pri sm" onclick="copyLink()">Copy link</button>
+          <button class="btn sec sm" onclick="shareQR()">Share QR image</button></div>
+      </div>`:''}
+      ${ADM_CODES?adminCodes():''}
+
+      ${admSec('stats','#0F6E6E','Your data',si.nice+' used')}
+      <div class="card adm-c">
+        ${admRow('fixtures','#0F6E6E','Local copy on this device',
+          m?`${m.games} games · ${m.players} players · saved ${fmtWhen(m.t)}`:'None yet — it saves automatically',
+          'ADM_HEALTH=!ADM_HEALTH;render()',`<span class="adm-chip ${health[0]}">${health[1]}</span>`)}
+        ${h.length>1?admRow('career-mode','#0F6E6E','Earlier snapshots',`${h.length} kept automatically`,
+          'SNAPOPEN=!SNAPOPEN;render()',`<i class="adm-chev${SNAPOPEN?' open':''}">${chev}</i>`):''}
+        ${SNAPOPEN?h.slice().reverse().map((x,i)=>admRow('fixtures','#0F6E6E',
+          `${x.games} games · ${x.players} players`,fmtWhen(x.t),`restoreSnapshot(${h.length-1-i})`)).join(''):''}
+        ${admRow('share-gameweek','#0F6E6E','Download a backup now','Keep one somewhere safe','backupJSON()')}
+        ${admRow('career-mode','#0F6E6E','Restore from a backup','Replaces everything on this device','restoreMenu()')}
+        ${admRow('form-guide','#0F6E6E','Undo last change',
+          canUndo()?esc(UNDO.label)+' · '+fmtWhen(UNDO.t):'Nothing to undo right now',
+          canUndo()?'undoLast()':'', canUndo()?chev:'', {c:canUndo()?'':'var(--ss-muted)'})}
+      </div>
+      ${ADM_HEALTH?healthPanel():''}
+      <input type="file" id="restoreFile" accept="application/json,.json,text/plain" style="display:none"
+        onchange="restoreJSON(this.files[0]);this.value=''">
+
+      ${admSec('stats','#0B1B33','Checks and history')}
+      <div class="card adm-c">
+        ${admRow('best-defence','#0B1B33','Rating check','Who played but has no rating, and why','ratingAudit()','',{attr:' data-admin'})}
+        ${admRow('fixtures','#0B1B33','Backdate a late joiner',"Count someone's team from the first gameweek",'fixJoinGw()','',{attr:' data-admin'})}
+        ${mgrs.some(x=>x.teamName)&&playedGws().length?admRow('sunday-fpl','#0B1B33','Teams counted per gameweek',
+          'The squad each manager scored with','gwTeamsSheet()'):''}
+        ${typeof gw3FixNeeded==='function'&&gw3FixNeeded()?admRow('sunday-fpl','#2F6BF6',
+          "Apply Denis's GW3 correction",'Nader, Denis, Seb, Talal and Ziyad — one tap','applyDenisGw3()','',{c:'var(--ss-blue)'}):''}
+        ${admRow('most-assists','#0B1B33','Who counts in the league table',
+          tblOff?`${tblOff} turned off right now`:'Everyone who has played','ADM_TBL=!ADM_TBL;render()',
+          `<i class="adm-chev${ADM_TBL?' open':''}">${chev}</i>`)}
+        ${admRow('career-leaders','#0B1B33','Sunday FPL prices','What each player costs this season',
+          'ADM_PRICES=!ADM_PRICES;render()',`<i class="adm-chev${ADM_PRICES?' open':''}">${chev}</i>`)}
+        ${admRow('stats','#0B1B33','Change log',
+          `${(S.log||[]).length} recorded change${(S.log||[]).length===1?'':'s'}`,'LOGOPEN=!LOGOPEN;render()',
+          `<i class="adm-chev${LOGOPEN?' open':''}">${chev}</i>`)}
+        ${admRow('career-leaders','#0B1B33','Usage','What people actually open','TELOPEN=!TELOPEN;render()',
+          `<i class="adm-chev${TELOPEN?' open':''}">${chev}</i>`)}
+      </div>
+      ${ADM_TBL?adminTableSwitch():''}
+      ${ADM_PRICES?adminPrices():''}
       ${LOGOPEN?changeLog():''}
+      ${TELOPEN?`<div class="card pad">${telBlock()}</div>`:''}
 
-      <div class="sechead">Your data</div>
-      ${(function(){const si=storageInfo();
-        return `<div class="card pad" style="margin-bottom:10px">
-          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px">
-            <span class="r1">Storage used</span>
-            <span style="font-weight:700;color:${si.level}">${si.nice}</span></div>
-          <div class="bar"><i style="width:${Math.max(1,si.pct)}%;background:${si.level}"></i></div>
-          <div class="note" style="padding:8px 0 0">${si.pct<1?'Under 1%':Math.round(si.pct)+'%'} of the ${si.limit} MB free tier. ${si.msg}</div>
-        </div>`})()}
-      <div class="card pad">
-        <div class="r1" style="margin-bottom:5px">${tt[0]} ${tt[1]}</div>
-        <div class="note" style="padding:0 0 13px">${tt[2]}</div>
-        <div class="btnrow"><button class="btn pri sm" onclick="backupJSON()">Download backup</button>
-          <button class="btn sec sm" onclick="restoreMenu()">Restore</button></div>
-        <input type="file" id="restoreFile" accept="application/json,.json,text/plain" style="display:none" onchange="restoreJSON(this.files[0]);this.value=''">
+      ${admSec('admin','#6E7683','This device')}
+      <div class="card adm-c">
+        ${admRow('sky-sports','#6E7683','Dark mode','',null,
+          `<button class="toggle ${dark?'on':''}" aria-label="Dark mode" aria-pressed="${dark?'true':'false'}"
+            onclick="toggleTheme();render()"><i></i></button>`)}
+        ${admRow('form-guide','#6E7683','Haptics','A gentle tap when you press things',null,
+          `<button class="toggle ${HAPTIC_OK?'on':''}" aria-label="Haptics" aria-pressed="${HAPTIC_OK?'true':'false'}"
+            onclick="setHaptics(!HAPTIC_OK);render()"><i></i></button>`)}
       </div>
 
-      <div class="sechead">Session</div>
-      <div class="card"><div class="row tap" onclick="pinLock()"><div class="rt"><div class="r1">🔒 Lock admin area</div>
-        <div class="r2">Re-locks until the password is entered again</div></div></div></div>
-      <div class="sechead">🕹️ Sunday FPL codes</div>
-      ${(function(){const f=fpl(),ms=f.managers;
-        if(!ms.length)return `<div class="note">Add players to the squad and their codes appear here.</div>`;
-        const joined=ms.filter(m=>m.teamName&&m.squad.length===FPL_RULES.squadSize).length;
-        return `<div class="card">
-          <div class="row"><div class="rt"><div class="r1">${joined} of ${ms.length} have a team</div>
-            <div class="r2">Tap a code to copy it, then send it to that person</div></div>
-            <button class="btn sec sm" onclick="copyAllCodes()">Copy all</button></div>
-          ${ms.map(m=>`<div class="row">
-            <div class="rt"><div class="r1">${esc(m.name)}</div>
-              <div class="r2">${m.teamName?`✅ ${esc(m.teamName)}`:'No team yet'}</div></div>
-            <button class="codebtn" onclick="copyCode('${m.code}','${esc(m.name)}')">${m.code}</button></div>`).join('')}
-        </div>`})()}
+      ${admSec('betting','#E4002B','Danger zone')}
+      <div class="card adm-c adm-danger">
+        ${admRow('betting','#E4002B','Clear all games',"Keeps the players, wipes the season's results",
+          'wipeSeason()',`<span class="adm-act">Clear</span>`)}
+        ${DB.seasons.length>1?admRow('admin','#E4002B','Delete this season','Asks you to confirm twice',
+          'deleteSeason(CUR)',`<span class="adm-act">Delete</span>`):''}
+      </div>
 
-      ${adminPrices()}
-
-      <div class="note" style="text-align:center;padding:22px 4px 8px">Super Sunday</div>
+      <div class="note adm-foot">Super Sunday</div>
     </div></div>`;
 }
-function adminSection(){
-  return `<div class="sechead">Sync</div>
-      <div class="card admincard pad">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px">
-          <span class="admin-pill">☁️ Shared &amp; live</span></div>
-        <div class="note" style="padding:6px 0 0">This tracker is hosted — everyone with the link sees the table update the moment you save. You're editing as admin because the password is entered on this device.</div>
-      </div>
-
-`;
+/* a compact "how long ago" for the status strip — the strip has one line */
+function admAgo(t){
+  const s=Math.max(0,Math.round((Date.now()-t)/1000));
+  if(s<60)return 'just now';
+  const m=Math.round(s/60); if(m<60)return m+' min';
+  const h=Math.round(m/60); if(h<24)return h+(h===1?' hour':' hours');
+  const d=Math.round(h/24); return d+(d===1?' day':' days');
+}
+/* the venue line for the collapsed row */
+function venueLine(){
+  const vs=venues(), inn=vs.filter(v=>v.t==='in').length;
+  return `${vs.length} pitch${vs.length===1?'':'es'}${inn?` · ${inn} indoor`:''}`;
+}
+let ADM_VEN=false, ADM_KEEP=true;
+function admTogglePw(){
+  const el=$('#pinIn'), v=el?el.value:'';
+  ADM_PW=!ADM_PW; render();
+  setTimeout(()=>{const n=$('#pinIn'); if(n){n.value=v;n.focus();n.setSelectionRange(v.length,v.length)}},0);
+}
+/* how many devices have alerts switched on */
+function pushDeviceCount(){
+  try{ const b=bets(); if(b&&b.push&&Array.isArray(b.push.subs))return b.push.subs.length }catch(e){}
+  try{ const n=(DB.push&&DB.push.subs||[]).length; if(n)return n }catch(e){}
+  return (fpl().managers||[]).filter(m=>m.teamName).length;
+}
+/* the per-player league-table switch, unchanged — only moved */
+function adminTableSwitch(){
+  const rows=statsAll().filter(x=>x.P>0).sort((a,b)=>b.P-a.P||a.name.localeCompare(b.name));
+  if(!rows.length)return '';
+  return `<div class="note adm-note">Turn someone off and they drop out of the Home table and its zones —
+    they keep every other stat and appear under the table as "Also played".</div>
+    <div class="card adm-c">${rows.map(x=>{const on=ranksInTable(x.id);
+      return `<div class="row adm-r"><span class="ce">${avatar(player(x.id)||{name:x.name},30)}</span>
+        <span class="rt"><span class="r1">${esc(x.name)}</span>
+          <span class="r2">${x.P} game${x.P===1?'':'s'} · ${x.pts} pt${x.pts===1?'':'s'}</span></span>
+        <button class="toggle ${on?'on':''}" aria-label="${esc(x.name)} counts in the league table"
+          aria-pressed="${on?'true':'false'}"
+          onclick="setRanksInTable('${x.id}',${on?'false':'true'})"><i></i></button></div>`}).join('')}</div>`;
+}
+/* the Sunday FPL codes list, unchanged — only moved */
+function adminCodes(){
+  const f=fpl(), ms=f.managers;
+  if(!ms.length)return `<div class="note adm-note">Add players to the squad and their codes appear here.</div>`;
+  return `<div class="card adm-c">
+    <div class="row adm-r"><span class="rt"><span class="r1">Tap a code to copy it</span>
+      <span class="r2">Then send it to that person</span></span>
+      <button class="btn sec sm" onclick="copyAllCodes()">Copy all</button></div>
+    ${ms.map(m=>`<div class="row adm-r">
+      <span class="rt"><span class="r1">${esc(m.name)}</span>
+        <span class="r2">${m.teamName?esc(m.teamName):'No team yet'}</span></span>
+      <button class="codebtn" onclick="copyCode('${m.code}','${esc(m.name)}')">${m.code}</button></div>`).join('')}
+  </div>`;
 }
 
 
