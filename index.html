@@ -4673,6 +4673,37 @@ html[data-theme="dark"] .lc-grid{stroke:#2A2A2D}
   justify-content:center}
 .fplchip svg{width:18px;height:18px}
 .chip-ic{flex:0 0 auto;display:flex}
+/* ---- thumb-sized tap targets ----
+   Several controls were 14-19px tall. That is fine for a mouse and fiddly for
+   a thumb, and the back button is the one people reach for most. Height only —
+   the type and the layout are unchanged. */
+.backbtn{min-height:34px;padding:2px 6px 2px 2px}
+.sechead .act,.sechead .ss-act{min-height:32px;display:inline-flex;align-items:center;padding:0 2px}
+.lg4-also-p,.stm-more,.see-all{min-height:30px;display:inline-flex;align-items:center}
+.lg4-none{text-align:center;margin-bottom:14px}
+.lg4-none b{font-size:16px;font-weight:800;color:var(--ss-ink)}
+/* ---- dark ink on gold, never white ----
+   White on #BD9A38 measures 2.68:1 — the worst contrast anywhere in the app,
+   and it was on the things people read most: the rank-1 pill, the draw chip,
+   the captain badge and the amber rating. Navy on the same gold is 5.85:1.
+   This is not a new decision: the Season Finale brief already said "dark text
+   on gold throughout, never white, because white on gold is the single most
+   common way to make something look cheap." These are the places that had not
+   caught up. */
+.rk.gold{color:var(--ss-navy)}
+.wdl i.D{color:var(--ss-navy)}
+.capav em{color:var(--ss-navy)}
+.st-rt.a{color:var(--ss-navy)}
+.sk-rt.a{color:var(--ss-navy)}
+.pp-games .fd.pp-fd.D{color:var(--ss-navy)}
+.bc-rt.r-good{color:var(--ss-navy)}
+/* second and third in the Player of the Month race. The medal emoji rendered
+   as whatever the phone felt like and were the last pictorial emoji left in
+   the app; these are the same rank pills used everywhere else. */
+.pm-rk{display:inline-flex;align-items:center;justify-content:center;width:17px;height:17px;border-radius:5px;
+  font-style:normal;font-size:10.5px;font-weight:900;margin-right:6px;color:var(--ss-navy)}
+.pm-rk.ag{background:#C7CED6}
+.pm-rk.br{background:#CFA06A}
 </style>
 </head>
 <body>
@@ -5772,7 +5803,7 @@ function potmBlock(){
       <div class="pm-tiles">
         ${tile(w.pts,'PTS')}${tile(w.G,'⚽ GOALS')}${tile(w.A,'🅰️ ASSISTS')}${tile((w.GA/Math.max(1,w.P)).toFixed(1),'CONCEDED / GAME')}
       </div>
-      ${cur.runners.length?`<div class="pm-runners">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')">${i===0?'🥈':'🥉'} ${esc(String(r.name).toUpperCase())}</span>`).join('')}</div>`:''}
+      ${cur.runners.length?`<div class="pm-runners">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')"><i class="pm-rk ${i===0?'ag':'br'}">${i+2}</i>${esc(String(r.name).toUpperCase())}</span>`).join('')}</div>`:''}
       ${pm.length>1?`<button class="lvltoggle pm-toggle" onclick="POTMOPEN=!POTMOPEN;render()">${POTMOPEN?'Hide past months ▲':`See ${pm.length-1} past month${pm.length-1===1?'':'s'} ▼`}</button>
         ${POTMOPEN?`<div class="pm-past">${pm.slice(1).map(x=>`<div class="pm-past-r" onclick="openPlayer('${x.win.id}')">
           <span class="pm-past-m">${MONTHNAME(x.month)}</span><b>${esc(String(x.win.name).toUpperCase())}</b>
@@ -6162,7 +6193,17 @@ function feed(){const gl=allGames(),ap={},go_={},ev=[],T=[1,5,10,25,50,100];
 const $=s=>document.querySelector(s);
 const app=()=>$('#app');
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function toast(m){ const t=$('#toast'); const s=String(m); const warn=/^(⚠️|❌|🚫)/.test(s);
+/* A success toast must never appear on top of a failed write.
+   Twenty-four write paths call save() without reading its answer — the
+   failure banner catches all of them, but they would still have cheerfully
+   said "Undone" or "Bracket drawn" a moment after the database refused. One
+   guard here covers every one of them, which is far safer than editing
+   twenty-four call sites. */
+function toast(m){ const t=$('#toast'); let s=String(m);
+  if(typeof SAVE_FAIL!=='undefined'&&SAVE_FAIL&&!/^(⚠️|❌|🚫)/.test(s)
+     &&Date.now()-(SAVE_FAIL.at||0)<4000)
+    s='⚠️ Not saved — '+(SAVE_FAIL.detail||'the database refused the write');
+  const warn=/^(⚠️|❌|🚫)/.test(s);
   t.innerHTML=`<span class="tk ${warn?'warn':''}">${warn?'!':'<svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>'}</span><span class="tm">${esc(s.replace(/^(⚠️|❌|🚫|↻|✅|✓)\s*/,''))}</span>`;
   t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2200)}
 const initials=n=>{const p=String(n||'?').trim().split(/\s+/);return((p[0]||'?')[0]+((p[1]||'')[0]||'')).toUpperCase()};
@@ -6409,8 +6450,17 @@ function render(){ try{applySeasonTint()}catch(e){}
   try{ssEmptyPass()}catch(e){}
   try{ssHeadPass();ssGlyphPass();ssSegPass()}catch(e){}
   try{applyEvent()}catch(e){}
+  try{ssHidePass()}catch(e){}
   try{navScrollPass()}catch(e){}
   setTheme(document.documentElement.getAttribute('data-theme'),true)}
+/* Every icon in the app is decoration — the text beside it is the content.
+   An SVG with no role and no label is read out as "image" or, worse, has its
+   <title> announced mid-sentence, so anything not already labelled is hidden
+   from screen readers here rather than in three hundred template literals. */
+function ssHidePass(){
+  document.querySelectorAll('.view.active svg:not([aria-hidden]):not([role]):not([aria-label])')
+    .forEach(n=>{ if(!n.closest('[role="img"]')) n.setAttribute('aria-hidden','true') });
+}
 /* segments that don't fit at 390 scroll sideways with a fade at the edge and keep the active tab in view */
 function ssSegPass(){
   document.querySelectorAll('.view.active .seg').forEach(sg=>{
@@ -6584,8 +6634,20 @@ function vHomeBody(){
         <div class="sky-hero-b">Super Sunday</div>
       </div>
       
-      <div class="card lg4-card"><div class="tw"><table class="lg4">${LG4_HEAD}<tbody>${lg4Rows(ranked,m)}</tbody></table></div></div>
-      ${lg4Key(ranked.length)}
+      ${ranked.length
+        ? `<div class="card lg4-card"><div class="tw"><table class="lg4">${LG4_HEAD}<tbody>${lg4Rows(ranked,m)}</tbody></table></div></div>
+      ${lg4Key(ranked.length)}`
+        /* A bare header with no rows and a zone key underneath is a dead end:
+           it reads as broken rather than as a setting. Since everyone can now
+           be switched out of the table one by one, this state is reachable. */
+        : `<div class="card pad lg4-none">
+            <b>Nobody is in the table yet</b>
+            <div class="note" style="padding:6px 0 0">${
+              unranked.length
+                ? `${unranked.length} player${unranked.length===1?' has':'s have'} played, but ${unranked.length===1?'they are':'they are all'} switched off for the table.${
+                    isAdmin()?' Turn someone back on in Admin → Checks and history → Who counts in the league table.':''}`
+                : 'Log a game and the table fills itself in.'}</div>
+          </div>`}
 
       <div class="note lg4-note">Win 3 · Draw 1 · Loss 0 · ties split by win rate.</div>
 
@@ -6836,22 +6898,22 @@ function fixturesBody(){
       <input class="search" placeholder="Search a player or round…" value="${esc(FSEARCH)}" id="fxq"
         oninput="FSEARCH=this.value;render()" style="margin-bottom:10px">
       <div class="filterbar">
-        <span class="fx-w">${ssNamed('League',22)}<select class="fsel fx-sel" onchange="FF=this.value;render()">
+        <span class="fx-w">${ssNamed('League',22)}<select class="fsel fx-sel" aria-label="Competition" onchange="FF=this.value;render()">
           <option value="all" ${FF==='all'?'selected':''}>All comps</option>
           ${comps().map(c=>`<option value="${c.id}" ${FF===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}
         </select></span>
-        <span class="fx-w">${ssNamed('Everyone',22)}<select class="fsel fx-sel" onchange="FPLAYER=this.value;render()">
+        <span class="fx-w">${ssNamed('Everyone',22)}<select class="fsel fx-sel" aria-label="Player" onchange="FPLAYER=this.value;render()">
           <option value="all" ${FPLAYER==='all'?'selected':''}>Everyone</option>
           ${roster.map(p=>`<option value="${p.id}" ${FPLAYER===p.id?'selected':''}>${esc(p.name)}</option>`).join('')}
         </select></span>
-        <select class="fsel" onchange="FRESULT=this.value;render()">
+        <select aria-label="Result" class="fsel" onchange="FRESULT=this.value;render()">
           <option value="all" ${FRESULT==='all'?'selected':''}>Any result</option>
           ${FPLAYER!=='all'?`<option value="win" ${FRESULT==='win'?'selected':''}>Wins</option>
             <option value="loss" ${FRESULT==='loss'?'selected':''}>Losses</option>`:''}
           <option value="draw" ${FRESULT==='draw'?'selected':''}>Draws</option>
           ${FPLAYER==='all'?`<option value="big" ${FRESULT==='big'?'selected':''}>Big wins</option>`:''}
         </select>
-        <span class="fx-w">${ssNamed('Newest',22)}<select class="fsel fx-sel" onchange="FSORT=this.value;render()">
+        <span class="fx-w">${ssNamed('Newest',22)}<select aria-label="Sort" class="fsel fx-sel" onchange="FSORT=this.value;render()">
           ${[['new','Newest'],['old','Oldest'],['goals','Most goals'],['margin','Biggest margin']]
             .map(([k,l])=>`<option value="${k}" ${FSORT===k?'selected':''}>${l}</option>`).join('')}
         </select></span>
@@ -8183,7 +8245,7 @@ async function physAdd(pid,gid){
   if(!g){
     const pick=await askChoice('Which game?','Pick the match these numbers came from',
       games.slice(0,8).map(x=>({
-        label:`${x.round||fmtDate(x.date)} · ${x.scoreA}–${x.scoreB}${physGame(pid,x.id)?' ✓':''}`,
+        label:`${x.round||fdate(x.date)} · ${x.scoreA}–${x.scoreB}${physGame(pid,x.id)?' ✓':''}`,
         value:x.id})));
     if(!pick)return;
     g=games.find(x=>x.id===pick);
@@ -8238,7 +8300,7 @@ function physRows(pid){
     const g=allGames().find(x=>x.id===r.gid);
     const who=r.src==='strava'?'<span class="psrc sy">SYNCED</span>':'<span class="psrc">TYPED</span>';
     return `<div class="physrow">
-      <span class="pr-g">${g?esc(g.round||fmtDate(g.date)):'—'}</span>
+      <span class="pr-g">${g?esc(g.round||fdate(g.date)):'—'}</span>
       <span class="pr-v">${r.kcal!=null?Math.round(r.kcal):'—'}</span>
       <span class="pr-v">${r.hr!=null?Math.round(r.hr):'—'}</span>
       <span class="pr-v">${r.maxHr!=null?Math.round(r.maxHr):'—'}</span>
@@ -11280,10 +11342,10 @@ function fplMarket(m,locked){
     ${f.ticker.length?`<div class="ticker mk-tick">${f.ticker.slice(0,6).map(t=>`<span class="${t.to>t.from?'up':'dn'}">${t.to>t.from?'▲':'▼'} ${esc(t.name)} £${t.to.toFixed(1)}m</span>`).join('')}</div>`:''}
 
     <div class="filterbar" style="margin-bottom:10px">
-      ${!FPICK?`<select class="fsel" onchange="FPOS=this.value;render()">
+      ${!FPICK?`<select aria-label="Position" class="fsel" onchange="FPOS=this.value;render()">
         ${['ALL','DEF','MID','ATT'].map(x=>`<option value="${x}" ${FPOS===x?'selected':''}>${x==='ALL'?'All positions':x}</option>`).join('')}
       </select>`:''}
-      <select class="fsel" onchange="FSORT2=this.value;render()">
+      <select aria-label="Sort by" class="fsel" onchange="FSORT2=this.value;render()">
         ${[['total','Total points'],['form','Form'],['price','Price'],['owned','% owned'],['threat','Threat'],['value','Value']].map(([k,l])=>`<option value="${k}" ${FSORT2===k?'selected':''}>${l}</option>`).join('')}
       </select>
     </div>
@@ -14166,7 +14228,15 @@ function sundayLockBefore(ms){
   let back=dow; if(dow===0&&h<H)back=7;
   return Date.UTC(d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()-back,H,0,0)-DUBAI_OFF;
 }
-const BET_RULES={start:10000, min:10, max:2500, margin:0.90, bailout:1000, lockHour:SUNDAY_LOCK_HOUR};
+/* maxReturn: the most any single slip can pay out.
+   Without it the economy is unbounded. "To score 5 or more" for a light
+   scorer prices around 590, and four of those on an accumulator multiply to
+   about 1.3e11 — a max stake would return more than three hundred trillion,
+   against a starting balance of ten thousand. One lucky slip would end the
+   game for everyone. Real books cap the payout rather than distorting the
+   prices, so the prices stay honest and the ceiling is stated on the slip. */
+const BET_RULES={start:10000, min:10, max:2500, margin:0.90, bailout:1000,
+  lockHour:SUNDAY_LOCK_HOUR, maxReturn:250000};
 const usd=n=>'$'+Math.round(n).toLocaleString('en-US');
 const usdSigned=n=>(n>0?'+':n<0?'−':'')+'$'+Math.abs(Math.round(n)).toLocaleString('en-US');
 function bets(){
@@ -14682,7 +14752,7 @@ function settleBets(){
       b.settled.unshift({...bet,res:'void',ret:bet.stake,when:Date.now()});
       done++; return false;
     }
-    const ret=allIn?Math.round(bet.stake*odds):0;
+    const ret=allIn?Math.min(Math.round(bet.stake*odds),BET_RULES.maxReturn):0;
     if(ret)b.wallets[bet.by]=wallet(bet.by)+ret;
     b.settled.unshift({...bet,res:allIn?'won':'lost',ret,
       settledOdds:Math.round(odds*100)/100,voided:legs.length-legsPlayed(legs,games),when:Date.now()});
@@ -14899,9 +14969,14 @@ function giveUpGuess(){ if(!GUESS)return; GSTREAK=0; GUESSDONE={right:false,gave
 let BTAB='markets', BSLIP=[], BSTAKE=100, BPLAYER=null;
 let BSOPEN=false, BSMODE='acca';        /* the slip sheet; 'acca' or 'singles' */
 const slipName=n=>n===1?'Single':({2:'Double',3:'Treble',4:'Four-fold'}[n]||n+'-fold');
+const capReturn=v=>Math.min(v,BET_RULES.maxReturn);
 const slipReturns=()=>BSMODE==='singles'
-  ? BSLIP.reduce((t,x)=>t+BSTAKE*x.odds,0)
-  : BSTAKE*slipOdds();
+  ? BSLIP.reduce((t,x)=>t+capReturn(BSTAKE*x.odds),0)
+  : capReturn(BSTAKE*slipOdds());
+/* true when the ceiling is actually biting, so the slip can say so */
+const slipCapped=()=>BSMODE==='singles'
+  ? BSLIP.some(x=>BSTAKE*x.odds>BET_RULES.maxReturn)
+  : BSTAKE*slipOdds()>BET_RULES.maxReturn;
 const slipOutlay=()=>BSMODE==='singles'?BSTAKE*BSLIP.length:BSTAKE;
 const BET_MAXLEGS=4;
 /* An accumulator multiplies, and every extra leg earns a bonus on top — the
@@ -14982,7 +15057,7 @@ function paintSlip(){
         <div class="r"><span>RETURNS</span><b class="up">${usd(ret)}</b></div>
       </div>
       <button class="btn pri full bsl-go2" onclick="placeBet()">Place bet · ${usd(slipOutlay())}</button>
-      <div class="bsl-note">Cancel any time before ${SUNDAY_LOCK_LABEL} Sunday, Dubai time. After that it rides.</div>
+      <div class="bsl-note">${slipCapped()?`Returns are capped at ${usd(BET_RULES.maxReturn)} a slip. `:''}Cancel any time before ${SUNDAY_LOCK_LABEL} Sunday, Dubai time. After that it rides.</div>
     </div>`;
 }
 let SHTAB='card';
@@ -15521,16 +15596,16 @@ function predBlock(){
           One free guess a gameweek, either way round counts.</div>
         <div class="predrow">
           <div class="predside">
-            <button onclick="setPred('A',1)">+</button>
+            <button onclick="setPred('A',1)" aria-label="One more for Team A">+</button>
             <b>${a}</b>
-            <button onclick="setPred('A',-1)">−</button>
+            <button onclick="setPred('A',-1)" aria-label="One fewer for Team A">−</button>
             <span>Team A</span>
           </div>
           <div class="preddash">–</div>
           <div class="predside">
-            <button onclick="setPred('B',1)">+</button>
+            <button onclick="setPred('B',1)" aria-label="One more for Team B">+</button>
             <b>${b2}</b>
-            <button onclick="setPred('B',-1)">−</button>
+            <button onclick="setPred('B',-1)" aria-label="One fewer for Team B">−</button>
             <span>Team B</span>
           </div>
         </div>
@@ -16485,14 +16560,14 @@ function vStats(){
       ${SMODE==='table'?`<div class="statseg">${Object.entries(STAT_VIEWS).map(([k,v])=>
         `<button class="${SVIEW===k?'on':''}" onclick="SVIEW='${k}';render()">${v.l}</button>`).join('')}</div>`:''}
       ${(SMODE==='chem'||SMODE==='compare'||SMODE==='insights'||SMODE==='venues')?'':`<div class="filterbar st-fb" style="margin-bottom:12px">
-        <select class="fsel" onchange="SCOMP=this.value;render()">
+        <select aria-label="Competition" class="fsel" onchange="SCOMP=this.value;render()">
           <option value="all" ${SCOMP==='all'?'selected':''}>All comps</option>
           ${comps().map(c=>`<option value="${c.id}" ${SCOMP===c.id?'selected':''}>${esc(c.name)}</option>`).join('')}
         </select>
-        <select class="fsel" onchange="PF=this.value;render()">
+        <select aria-label="Position" class="fsel" onchange="PF=this.value;render()">
           ${['ALL','GK','DEF','MID','ATT'].map(x=>`<option value="${x}" ${PF===x?'selected':''}>${x==='ALL'?'Positions':x}</option>`).join('')}
         </select>
-        <select class="fsel" onchange="SMIN=+this.value;render()">
+        <select aria-label="Minimum games" class="fsel" onchange="SMIN=+this.value;render()">
           ${[0,3,5,10].map(n=>`<option value="${n}" ${SMIN===n?'selected':''}>${n===0?'Any games':n+'+ games'}</option>`).join('')}
         </select>
         ${(SCOMP!=='all'||PF!=='ALL'||SMIN>0)?`<button class="fclear" onclick="SCOMP='all';PF='ALL';SMIN=0;render()">✕ Clear filters</button>`:''}
@@ -16613,7 +16688,7 @@ function compareBody(){
       <div class="grid cmp2" style="margin-bottom:12px">
         ${[[a,'CA','var(--tint)'],[b,'CB','var(--blue)']].map(([x,v,col])=>`<div class="card pad" style="text-align:center">
           <div style="display:flex;justify-content:center;margin-bottom:9px">${avatar(x,48)}</div>
-          <select onchange="${v}=this.value;render()" style="background:var(--fill);font-size:15px;text-align:center">
+          <select aria-label="Player" onchange="${v}=this.value;render()" style="background:var(--fill);font-size:15px;text-align:center">
             ${st.map(o=>`<option value="${o.id}" ${o.id===x.id?'selected':''}>${esc(o.name)}</option>`).join('')}</select>
           <div style="margin-top:8px;font-size:12.5px;color:var(--label2)">${x.P} games · ${x.pts} pts</div></div>`).join('')}
       </div>
@@ -17187,7 +17262,7 @@ function tacBoard(){
         <button class="b ${side==='B'?'on':''}" onclick="setBoardSide('B')">Team B <em>${count('B')}/${size}</em></button>
       </div>
       <div class="lbl">Team ${side} shape</div>
-      <select class="lg6-in" onchange="setFormation(this.value)">
+      <select aria-label="Formation" class="lg6-in" onchange="setFormation(this.value)">
         ${FORMATIONS.filter(x=>(x.size||7)===size).map(x=>
           `<option value="${x.id}" ${x.id===(side==='A'?fA.id:fB.id)?'selected':''}>${x.name}${x.wb?'':' · '+esc(x.tag)}</option>`).join('')}
       </select>
