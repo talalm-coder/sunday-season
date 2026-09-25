@@ -5228,6 +5228,49 @@ body.ref-mode #app{padding-top:0!important;margin-top:0!important}
 .pay-gh .rt{flex:1;min-width:0}
 .pay-gl{background:var(--ss-soft);border-radius:0 0 12px 12px}
 .pay-gl .row{background:transparent}
+.pay-gn{flex:0 0 auto;min-width:40px;text-align:center;font-size:12px;font-weight:900;padding:4px 7px;border-radius:9px;background:rgba(208,20,44,.1);color:#D0142C;margin-left:5.5px}
+.pay-gn.ok{background:rgba(31,138,76,.12);color:#1F8A4C}
+[data-theme="dark"] .pay-gn{background:rgba(255,122,133,.16);color:#FF9AA3}
+[data-theme="dark"] .pay-gn.ok{background:rgba(94,227,154,.14);color:#5EE39A}
+.pay-says{font-weight:800;color:#C77700}
+[data-theme="dark"] .pay-says{color:#FFB547}
+.pay-kr{gap:9px}
+.pay-kr .rt{flex:1;min-width:0}
+.pay-kr.says .r2{color:#C77700;font-weight:800}
+[data-theme="dark"] .pay-kr.says .r2{color:#FFB547}
+.pay-tick{flex:0 0 40px;width:40px;height:40px;border-radius:12px;border:2px solid var(--ss-hair);background:var(--card);color:#fff;display:flex;align-items:center;justify-content:center;padding:0}
+.pay-tick.on{background:#1F8A4C;border-color:#1F8A4C}
+.pay-tick.on.bal{background:#2F6BF6;border-color:#2F6BF6}
+.pay-tick[disabled]{opacity:.5}
+.pay-gf{padding:7px 12.5px 11px}
+.pay-wa{width:100%;min-height:44px;border-radius:12px;border:0;background:#1F8A4C;color:#fff;font-weight:800;margin:0}
+.pay-due{padding:0}
+.pay-dr{padding:11px 12.5px;border-top:1px solid var(--ss-hair)}
+.pay-dr:first-child{border-top:0}
+.pay-dh{display:flex;align-items:center;gap:7px}
+.pay-dh .rt{flex:1;min-width:0}
+.pay-dh .r1{display:block;font-size:13px;font-weight:800;color:var(--ss-ink)}
+.pay-dh .r2{display:block;font-size:11px;color:var(--ss-muted);margin-top:2px}
+.pay-db{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}
+.pay-db.one{grid-template-columns:1fr}
+.pay-db .btn{min-height:44px;border-radius:12px;font-weight:800;display:flex;align-items:center;justify-content:center;text-decoration:none;margin:0;font-size:13px}
+.pay-sent{background:var(--ss-soft);color:var(--ss-muted);border:0}
+.pay-dn{margin:0;padding:9px 12.5px 11px;border-top:1px solid var(--ss-hair)}
+.pbal-cash{margin-top:9px}
+.pay-g span b{display:block;color:var(--ss-ink);font-weight:800}
+.pay-g span i{display:block;font-style:normal;font-weight:600;margin-top:2px}
+.pay-tg2{display:flex;align-items:center;gap:11px}
+.pay-tg2>span{flex:1;min-width:0}
+.pay-tg2 b{display:block;font-size:12.5px;font-weight:800;color:var(--ss-ink)}
+.pay-tg2 i{display:block;font-style:normal;font-size:11px;color:var(--ss-muted);margin-top:2px;line-height:1.35}
+.pay-tg2 .toggle{height:31px;min-height:0;width:51px;padding:0;flex:0 0 auto;margin:0}
+.pay-vl{margin:0 0 7px}
+.pay-vr{width:100%;background:none;border:0;text-align:left;color:inherit;min-height:48px}
+.pay-vr .rt{flex:1;min-width:0}
+.pay-vs{padding-top:2px}
+.pay-vz{display:grid;grid-template-columns:62px 64px minmax(0,1fr);gap:7px;align-items:center;margin-bottom:7px}
+.pay-vz b{font-size:12px;font-weight:800;color:var(--ss-ink)}
+.pay-vzh span{font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ss-muted)}
 .bb-ord{padding:3.5px 12.5px 11px}
 .bb-or{display:flex;align-items:center;gap:7px;min-height:44px;border-top:1px solid var(--ss-hair)}
 .bb-or:first-child{border-top:0}
@@ -8630,7 +8673,7 @@ function venueType(g){
   const v=gameVenue(g); if(v)return v.t;
   return (g.venue==='in'||g.venue==='out')?g.venue:null;   /* null = unknown */
 }
-const venueName=g=>{const v=gameVenue(g);return v?v.n:null};
+const venueName=g=>{const v=gameVenue(g);return v?v.n:(g&&g.venueOther)?String(g.venueOther):null};
 
 async function editVenue(id){
   if(!requireAdmin())return;
@@ -12775,7 +12818,7 @@ BULLETIN_SLIDES.push(()=>{
     c1:'#E4002B', c1d:'#A8001F', c2:'#0B1B33', action:{label:'Match', fn:()=>openMatch(g.id)}};
 });
 /* the order of the board, set by the admin; the match banner always leads */
-const BB_KINDS=[['result','Latest result'],['paycheck','Top-ups to confirm (admin only)'],['money','Low pitch balance'],['poll','Open polls'],
+const BB_KINDS=[['result','Latest result'],['paygame','Pay for your game'],['paycheck','Payments to confirm (admin only)'],['poll','Open polls'],
   ['notice','Your notices'],['santa','Secret Santa'],['mb','Match balls (hat-tricks)'],['potm','Player of the Month'],['pres','Poll results']];
 const bbKind=id=>id==='match'?'match':/^n:/.test(id)?'notice':/^mb:/.test(id)?'mb':/^potm:/.test(id)?'potm':/^pres:/.test(id)?'pres':/^poll:/.test(id)?'poll':String(id).split(':')[0];
 function bbOrder(){ const o=Array.isArray(DB.bbOrder)?DB.bbOrder.filter(k=>BB_KINDS.some(x=>x[0]===k)):[];
@@ -13778,12 +13821,12 @@ function adminSanta(){
 const PAY_C1='#157A43', PAY_C1D='#0C5530', PAY_GREEN='#1F8A4C';
 const PAY_PRICE_SEED={v_all:{7:82,9:65},v_scin:{7:73,9:58},v_scout:{7:65,9:52},v_rad:{7:60,9:48},
   v_ahd:{7:75,9:60},v_gems:{7:55,9:44},v_wtc:{7:90,9:72}};
-const payDefaults=()=>({startFrom:null,onAt:null,prices:JSON.parse(JSON.stringify(PAY_PRICE_SEED)),
+const payDefaults=()=>({onAt:null,v2:true,v3:true,prices:JSON.parse(JSON.stringify(PAY_PRICE_SEED)),links:{},paid:{},
   topups:[{amt:150,link:''},{amt:300,link:''},{amt:500,link:''}],pushOnCharge:true,lines:[]});
 /* a read-only view: looking never creates DB.money, only an admin write does */
 const payCfg=()=>(DB.money&&typeof DB.money==='object')?DB.money:payDefaults();
 function paySetup(){ if(!DB.money||typeof DB.money!=='object'){ DB.money=payDefaults(); DB.money.onAt=Date.now() }
-  const M=DB.money; M.lines=M.lines||[]; M.prices=M.prices||{}; M.topups=M.topups||payDefaults().topups; return M }
+  const M=DB.money; M.lines=M.lines||[]; M.prices=M.prices||{}; M.links=M.links||{}; M.paid=M.paid||{}; M.topups=M.topups||payDefaults().topups; return M }
 /* Oct 2026: payments are simply on. Charges apply to games logged from the moment
    the ledger first exists (onAt); a start date is now only an optional "don't
    charge games dated before" guard. */
@@ -13812,10 +13855,30 @@ function payName(pid){ const p=player(pid); if(p)return p.name;
   for(const s of DB.seasons){ const q=(s.players||[]).find(x=>x.id===pid); if(q)return q.name }
   const l=((DB.money||{}).lines||[]).find(x=>x.pid===pid&&x.nm); return l?l.nm:'Someone' }
 
-/* ---- prices ---- */
-const payFmt=g=>Math.max((g.teamA||[]).length+(g.fillA||[]).length,(g.teamB||[]).length+(g.fillB||[]).length)>=8?9:7;
-function payPrice(venueId,fmt){ const p=(payCfg().prices||{})[venueId]; const v=p?+p[fmt]:0; return v>0?Math.round(v):0 }
-function payGamePrice(g){ if(g&&g.price!=null&&g.price!=='')return Math.max(0,Math.round(+g.price)||0); return payPrice(g&&g.venueId,payFmt(g||{})) }
+/* ---- prices: per pitch and per game size (6 to 11-a-side), each size with its own Ziina link ---- */
+const PAY_SIZES=[6,7,8,9,10,11];
+/* the size of a game is its bigger side, fillers included, kept inside 6..11 */
+const paySize=g=>Math.min(11,Math.max(6,Math.max((g.teamA||[]).length+(g.fillA||[]).length,(g.teamB||[]).length+(g.fillB||[]).length)||7));
+const payLinkOk=s=>/^https:\/\/\S+$/i.test(String(s||''));
+/* the nearest size that has a price (a tie takes the bigger side), with that size's link */
+function payRate(venueId,size){
+  const M=payCfg(), p=(M.prices||{})[venueId]||{}, L=(M.links||{})[venueId]||{};
+  const set=PAY_SIZES.filter(s=>+p[s]>0); if(!set.length)return {price:0,link:'',size};
+  const s=set.slice().sort((a,b)=>Math.abs(a-size)-Math.abs(b-size)||b-a)[0];
+  return {price:Math.round(+p[s]),link:payLinkOk(L[s])?L[s]:'',size:s};
+}
+const payPrice=(venueId,size)=>payRate(venueId,size).price;
+const payHasPrice=g=>!!g&&g.price!=null&&g.price!=='';
+function payGamePrice(g){ if(payHasPrice(g))return Math.max(0,Math.round(+g.price)||0); return payPrice(g&&g.venueId,paySize(g||{})) }
+/* a game's Ziina link: its own one-off link, else the pitch link for that size
+   (not when a one-off price differs, because the pitch link asks for the pitch amount) */
+function payGameLink(g){ if(!g)return ''; if(payLinkOk(g.payLink))return g.payLink;
+  const r=payRate(g.venueId,paySize(g)); if(payHasPrice(g)&&+g.price!==r.price)return ''; return r.link }
+/* what a game usually costs a player: the middle of the last six priced games, else the next-game guess */
+function payTypicalPrice(){
+  const L=season().games.slice().sort((a,b)=>String(b.date||'').localeCompare(String(a.date||''))).map(g=>payGamePrice(g)).filter(p=>p>0).slice(0,6).sort((a,b)=>a-b);
+  return L.length?L[Math.floor(L.length/2)]:payNextPrice();
+}
 /* "the next game": the last pitch you played at, 7-a-side; else the middle price */
 function payNextPrice(){
   const p=payPrice(season().lastVenueId,7); if(p)return p;
@@ -13823,24 +13886,46 @@ function payNextPrice(){
   return all.length?all[Math.floor(all.length/2)]:0;
 }
 
-/* ---- the charge for one game ----
-   Only games dated on or after startFrom, and only games logged after charging
-   was switched on (onAt) — so editing an old game never bills anyone by surprise. */
-function payCharges(g){
-  const M=DB.money; if(!M||!g||!g.date)return [];
-  if(M.startFrom&&g.date<M.startFrom)return [];
-  if(!M.onAt||((g.created||0)<M.onAt&&!payGameLines(g.id).length))return [];
-  const price=payGamePrice(g); if(!price)return [];
+/* ---- who a game is for: everyone on the sheet (n) plus fillers put on them (f) ---- */
+function payOwe(g){
   const owe={};
   [...(g.teamA||[]),...(g.teamB||[])].forEach(pid=>{ if(pid&&!/^~/.test(pid))owe[pid]=owe[pid]||{n:1,f:0} });
   Object.entries(g.fillTo||{}).forEach(([k,pid])=>{ const m=FILL_KEY.exec(k);
     if(!m||!pid||(g['fill'+m[1]]||[])[+m[2]]==null)return;
     (owe[pid]=owe[pid]||{n:0,f:0}).f++ });
-  const vn=venueName(g)||'Game';
-  const wv=M.waive||{};
-  Object.keys(owe).forEach(pid=>{ if(wv[g.id+':'+pid])delete owe[pid] });
-  return Object.entries(owe).map(([pid,o])=>({id:'g:'+g.id+':'+pid,pid,nm:payName(pid),amt:-(price*(o.n+o.f)),kind:'game',
-    gameId:g.id,gw:g.round||'',note:vn+(o.f?` · +${o.f} filler${o.f>1?'s':''}`:'')}));
+  return owe;
+}
+/* a game counts for payments when it has a price and was logged after the ledger
+   began (onAt), so editing an old game never bills anyone by surprise */
+function payChargeable(g){
+  const M=DB.money; if(!M||!g||!g.date||!M.onAt||(M.settled||{})[g.id])return false;
+  if((g.created||0)<M.onAt&&!payGameLines(g.id).length&&!(M.paid||{})[g.id])return false;
+  return payGamePrice(g)>0;
+}
+/* Top-ups are optional. Someone uses a balance once they have topped up, paid cash
+   or bank into it, or had a correction. Only they are charged from it; everyone
+   else pays per game and the admin ticks them off. */
+const PAY_IN=['topup','cash','bank'];
+const payUsesBal=(pid,b)=>{ const L=payLinesOf(pid,b); return L.some(l=>PAY_IN.includes(l.kind))||L.reduce((t,l)=>t+(+l.amt||0),0)>0 };
+const PAY_HOW={paid:'Paid',balance:'From balance',ziina:'Paid by Ziina',cash:'Paid cash',bank:'Paid by bank transfer',due:'Not paid yet',waive:'Waived'};
+/* the checklist for one game, DB.money.paid[gameId][pid]={how,at}: everyone on it
+   gets an entry. A balance user starts ticked "balance" (and is charged); anyone
+   else starts "due" until the admin ticks them. An entry, once there, is kept. */
+function payMark(g){
+  const M=DB.money; M.paid=M.paid||{};
+  if(!payChargeable(g)){ delete M.paid[g.id]; return }
+  const P=M.paid[g.id]=M.paid[g.id]||{}, owe=payOwe(g), b=payBook();
+  Object.keys(P).forEach(pid=>{ if(!owe[pid])delete P[pid] });
+  Object.keys(owe).forEach(pid=>{ if(!P[pid]||!P[pid].how)P[pid]={how:payUsesBal(pid,b)?'balance':'due',at:Date.now()} });
+}
+const payAmtFor=(g,o)=>payGamePrice(g)*(((o||{}).n||0)+((o||{}).f||0));
+/* ---- the charge for one game: only the people ticked "balance" ---- */
+function payCharges(g){
+  const M=DB.money; if(!M||!payChargeable(g))return [];
+  const P=(M.paid||{})[g.id]||{}, wv=M.waive||{}, price=payGamePrice(g), vn=venueName(g)||'Game';
+  return Object.entries(payOwe(g)).filter(([pid])=>P[pid]&&P[pid].how==='balance'&&!wv[g.id+':'+pid])
+    .map(([pid,o])=>({id:'g:'+g.id+':'+pid,pid,nm:payName(pid),amt:-(price*(o.n+o.f)),kind:'game',
+      gameId:g.id,gw:g.round||'',note:vn+(o.f?` · +${o.f} filler${o.f>1?'s':''}`:'')}));
 }
 /* replace this game's lines (called inside saveGame's applyGame, so it rides the same save) */
 function payApplyGame(g,isNew){
@@ -13849,17 +13934,23 @@ function payApplyGame(g,isNew){
   if(!DB.money){ if(!isNew)return []; DB.money=payDefaults() }
   const M=DB.money; M.lines=M.lines||[];
   if(!M.onAt)M.onAt=isNew?(g.created||Date.now()):Date.now();
+  if((M.settled||{})[g.id]){ if(M.paid)delete M.paid[g.id]; return payGameLines(g.id) }
+  payMark(g);
   const was={}; M.lines.forEach(l=>{ if(l.gameId===g.id)was[l.id]=l.at });
   const fresh=payCharges(g).map(l=>({...l,at:was[l.id]||Date.now()}));
   M.lines=M.lines.filter(l=>l.gameId!==g.id).concat(fresh);
   return fresh;
 }
+/* a game by id, this season first, then any season */
+function payFindGame(id){ const g=(season().games||[]).find(x=>x.id===id); if(g)return g;
+  const x=allTimeGames().find(y=>y.g&&y.g.id===id); return x?x.g:null }
 const payGameLines=id=>((DB.money||{}).lines||[]).filter(l=>l.gameId===id);
-/* a deleted game takes its charges with it */
-function payDropGames(ids){ const M=DB.money; if(!M||!M.lines)return; const s=new Set(ids);
-  M.lines=M.lines.filter(l=>!(l.kind==='game'&&s.has(l.gameId))) }
+/* a deleted game takes its charges and its checklist with it */
+function payDropGames(ids){ const M=DB.money; if(!M)return; const s=new Set(ids);
+  if(M.lines)M.lines=M.lines.filter(l=>!(l.kind==='game'&&s.has(l.gameId)));
+  if(M.paid)ids.forEach(id=>{ delete M.paid[id] }) }
 function payPruneSeason(S){ if(S)payDropGames((S.games||[]).map(g=>g.id)) }
-/* after a new game is logged: one private push to each person charged */
+/* after a new game is logged: one private push to each balance player charged */
 function payAfterGame(g){
   if(!payLive()||payCfg().pushOnCharge===false)return;
   const b=payBook();
@@ -13867,17 +13958,68 @@ function payAfterGame(g){
     pushSend('Pitch balance',`${l.gw?l.gw+' · ':''}AED ${-l.amt} taken · ${left<0?'you owe AED '+(-left):'AED '+left+' left'}`,
       'money',{pids:[l.pid],url:'/'}) });
 }
+/* games this player still has to pay for (not from a balance), newest first */
+function payDueOf(pid){
+  const M=DB.money; if(!M||!M.paid)return [];
+  const wv=M.waive||{};
+  return season().games.filter(g=>{ const e=(M.paid[g.id]||{})[pid]; return e&&e.how==='due'&&!wv[g.id+':'+pid]&&payChargeable(g) })
+    .map(g=>({g,amt:payAmtFor(g,payOwe(g)[pid]),link:payGameLink(g)}))
+    .sort((a,b)=>String(b.g.date||'').localeCompare(String(a.g.date||''))||(b.g.created||0)-(a.g.created||0));
+}
+/* ---- settled games ----
+   Everything up to a chosen game is settled outside the app: it leaves the
+   checklist and is never charged again. Balance players keep what already came
+   off their balance; charges on anyone who never used a balance are dropped. */
+const paySeasonOrder=()=>season().games.slice().sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))||(a.created||0)-(b.created||0));
+function paySettleApply(M,gid){
+  const order=paySeasonOrder(), i=order.findIndex(g=>g.id===gid);
+  const upto=new Set(i<0?[]:order.slice(0,i+1).map(g=>g.id));
+  M.settled=M.settled||{}; M.paid=M.paid||{};
+  const was=Object.keys(M.settled).filter(id=>season().games.some(g=>g.id===id));
+  was.filter(id=>!upto.has(id)).forEach(id=>{ delete M.settled[id] });
+  const b=payBook();
+  upto.forEach(id=>{ M.lines=(M.lines||[]).filter(l=>!(l.kind==='game'&&l.gameId===id&&!payUsesBal(l.pid,b))); delete M.paid[id]; M.settled[id]=true });
+  M.settledTo=i<0?null:gid;
+  /* games that were settled and no longer are: back on the checklist */
+  was.filter(id=>!upto.has(id)).forEach(id=>{ const g=payFindGame(id); if(g)payApplyGame(g,false) });
+}
+/* Talal: everything up to GW3 was settled before the checklist existed */
+function paySettleDefault(){
+  const n=g=>{ const m=/^GW\s*(\d+)$/i.exec(String(g.round||'').trim()); return m?+m[1]:null };
+  const L=paySeasonOrder().filter(g=>{ const k=n(g); return k!=null&&k<=3 });
+  return L.length?L[L.length-1].id:null;
+}
+async function paySettlePick(){
+  if(!requireAdmin())return;
+  const L=paySeasonOrder().reverse().slice(0,12);
+  const opts=[...L.map(g=>({label:`${g.round||'Game'} · ${fdate(g.date)}${venueName(g)?' · '+venueName(g):''}`,value:g.id})),{label:'Nothing settled',value:'none'}];
+  const v=await askChoice('Settled up to','Games up to and including this one are paid up. They leave the checklist and are never charged again.',opts); if(!v)return;
+  await payWrite(M=>paySettleApply(M,v==='none'?null:v),v==='none'?'Nothing is settled':'Settled up to '+((payFindGame(v)||{}).round||'that game'));
+}
+/* once per ledger: older ledgers charged everyone, so redo those games; and settle up to GW3 */
+let PAY_MIG=false;
+function payMigrate(){
+  if(PAY_MIG||!isAdmin()||!DB.money||(DB.money.v2&&DB.money.v3))return; PAY_MIG=true;
+  payWrite(M=>{
+    if(!M.v3){ const cut=paySettleDefault(); if(cut)paySettleApply(M,cut); M.v3=true }
+    if(!M.v2){ const ids=[...new Set((M.lines||[]).filter(l=>l.kind==='game').map(l=>l.gameId))];
+      ids.forEach(id=>{ const g=payFindGame(id); if(g)payApplyGame(g,false) }); M.v2=true }
+  });
+}
 
 /* ---- claims ("I've paid") ---- */
 let PAYC={}, PAYC_READY=false, PAY_BUSY=false;
 async function paySync(){
   if(!flagOn('payments')||!DB.money)return false;
   const me=fplMine(), pre=isAdmin()?'pay:':(me?'pay:'+me.pid+':':null); if(!pre)return false;
+  const t0=Date.now();
   const r=await kvList(pre); if(!r.ok)return false;
   const next={};
   r.rows.forEach(x=>{ const m=/^pay:(.+):(\d+)$/.exec(x.key); if(!m||!x.value)return;
     next[x.key]={key:x.key,pid:m[1],amt:Math.round(+x.value.amt||0),method:x.value.method==='bank'?'bank':'ziina',
       at:+x.value.at||+m[2],status:['ok','no'].includes(x.value.status)?x.value.status:'pending'} });
+  /* a claim sent while this sync was in flight is not in the rows yet: keep it */
+  Object.values(PAYC).forEach(c=>{ if(!next[c.key]&&c.at>=t0-2000)next[c.key]=c });
   const moved=JSON.stringify(next)!==JSON.stringify(PAYC); PAYC=next; PAYC_READY=true; return moved;
 }
 const payDone=k=>((DB.money||{}).lines||[]).some(l=>l.id==='c:'+k);
@@ -13893,7 +14035,7 @@ async function payClaim(amt,method){
   if(!r.ok){ toast('⚠️ Not sent — '+(r.detail||'try again')); return }
   PAYC[key]={key,pid:me.pid,amt,method,at,status:'pending'};
   const to=payCfg().adminPid;
-  if(to&&to!==me.pid)pushSend('Pitch balance \u00b7 to confirm',`${me.name} says they’ve paid AED ${amt} by ${method==='bank'?'bank transfer':'Ziina'}. Check it and confirm in Admin.`,'money',{pids:[to],url:'/'});
+  if(to&&to!==me.pid)pushSend('Pitch balance \u00b7 to confirm',`${me.name} says they’ve paid AED ${amt} by ${method==='bank'?'bank transfer':'Ziina'}. Check it and confirm in Payments.`,'money',{pids:[to],url:'/'});
   closeSheet(); render(); toast(`AED ${amt} pending until Talal confirms`);
 }
 
@@ -13908,23 +14050,35 @@ function payNavPass(){ return;
   const x=nav.querySelector('[data-nav="pitch"]'); if(x)x.classList.toggle('on',VIEW==='pitch');
 }
 /* where a balance stands against the next game */
-function payState(bal,price){
+function payState(bal,price,uses){
   if(bal<0)return {st:'owe',line:`You owe AED ${-bal}`};
+  if(!uses&&!bal)return {st:'ok',line:'Optional. Top up once and every game comes off by itself.'};
   if(price&&bal<price)return {st:'low',line:bal>0?`Not enough for the next game (about AED ${price})`:'Top up before the next game'};
   if(!price)return {st:'ok',line:''};
   const n=Math.floor(bal/price);
   return {st:'ok',line:n===1?'Enough for the next game':`Enough for about ${n} more games`};
 }
+/* the games a per-game payer still owes, each with Pay with Ziina. No "I've paid":
+   Talal checks Ziina and his bank himself and ticks people off. */
+function payDueRows(me){
+  const D=payDueOf(me.pid); if(!D.length)return '';
+  return `${ssSec('fixtures','To pay',`<span class="ss-note">${D.length}</span>`,PAY_GREEN)}
+    <div class="card adm-c pay-due">${D.map(d=>`<div class="pay-dr"><div class="pay-dh"><span class="rt"><span class="r1">${esc(d.g.round||'Game')} · ${esc(venueName(d.g)||'Game')}</span>
+          <span class="r2">${esc(fdate(d.g.date))}</span></span>
+          <b class="pbal-a">AED ${d.amt}</b></div>
+        ${d.link?`<div class="pay-db one"><a class="btn pbal-z" href="${esc(d.link)}" target="_blank" rel="noopener">Pay with Ziina</a></div>`:''}</div>`).join('')}
+      <div class="note pay-dn">Already paid? Talal ticks you off once it’s in. Paying cash or by bank transfer? Tell Talal.</div></div>`;
+}
 /* Payments tab (Oct 2026): players get one simple page; the admin gets tabs */
 let PAYTAB='me';
 function payMeView(me){
-  if(!me)return `<div class="card pad pbal-in"><div class="pbal-in-t">Sign in to see your balance</div>
-      <div class="pbal-in-s">Use the same code as Sunday FPL. Only you see your own balance.</div>
+  if(!me)return `<div class="card pad pbal-in"><div class="pbal-in-t">Sign in to see your payments</div>
+      <div class="pbal-in-s">Use the same code as Sunday FPL. Only you see your own.</div>
       <button class="btn pri full" onclick="askSignIn()">Enter your code</button></div>`;
   const b=payBook(), p=player(me.pid)||{name:me.name};
-  const bal=payBalance(me.pid,b), pend=payPendingOf(me.pid,b).reduce((t,c)=>t+c.amt,0), price=payNextPrice(), s=payState(bal,price);
+  const bal=payBalance(me.pid,b), pend=payPendingOf(me.pid,b).reduce((t,c)=>t+c.amt,0), price=payNextPrice(), uses=payUsesBal(me.pid,b), s=payState(bal,price,uses||pend>0);
   const R=payHistRows(me.pid);
-  return `<div class="pbal-card ${s.st}">
+  return `${payDueRows(me)}<div class="pbal-card ${s.st}">
       <div class="pbal-h"><span>Your balance</span><i>${esc(String(p.name||'').toUpperCase())}${p.num?' · #'+p.num:''}</i></div>
       <div class="pbal-v"><small>AED</small><b>${bal<0?'−'+(-bal):bal}</b>${pend?`<em>+${pend} pending</em>`:''}</div>
       ${s.line?`<div class="pbal-s">${esc(s.line)}</div>`:''}
@@ -13933,22 +14087,23 @@ function payMeView(me){
     ${ssSec('shop','Recent',R.length>4?`<button class="act" onclick="payHistSheet()">See all</button>`:'',PAY_GREEN)}
     ${R.length?`<div class="card adm-c pbal-list">${R.slice(0,4).map(payRow).join('')}</div>`
       :`<div class="note adm-note">Nothing yet. Your games and top-ups show here.</div>`}
-    <div class="note adm-note pbal-note">Games come off by themselves. Top up, tap “I’ve paid”, and it counts once Talal confirms.</div>`;
+    <div class="note adm-note pbal-note">Pay per game with Ziina, or top up once and every game comes off your balance by itself. Paying cash or by bank transfer? Tell Talal.</div>`;
 }
 function vPitch(){
   $('#navMount').innerHTML=navbar();
   const me=fplMine(), adm=isAdmin();
   if(!adm)PAYTAB='me';
+  if(adm)payMigrate();
   const pend=adm?payToConfirm().length:0;
-  const tabs=adm?`<div class="seg pay-tabs">${[['me','My balance'],['players',`Players${pend?` · ${pend}`:''}`],['games','Games'],['set','Settings']].map(([k,l])=>
+  const tabs=adm?`<div class="seg pay-tabs">${[['me','Mine'],['players',`Players${pend?` · ${pend}`:''}`],['games','Games'],['set','Settings']].map(([k,l])=>
     `<button class="${PAYTAB===k?'on':''}" onclick="PAYTAB='${k}';render()">${l}</button>`).join('')}</div>`:'';
   let body='';
   if(PAYTAB==='me')body=payMeView(me);
   else if(PAYTAB==='players')body=payAdminPanel('players');
-  else if(PAYTAB==='games')body=`<div class="card adm-c">${payGamesCharged()}</div><div class="note adm-note">Tap a game to see who paid, or waive someone.</div>`;
+  else if(PAYTAB==='games')body=`<div class="card adm-c">${payGamesCharged()}</div><div class="note adm-note">Balance players are ticked by themselves. Tap the box next to anyone else once their money is in. Tap again to untick.</div>`;
   else body=adminPaySettings();
   app().innerHTML=`<div class="view active"><div class="wrap">${cloudBanner()}
-    ${pageBanner('Payments','PITCH BALANCE · '+esc(String(season().name||'').toUpperCase()))}
+    ${pageBanner('Payments','PITCH MONEY · '+esc(String(season().name||'').toUpperCase()))}
     ${tabs}${body}</div></div>`;
   if(!vPitch._t||Date.now()-vPitch._t>4000){ vPitch._t=Date.now(); paySync().then(m=>{ if(m&&VIEW==='pitch')render() }) }
 }
@@ -13989,39 +14144,31 @@ function payTopSheet(){
 }
 function payPick(a){ PAY_AMT=a; const e=document.getElementById('payTop'); if(e)e.innerHTML=payTopBody() }
 function payTopBody(){
-  const T=payCfg().topups.filter(t=>t.amt>0), t=T.find(x=>x.amt===PAY_AMT)||{}, price=payNextPrice();
-  const link=/^https:\/\//i.test(t.link||'')?t.link:'';
+  const T=payCfg().topups.filter(t=>t.amt>0), t=T.find(x=>x.amt===PAY_AMT)||{}, price=payTypicalPrice();
+  const link=payLinkOk(t.link)?t.link:'';
   return `<div class="lg6-lbl pbal-lbl">How much</div>
     <div class="pbal-amts">${T.map(x=>`<button class="pbal-amt ${x.amt===PAY_AMT?'on':''}" aria-pressed="${x.amt===PAY_AMT}" onclick="payPick(${x.amt})">
-      <b>${x.amt}</b><span>${price?(k=>'~'+k+' game'+(k===1?'':'s'))(Math.floor(x.amt/price)):'AED'}</span></button>`).join('')}</div>
+      <b>${x.amt}</b><span>${price?(k=>'~'+k+' game'+(k===1?'':'s'))(Math.max(1,Math.round(x.amt/price))):'AED'}</span></button>`).join('')}</div>
     <ol class="pbal-steps">
-      <li><b>Pay AED ${t.amt||''} in Ziina</b><span>Opens Talal’s link. Apple Pay, one tap.</span></li>
+      <li><b>Pay AED ${t.amt||''} with Ziina</b><span>Opens Talal’s link. Apple Pay, one tap.</span></li>
       <li><b>Tap “I’ve paid”</b><span>Your balance shows it as pending.</span></li>
-      <li><b>Talal confirms once</b><span>After that every game comes off by itself.</span></li></ol>
-    ${link?'':`<div class="note">No Ziina link for this amount yet. Pay by bank transfer, or ask Talal.</div>`}
+      <li><b>Talal confirms once</b><span>After that every game comes off your balance by itself.</span></li></ol>
+    ${link?'':`<div class="note">No Ziina link for this amount yet. Ask Talal.</div>`}
     <div class="pbal-go">
-      ${link?`<a class="btn pbal-z" href="${esc(link)}" target="_blank" rel="noopener">Open Ziina</a>`
-        :`<button class="btn pbal-z" disabled>Open Ziina</button>`}
+      ${link?`<a class="btn pbal-z" href="${esc(link)}" target="_blank" rel="noopener">Pay with Ziina</a>`
+        :`<button class="btn pbal-z" disabled>Pay with Ziina</button>`}
       <button class="btn pri pbal-paid" onclick="payClaim(${t.amt||0},'ziina')" ${t.amt?'':'disabled'}>I’ve paid AED ${t.amt||''}</button></div>
-    <button class="pl-later pbal-bank" onclick="payBank()">Paid by bank transfer?</button>`;
-}
-async function payBank(){
-  const v=await askText('Paid by bank transfer?','How much did you send, in dirhams?','','Next'); if(v===null)return;
-  const a=payInt(v); if(!(a>0)){ toast('Enter an amount'); return }
-  if(!await askConfirm(`I’ve paid AED ${a}`,'By bank transfer. It shows as pending until Talal confirms.','I’ve paid'))return;
-  await payClaim(a,'bank');
+    <div class="note pbal-cash">Paying cash or by bank transfer? Tell Talal and he’ll add it.</div>`;
 }
 
-/* ---- the Home board: only to that player, only when the balance won't cover the next game ---- */
+/* ---- the Home board: a per-game payer sees their latest unpaid game with a Pay button.
+   Top-ups are optional, so nobody is ever nagged about a low balance. ---- */
 BULLETIN_SLIDES.push(()=>{
   if(!payLive())return null; const me=fplMine(); if(!me||!player(me.pid))return null;
-  const b=payBook(), bal=payBalance(me.pid,b), price=payNextPrice();
-  if(!payLinesOf(me.pid,b).length)return null;          /* nothing charged or paid yet: no nagging */
-  if(bal>=0&&(!price||bal>=price))return null;
-  const pend=payPendingOf(me.pid,b).reduce((t,c)=>t+c.amt,0);
-  return {id:'money', kicker:'Pitch balance', title:bal<0?`You owe AED ${-bal}`:`AED ${bal} left`,
-    sub:pend?`AED ${pend} pending`:price?`The next game is about AED ${price}`:'Top up before the next game',
-    c1:PAY_C1, c1d:PAY_C1D, c2:'#0B1B33', action:{label:'Top up', fn:payTopSheet}};
+  const d=payDueOf(me.pid)[0]; if(!d)return null;
+  return {id:'paygame:'+d.g.id, kicker:`${d.g.round||'Game'} · pay for the game`, title:`AED ${d.amt} · ${venueName(d.g)||'Game'}`,
+    sub:'Already paid? Talal ticks you off once it’s in',
+    c1:PAY_C1, c1d:PAY_C1D, c2:'#0B1B33', action:{label:d.link?'Pay with Ziina':'Payments', fn:()=>{ if(d.link){ try{ window.open(d.link,'_blank','noopener') }catch(e){} } go('pitch') }}};
 });
 
 /* ---- the admin is told on Home: a pop-up once per sitting for each new claim,
@@ -14034,8 +14181,8 @@ document.addEventListener('visibilitychange',()=>{
 function payClaimRows(L){
   return `<div class="card adm-c">${L.map(c=>{ const p=player(c.pid)||{name:payName(c.pid)};
     return `<div class="row adm-r pay-c"><span class="ce">${avatar(p,28)}</span>
-      <span class="rt"><span class="r1">${esc(p.name)} \u00b7 AED ${c.amt}</span>
-        <span class="r2">${c.method==='bank'?'Bank transfer':'Ziina'} \u00b7 ${esc(admAgo(c.at))}</span></span>
+      <span class="rt"><span class="r1">${esc(p.name)} · AED ${c.amt}</span>
+        <span class="r2">Top-up · ${c.method==='bank'?'Bank transfer':'Ziina'} · ${esc(admAgo(c.at))}</span></span>
       <span class="pay-cb"><button class="btn pay-ok" onclick="payConfirm('${esc(c.key)}')">Confirm</button>
         <button class="pay-no" onclick="payReject('${esc(c.key)}')">Not received</button></span></div>` }).join('')}</div>`;
 }
@@ -14044,19 +14191,18 @@ function payPopPass(){
   if($('#sbg').classList.contains('open'))return;
   const L=payToConfirm(); if(!L.some(c=>!PAY_POPPED.has(c.key)))return;
   L.forEach(c=>PAY_POPPED.add(c.key));
-  openSheet('To confirm',`<div class="pay-pop"><b>${L.length===1?`${esc(payName(L[0].pid))} says they’ve paid`:`${L.length} people say they’ve paid`}</b>
+  openSheet('To confirm',`<div class="pay-pop"><b>${L.length===1?`${esc(payName(L[0].pid))} says they’ve topped up`:`${L.length} top-ups to confirm`}</b>
       <span>Check your Ziina app or bank, then confirm. Nothing counts until you do.</span></div>
     <div id="payPop">${payClaimRows(L)}</div>
-    <button class="pl-later" onclick="closeSheet()">Later — it stays in Admin</button>`);
+    <button class="pl-later" onclick="closeSheet()">Later — it stays in Payments</button>`);
 }
 const payPopRefresh=()=>{ const e=document.getElementById('payPop'); if(!e)return; const L=payToConfirm(); if(L.length)e.innerHTML=payClaimRows(L); else closeSheet() };
 BULLETIN_SLIDES.push(()=>{
   if(!payLive()||!isAdmin())return null; const L=payToConfirm(); if(!L.length)return null;
-  return {id:'paycheck', kicker:'Pitch balance \u00b7 admin', title:L.length===1?`${payName(L[0].pid)} \u00b7 AED ${L[0].amt}`:`${L.length} top-ups to confirm`,
-    sub:L.length===1?'Says they’ve paid \u2014 check and confirm':'People say they’ve paid \u2014 check and confirm',
-    c1:PAY_C1, c1d:PAY_C1D, c2:'#0B1B33', action:{label:'Check', fn:()=>{ go('admin') }}};
+  return {id:'paycheck', kicker:'Payments · admin', title:L.length===1?`${payName(L[0].pid)} · AED ${L[0].amt}`:`${L.length} top-ups to confirm`,
+    sub:L.length===1?'Says they’ve topped up — check and confirm':'People say they’ve topped up — check and confirm',
+    c1:PAY_C1, c1d:PAY_C1D, c2:'#0B1B33', action:{label:'Check', fn:()=>{ PAYTAB='players'; go('pitch') }}};
 });
-
 /* ---- Admin -> Payments ---- */
 let ADM_PAYBAL=false, ADM_PAYSET=false;
 /* one admin write: snapshot, change, save, and put it all back if the save is refused */
@@ -14091,34 +14237,69 @@ function payBalanceRows(){
       <button class="pay-bn" onclick="payPlayerSheet('${x.p.id}')"><span class="ce">${avatar(x.p,30)}</span>
         <span class="rt"><span class="r1">${esc(x.p.name)}</span><span class="r2 ${x.v<0?'neg':x.v>0?'pos':''}">${payAED(x.v)}${x.former?' · not in the squad':''}</span></span></button>
       <button class="pay-qa add" onclick="payAdd('${x.p.id}')" aria-label="Add a payment for ${esc(x.p.name)}">+ Add</button>
-      <button class="pay-qa" onclick="payFix('${x.p.id}')" aria-label="Correction for ${esc(x.p.name)}">Fix</button></div>`).join('')
+      <button class="pay-qa" onclick="paySetBal('${x.p.id}')" aria-label="Edit ${esc(x.p.name)}’s balance">Edit</button></div>`).join('')
     :`<div class="note" style="padding:12px 14px">Nobody matches.</div>`;
 }
 function payFind(v){ PAY_Q=v; const e=document.getElementById('payBals'); if(e)e.innerHTML=payBalanceRows() }
-/* games that charged someone, newest first, with a waive per person */
+/* the checklist: every priced game, newest first, a tick for each person on it */
+const PAY_TICK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const payStOf=(M,gid,pid)=>((M.waive||{})[gid+':'+pid])?'waive':((((M.paid||{})[gid]||{})[pid]||{}).how||'due');
 function payGamesCharged(){
-  const M=DB.money||{}, by={};
-  (M.lines||[]).filter(l=>l.kind==='game').forEach(l=>{ (by[l.gameId]=by[l.gameId]||[]).push(l) });
-  const wv=M.waive||{}; Object.keys(wv).forEach(k=>{ const gid=k.split(':')[0]; by[gid]=by[gid]||[] });
-  const games=Object.keys(by).map(id=>({id,g:allTimeGames().find(x=>x.id===id)||null,L:by[id]}))
-    .sort((x,y)=>String((y.g||{}).date||'').localeCompare(String((x.g||{}).date||''))).slice(0,12);
-  if(!games.length)return `<div class="note" style="padding:12px 14px">No game has charged anyone yet. The next game you log will.</div>`;
-  return games.map(({id,g,L})=>{ const tot=L.reduce((t,l)=>t-l.amt,0), each=L.length?-L[0].amt:0, open=PAY_GOPEN===id;
-    const waived=Object.keys(wv).filter(k=>k.startsWith(id+':')).map(k=>k.slice(id.length+1));
+  const M=DB.money||{}, P=M.paid||{};
+  const games=Object.keys(P).map(id=>({id,g:payFindGame(id)||null})).filter(x=>x.g)
+    .sort((x,y)=>String(y.g.date||'').localeCompare(String(x.g.date||''))||(y.g.created||0)-(x.g.created||0)).slice(0,12);
+  const set=M.settledTo?payFindGame(M.settledTo):null;
+  const foot=set?`<div class="note" style="padding:9px 14px">Settled up to ${esc(set.round||'Game')}. Change it in Settings.</div>`:'';
+  if(!games.length)return `<div class="note" style="padding:12px 14px">No games to tick yet. The next game you log at a priced pitch shows here, with a box for everyone on it.</div>${foot}`;
+  return games.map(({id,g})=>{
+    const owe=payOwe(g), price=payGamePrice(g), ids=Object.keys(P[id]).filter(pid=>owe[pid]), here=season().games.some(x=>x.id===id);
+    const st=pid=>payStOf(M,id,pid);
+    const done=ids.filter(pid=>st(pid)!=='due').length;
+    const rows=ids.slice().sort((a,b)=>(st(a)!=='due')-(st(b)!=='due')||payName(a).localeCompare(payName(b)));
+    const open=PAY_GOPEN===id;
     return `<div class="pay-gc${open?' open':''}"><button class="row tap adm-r pay-gh" onclick="PAY_GOPEN=PAY_GOPEN==='${id}'?null:'${id}';render()">
-        <span class="rt"><span class="r1">${esc((L[0]&&L[0].gw)||(g&&g.round)||'Game')} · ${esc((L[0]&&String(L[0].note||'').split(' · ')[0])||(g&&venueName(g))||'')}</span>
-          <span class="r2">${g?esc(fdate(g.date))+' · ':''}${L.length} charged${waived.length?` · ${waived.length} waived`:''}</span></span>
-        <b class="pbal-a">AED ${tot}</b><i class="adm-chev${open?' open':''}">${chev}</i></button>
-      ${open?`<div class="pay-gl">${[...L.map(l=>({pid:l.pid,amt:-l.amt,on:true})),...waived.map(pid=>({pid,amt:0,on:false}))].map(x=>`
-        <div class="row adm-r"><span class="ce">${avatar(player(x.pid)||{name:payName(x.pid)},26)}</span><span class="rt"><span class="r1">${esc(payName(x.pid))}</span>
-          <span class="r2">${x.on?`AED ${x.amt}`:'Waived — not charged'}</span></span>
-          <button class="pay-qa${x.on?'':' add'}" onclick="payWaive('${id}','${x.pid}',${x.on})">${x.on?'Waive':'Charge'}</button></div>`).join('')}
-        ${g?'':'<div class="note" style="padding:8px 14px">This game is in an older season, so it can only be read here.</div>'}</div>`:''}</div>` }).join('');
+        <span class="rt"><span class="r1">${esc(g.round||'Game')} · ${esc(venueName(g)||'Game')}</span>
+          <span class="r2">${esc(fdate(g.date))} · AED ${price} each · ${ids.length-done?`${ids.length-done} to pay`:'all paid'}</span></span>
+        <b class="pay-gn${done===ids.length?' ok':''}">${done}/${ids.length}</b><i class="adm-chev${open?' open':''}">${chev}</i></button>
+      ${open?`<div class="pay-gl">${rows.map(pid=>{ const s=st(pid), amt=payAmtFor(g,owe[pid]);
+          const sub=s==='balance'?`From balance · AED ${amt}`:s==='waive'?'Waived':s!=='due'?`Paid · AED ${amt}`:`Not paid yet · AED ${amt}`;
+          return `<div class="row adm-r pay-kr${s==='due'?' due':''}"><span class="ce">${avatar(player(pid)||{name:payName(pid)},26)}</span>
+            <span class="rt"><span class="r1">${esc(payName(pid))}</span><span class="r2">${sub}</span></span>
+            <button class="pay-tick${s!=='due'?' on':''}${s==='balance'?' bal':''}" ${here?'':'disabled'} aria-pressed="${s!=='due'}" aria-label="${esc(payName(pid))}: ${esc(PAY_HOW[s]||'')}" onclick="payTickTap('${id}','${pid}')">${s!=='due'?PAY_TICK:''}</button></div>` }).join('')}
+        ${here?`<div class="pay-gf"><button class="btn pay-wa" onclick="payShareGame('${id}')">Share to WhatsApp</button></div>`
+          :'<div class="note" style="padding:8px 14px">This game is in an older season, so it can only be read here.</div>'}</div>`:''}</div>` }).join('')+foot;
 }
-async function payWaive(gid,pid,on){
+/* the admin ticks someone off (or back), inside one checked save */
+async function payTick(gid,pid,how){
+  const g=season().games.find(x=>x.id===gid); if(!g){ toast('Only this season’s games can be changed'); return false }
+  const nm=payName(pid);
+  const ok=await payWrite(M=>{ M.paid=M.paid||{}; M.waive=M.waive||{}; const P=M.paid[gid]=M.paid[gid]||{};
+    delete M.waive[gid+':'+pid]; P[pid]={how,at:Date.now()};
+    payApplyGame(g,false) }, how==='due'?`${nm} unticked`:how==='balance'?`AED taken from ${nm}’s balance`:`${nm} ticked off`);
+  if(!ok)return false;
+  render(); return true;
+}
+/* one tap: unticked -> paid, paid -> unticked. A balance tick gives the money back, so it asks first */
+async function payTickTap(gid,pid){
+  if(!requireAdmin())return;
   const g=season().games.find(x=>x.id===gid); if(!g){ toast('Only this season’s games can be changed'); return }
-  if(on&&!await askConfirm(`Waive ${payName(pid)}?`,'They will not be charged for this game. You can charge them again later.','Waive'))return;
-  await payWrite(M=>{ M.waive=M.waive||{}; if(on)M.waive[gid+':'+pid]=true; else delete M.waive[gid+':'+pid]; payApplyGame(g,false) },on?'Waived':'Charged again');
+  const s=payStOf(DB.money||{},gid,pid);
+  if(s==='due')return payTick(gid,pid,'paid');
+  if(s==='balance'){ const amt=payAmtFor(g,payOwe(g)[pid]);
+    if(!await askConfirm(`Give AED ${amt} back to ${payName(pid)}?`,`It came off their balance for ${g.round||'this game'}. Untick only if it shouldn’t have, and they show as not paid.`,'Give it back'))return; }
+  return payTick(gid,pid,'due');
+}
+/* one message for the group chat: price, the Ziina link, and who still has to pay */
+function payShareText(g){
+  const M=DB.money||{}, E=(M.paid||{})[g.id]||{}, owe=payOwe(g), link=payGameLink(g);
+  const due=Object.keys(E).filter(pid=>owe[pid]&&payStOf(M,g.id,pid)==='due').map(payName).sort();
+  return [`${g.round?g.round+' · ':''}${venueName(g)||'Game'} · ${fdate(g.date)}`,`AED ${payGamePrice(g)} each`,
+    link?`Pay with Ziina: ${link}`:'',due.length?`Still to pay: ${due.join(', ')}`:'Everyone has paid, thank you',
+    'Paying cash or by bank transfer? Tell Talal.','Paid? Tap “I’ve paid” in the app under Payments.'].filter(Boolean).join('\n');
+}
+function payShareGame(gid){
+  const g=payFindGame(gid); if(!g)return;
+  try{ window.open('https://wa.me/?text='+encodeURIComponent(payShareText(g)),'_blank','noopener') }catch(e){}
 }
 function payExport(){
   if(!requireAdmin())return;
@@ -14136,7 +14317,7 @@ function payAdminPanel(ctx){
   const held=Object.values(bals).filter(v=>v>0).reduce((t,v)=>t+v,0), owed=Object.values(bals).filter(v=>v<0).reduce((t,v)=>t+v,0);
   const got=(M.lines||[]).filter(l=>['topup','cash','bank'].includes(l.kind)&&(l.at||0)>=(S.created||0)).reduce((t,l)=>t+l.amt,0);
   const all=payBalancesAll(b), low=all.filter(x=>x.v<0), credit=all.filter(x=>x.v>0), pend=payToConfirm();
-  const priced=venues().filter(v=>payPrice(v.id,7)||payPrice(v.id,9)).length;
+  const priced=venues().filter(v=>PAY_SIZES.some(s=>+((M.prices||{})[v.id]||{})[s]>0)).length;
   const links=(M.topups||[]).filter(t=>/^https:\/\//i.test(t.link||'')).length;
   const page=ctx==='page'||ctx==='players', showBal=page||ADM_PAYBAL, showG=ctx==='page'||(!page&&ADM_PAYG);
   if(!payAdminPanel._t||Date.now()-payAdminPanel._t>5000){ payAdminPanel._t=Date.now(); paySync().then(m=>{ if(m&&(VIEW==='admin'||VIEW==='pitch'))render() }) }
@@ -14145,60 +14326,70 @@ function payAdminPanel(ctx){
       <div><b>${payAED(got)}</b><span>COLLECTED THIS SEASON</span></div></div>
     ${pend.length?`${ssSec('shop','To confirm',`<span class="ss-note">${pend.length}</span>`,PAY_GREEN)}${payClaimRows(pend)}`:''}
     <div class="pay-acts">
-      <button onclick="payRemind()" ${low.length?'':'disabled'}>Remind ${low.length||''} low</button>
       <button onclick="payExport()">Download CSV</button>
       </div>
     ${page?'':`<div class="card adm-c">
       ${admRow('squad',PAY_GREEN,'Balances',`${credit.length} in credit · ${low.length} below zero`,'ADM_PAYBAL=!ADM_PAYBAL;render()',`<i class="adm-chev${ADM_PAYBAL?' open':''}">${chev}</i>`)}
-      ${admRow('fixtures',PAY_GREEN,'Games charged','Who paid for each game · waive anyone','ADM_PAYG=!ADM_PAYG;render()',`<i class="adm-chev${ADM_PAYG?' open':''}">${chev}</i>`)}
+      ${admRow('fixtures',PAY_GREEN,'Games','A tick for everyone on each game','ADM_PAYG=!ADM_PAYG;render()',`<i class="adm-chev${ADM_PAYG?' open':''}">${chev}</i>`)}
       ${admRow('sunday-fpl',PAY_GREEN,'Prices and links',`${priced} pitch${priced===1?'':'es'} priced · ${links} top-up link${links===1?'':'s'}`,'ADM_PAYSET=!ADM_PAYSET;render()',`<i class="adm-chev${ADM_PAYSET?' open':''}">${chev}</i>`)}
     </div>`}
     ${showBal?`${ssSec('squad','Balances',`<span class="ss-note">${credit.length} in credit · ${low.length} owe</span>`,PAY_GREEN)}
       <div class="pay-tools"><input class="vid-in pay-q" type="search" placeholder="Search a name" value="${esc(PAY_Q)}" oninput="payFind(this.value)" aria-label="Search balances">
         <div class="chips pay-f">${chip('money','Paying')}${chip('owe','Owes',low.length)}${chip('credit','In credit',credit.length)}${chip('all','Everyone')}</div></div>
       <div class="card adm-c" id="payBals">${payBalanceRows()}</div>`:''}
-    ${showG?`${ssSec('fixtures','Games charged','',PAY_GREEN)}<div class="card adm-c">${payGamesCharged()}</div>`:''}
+    ${showG?`${ssSec('fixtures','Games','',PAY_GREEN)}<div class="card adm-c">${payGamesCharged()}</div>`:''}
     ${!page&&ADM_PAYSET?adminPaySettings():''}`;
 }
 function adminPayments(){
-  const pend=payToConfirm();
-  return `${admSec('shop',PAY_GREEN,'Payments',pend.length?`${pend.length} to confirm`:'Live')}${payAdminPanel('admin')}`;
+  payMigrate();
+  const pend=payToConfirm().length;
+  return `${admSec('shop',PAY_GREEN,'Payments',pend?`${pend} to confirm`:'Live')}${payAdminPanel('admin')}`;
 }
 function adminPaySettings(){
   const M=payCfg(), on=M.pushOnCharge!==false;
   return `<div class="card pad pay-set">
-    <div class="sn-fields"><div><label class="vid-lab" for="payStart">Don’t charge games before</label>
-      <input id="payStart" class="vid-in" type="date" value="${esc(M.startFrom||'')}" onchange="payStart(this.value)"></div>
-      <div class="pay-tg"><span class="vid-lab">Push after each game</span>
-        <button class="toggle tf-tg ${on?'on':''}" aria-label="Push after each game" aria-pressed="${on}" onclick="payPushSet(${!on})"><i></i></button></div></div>
-    <div class="note">Optional. Every game you log is charged; games logged before payments went live never are.</div>
+    <div class="pay-tg2"><span><b>Tell balance players what came off</b><i>After each game, a private push to each player who pays from a balance: how much was taken and what’s left. Per-game payers get nothing.</i></span>
+      <button class="toggle tf-tg ${on?'on':''}" aria-label="Tell balance players what came off" aria-pressed="${on}" onclick="payPushSet(${!on})"><i></i></button></div>
     <div class="pay-al"><span><b>Alerts when someone says they’ve paid</b><i>${M.adminPid?`Go to ${esc(payName(M.adminPid))}’s phone`:'Sign in with your own code on this phone, then tap Use this phone'}</i></span>
       <button class="btn pay-fix" onclick="payAlertHere()">Use this phone</button></div>
-    <div class="lg6-lbl pay-h">Price per player <span>7-a-side · 9-a-side</span></div>
-    ${venues().map(v=>{ const p=(M.prices||{})[v.id]||{};
-      return `<div class="pay-v"><span class="pay-vn">${esc(v.n)}<i>${v.t==='in'?'Indoor':'Outdoor'}</i></span>
-        <input class="vid-in pay-n" type="number" inputmode="numeric" min="0" aria-label="${esc(v.n)} 7-a-side" value="${p[7]!=null?esc(String(p[7])):''}" onchange="payPriceSet('${v.id}',7,this.value)">
-        <input class="vid-in pay-n" type="number" inputmode="numeric" min="0" aria-label="${esc(v.n)} 9-a-side" value="${p[9]!=null?esc(String(p[9])):''}" onchange="payPriceSet('${v.id}',9,this.value)"></div>` }).join('')}
-    <div class="note">9-a-side is used when either side has 8 or more.</div>
+    <div class="pay-al"><span><b>Settled up to</b><i>${(()=>{ const g=M.settledTo?payFindGame(M.settledTo):null; return g?`${esc(g.round||'Game')} · ${esc(fdate(g.date))}. Earlier games are paid up and off the checklist.`:'Nothing yet. Every priced game is on the checklist.' })()}</i></span>
+      <button class="btn pay-fix" onclick="paySettlePick()">Change</button></div>
+    <div class="lg6-lbl pay-h">Pitches <span>price per player and Ziina link, by size</span></div>
+    <div class="card adm-c pay-vl">${venues().map(v=>{ const p=(M.prices||{})[v.id]||{}, L=(M.links||{})[v.id]||{};
+      const set=PAY_SIZES.filter(s=>+p[s]>0), nl=PAY_SIZES.filter(s=>payLinkOk(L[s])).length;
+      return `<button class="row tap adm-r pay-vr" onclick="payVenueSheet('${v.id}')"><span class="rt"><span class="r1">${esc(v.n)}</span>
+        <span class="r2">${set.length?set.map(s=>`${s}-a-side ${p[s]}`).join(' · '):'No prices yet'} · ${nl?`${nl} Ziina link${nl===1?'':'s'}`:'no Ziina links'}</span></span><i class="adm-chev">${chev}</i></button>` }).join('')}</div>
+    <div class="note">Tap a pitch to set the price and Ziina link for 6 to 11-a-side. A size with no price uses the nearest one. For a one-off pitch or price, tap Edit under Where on the game.</div>
     <div class="lg6-lbl pay-h">Top-up amounts and Ziina links</div>
     ${(M.topups||[]).map((t,i)=>`<div class="pay-t">
       <input class="vid-in pay-n" type="number" inputmode="numeric" min="0" aria-label="Top-up amount ${i+1}" value="${esc(String(t.amt||''))}" onchange="payTopSet(${i},'amt',this.value)">
       <input class="vid-in" type="url" placeholder="Paste the Ziina link" aria-label="Ziina link for top-up ${i+1}" value="${esc(t.link||'')}" onchange="payTopSet(${i},'link',this.value)"></div>`).join('')}
-    <div class="note">One fixed Ziina link per amount, made once in the Ziina app and pasted here.</div>
+    <div class="note">Top-ups are optional. One fixed Ziina link per amount, made once in the Ziina app and pasted here.</div>
   </div>`;
+}
+/* one pitch: price and Ziina link for each size */
+function payVenueSheet(vid){
+  if(!requireAdmin())return; const v=venueBy(vid); if(!v)return;
+  const M=payCfg(), p=(M.prices||{})[vid]||{}, L=(M.links||{})[vid]||{};
+  openSheet(v.n,`<div class="pay-vs">
+    <div class="pay-vz pay-vzh"><span>Size</span><span>AED each</span><span>Ziina link</span></div>
+    ${PAY_SIZES.map(s=>`<div class="pay-vz"><b>${s}-a-side</b>
+      <input class="vid-in pay-n" type="number" inputmode="numeric" min="0" placeholder="—" aria-label="${s}-a-side price per player" value="${p[s]!=null?esc(String(p[s])):''}" onchange="payPriceSet('${vid}',${s},this.value)">
+      <input class="vid-in" type="url" placeholder="https://" aria-label="${s}-a-side Ziina link" value="${esc(L[s]||'')}" onchange="payLinkSet('${vid}',${s},this.value)"></div>`).join('')}
+    <div class="note">Price is per player. In the Ziina app, make a payment link for that amount and paste it here. It shows as Pay with Ziina to anyone paying per game, on Home and in Payments, and goes in the WhatsApp message.</div></div>`);
 }
 async function payAlertHere(){
   const me=fplMine(); if(!me){ toast('Sign in with your code first'); askSignIn(); return }
   await payWrite(M=>{ M.adminPid=me.pid },'Alerts go to '+me.name);
 }
-async function payStart(v){
-  if(v&&!/^\d{4}-\d{2}-\d{2}$/.test(v)){ toast('Pick a date'); render(); return }
-  await payWrite(M=>{ M.startFrom=v||null },v?'Games before '+fdate(v+'T12:00:00')+' are not charged':'Every game is charged');
-}
-const payPushSet=on=>payWrite(M=>{ M.pushOnCharge=!!on },on?'Push after each game is on':'Push after each game is off');
-async function payPriceSet(vid,fmt,v){
+const payPushSet=on=>payWrite(M=>{ M.pushOnCharge=!!on },on?'Balance players are told after each game':'No push after games');
+async function payPriceSet(vid,size,v){
   const n=v===''?null:payInt(v); if(n!==null&&!(n>=0)){ toast('Enter a number'); render(); return }
-  await payWrite(M=>{ const p=M.prices[vid]=M.prices[vid]||{}; if(n===null)delete p[fmt]; else p[fmt]=n },'Saved');
+  await payWrite(M=>{ const p=M.prices[vid]=M.prices[vid]||{}; if(n===null||n===0)delete p[size]; else p[size]=n },'Saved');
+}
+async function payLinkSet(vid,size,v){
+  const s=String(v||'').trim(); if(s&&!payLinkOk(s)){ toast('Paste the full link, starting https://'); return }
+  await payWrite(M=>{ M.links=M.links||{}; const L=M.links[vid]=M.links[vid]||{}; if(s)L[size]=s; else delete L[size] },s?'Link saved':'Link removed');
 }
 async function payTopSet(i,k,v){
   if(k==='amt'){ const n=payInt(v); if(!(n>0)){ toast('Enter an amount'); render(); return }
@@ -14227,20 +14418,12 @@ async function payReject(key){
   c.status='no'; render(); payPopRefresh(); toast('Removed');
   pushSend('Pitch balance','Top-up not found, check with Talal','money',{pids:[c.pid],url:'/'});
 }
-async function payRemind(){
-  if(!requireAdmin())return;
-  const b=payBook(), low=season().players.map(p=>({p,v:payBalance(p.id,b)})).filter(x=>x.v<0);
-  if(!low.length){ toast('Nobody is below zero'); return }
-  if(!await askConfirm('Remind who is low?',`Sends to ${low.length} ${low.length===1?'person':'people'}, privately. Each one sees only their own amount. The group gets nothing.`,'Send'))return;
-  for(const x of low) await pushSend('Pitch balance',`You owe AED ${-x.v}. Top up in the app when you can.`,'money',{pids:[x.p.id],url:'/'});
-  toast(`Sent to ${low.length}`);
-}
 function payPlayerSheet(pid){
   if(!requireAdmin())return; const p=player(pid)||{id:pid,name:payName(pid)};
   const body=()=>{ const b=payBook(), v=payBalance(pid,b), R=payHistRows(pid);
     return `<div class="pay-ph">${avatar(p,44)}<span><b>${esc(p.name)}</b><i class="${v<0?'neg':''}">${payAED(v)}</i></span></div>
       <div class="np-act"><button class="btn pay-ok" onclick="payAdd('${pid}')">Add payment</button>
-        <button class="btn pay-fix" onclick="payFix('${pid}')">Correction</button></div>
+        <button class="btn pay-fix" onclick="paySetBal('${pid}')">Edit balance</button></div>
       ${R.length?`<div class="card adm-c pbal-list" style="margin-top:14px">${R.slice(0,60).map(payRow).join('')}</div>`
         :`<div class="note">No payments or games yet.</div>`}` };
   openSheet(p.name,`<div id="payPl">${body()}</div>`);
@@ -14254,6 +14437,16 @@ async function payAdd(pid){
   const how=await askChoice(`AED ${a} from ${p.name}`,'How did they pay?',[{label:'Cash',value:'cash'},{label:'Bank transfer',value:'bank'}]); if(!how)return;
   if(await payWrite(M=>{ M.lines.push({id:'m:'+uid(),pid,nm:payName(pid),amt:a,kind:how,at:Date.now()}) },`AED ${a} added`))payPlRefresh();
 }
+/* the admin sets a balance to an exact figure; the difference goes in as a correction line */
+async function paySetBal(pid){
+  if(!requireAdmin())return;
+  const p={name:payName(pid)}, now=payBalance(pid);
+  const v=await askText(`Edit ${p.name}’s balance`,`Now ${payAED(now)}. Type the new balance in dirhams (use - for money owed).`,String(now),'Next'); if(v===null)return;
+  const a=payInt(v); if(!isFinite(a)){ toast('Enter a number'); return }
+  if(a===now){ toast('No change'); return }
+  const note=await askText('What for?','A short note, shown in their history','Balance set by Talal','Save'); if(note===null)return;
+  if(await payWrite(M=>{ M.lines.push({id:'f:'+uid(),pid,nm:payName(pid),amt:a-now,kind:'fix',note:String(note||'Balance set by Talal').slice(0,60),at:Date.now()}) },`${p.name}: ${payAED(a)}`))payPlRefresh();
+}
 async function payFix(pid){
   const p={name:payName(pid)};
   const v=await askText('Correction','Plus or minus, in dirhams — e.g. 82 for a refund, -20 to take off','','Next'); if(v===null)return;
@@ -14263,27 +14456,37 @@ async function payFix(pid){
 }
 
 /* ---- the one change to the New game screen ---- */
+const payFormGame=()=>({teamA:[...G.A],teamB:[...G.B],fillA:G.fillA,fillB:G.fillB,fillTo:G.fillTo||{},venueId:G.venueId,price:G.price,payLink:G.payLink});
 function payGameLine(){
   if(!payLive()||!G)return '';
-  const M=DB.money||{}; if(!G.date||(M.startFrom&&G.date<M.startFrom))return '';
-  if(G.id){ const g0=season().games.find(x=>x.id===G.id); if(g0&&(!M.onAt||(g0.created||0)<M.onAt)&&!payGameLines(G.id).length)return '' }
-  const g={teamA:[...G.A],teamB:[...G.B],fillA:G.fillA,fillB:G.fillB,venueId:G.venueId,price:G.price};
-  const price=payGamePrice(g), n=G.A.size+G.B.size, f=Object.keys(G.fillTo||{}).filter(k=>G.fillTo[k]).length;
-  return `<div class="pay-g"><span>${price?`Charges AED ${price} each · ${n} player${n===1?'':'s'}${f?` + ${f} filler${f>1?'s':''}`:''}${G.price!=null?' · this game only':''}`
-    :'No price for this pitch · nobody is charged'}</span>
-    <button class="pay-ge" onclick="payGamePriceEdit()">Edit</button></div>`;
+  const M=DB.money||{};
+  if(G.id){ const g0=season().games.find(x=>x.id===G.id); if(g0&&(!M.onAt||(g0.created||0)<M.onAt)&&!payGameLines(G.id).length&&!(M.paid||{})[G.id])return '' }
+  if(G.id&&(M.settled||{})[G.id])return '';
+  const g=payFormGame(), price=payGamePrice(g), link=payGameLink(g), b=payBook(), who=Object.keys(payOwe(g)), nb=who.filter(pid=>payUsesBal(pid,b)).length;
+  return `<div class="pay-g"><span>${price?`<b>AED ${price} each · ${paySize(g)}-a-side${payHasPrice(G)?' · this game only':''}</b><i>${who.length?`${nb} from balance · ${who.length-nb} pay per game · `:''}${link?'Ziina link ready':'no Ziina link'}</i>`
+    :`<b>No price for this ${G.venueId?'pitch and size':'pitch'}</b><i>Tap Edit to set one, or nobody is asked to pay</i>`}</span>
+    <button class="pay-ge" onclick="payGameEdit()">Edit</button></div>`;
 }
-async function payGamePriceEdit(){
-  const g={teamA:[...G.A],teamB:[...G.B],fillA:G.fillA,fillB:G.fillB,venueId:G.venueId};
-  const v=await askText('Price for this game','Per player, in dirhams. Leave empty to use the pitch price.',G.price!=null?String(G.price):String(payGamePrice(g)||''),'Save');
+/* a one-off price and a one-off Ziina link for this game only */
+async function payGameEdit(){
+  const g=payFormGame(); delete g.price; delete g.payLink; const base=payRate(G.venueId,paySize(g));
+  const v=await askText('Price for this game',`Per player, in dirhams.${G.venueId?` Leave empty to use the pitch price${base.price?` (AED ${base.price})`:''}.`:''}`,payHasPrice(G)?String(G.price):'','Next');
   if(v===null)return;
-  if(v===''){ delete G.price; paintGame(); return }
-  const n=payInt(v); if(!(n>=0)){ toast('Enter a number'); return }
-  G.price=(n===payGamePrice(g))?undefined:n; if(G.price===undefined)delete G.price; paintGame();
+  if(String(v).trim()===''){ delete G.price }
+  else { const n=payInt(v); if(!(n>=0)){ toast('Enter a number'); return } if(G.venueId&&n===base.price)delete G.price; else G.price=n }
+  const l=await askText('Ziina link for this game','Only for a one-off. Leave empty to use the pitch link.',G.payLink||'','Save');
+  if(l!==null){ const s=String(l).trim(); if(s&&!payLinkOk(s))toast('Paste the full link, starting https://'); else if(s)G.payLink=s; else delete G.payLink }
+  paintGame();
+}
+/* a pitch you play at once: a name for this game only, no venue kept */
+async function gameOneOffPitch(){
+  const n=await askText('One-off pitch','Name of the pitch, just for this game',G.venueOther||'','Next'); if(n==null||!String(n).trim())return;
+  const t=await askChoice('Indoor or outdoor?','This decides whether weather is recorded',[{label:'Outdoor',value:'out'},{label:'Indoor',value:'in'}]); if(!t)return;
+  G.venueId=null; G.venueOther=String(n).trim().slice(0,40); G.venue=t; paintGame();
+  if(!payHasPrice(G))toast('Tap Edit to set the price for this game');
 }
 function payFillerPick(sd,i){
   if(!payLive()||!G)return '';
-  if(!G.date||(DB.money&&DB.money.startFrom&&G.date<DB.money.startFrom))return '';
   const k=fillKey(sd,i), cur=(G.fillTo||{})[k]||'';
   const ids=[...new Set([...G.A,...G.B,...(cur?[cur]:[])])].map(player).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name));
   return `<label class="pay-fto"><span>Charge to</span><select aria-label="Charge this filler to" onchange="G.fillTo=G.fillTo||{};if(this.value)G.fillTo['${k}']=this.value;else delete G.fillTo['${k}'];paintGame()">
@@ -21045,7 +21248,7 @@ function openGame(id){if(!requireAdmin())return;const g=season().games.find(x=>x
      /* the venue was not carried into the edit form, so saving an edit wiped it */
      venueId:g.venueId||null,venue:g.venue||'out',fillTo:{...(g.fillTo||{})}};
   if(Array.isArray(g.timeline))G.timeline=g.timeline.map(x=>({...x}));
-  if(g.price!=null)G.price=g.price;
+  if(g.price!=null)G.price=g.price; if(g.payLink)G.payLink=g.payLink; if(g.venueOther)G.venueOther=g.venueOther;
   gameSheet()}
 function gameSheet(){
   const dsub=(()=>{try{const d=new Date(G.date+'T12:00:00');return d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'short'})}catch(e){return G.date}})();
@@ -21097,9 +21300,11 @@ function _paintGame(){
 
     ${sec(ssNamed('Venue',22,'#2F6BF6'),'Where')}
     <div class="lg6-venues">${venues().map(v=>`
-      <button class="lg6-venue ${G.venueId===v.id?'on':''}" onclick="G.venueId='${v.id}';G.venue='${v.t}';paintGame()">
+      <button class="lg6-venue ${G.venueId===v.id?'on':''}" onclick="G.venueId='${v.id}';G.venue='${v.t}';G.venueOther=null;paintGame()">
         <span class="lg6-vi">${v.t==='in'?ssGlyphSvg('@Indoor vs outdoor'):SS_SUN}</span><span class="lg6-vt"><b>${esc(v.n)}</b><i>${v.t==='in'?'Indoor':'Outdoor'}</i></span></button>`).join('')}
-      <button class="lg6-venue add" onclick="editVenue(null)">+ Add venue</button></div>
+      ${!G.venueId&&G.venueOther?`<button class="lg6-venue on" onclick="gameOneOffPitch()"><span class="lg6-vi">${G.venue==='in'?ssGlyphSvg('@Indoor vs outdoor'):SS_SUN}</span><span class="lg6-vt"><b>${esc(G.venueOther)}</b><i>One-off</i></span></button>`:''}
+      <button class="lg6-venue add" onclick="editVenue(null)">+ Add venue</button>
+      <button class="lg6-venue add" onclick="gameOneOffPitch()">+ One-off pitch</button></div>
     ${payGameLine()}
 
     ${sec(ssNamed('Everyone',22,'#2F6BF6'),'Pick the sides',`${cA} v ${cB}`)}
@@ -21303,14 +21508,15 @@ async function saveGame(){ track('game_completed');
   if((G.guests||[]).length)g.guests=[...new Set(G.guests.map(n=>String(n).trim()))];
   /* payments: who a filler's fee goes on, and a one-game price */
   { const ft={}; Object.entries(G.fillTo||{}).forEach(([k,pid])=>{ const m=FILL_KEY.exec(k); if(m&&pid&&(G['fill'+m[1]]||[])[+m[2]]!=null)ft[k]=pid });
-    if(Object.keys(ft).length)g.fillTo=ft; if(G.price!=null)g.price=G.price; }
+    if(Object.keys(ft).length)g.fillTo=ft; if(G.price!=null)g.price=G.price; if(payLinkOk(G.payLink))g.payLink=G.payLink;
+    if(!g.venueId&&G.venueOther)g.venueOther=String(G.venueOther).slice(0,40); }
   /* referee sheet: the goals in order, kept only while they agree with the goals being saved */
   { const tl=refTimelineFor(g); if(tl)g.timeline=tl; }
   /* keep whatever weather was already fetched for this game */
   const prev=G.id?S.games.find(x=>x.id===G.id):null;
   if(prev&&prev.wx)g.wx=prev.wx;
   const prevCopy=prev?JSON.parse(JSON.stringify(prev)):null;
-  const payPrev=JSON.parse(JSON.stringify(payGameLines(g.id)));
+  const payPrev=JSON.parse(JSON.stringify(payGameLines(g.id))), paidPrev=JSON.stringify(((DB.money||{}).paid||{})[g.id]||null);
   /* Put the game into whichever copy of the season is current — after a merge
      that is a freshly pulled one, so this has to look it up every time. */
   const applyGame=()=>{
@@ -21338,6 +21544,7 @@ async function saveGame(){ track('game_completed');
       if(S3&&!prevCopy){ const i=S3.games.findIndex(x=>x.id===g.id); if(i>=0)S3.games.splice(i,1); }
       else if(S3&&prevCopy){ const i=S3.games.findIndex(x=>x.id===g.id); if(i>=0)S3.games[i]=prevCopy; }
       if(DB.money&&DB.money.lines)DB.money.lines=DB.money.lines.filter(l=>l.gameId!==g.id).concat(payPrev);
+      if(DB.money&&DB.money.paid){ const pp=JSON.parse(paidPrev); if(pp)DB.money.paid[g.id]=pp; else delete DB.money.paid[g.id] }
       toast('Nothing was saved — the game is still in the form');
       return;
     }
