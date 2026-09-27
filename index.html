@@ -6034,7 +6034,7 @@ html[data-theme="dark"] .tb-dd.b .tb-dot{background:#7FA2DC}
 .adm-nclr{border:0;background:none;color:var(--tint);font:inherit;font-weight:800;font-size:14px;min-height:40px;cursor:pointer}
 
 /* =================== ROUND 11 · DEADLINE =================== */
-.dl-box{margin:-6px 0 14.5px;padding:12px;border-radius:14px;background:var(--ss-card);border:1px solid var(--ss-hair);display:flex;flex-direction:column;gap:9px}
+.dl-box{margin:-6px 0 14.5px;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--ss-hair);display:flex;flex-direction:column;gap:9px}
 .dl-now{display:flex;flex-direction:column;gap:2px}
 .dl-now b{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--ss-muted)}
 .dl-now>span{font-size:15px;font-weight:800;color:var(--ss-ink)}
@@ -6059,16 +6059,16 @@ html[data-theme="dark"] .wdl i.D,html[data-theme="dark"] .pp-games .fd.pp-fd.D{b
 .wdl i{letter-spacing:0;line-height:1;text-align:center;padding:0;text-indent:0}
 .lead-n .wdl{letter-spacing:0;margin-top:0;opacity:1;font-size:inherit}
 /* =================== ROUND 11 · RATING COLOURS (SofaScore bands) =================== */
-:root{--sf9:#374DF5;--sf8:#00879A;--sf7:#188A47;--sf65:#D9AF00;--sf6:#ED7E07;--sf5:#D0342C}
+:root{--sf9:#374DF5;--sf8:#0A9A48;--sf7:#7CC242;--sf65:#D9AF00;--sf6:#ED7E07;--sf5:#D0342C}
 .rpill.sf-9,.bc-rt.sf-9,.rt3-r.sf-9,.st-rt.sf-9{background:var(--sf9);color:#fff;box-shadow:none;text-shadow:none}
 .rpill.sf-8,.bc-rt.sf-8,.rt3-r.sf-8,.st-rt.sf-8{background:var(--sf8);color:#fff;box-shadow:none;text-shadow:none}
-.rpill.sf-7,.bc-rt.sf-7,.rt3-r.sf-7,.st-rt.sf-7{background:var(--sf7);color:#fff;box-shadow:none;text-shadow:none}
+.rpill.sf-7,.bc-rt.sf-7,.rt3-r.sf-7,.st-rt.sf-7{background:var(--sf7);color:#10240A;box-shadow:none;text-shadow:none}
 .rpill.sf-65,.bc-rt.sf-65,.rt3-r.sf-65,.st-rt.sf-65{background:var(--sf65);color:#241B06;box-shadow:none;text-shadow:none}
 .rpill.sf-6,.bc-rt.sf-6,.rt3-r.sf-6,.st-rt.sf-6{background:var(--sf6);color:#241B06;box-shadow:none;text-shadow:none}
 .rpill.sf-5,.bc-rt.sf-5,.rt3-r.sf-5,.st-rt.sf-5{background:var(--sf5);color:#fff;box-shadow:none;text-shadow:none}
 /* =================== ROUND 11 · SKY MONTH IN REVIEW =================== */
 .mir-chips{margin:0 0 9px}
-.mir{border-radius:18px;overflow:hidden;background:var(--ss-card);border:1px solid var(--ss-hair);margin-bottom:14.5px}
+.mir{border-radius:18px;overflow:hidden;background:var(--card);border:1px solid var(--ss-hair);margin-bottom:14.5px}
 .mir-h{background:var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.05) 0 2px,transparent 2px 9px);color:#fff;padding:14px 14px 12px;border-bottom:2px solid transparent;border-image:var(--gold-metal) 1}
 .mir-k{display:block;font-style:normal;font-size:10px;font-weight:900;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-on-dark)}
 .mir-t{display:block;font-size:22px;font-weight:900;font-style:italic;letter-spacing:-.01em;margin:2px 0 10px;overflow-wrap:anywhere}
@@ -6129,6 +6129,94 @@ html[data-theme="dark"] .wdl i.D,html[data-theme="dark"] .pp-games .fd.pp-fd.D{b
 .shpv-theme{display:flex;align-items:flex-start;gap:8px;padding:12px;border-radius:12px;background:var(--ss-soft);font-size:13px;line-height:1.4;margin-bottom:12px;color:var(--ss-ink)}
 .shpv-theme .ss2{flex:0 0 auto;margin-top:1px}
 .sbg.shpv-clear{background:rgba(0,0,0,.12)!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.pm-tile b .pm-of{font-style:normal;font-size:12px;opacity:.6;margin-left:1px}
+/* round 11b: no teal — 8s are a vivid green and 7s lime, both far brighter than any pitch grass */
+/* =================== ROUND 11 (b) · ATTRIBUTES, FC STYLE =================== */
+.fca{--t80:#3BE07A;--t70:#A6E35A;--t50:#F4C542;--t40:#F59A3C;--t0:#FF6B6B;
+  border-radius:20px;overflow:hidden;margin-bottom:14.5px;color:#fff;padding:6px 14px 14px;
+  background:radial-gradient(120% 60% at 50% 0,rgba(212,175,55,.16),transparent 60%),var(--ss-navy) repeating-linear-gradient(115deg,rgba(255,255,255,.035) 0 2px,transparent 2px 9px);
+  border:1px solid transparent;box-shadow:inset 0 0 0 1px rgba(234,208,138,.28)}
+.fca .t80{--tc:var(--t80)} .fca .t70{--tc:var(--t70)} .fca .t50{--tc:var(--t50)} .fca .t40{--tc:var(--t40)} .fca .t0{--tc:var(--t0)}
+.fca-top{position:relative}
+.fca-rad{display:block;width:100%;max-width:330px;margin:0 auto}
+.fca-pt rect{fill:rgba(255,255,255,.08);stroke:var(--tc);stroke-width:1.5}
+.fca-pt.st rect{stroke-dasharray:3 3}
+.fca-v{fill:var(--tc);font-size:17px;font-weight:900;text-anchor:middle;dominant-baseline:middle;font-variant-numeric:tabular-nums}
+.fca-k{fill:#fff;opacity:.78;font-size:9.5px;font-weight:800;letter-spacing:.1em;text-anchor:middle;dominant-baseline:middle}
+.fca-leg{display:flex;justify-content:center;gap:16px;font-size:11.5px;font-weight:700;color:rgba(255,255,255,.8);margin:-4px 0 6px}
+.fca-leg span{display:inline-flex;align-items:center;gap:6px}
+.fca-leg i{display:inline-block;width:18px;height:0;border-top:2.4px solid #EAD08A}
+.fca-leg i.gh{border-top:2px dashed rgba(255,255,255,.6)}
+.fca-rows{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 14px;padding:10px 0 4px;border-top:1px solid rgba(255,255,255,.1)}
+.fca-r{display:grid;grid-template-columns:32px minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:7px;align-items:center;min-height:40px}
+.fca-rv{grid-column:1;grid-row:1 / 3;font-size:20px;font-weight:900;color:var(--tc);font-variant-numeric:tabular-nums;text-align:left;line-height:1}
+.fca-rk{grid-column:2;grid-row:1;font-size:12px;font-weight:700;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.fca-rp{grid-column:3;grid-row:1;font-style:normal;font-size:9.5px;font-weight:800;color:rgba(255,255,255,.55);letter-spacing:.04em;text-align:right}
+.fca-rb{grid-column:2 / 4;grid-row:2;height:4px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+.fca-rb i{display:block;height:100%;border-radius:4px;background:var(--tc)}
+.fca-st{display:flex;align-items:center;gap:6px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#FF9A57;padding:8px 0 0}
+.fca-ts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1)}
+.fca-ts.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+.fca-t{display:flex;flex-direction:column;align-items:center;text-align:center;gap:5px;padding:12px 6px 11px;border-radius:14px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#fff;font:inherit;min-width:0;min-height:112px;box-sizing:border-box}
+button.fca-t{cursor:pointer}
+.fca-ti{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:0 0 40px}
+.fca-ic{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px}
+.fca-t.good .fca-ic{background:#1E9E55} .fca-t.work .fca-ic{background:#C77700}
+.fca-ic .ss2{color:#fff}
+.fca-tl{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.62)}
+.fca-tv{font-size:12.5px;font-weight:800;line-height:1.2;overflow-wrap:anywhere;display:flex;flex-direction:column;align-items:center;gap:1px}
+.fca-tv em{font-style:normal;font-size:15px;font-weight:900}
+.fca-t.good em{color:var(--t80)} .fca-t.work em{color:var(--t40)} .fca-t.like em{color:#EAD08A}
+.fca-note{font-size:11px;line-height:1.45;color:rgba(255,255,255,.6);padding-top:11px}
+.fc-crest{display:inline-flex;align-items:center;justify-content:center;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85);flex:0 0 auto}
+.fc-crest i{font-style:normal;font-size:10.5px;font-weight:900;color:#fff;letter-spacing:.02em;line-height:1}
+@media(max-width:370px){.fca{padding:6px 11px 12px}.fca-rows{column-gap:10px}.fca-tv{font-size:11.5px}}
+/* =================== ROUND 11 (b) · PHYSICAL CHARTS =================== */
+.phc{margin-top:14px;padding-top:12px;border-top:1px solid var(--ss-hair)}
+.phc-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.phc-h b{font-size:14px;font-weight:800;color:var(--ss-ink)}
+.phc-h span{font-size:11.5px;color:var(--ss-muted)}
+.phc-svg{display:block;width:100%;height:auto;overflow:visible}
+.phz{stroke:none} .phz.z0{fill:rgba(34,162,94,.08)} .phz.z1{fill:rgba(237,126,7,.09)} .phz.z2{fill:rgba(208,52,44,.10)}
+.phz-t.z0,.phz-t{}
+.phz-t{font-size:9px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;fill:var(--ss-muted)}
+.phc-tk,.phc-x{font-size:10px;font-weight:700;fill:var(--ss-muted);font-variant-numeric:tabular-nums}
+.phc-lb{font-size:11px;font-weight:800;fill:var(--ss-ink);font-variant-numeric:tabular-nums}
+.phb.hr{fill:#E4677A} .phb.hr.last{fill:#D0342C}
+.phb.kc{fill:#F2A649} .phb.kc.last{fill:#E07F00}
+.phd{fill:#fff;stroke:#D0342C;stroke-width:2}
+html[data-theme="dark"] .phd{fill:#1C1C1E}
+.phc-base{stroke:var(--ss-hair);stroke-width:1}
+.phc-avg{stroke:var(--ss-ink);stroke-width:1.2;stroke-dasharray:4 4;opacity:.55}
+.phc-key{display:flex;gap:14px;flex-wrap:wrap;font-size:11px;color:var(--ss-muted);margin-top:4px}
+.phc-key span{display:inline-flex;align-items:center;gap:5px}
+.phc-key i{display:inline-block}
+.phc-key .k-bar{width:8px;height:14px;border-radius:3px;background:#D0342C}
+.phc-key .k-dot{width:8px;height:8px;border-radius:50%;border:2px solid #D0342C;background:transparent}
+.phc-key .k-kc{width:10px;height:10px;border-radius:3px;background:#E07F00}
+.phc-key .k-avg{width:16px;border-top:1.5px dashed var(--ss-ink);opacity:.6}
+.phc-say{font-size:12.5px;line-height:1.4;color:var(--ss-ink);margin-top:6px}
+html[data-theme="dark"] .phz.z0{fill:rgba(47,184,108,.12)} html[data-theme="dark"] .phz.z1{fill:rgba(255,166,43,.12)} html[data-theme="dark"] .phz.z2{fill:rgba(255,92,92,.14)}
+/* =================== ROUND 11 (b) · FC 26 ROLES =================== */
+.rl-b{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;border-radius:28%;font-weight:900;letter-spacing:.02em;color:#fff;
+  background:linear-gradient(150deg,color-mix(in srgb,var(--rc) 88%,#fff),var(--rc) 55%,color-mix(in srgb,var(--rc) 70%,#000));box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.35)}
+.rl-card{display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:16px;background:var(--card);box-shadow:var(--shadow);margin-bottom:12.5px}
+.pp-ps+.rl-card{margin-top:0}
+.rl-k{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ss-muted)}
+.rl-n{font-size:16px;font-weight:800;color:var(--ss-ink);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rl-d{font-size:12.5px;color:var(--ss-muted);line-height:1.35;margin-top:2px}
+.rl-new{font-style:normal;font-size:9.5px;font-weight:900;letter-spacing:.06em;padding:2px 6px;border-radius:6px;background:var(--gold-metal);color:var(--gold-ink)}
+.rl-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-bottom:10px}
+.rl-opt{display:flex;align-items:center;gap:9px;min-height:48px;padding:7px 9px;border-radius:12px;background:var(--ss-soft);color:var(--ss-ink);font-size:12.5px;font-weight:700;text-align:left;border:1.5px solid transparent;min-width:0}
+.rl-opt span:last-child{min-width:0;overflow-wrap:anywhere;line-height:1.2}
+.rl-opt.on{border-color:var(--tint);background:color-mix(in srgb,var(--tint) 10%,transparent)}
+/* =================== ROUND 11 (b) · TROPHY CABINET =================== */
+.cab-e{position:relative}
+.cab-x{position:absolute;right:-2px;top:2px;font-style:normal;font-size:11px;font-weight:900;padding:2px 6px;border-radius:8px;background:var(--gold-metal);color:var(--gold-ink);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+.cab-plus{display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin:8px auto;border-radius:50%;border:1.5px dashed rgba(234,208,138,.6);color:#EAD08A;font-size:17px;font-weight:900}
+.cab-li{flex:0 0 44px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:12px;background:#0B1B33}
+.cab-li .cab-art{width:40px;height:40px}
 </style>
 </head>
 <body>
@@ -7385,8 +7473,8 @@ function availPill(p){
 }
 
 
-/* Player of the Month — goals and clean sheets weighted equally so
-   keepers and defenders can win it too. */
+/* Player of the Month — individual: goals, assists and defending, balanced by
+   position. Results do not count. */
 function potm(){
   const g=allGames().filter(x=>x.date);
   const months={};
@@ -7408,21 +7496,38 @@ function potm(){
           e.GF+=(gf??0); e.GA+=(ga??0);
           if((ga??0)===0)e.cs++;
           if(x.result==='D'){e.D++;e.pts++} else if(x.result===sd){e.W++;e.pts+=3} else e.L++;
+          /* defending, judged against the game it was in (as the ratings do):
+             +1 a clean sheet, 0 conceding the game's par, down to -1 */
+          const par=Math.max(1,((x.scoreA||0)+(x.scoreB||0))/2);
+          e.def=(e.def||0)+Math.max(-1,Math.min(1,(par-(ga??0))/par));
         })});
     });
     const arr=Object.values(m).filter(x=>x.P>=2&&ranksInTable(x.id));
     if(!arr.length)return;
-    /* Round 11: the month is judged on the match ratings — the same number every
-       surface shows, which already credits goals, assists, results and
-       defending by position — plus a little for turning up and for winning.
-       It used to add 1.5 a goal on top of points, so a striker on a losing run
-       could outscore the best-rated player of the month. */
+    /* Round 11 (b): an individual award. The result of the game plays no part,
+       so a player who loses but performs can win it. Three things per game —
+       goals, assists and defending (goals let in against that game's par) —
+       each scaled from the month's lowest to its highest, so none of them can
+       swamp the others, then weighted by position so a defender is judged mostly on
+       defending and a striker mostly on goals. A little for turning up.
+         ATT  goals .40  assists .30  defending .25
+         MID  goals .30  assists .35  defending .30
+         DEF/GK goals .20 assists .25 defending .50      + appearances .05
+       Out of 100. The match rating is not used: it leans on goals and wins. */
+    const W={ATT:[.40,.30,.25],MID:[.30,.35,.30],DEF:[.20,.25,.50],GK:[.20,.25,.50]};
+    arr.forEach(x=>{ x.gpg=x.G/x.P; x.apg=x.A/x.P; x.dpg=((x.def||0)/x.P+1)/2; });
+    /* each part runs from the month's lowest (0) to its highest (1), so all
+       three spread the same distance and none dominates */
+    const sc=k=>{ const v=arr.map(x=>x[k]), lo=Math.min(...v), hi=Math.max(...v); return x=>hi>lo?(x[k]-lo)/(hi-lo):(hi>0?1:0) };
+    const nG=sc('gpg'), nA=sc('apg'), nD=sc('dpg'), mP=Math.max(...arr.map(x=>x.P));
     arr.forEach(x=>{
+      const w=W[x.pos]||W.MID;
+      x.parts={g:nG(x), a:nA(x), d:nD(x)};
+      x.score=Math.round((w[0]*x.parts.g + w[1]*x.parts.a + w[2]*x.parts.d + .05*x.P/mP)*100);
       const rr=gl.map(g=>ratingFor(x.id,g)).filter(v=>v!=null);
-      x.avg=rr.length?rr.reduce((a,b)=>a+b,0)/rr.length:6;
-      x.score=x.avg + Math.min(x.P,5)*0.08 + (x.W/x.P)*0.4;
+      x.avg=rr.length?rr.reduce((a,b)=>a+b,0)/rr.length:null;
     });
-    arr.sort((a,b)=>b.score-a.score||b.avg-a.avg||b.P-a.P);
+    arr.sort((a,b)=>b.score-a.score||b.dpg-a.dpg||(b.G+b.A)-(a.G+a.A)||b.P-a.P);
     out.push({month:k,games:gl.length,win:arr[0],runners:arr.slice(1,3)});
   });
   return out.reverse();
@@ -7445,13 +7550,13 @@ function potmBlock(){
         <div class="pm-sub">${w.pos?`<span class="pill ${w.pos}">${w.pos}</span>`:''}<span>${w.W}W – ${w.D}D – ${w.L}L</span></div>
       </div>
       <div class="pm-tiles">
-        ${tile(w.avg!=null?(+w.avg).toFixed(1):'—','AVG RATING')}${tile(w.G,'⚽ GOALS')}${tile(w.A,'🅰️ ASSISTS')}${tile((w.GA/Math.max(1,w.P)).toFixed(1),'CONCEDED / GAME')}
+        ${tile(w.score+'<i class="pm-of">/100</i>','POTM SCORE')}${tile(w.G,'⚽ GOALS')}${tile(w.A,'🅰️ ASSISTS')}${tile((w.GA/Math.max(1,w.P)).toFixed(1),'CONCEDED / GAME')}
       </div>
       ${cur.runners.length?`<div class="pm-runners">${cur.runners.map((r,i)=>`<span onclick="openPlayer('${r.id}')"><i class="pm-rk ${i===0?'ag':'br'}">${i+2}</i>${esc(String(r.name).toUpperCase())}</span>`).join('')}</div>`:''}
       ${pm.length>1?`<button class="lvltoggle pm-toggle" onclick="POTMOPEN=!POTMOPEN;render()">${POTMOPEN?'Hide past months ▲':`See ${pm.length-1} past month${pm.length-1===1?'':'s'} ▼`}</button>
         ${POTMOPEN?`<div class="pm-past">${pm.slice(1).map(x=>`<div class="pm-past-r" onclick="openPlayer('${x.win.id}')">
           <span class="pm-past-m">${MONTHNAME(x.month)}</span><b>${esc(String(x.win.name).toUpperCase())}</b>
-          <i>${x.win.avg!=null?(+x.win.avg).toFixed(1)+' avg':x.win.pts+' pts'}${x.win.G?` · ${x.win.G} ⚽`:''}${x.win.A?` · ${x.win.A} 🅰️`:''}${x.win.cs?` · ${x.win.cs} 🧤`:''}</i></div>`).join('')}</div>`:''}`:''}
+          <i>${x.win.score}/100${x.win.G?` · ${x.win.G} ⚽`:''}${x.win.A?` · ${x.win.A} 🅰️`:''}${x.win.cs?` · ${x.win.cs} 🧤`:''}</i></div>`).join('')}</div>`:''}`:''}
     </div>`;
 }
 
@@ -7593,27 +7698,29 @@ function statsFor(games,upto){
       const v=list.map(x=>x[k]),lo=Math.min(...v,0),hi=Math.max(...v,0);
       list.forEach(x=>{const t=hi===lo?0.5:(x[k]-lo)/(hi-lo);x[out]=inv?1-t:t});
     };
-    pl.forEach(x=>x._ga=(x.G+(x.A||0))/Math.max(1,x.P));      /* involvements a game */
+    /* Round 11 (b): individual first. Goals 25%, assists 20% and defending 30%
+       are each scored against players in the SAME position; winning 15% and
+       turning up 10% stay global. It used to be attacking 34%, winning 28%,
+       defending 24%, turning up 14% — two fifths on results and appearances,
+       so a good player in a losing side sank.
+       Defending is judged against each game's own level (as the match rating
+       does): +1 a clean sheet, 0 conceding that game's par, down to -1. */
+    pl.forEach(x=>{
+      x._gpg=x.G/Math.max(1,x.P); x._apg=(x.A||0)/Math.max(1,x.P);
+      const d=x.seq.map(s=>{ const par=Math.max(1,((s.gf||0)+(s.ga||0))/2); return Math.max(-1,Math.min(1,(par-(s.ga||0))/par)) });
+      x._drel=d.length?d.reduce((t,v)=>t+v,0)/d.length:0;
+    });
     ['ATT','MID','DEF','GK'].forEach(pos=>{
       const grp=pl.filter(x=>((player(x.id)||{}).pos||'MID')===pos);
-      if(grp.length)nm(grp,'_ga',false,'_att');
+      if(grp.length){ nm(grp,'_gpg',false,'_gl'); nm(grp,'_apg',false,'_as'); nm(grp,'_drel',false,'_def') }
     });
-    pl.forEach(x=>{ if(x._att===undefined)x._att=0.5 });
-    /* Defending is scored within position too. How many your team lets in
-       depends enormously on where you play, so ranking a midfielder against
-       defenders quietly handed the award to the same positions every year.
-       Winning and turning up stay global — those mean the same wherever
-       you play. */
-    ['ATT','MID','DEF','GK'].forEach(pos=>{
-      const grp=pl.filter(x=>((player(x.id)||{}).pos||'MID')===pos);
-      if(grp.length)nm(grp,'cpg',true,'_def');
-    });
-    pl.forEach(x=>{ if(x._def===undefined)x._def=0.5 });
+    pl.forEach(x=>{ ['_gl','_as','_def'].forEach(k=>{ if(x[k]===undefined)x[k]=0.5 }) });
     nm(pl,'ppg',false,'_win1'); nm(pl,'wr',false,'_win2');
     nm(pl,'P',false,'_app');
     pl.forEach(x=>{
-      const win=(x._win1+x._win2)/2;
-      x.index=Math.round((x._att*0.34 + win*0.28 + x._def*0.24 + x._app*0.14)*100);
+      x._win=(x._win1+x._win2)/2;
+      x._att=(x._gl*0.25+x._as*0.20)/0.45;    /* kept for anything that reads the attacking part */
+      x.index=Math.round((x._gl*0.25 + x._as*0.20 + x._def*0.30 + x._win*0.15 + x._app*0.10)*100);
     });
   }
   arr.forEach(x=>{if(x.index===undefined)x.index=0});
@@ -9245,28 +9352,6 @@ function archetypeOf(pid){
 /* the hexagon */
 const AX_SHORT={Finishing:'FIN',Creating:'CRE',Winning:'WIN',Defending:'DEF',
   Availability:'APP',Consistency:'CON',Stamina:'STA','Work rate':'WRK'};
-function radarSVG(axes,size){
-  if(!axes)return '';
-  const keys=Object.keys(axes), n=keys.length, S=size||210, C=S/2, R=S*0.32;
-  const pt=(i,r)=>{const a=(Math.PI*2*i/n)-Math.PI/2;
-    return [C+Math.cos(a)*r, C+Math.sin(a)*r];};
-  const ring=f=>keys.map((_,i)=>pt(i,R*f).map(v=>v.toFixed(1)).join(',')).join(' ');
-  const shape=keys.map((k,i)=>pt(i,R*(axes[k]/100)).map(v=>v.toFixed(1)).join(',')).join(' ');
-  return `<svg viewBox="0 0 ${S} ${S}" style="width:100%;max-width:300px;display:block;margin:0 auto">
-    ${[1,.75,.5,.25].map(f=>`<polygon points="${ring(f)}" fill="none" stroke="var(--sep)" stroke-width="1"/>`).join('')}
-    ${keys.map((_,i)=>{const [x,y]=pt(i,R);
-      return `<line x1="${C}" y1="${C}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--sep)" stroke-width="1"/>`}).join('')}
-    <polygon points="${shape}" fill="var(--rad-fill,var(--tint))" fill-opacity="var(--rad-op,.26)" stroke="var(--rad-line,var(--tint))" stroke-width="2.4" stroke-linejoin="round"/>
-    ${keys.map((k,i)=>{const [x,y]=pt(i,R*1.34);
-      return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
-        font-size="10.5" font-weight="800" fill="var(--rad-lab,var(--label3))" letter-spacing=".06em">${AX_SHORT[k]||k.slice(0,3).toUpperCase()}</text>`}).join('')}
-    ${keys.map((k,i)=>{const [x,y]=pt(i,R*1.34);
-      return `<text x="${x.toFixed(1)}" y="${(y+11).toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
-        font-size="10" font-weight="800" fill="var(--rad-val,var(--tint))">${axes[k]}</text>`}).join('')}
-    ${keys.map((k,i)=>{const [x,y]=pt(i,R*(axes[k]/100));
-      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3" fill="var(--rad-dot,var(--tint))"/>`}).join('')}
-  </svg>`;
-}
 
 /* a small inline line chart */
 function sparkPath(vals,w,h){
@@ -9332,36 +9417,6 @@ function lineChart(vals,label,baseline,opt){
    a range actually is. It used to be a row of unlabelled sticks with no scale.
    Bars are capped at 24px with rounded ends, a 2px surface gap between them, a
    labelled bpm axis, and the last game's range spelled out. */
-function effortRange(acts){
-  const rows=(acts||[]).map(a=>({lo:+a.hr||0,hi:+a.maxHr||0})).filter(r=>r.lo&&r.hi&&r.hi>=r.lo);
-  if(rows.length<2)return '';
-  const W=300,H=104, PAD_L=34, PAD_B=18, PAD_T=12;
-  const rawLo=Math.min(...rows.map(r=>r.lo)), rawHi=Math.max(...rows.map(r=>r.hi));
-  const pad=(rawHi-rawLo||10)*0.15;
-  let lo=rawLo-pad, hi=rawHi+pad;
-  const ticks=niceTicks(lo,hi,4);
-  lo=Math.min(lo,ticks[0]); hi=Math.max(hi,ticks[ticks.length-1]);
-  const sp=(hi-lo)||1;
-  const y=v=>PAD_T+(H-PAD_T-PAD_B)*(1-(v-lo)/sp);
-  const band=(W-PAD_L)/rows.length;
-  const bw=Math.min(24,band-4);
-  const last=rows[rows.length-1];
-  return `<svg viewBox="0 -4 ${W+6} ${H+10}" style="width:100%;height:138px;overflow:visible"
-      role="img" aria-label="Average to maximum heart rate in each of the last ${rows.length} games">
-    ${ticks.map(t=>`<line x1="${PAD_L}" y1="${y(t).toFixed(1)}" x2="${W}" y2="${y(t).toFixed(1)}" class="lc-grid"/>
-      <text x="${PAD_L-7}" y="${(y(t)+3.5).toFixed(1)}" text-anchor="end" class="lc-tick">${fmtN(t)}</text>`).join('')}
-    ${rows.map((r,i)=>{
-      const cx=PAD_L+band*i+band/2, top=y(r.hi), h=Math.max(4,y(r.lo)-y(r.hi));
-      return `<rect x="${(cx-bw/2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}"
-        height="${h.toFixed(1)}" rx="4" fill="var(--ss-red)" opacity="${i===rows.length-1?'1':'.34'}">
-        <title>${Math.round(r.lo)}–${Math.round(r.hi)} bpm</title></rect>`}).join('')}
-    <text x="${W}" y="${(y(last.hi)-7).toFixed(1)}" text-anchor="end" class="lc-val">${Math.round(last.hi)}</text>
-    <text x="${PAD_L}" y="${H+2}" text-anchor="start" class="lc-tick">${rows.length} games ago</text>
-    <text x="${W}" y="${H+2}" text-anchor="end" class="lc-tick">latest</text>
-  </svg>
-  <div class="note" style="padding:6px 0 0">Each bar runs from your average heart rate that game to your
-    maximum, in beats per minute. The last game was ${Math.round(last.lo)}–${Math.round(last.hi)} bpm.</div>`;
-}
 
 /* a donut, for where someone's contributions come from */
 function donut(parts,size){
@@ -9688,14 +9743,16 @@ function vPlayer(pid){
       })()}
     </div>
 
-    ${ps?`${ssSec('form-guide','PlayStyle+')}
-      <div class="pscard pp-ps" style="--pc:${pscol}">
+    ${ps||(p.role&&FC_ROLE_BY[p.role])?`${ssSec('form-guide','PlayStyle+')}
+      ${ps?`<div class="pscard pp-ps" style="--pc:${pscol}">
         ${psDiamond(p.ps,64)}
         <div style="flex:1;min-width:0">
           <div class="psname">${esc(ps.name)}</div>
           <div class="pscat">${PS_CAT[ps.cat].name}</div>
           <div class="psdesc">${esc(ps.d)}</div></div>
       </div>`:''}
+      ${p.role&&FC_ROLE_BY[p.role]?(r=>`<div class="rl-card pp-rl">${roleBadge(r,56)}
+        <div style="flex:1;min-width:0"><div class="rl-k">Role</div><div class="rl-n">${esc(r.n)}${r.nw?'<i class="rl-new">FC 26</i>':''}</div><div class="rl-d">${esc(r.d)}</div></div></div>`)(FC_ROLE_BY[p.role]):''}`:''}
 
     ${car?`${ssSec('career-mode','Career')}
       <div class="card lvlcard pp-lvl">
@@ -9755,38 +9812,7 @@ function vPlayer(pid){
         </div>`;
       })()}
 
-      ${ax?(function(){
-        const ent=Object.entries(ax).sort((a,b)=>b[1]-a[1]);
-        const best=ent[0], worst=ent[ent.length-1];
-        const tone=v=>v>=70?'var(--ss-green)':v>=45?'var(--ss-gold)':'var(--ss-red)';
-        const v2=flagOn('playsLike'), pl=v2?playsLike(pid):null;
-        const isSt=k=>k==='Stamina'||k==='Work rate';
-        /* the new web lists Strava's two under their own divider, and only when there are any */
-        const order=v2?[...Object.entries(ax).filter(([k])=>!isSt(k)),...Object.entries(ax).filter(([k])=>isSt(k))]:Object.entries(ax);
-        const firstSt=v2?order.findIndex(([k])=>isSt(k)):-1;
-        return `${ssSec('best-defence','Attributes','<span class="ss-note">Against the squad</span>')}
-        <div class="card pad pp-attr${v2?' v2':''}">
-          ${v2?radarSVG2(ax,215,pl&&pl.ghost):radarSVG(ax,215)}
-          ${pl?`<div class="rad-leg" aria-hidden="true"><span><i class="me"></i>You</span><span><i class="gh"></i>${esc(pl.best.ref.short)}</span></div>`:''}
-          <div class="axbars">${order.map(([k,v],ix)=>{
-            const bd=rankBand(pid,k,ax);
-            return `${ix===firstSt?`<div class="axst">${ss2Tile('pulse',16,'#E0662B')}<span>From Strava \u00b7 only for players who connected</span></div>`:''}<div class="axb">
-              <span class="axb-k">${k}</span>
-              <span class="axb-t"><i style="width:${Math.max(3,v)}%;background:${tone(v)==='var(--ss-gold)'?'var(--gold-metal)':tone(v)}"></i></span>
-              ${bd?`<span class="axband ${bd.c}">${bd.t}</span>`:''}
-              <b style="color:${tone(v)==='var(--ss-gold)'?'var(--gold-text)':tone(v)}">${v}</b>
-            </div>`}).join('')}</div>
-          <div class="axnote pp-axn${pl?' three':''}">
-            <div class="axn-t axn-g">${ss2Tile('strongest',24,'#22A25E')}<div><span>Strongest</span><b style="color:var(--ss-green)">${best[0]} · ${best[1]}</b></div></div>
-            <div class="axn-t axn-a">${ss2Tile('workon',24,'#C77700')}<div><span>To work on</span><b class="axn-am">${worst[0]} · ${worst[1]}</b></div></div>
-            ${pl?`<button class="axn-t axn-pl" onclick="playsLikeSheet('${pid}')" aria-label="Plays like ${esc(pl.best.ref.name)}, ${pl.best.pct}% match">
-              <span class="axn-cr">${plCrest(pl.best.ref,24)}</span><div><span>Plays like</span><b>${esc(pl.best.ref.short)} \u00b7 ${pl.best.pct}%</b></div></button>`:''}
-          </div>
-          <div class="note" style="padding:10px 0 0">Each score is the percentage of the squad this
-            player is ahead of on that attribute — 100 is the best in the squad, 50 is mid-table.
-            The place beside it is out of everyone who has played this season.</div>
-        </div>`;
-      })():''}
+      ${ax?fcAttrCard(pid,ax):''}
 
       ${ins.length?`${ssSec('sky-sports','What the numbers say')}
       <div class="card pp-ins">${ins.map(x=>`<div class="tp-r">
@@ -9893,17 +9919,7 @@ function vPlayer(pid){
               :sv.mins!=null?`<div><b>${Math.round(sv.mins)}</b><span>min a game</span></div>`
               :`<div><b>${sv.n}</b><span>game${sv.n===1?'':'s'} logged</span></div>`}
           </div>
-          ${hrs.length>1?`<div class="phhead">Heart rate ${arrow(tHr)}</div>
-            <div style="--ln:var(--ss-red)">${lineChart(hrs,`Average beats per minute in each game.`,
-              Math.round(avg(hrs)),{xLabels:hrs.map((_,i)=>'Game '+(i+1)),alt:'Average heart rate each game'})}</div>`:''}
-          ${kcals.length>1?`<div class="phhead">Calories ${arrow(tKcal)}</div>
-            <div style="--ln:#E08A00">${lineChart(kcals,`Calories burned in each game.`,
-              Math.round(avg(kcals)),{xLabels:kcals.map((_,i)=>'Game '+(i+1)),alt:'Calories burned each game'})}</div>`:''}
-          ${kms.length>1?`<div class="phhead">Distance</div>
-            <div style="--ln:var(--ss-green)">${lineChart(kms,`Kilometres covered in each game.`,
-              +avg(kms).toFixed(1),{xLabels:kms.map((_,i)=>'Game '+(i+1)),alt:'Kilometres covered each game'})}</div>`:''}
-          ${mx.length>1&&hrs.length>1?`<div class="phhead">Effort range</div>
-            ${effortRange(acts.slice(-8))}`:''}
+          ${physCharts(acts,sv)}
           ${physRows(pid)}
           ${mine?`<button class="btn sec full" style="margin-top:12px" onclick="physAdd('${pid}')">
             + Add numbers for a game</button>`:''}
@@ -10269,6 +10285,60 @@ function physAll(pid){
 const stravaFor=pid=>STRAVA.filter(a=>a.pid===pid);
 const stravaGame=(pid,gid)=>STRAVA.find(a=>a.pid===pid&&a.game_id===gid)||null;
 
+/* ============ ROUND 11 (b) · PHYSICAL CHARTS ============
+   Two plain charts instead of three hard ones. Heart rate: one bar per game
+   from your average to your peak, over three shaded effort zones, so a single
+   look says how hard each game was. Calories: one bar per game with your
+   average as a dashed line. The newest game and the season high are labelled;
+   every bar says its numbers when tapped (title). Game labels are gameweeks. */
+function physLabel(a,i){ const g=allGames().find(x=>x.id===a.gid), gw=g?gwOf(g):null; return gw?'GW'+gw:'G'+(i+1) }
+function physCharts(acts,sv){
+  const L=acts.slice(-8), W=320, H=150, PL=34, PR=42, PT=14, PB=24;
+  const bw=Math.min(26,(W-PL-PR)/Math.max(1,L.length)*0.55), xc=i=>PL+(W-PL-PR)*((i+.5)/L.length);
+  let out='';
+  /* heart rate */
+  const hr=L.map(a=>({a:+a.hr||null,m:+a.maxHr||null}));
+  if(hr.filter(x=>x.a||x.m).length>=2){
+    const vals=hr.flatMap(x=>[x.a,x.m]).filter(Boolean), lo=Math.min(120,Math.floor(Math.min(...vals)/10)*10-5), hi=Math.max(200,Math.ceil(Math.max(...vals)/10)*10);
+    const y=v=>PT+(H-PT-PB)*(1-(v-lo)/(hi-lo));
+    const zones=[[lo,140,'Easy'],[140,165,'Hard'],[165,hi,'Max']];
+    const lastI=L.length-1;
+    out+=`<div class="phc"><div class="phc-h"><b>Heart rate</b><span>each game · average to peak (bpm)</span></div>
+      <svg viewBox="0 0 ${W} ${H}" class="phc-svg" role="img" aria-label="Heart rate each game, average to peak">
+      ${zones.map(([a,b,n],k)=>`<rect x="${PL}" y="${y(b).toFixed(1)}" width="${W-PL-PR}" height="${(y(a)-y(b)).toFixed(1)}" class="phz z${k}"/>
+        <text x="${W-PR+5}" y="${((y(a)+y(b))/2+3).toFixed(1)}" class="phz-t">${n}</text>`).join('')}
+      ${[140,165].map(v=>`<text x="${PL-5}" y="${(y(v)+3.5).toFixed(1)}" class="phc-tk" text-anchor="end">${v}</text>`).join('')}
+      ${hr.map((x,i)=>{ if(!x.a&&!x.m)return ''; const top=y(x.m||x.a), bot=y(x.a||x.m), cx=xc(i);
+        return `<g><title>${physLabel(L[i],i)}: average ${x.a||'—'}, peak ${x.m||'—'} bpm</title>
+          <rect x="${(cx-bw/2).toFixed(1)}" y="${top.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(4,bot-top).toFixed(1)}" rx="4" class="phb hr${i===lastI?' last':''}"/>
+          ${x.a?`<circle cx="${cx.toFixed(1)}" cy="${bot.toFixed(1)}" r="4" class="phd"/>`:''}
+          ${i===lastI?`<text x="${cx.toFixed(1)}" y="${(top-5).toFixed(1)}" class="phc-lb" text-anchor="middle">${x.m||x.a}</text>`:''}</g>` }).join('')}
+      ${L.map((a,i)=>`<text x="${xc(i).toFixed(1)}" y="${H-7}" class="phc-x" text-anchor="middle">${physLabel(a,i)}</text>`).join('')}
+      </svg>
+      <div class="phc-key"><span><i class="k-bar"></i>average → peak</span><span><i class="k-dot"></i>average</span></div>
+      ${(()=>{ const x=hr[lastI]; if(!x||!x.a||!sv.hr)return ''; const d=Math.round(x.a-sv.hr);
+        return `<div class="phc-say">Last game: average <b>${x.a}</b>, peak <b>${x.m||'—'}</b> — ${Math.abs(d)<3?'about your usual':d>0?`<b>${d} bpm harder</b> than your usual`:`<b>${-d} bpm easier</b> than your usual`}.</div>` })()}
+    </div>`;
+  }
+  /* calories */
+  const kc=L.map(a=>+a.kcal||null);
+  if(kc.filter(Boolean).length>=2){
+    const hi=Math.ceil(Math.max(...kc.filter(Boolean))*1.15/100)*100, y=v=>PT+(H-PT-PB)*(1-v/hi), avg=sv.kcal||0;
+    const top=Math.max(...kc.filter(Boolean)), lastI=L.length-1;
+    out+=`<div class="phc"><div class="phc-h"><b>Calories</b><span>burned each game (kcal)</span></div>
+      <svg viewBox="0 0 ${W} ${H}" class="phc-svg" role="img" aria-label="Calories burned each game">
+      <line x1="${PL}" y1="${y(0).toFixed(1)}" x2="${W-PR}" y2="${y(0).toFixed(1)}" class="phc-base"/>
+      ${kc.map((v,i)=>{ if(!v)return ''; const cx=xc(i), t=y(v);
+        return `<g><title>${physLabel(L[i],i)}: ${v} kcal</title><path d="M${(cx-bw/2).toFixed(1)} ${y(0).toFixed(1)}V${(t+4).toFixed(1)}q0 -4 4 -4h${(bw-8).toFixed(1)}q4 0 4 4V${y(0).toFixed(1)}z" class="phb kc${i===lastI?' last':''}"/>
+          ${(i===lastI||v===top)?`<text x="${cx.toFixed(1)}" y="${(t-5).toFixed(1)}" class="phc-lb" text-anchor="middle">${v}</text>`:''}</g>` }).join('')}
+      ${avg?`<line x1="${PL}" y1="${y(avg).toFixed(1)}" x2="${W-PR}" y2="${y(avg).toFixed(1)}" class="phc-avg"/><text x="${PL-5}" y="${(y(avg)+3.5).toFixed(1)}" class="phc-tk" text-anchor="end">${Math.round(avg)}</text>`:''}
+      ${L.map((a,i)=>`<text x="${xc(i).toFixed(1)}" y="${H-7}" class="phc-x" text-anchor="middle">${physLabel(a,i)}</text>`).join('')}
+      </svg>
+      <div class="phc-key"><span><i class="k-kc"></i>calories</span><span><i class="k-avg"></i>your average (${Math.round(avg)})</span></div>
+    </div>`;
+  }
+  return out;
+}
 /* one player's physical picture, averaged over every game with data */
 function stravaSummary(pid){
   const a=physAll(pid); if(!a.length)return null;
@@ -11249,8 +11319,8 @@ async function sharePng(svg,w,h,name,title){
   await shareOrSave(blob,name,title);
 }
 /* SofaScore band colours for the exported graphics (same as the app) */
-function sfFill(r){ return r>=9?'#374DF5':r>=8?'#00879A':r>=7?'#188A47':r>=6.5?'#D9AF00':r>=6?'#ED7E07':'#D0342C' }
-const sfInk=r=>(r>=6&&r<7)?'#241B06':'#FFFFFF';
+function sfFill(r){ return r>=9?'#374DF5':r>=8?'#0A9A48':r>=7?'#7CC242':r>=6.5?'#D9AF00':r>=6?'#ED7E07':'#D0342C' }
+const sfInk=r=>(r>=6&&r<8)?(r>=7?'#10240A':'#241B06'):'#FFFFFF';
 /* iOS-friendly: open the native share sheet (which offers "Save Image"),
    falling back to a plain download on desktop browsers. */
 async function shareOrSave(blob,filename,title){
@@ -11586,7 +11656,9 @@ function gwGraphicSVG(gw){
   const head=fill(tplHead.replace('{{DATE}} · {{VENUE}} · {{TEMP}}','{{HEADLINE}}'),{H,GW:`GW${gw}`,HEADLINE:headLine});
   /* the rating text takes the band's ink (dark on yellow/orange, white on the rest) */
   const tail=tplTail.replace(/fill="#0B1B33" text-anchor="middle">\{\{TOTW_(\w+?)_RATING\}\}/g,'fill="{{TOTW_$1_INK}}" text-anchor="middle">{{TOTW_$1_RATING}}');
-  return head+out+fill(tail,lower);
+  /* a white edge on each rating tile so a green never melts into the grass */
+  const tail2=tail.replace(/fill="\{\{TOTW_(\w+?)_FILL\}\}"\/>/g,'fill="{{TOTW_$1_FILL}}" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/>');
+  return head+out+fill(tail2,lower);
 }
 
 /* Team of the week, from the games just played rather than the whole season —
@@ -13983,16 +14055,22 @@ function ratingFor(pid,g,sideHint){
   const ga=onA?(g.scoreB||0):(g.scoreA||0);
   const won=(onA&&g.result==='A')||(onB&&g.result==='B');
   const drew=g.result==='D';
+  /* Round 11 (b): rebalanced so goals no longer decide it on their own.
+     The result counts for less (a good game on a losing side can still rate
+     7+), each extra goal in one game is worth a little less than the one
+     before, assists are worth close to a goal, and defending carries more,
+     most of all for keepers and defenders. */
   let r=6.0;
-  r += won?1.2 : drew?0.3 : -0.7;
-  r += Math.max(-1,Math.min(1,(gf-ga)*0.18));
+  r += won?0.6 : drew?0.15 : -0.35;
+  r += Math.max(-0.5,Math.min(0.5,(gf-ga)*0.1));
   /* goals — worth more from deeper positions, because they are rarer there */
-  const gw={ATT:0.80,MID:1.05,DEF:1.35,GK:1.6}[pos]||1.0;
-  r += goals*gw;
-  if(goals>=3)r+=0.4;
-  /* assists — the thing that was missing entirely */
-  const aw={ATT:0.55,MID:0.75,DEF:0.85,GK:1.0}[pos]||0.7;
-  r += asts*aw;
+  const gw={ATT:0.70,MID:0.85,DEF:1.10,GK:1.30}[pos]||0.85;
+  const dim=n=>{ let t=0; for(let k=0;k<n;k++)t+=Math.max(0.35,1-0.2*k); return t };
+  r += dim(goals)*gw;
+  if(goals>=3)r+=0.3;
+  /* assists — close to a goal now */
+  const aw={ATT:0.60,MID:0.75,DEF:0.85,GK:1.0}[pos]||0.75;
+  r += dim(asts)*aw;
   if(asts>=3)r+=0.3;
   /* Defending — judged against what THIS game was like, not only against the
      season.
@@ -14009,10 +14087,10 @@ function ratingFor(pid,g,sideHint){
   const gAvg=((g.scoreA||0)+(g.scoreB||0))/2;
   const par=Math.max(1, 0.7*gAvg + 0.3*lAvg);
   const rel=(par-ga)/par;                    /* +1 is a clean sheet, 0 is par */
-  const dw={GK:1.15,DEF:1.0,MID:0.5,ATT:0.22}[pos]??0.5;
-  r += Math.max(-1.6,Math.min(2.2,rel*2.2))*dw;
-  if(ga===0)r+=0.8*dw;
-  if(gf===0&&pos==='ATT')r-=0.4;
+  const dw={GK:1.3,DEF:1.15,MID:0.75,ATT:0.4}[pos]??0.75;
+  r += Math.max(-1.4,Math.min(2.0,rel*2.0))*dw;
+  if(ga===0)r+=0.6*dw;
+  if(gf===0&&pos==='ATT')r-=0.2;
   /* leagueConceded() has nothing to average in a cup-only or brand-new season,
      which made avg NaN and poisoned the whole sum. A non-finite result used to
      pass the !=null filter and render as an empty pill — a player with a name,
@@ -14140,7 +14218,7 @@ function potmFor(ym){
   const w=m.win, gs=allGames().filter(g=>String(g.date||'').slice(0,7)===ym);
   const rr=gs.map(g=>ratingFor(w.id,g)).filter(v=>v!=null);
   const avg=rr.length?Math.round(rr.reduce((a,b)=>a+b,0)/rr.length*10)/10:null;
-  return {ym,id:w.id,name:w.name,avg:avg==null?'—':avg,P:w.P,G:w.G,A:w.A,W:w.W,games:m.games};
+  return {ym,id:w.id,name:w.name,avg:avg==null?'—':avg,score:w.score,P:w.P,G:w.G,A:w.A,W:w.W,games:m.games};
 }
 function potmHistory(){ return monthsPlayed().map(potmFor).filter(Boolean) }
 function ymLabel(ym){
@@ -14347,7 +14425,7 @@ function potmCardSVG(key){
   ${badge}
   <text x="540" y="${600+Math.round(ns*0.1)}" text-anchor="middle" font-family="${F}" font-size="${ns}" font-weight="700" font-style="italic" fill="#FFFFFF">${e(nm)}</text>
   <text x="540" y="688" text-anchor="middle" font-family="${F}" font-size="40" font-weight="700" letter-spacing="3" fill="#FFFFFF" opacity=".86">${w.pos?e(w.pos)+'   ':''}${w.W}W — ${w.D}D — ${w.L}L</text>
-  ${tile(90,740,w.avg!=null?(+w.avg).toFixed(1):'—','AVG RATING',true)}${tile(550,740,w.G,'GOALS')}
+  ${tile(90,740,w.score,'POTM SCORE / 100',true)}${tile(550,740,w.G,'GOALS')}
   ${tile(90,950,w.A,'ASSISTS')}${tile(550,950,(w.GA/Math.max(1,w.P)).toFixed(1),'CONCEDED / GAME')}
   <line x1="90" y1="1172" x2="990" y2="1172" stroke="#FFFFFF" stroke-opacity=".16" stroke-width="2"/>
   ${cur.runners.length?`<text x="540" y="1232" text-anchor="middle" font-family="${F}" font-size="34" font-weight="700" font-style="italic" letter-spacing="3" fill="#FFFFFF" opacity=".84">${cur.runners.map((r,i)=>`<tspan${i?' dx="70"':''}>${i+2} · ${e(String(r.name).toUpperCase())}</tspan>`).join('')}</text>`:''}
@@ -14887,17 +14965,19 @@ function plScore(mine,ref,keys){
   if(b.some(v=>v==null))return null;
   const shape=(plPearson(a,b)+1)/2;
   const level=1-a.reduce((t,v,i)=>t+Math.abs(v-b[i]),0)/(100*keys.length);
-  return 0.8*shape+0.2*level;
+  return 0.65*shape+0.35*level;     /* round 11b: level counts more, so near-identical shapes separate */
 }
 /* the same answer, remembered until the games or the squad change (the card asks for every player) */
-const PL_MEMO={k:null,m:{}};
+const PL_MEMO={k:null,m:{},as:null};
+function plMemoKey(){ const g=allGames(); return g.length+'|'+(g.length?g[g.length-1].id+(g[g.length-1].created||''):'')+'|'+season().players.map(p=>p.id+(p.pos||'')).join(',')+'|'+CUR+'|'+(Array.isArray(PLAYS_LIKE_REFS)?PLAYS_LIKE_REFS.length:0)+'|'+(typeof STRAVA_WHO==='object'?Object.keys(STRAVA_WHO).length:0)+'|'+(season().phys||[]).length }
 function playsLikeMemo(pid){
-  const g=allGames(), k=g.length+'|'+(g.length?g[g.length-1].id+(g[g.length-1].created||''):'')+'|'+season().players.length+'|'+CUR;
-  if(PL_MEMO.k!==k){ PL_MEMO.k=k; PL_MEMO.m={} }
+  const k=plMemoKey();
+  if(PL_MEMO.k!==k){ PL_MEMO.k=k; PL_MEMO.m={}; PL_MEMO.as=null }
   if(!(pid in PL_MEMO.m))PL_MEMO.m[pid]=playsLike(pid);
   return PL_MEMO.m[pid];
 }
-function playsLike(pid){
+/* every reference for one player, best first */
+function playsLikeRank(pid){
   if(!flagOn('playsLike'))return null;
   const refs=plRefs(); if(!refs.length)return null;
   const st=statsAll().find(x=>x.id===pid); if(!st||st.P<PL_MIN_GAMES)return null;
@@ -14909,27 +14989,48 @@ function playsLike(pid){
   /* a ref with no Strava numbers is still compared, on the four it has */
   const ranked=refs.filter(r=>r.pos===pos).map(r=>({ref:r,s:plScore(mine,r,strava&&r.ax.WRK!=null&&r.ax.STA!=null?keys:PL_MATCH)}))
     .filter(x=>x.s!=null).sort((x,y)=>y.s-x.s||x.ref.name.localeCompare(y.ref.name))
-    .map(x=>({ref:x.ref,pct:Math.round(x.s*100)}));
-  if(!ranked.length||ranked[0].pct<PL_MIN_PCT)return null;
+    .map(x=>({ref:x.ref,s:x.s,pct:Math.round(x.s*100)}));
+  return ranked.length?{ranked,axes,keys}:null;
+}
+/* Round 11 (b): one pro per person. Matching each player on their own gave
+   the same few pros to half the squad, because with four attributes lots of
+   people have the same shape. Now the whole squad is matched at once: the
+   closest pair of all is fixed first, then the next closest among who and
+   what is left, and so on — so nobody shares a pro, and each still gets the
+   nearest one that is free. The same on every phone: it only reads the data. */
+function plAssign(){
+  const k=plMemoKey(); if(PL_MEMO.k!==k){ PL_MEMO.k=k; PL_MEMO.m={}; PL_MEMO.as=null }
+  if(PL_MEMO.as)return PL_MEMO.as;
+  const R={}, pairs=[];
+  season().players.forEach(p=>{ const r=playsLikeRank(p.id); if(!r)return; R[p.id]=r;
+    r.ranked.forEach((x,i)=>pairs.push({pid:p.id,ref:x.ref,s:x.s,i})) });
+  pairs.sort((a,b)=>b.s-a.s||a.i-b.i||a.pid.localeCompare(b.pid)||a.ref.id.localeCompare(b.ref.id));
+  const got={}, used=new Set();
+  pairs.forEach(x=>{ if(got[x.pid]||used.has(x.ref.id))return; got[x.pid]=x; used.add(x.ref.id) });
+  return (PL_MEMO.as={R,got});
+}
+function playsLike(pid){
+  const A=plAssign(), r=A.R[pid]; if(!r)return null;
+  /* more people in a position than pros in it (keepers: 11): the extras share their nearest */
+  const g=A.got[pid]||r.ranked[0];
+  const best={ref:g.ref,pct:Math.round(g.s*100)};
+  if(best.pct<PL_MIN_PCT)return null;
+  const runners=r.ranked.filter(x=>x.ref.id!==g.ref.id).slice(0,2).map(x=>({ref:x.ref,pct:x.pct}));
   /* the ghost: the ref's value on every axis the web shows (50 where a ref has none) */
-  const ghost={}; Object.keys(axes).forEach(k=>{ const c=PL_AX[k], v=c?ranked[0].ref.ax[c]:null; ghost[k]=v==null?50:v });
-  return {best:ranked[0],runners:ranked.slice(1,3),ghost,keys};
+  const ghost={}; Object.keys(r.axes).forEach(k=>{ const c=PL_AX[k], v=c?g.ref.ax[c]:null; ghost[k]=v==null?50:v });
+  return {best,runners,ghost,keys:r.keys};
 }
 /* batch 3: a clean crest for Plays like — the club's colour and its three letters, no emblem art */
-const plCrest=(ref,s)=>{ const c=CLUB_BY[PL_CODE_ALIAS[ref.code]||ref.code];
-  if(!c)return `<span class="pl-ini" style="width:${s}px;height:${s}px">${esc(initials(ref.club||ref.name))}</span>`;
-  const light=/^#(F|E|D)/i.test(c.c1||''), bg=light?(c.c2&&!/^#FFF/i.test(c.c2)?c.c2:'#0B1B33'):c.c1;
-  return `<span class="pl-crest" style="width:${s}px;height:${s}px;background:${bg};font-size:${Math.max(6,Math.round(s*.28))}px" aria-hidden="true">${esc(c.short||ref.code||'')}</span>` };
 function playsLikeSheet(pid){
   const m=playsLike(pid); if(!m)return;
   const r=m.best.ref;
   openSheet('Plays like',`<div class="plk">
-      <div class="plk-c">${plCrest(r,64)}</div>
+      <div class="plk-c">${fcCrest(r,64)}</div>
       <div class="plk-n">${esc(r.name)}</div>
       <div class="plk-club">${esc(r.club)}</div>
       <div class="plk-pct">${m.best.pct}% match</div></div>
     ${m.runners.length?`<div class="card adm-c">${m.runners.map(x=>`<div class="row adm-r">
-      <span class="ce">${plCrest(x.ref,30)}</span>
+      <span class="ce">${fcCrest(x.ref,30)}</span>
       <span class="rt"><span class="r1">${esc(x.ref.name)}</span><span class="r2">${esc(x.ref.club)}</span></span>
       <b class="plk-rp">${x.pct}%</b></div>`).join('')}</div>`:''}
     <div class="note">Same shape as your game, not the same level. Worked out from your attributes every time they change.</div>`);
@@ -14956,29 +15057,65 @@ async function playsLikeAfterGame(){
 /* ---- the radar, restyled: zebra rings, the app blue, white dots, and the ghost
    drawn FIRST so your own shape always sits on top of it ---- */
 let RAD_ID=0;
-function radarSVG2(axes,size,ghost){
-  if(!axes)return '';
-  const keys=Object.keys(axes), n=keys.length, S=size||210, C=S/2, R=S*0.32, gid='radg'+(++RAD_ID);
-  const pt=(i,r)=>{const a=(Math.PI*2*i/n)-Math.PI/2; return [C+Math.cos(a)*r, C+Math.sin(a)*r]};
+
+/* ============ ROUND 11 (b) · ATTRIBUTES, FC STYLE ============
+   One navy panel in both themes, like the attribute screen in FC: a hexagon
+   with every number at its point in its tier colour, the pro you play like as
+   a dashed ghost, the attributes as FC stat rows (number first, bar, place in
+   the squad), and three equal tiles underneath — Strongest, To work on and
+   Plays like — each with the same 40px icon on the same centre line. */
+const fcTier=v=>v>=80?'t80':v>=70?'t70':v>=50?'t50':v>=40?'t40':'t0';
+function fcRadar(ax,ghost){
+  const keys=Object.keys(ax), n=keys.length, S=300, C=S/2, R=92, gid='fcg'+(++RAD_ID);
+  const pt=(i,r)=>{ const a=(Math.PI*2*i/n)-Math.PI/2; return [C+Math.cos(a)*r, C+Math.sin(a)*r] };
   const ring=f=>keys.map((_,i)=>pt(i,R*f).map(v=>v.toFixed(1)).join(',')).join(' ');
-  const poly=o=>keys.map((k,i)=>pt(i,R*(Math.max(0,Math.min(100,o[k]))/100)).map(v=>v.toFixed(1)).join(',')).join(' ');
+  const poly=o=>keys.map((k,i)=>pt(i,R*(Math.max(4,Math.min(100,o[k]))/100)).map(v=>v.toFixed(1)).join(',')).join(' ');
   const strava=k=>k==='Stamina'||k==='Work rate';
-  return `<svg viewBox="0 0 ${S} ${S}" style="width:100%;max-width:300px;display:block;margin:0 auto" class="rad2">
-    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="var(--rad-line)" stop-opacity=".34"/><stop offset="1" stop-color="var(--rad-line)" stop-opacity=".10"/></linearGradient></defs>
-    ${[1,.75,.5,.25].map((f,i)=>`<polygon points="${ring(f)}" fill="var(${i%2?'--rad-z2':'--rad-z1'})" stroke="var(--rad-ring)" stroke-width="1"/>`).join('')}
-    ${keys.map((_,i)=>{const [x,y]=pt(i,R); return `<line x1="${C}" y1="${C}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="var(--rad-ring)" stroke-width="1"/>`}).join('')}
-    ${ghost?`<polygon class="rad-ghost" points="${poly(ghost)}" fill="none" stroke="#9AA1B2" stroke-opacity=".75" stroke-width="1.5" stroke-dasharray="3 4" stroke-linejoin="round" pointer-events="none"/>`:''}
-    <polygon points="${poly(axes)}" fill="url(#${gid})" stroke="var(--rad-line)" stroke-width="2" stroke-linejoin="round"/>
-    ${keys.map((k,i)=>{const [x,y]=pt(i,R*(Math.max(0,Math.min(100,axes[k]))/100));
-      return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.6" fill="#fff" stroke="var(--rad-line)" stroke-width="1.8"/>`}).join('')}
-    ${keys.map((k,i)=>{const [x,y]=pt(i,R*1.34);
-      return `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
-        font-size="10.5" font-weight="800" fill="${strava(k)?'var(--rad-strava)':'var(--rad-lab,var(--label3))'}" letter-spacing=".06em">${AX_SHORT[k]||k.slice(0,3).toUpperCase()}</text>
-        <text x="${x.toFixed(1)}" y="${(y+11).toFixed(1)}" text-anchor="middle" dominant-baseline="middle"
-        font-size="10" font-weight="800" fill="var(--rad-val,var(--tint))">${axes[k]}</text>`}).join('')}
-  </svg>
-  ${ghost?'':''}`;
+  return `<svg viewBox="0 0 ${S} ${S}" class="fca-rad" role="img" aria-label="Attributes: ${keys.map(k=>`${k} ${ax[k]}`).join(', ')}">
+    <defs><radialGradient id="${gid}" cx="50%" cy="50%" r="60%"><stop offset="0" stop-color="#EAD08A" stop-opacity=".55"/><stop offset="1" stop-color="#D4AF37" stop-opacity=".18"/></radialGradient></defs>
+    ${[1,.8,.6,.4,.2].map((f,i)=>`<polygon points="${ring(f)}" fill="${i%2?'rgba(255,255,255,.035)':'rgba(255,255,255,.065)'}" stroke="rgba(255,255,255,.12)" stroke-width="1"/>`).join('')}
+    ${keys.map((_,i)=>{ const [x,y]=pt(i,R); return `<line x1="${C}" y1="${C}" x2="${x.toFixed(1)}" y2="${y.toFixed(1)}" stroke="rgba(255,255,255,.1)" stroke-width="1"/>` }).join('')}
+    ${ghost?`<polygon points="${poly(ghost)}" fill="none" stroke="#FFFFFF" stroke-opacity=".55" stroke-width="1.6" stroke-dasharray="4 4" stroke-linejoin="round"/>`:''}
+    <polygon points="${poly(ax)}" fill="url(#${gid})" stroke="#EAD08A" stroke-width="2.4" stroke-linejoin="round"/>
+    ${keys.map((k,i)=>{ const [x,y]=pt(i,R*(Math.max(4,Math.min(100,ax[k]))/100)); return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4" fill="#0B1B33" stroke="#EAD08A" stroke-width="2"/>` }).join('')}
+    ${keys.map((k,i)=>{ const [x,y]=pt(i,R+34);
+      return `<g class="fca-pt ${fcTier(ax[k])}${strava(k)?' st':''}"><rect x="${(x-25).toFixed(1)}" y="${(y-19).toFixed(1)}" width="50" height="38" rx="9"/>
+        <text x="${x.toFixed(1)}" y="${(y-4).toFixed(1)}" class="fca-v">${ax[k]}</text>
+        <text x="${x.toFixed(1)}" y="${(y+11).toFixed(1)}" class="fca-k">${AX_SHORT[k]||k.slice(0,3).toUpperCase()}</text></g>` }).join('')}
+  </svg>`;
+}
+function fcCrest(ref,s){
+  const c=CLUB_BY[PL_CODE_ALIAS[ref.code]||ref.code];
+  const light=c&&/^#(F|E|D)/i.test(c.c1||''), bg=c?(light?(c.c2&&!/^#FFF/i.test(c.c2)?c.c2:'#0B1B33'):c.c1):'#0B1B33';
+  const t=c?(c.short||ref.code||''):initials(ref.club||ref.name);
+  return `<span class="fc-crest" style="width:${s}px;height:${s}px;background:${bg}" aria-hidden="true"><i>${esc(String(t).slice(0,3))}</i></span>`;
+}
+function fcAttrCard(pid,ax){
+  const ent=Object.entries(ax).sort((a,b)=>b[1]-a[1]);
+  const best=ent[0], worst=ent[ent.length-1];
+  const pl=flagOn('playsLike')?playsLike(pid):null;
+  const isSt=k=>k==='Stamina'||k==='Work rate';
+  const main=Object.entries(ax).filter(([k])=>!isSt(k)), st=Object.entries(ax).filter(([k])=>isSt(k));
+  const row=([k,v])=>{ const bd=rankBand(pid,k,ax);
+    return `<div class="fca-r ${fcTier(v)}"><b class="fca-rv">${v}</b><span class="fca-rk">${esc(k)}</span>
+      <span class="fca-rb"><i style="width:${Math.max(3,v)}%"></i></span>${bd?`<i class="fca-rp">${bd.t.replace(' OF ','/')}</i>`:''}</div>` };
+  const tile=(cls,icon,label,value,on)=>`<${on?'button':'div'} class="fca-t ${cls}"${on?` onclick="${on}"`:''}>
+      <span class="fca-ti">${icon}</span><span class="fca-tl">${label}</span><b class="fca-tv">${value}</b></${on?'button':'div'}>`;
+  return `${ssSec('best-defence','Attributes','<span class="ss-note">Against the squad</span>')}
+  <div class="fca pp-attr">
+    <div class="fca-top">
+      ${fcRadar(ax,pl&&pl.ghost)}
+      ${pl?`<div class="fca-leg"><span><i class="me"></i>You</span><span><i class="gh"></i>${esc(pl.best.ref.short)}</span></div>`:''}
+    </div>
+    <div class="fca-rows">${main.map(row).join('')}</div>
+    ${st.length?`<div class="fca-st">${ss2Svg('pulse',14)}<span>From Strava</span></div><div class="fca-rows">${st.map(row).join('')}</div>`:''}
+    <div class="fca-ts${pl?' three':''}">
+      ${tile('good',`<span class="fca-ic">${ss2Svg('strongest',20)}</span>`,'Strongest',`${esc(best[0])}<em>${best[1]}</em>`)}
+      ${tile('work',`<span class="fca-ic">${ss2Svg('workon',20)}</span>`,'To work on',`${esc(worst[0])}<em>${worst[1]}</em>`)}
+      ${pl?tile('like',fcCrest(pl.best.ref,40),'Plays like',`${esc(pl.best.ref.short)}<em>${pl.best.pct}%</em>`,`playsLikeSheet('${pid}')`):''}
+    </div>
+    <div class="fca-note">Each number is where this player sits in the squad on that attribute: 100 is the best, 50 is mid-table. The place is out of everyone who has played this season.</div>
+  </div>`;
 }
 
 /* ---- Contribution: share of the team's goals and assists ----
@@ -16719,8 +16856,14 @@ function cabArt(kind,metal){
     big:`${defs}<path d="M20 8h40v10c0 16-9 26-20 26S20 34 20 18z" fill="url(#${u}m)"/><path d="M20 12h-8c0 11 6 17 12 18M60 12h8c0 11-6 17-12 18" fill="none" stroke="url(#${u}m)" stroke-width="3.6" stroke-linecap="round"/>
       <path d="M35 43h10v8H35z" fill="url(#${u}m)"/><path d="M27 51h26l3 7H24z" fill="url(#${u}v)"/><rect x="23" y="57" width="34" height="8" rx="1.5" fill="url(#${u}m)"/>
       <path d="M28 13c0 11 3 19 8 24" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2.2" stroke-linecap="round"/><path d="M40 20l2.4 4.8 5.3.8-3.9 3.7.9 5.3-4.7-2.5-4.7 2.5.9-5.3-3.9-3.7 5.3-.8z" fill="#fff" fill-opacity=".85"/>${plinth}`,
-    boot:`${defs}<path d="M22 18h14l2 18c4 2 10 3 17 4 5 1 7 4 7 8v4H22z" fill="url(#${u}v)"/><path d="M22 52h40v4H22z" fill="url(#${u}m)"/>
-      <path d="M36 26l7 3M37 31l7 3" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linecap="round"/>${[26,34,42,50,58].map(x=>`<rect x="${x-1.5}" y="56" width="3" height="4" fill="url(#${u}m)"/>`).join('')}${plinth}`,
+    /* round 11b: a real boot in profile — toe, heel, laces, a stripe, studs — on a pin to the plinth */
+    boot:`${defs}<path d="M17 29c0-3.4 2.4-5.6 5.6-5.6h8.6c2 0 3.2 1.4 3.6 3.2l1 4.6c4.2 2.2 10.4 4.1 18.2 5.4 6.4 1.1 10.4 3.8 10.4 8.6v4.4c0 1.5-1.1 2.6-2.6 2.6H19.6c-1.5 0-2.6-1.1-2.6-2.6z" fill="url(#${u}v)"/>
+      <path d="M17 49.6h47.4v3.2c0 1.2-1 2.2-2.2 2.2H19.2c-1.2 0-2.2-1-2.2-2.2z" fill="url(#${u}m)"/>
+      ${[23,30,44,52,59].map(x=>`<rect x="${x-1.6}" y="55" width="3.2" height="3.4" rx="1" fill="${m[3]}"/>`).join('')}
+      <path d="M36.6 32.6l3.4 5.2M41 34.3l3.2 5M45.4 35.7l2.8 4.8" stroke="#fff" stroke-opacity=".8" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M21 44.5c9 2.2 23 2.6 38 .8" fill="none" stroke="${m[3]}" stroke-opacity=".55" stroke-width="2.4" stroke-linecap="round"/>
+      <path d="M20 28c0-1.8 1.2-2.9 3-2.9h6" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="38.4" y="58" width="3.2" height="6.5" fill="url(#${u}m)"/>${plinth}`,
     glove:`${defs}<path d="M27 58V30c0-3 4-3 4 0v-8c0-3 4-3 4 0v-3c0-3 4-3 4 0v3c0-3 4-3 4 0v12c1-4 6-4 6 1-1 8-4 14-9 19v4z" fill="url(#${u}v)"/>
       <rect x="26" y="56" width="22" height="7" rx="1.5" fill="url(#${u}m)"/><path d="M33 25v15M37 21v19M41 22v18" stroke="#fff" stroke-opacity=".55" stroke-width="1.6" stroke-linecap="round"/>${plinth}`,
     star:`${defs}<path d="M31 6h6l3 14 3-14h6l-5 20h-8z" fill="#E4002B"/><path d="M34 6h3l3 14 3-14h3" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1"/>
@@ -16728,14 +16871,25 @@ function cabArt(kind,metal){
       <path d="M40 31l2.9 5.8 6.4.9-4.6 4.5 1.1 6.4-5.8-3-5.8 3 1.1-6.4-4.6-4.5 6.4-.9z" fill="${m[3]}" fill-opacity=".85"/>${plinth}`,
     medal:`${defs}<path d="M30 6h7l3 12 3-12h7l-6 18h-8z" fill="#0B1B33"/><circle cx="40" cy="40" r="17" fill="url(#${u}m)"/><circle cx="40" cy="40" r="12" fill="none" stroke="${m[3]}" stroke-opacity=".45" stroke-width="1.6"/>
       <path d="M33 33c2 6 4 8 7 8s5-2 7-8" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/>${plinth}`,
-    ball:`${defs}<ellipse cx="40" cy="62" rx="15" ry="3.5" fill="#000" opacity=".35"/>
-      <path d="M26 58h28l3 6H23z" fill="url(#${u}m)"/><rect x="21" y="64" width="38" height="7" rx="1.5" fill="url(#${u}m)"/><rect x="18" y="70" width="44" height="8" rx="1.5" fill="#1A1A1A"/>
-      <circle cx="40" cy="36" r="21" fill="url(#${u}b)"/>
-      <g fill="#10151E"><path d="M40 28l6.2 4.5-2.4 7.3h-7.6l-2.4-7.3z"/><path d="M40 15.6l4.6 3.1-1 3.6h-7.2l-1-3.6z" opacity=".95"/>
-        <path d="M22.4 31.2l3.6-2.4 3.2 2.6-1.6 6.6-4.6 1.4c-1-2.6-1.2-5.4-.6-8.2z"/><path d="M57.6 31.2l-3.6-2.4-3.2 2.6 1.6 6.6 4.6 1.4c1-2.6 1.2-5.4.6-8.2z"/>
-        <path d="M30 51.5l2.6-5.8h6.2l1.2 5.6-3.6 3.2c-2.4-.6-4.6-1.6-6.4-3z"/><path d="M50 51.5l-2.6-5.8h-6.2l-1.2 5.6 3.6 3.2c2.4-.6 4.6-1.6 6.4-3z"/></g>
-      <g stroke="#10151E" stroke-width="1.1" opacity=".55"><path d="M40 28v-5.7M46.2 32.5l5-2.2M43.8 39.8l3.4 5.9M36.2 39.8l-3.4 5.9M33.8 32.5l-5-2.2"/></g>
-      <ellipse cx="33" cy="26" rx="7" ry="4" fill="#fff" opacity=".55" transform="rotate(-30 33 26)"/>`
+    /* round 11b: a proper ball — a centre pentagon, five around it cut by the
+       edge, seams joining them — held in a gold collar on a stem */
+    ball:(()=>{ const cx=40, cy=31, R=19, P=(x,y,r,rot)=>Array.from({length:5},(_,k)=>{ const a=rot+k*2*Math.PI/5; return (x+r*Math.sin(a)).toFixed(2)+','+(y-r*Math.cos(a)).toFixed(2) }).join(' ');
+      const inner=Array.from({length:5},(_,k)=>{ const a=k*2*Math.PI/5; return [cx+6.6*Math.sin(a),cy-6.6*Math.cos(a)] });
+      const outer=Array.from({length:5},(_,k)=>{ const a=k*2*Math.PI/5+Math.PI/5; return [cx+17*Math.sin(a),cy-17*Math.cos(a),a] });
+      return `${defs}<clipPath id="${u}c"><circle cx="${cx}" cy="${cy}" r="${R}"/></clipPath>
+      <ellipse cx="40" cy="61" rx="13" ry="3" fill="#000" opacity=".35"/>
+      <rect x="37.6" y="50" width="4.8" height="8" fill="url(#${u}m)"/>
+      <path d="M29 47.5c3 2.6 6.8 4 11 4s8-1.4 11-4l1.6 3.2c-3.5 3-8 4.6-12.6 4.6s-9.1-1.6-12.6-4.6z" fill="url(#${u}m)"/>
+      <path d="M31 57h18l3 7H28z" fill="url(#${u}v)"/>
+      <circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#${u}b)"/>
+      <g clip-path="url(#${u}c)">
+        <g stroke="#10151E" stroke-width="1.2" stroke-opacity=".7">${inner.map(([x,y],k)=>{ const o=outer[k]; const o2=outer[(k+4)%5];
+          return `<line x1="${x.toFixed(2)}" y1="${y.toFixed(2)}" x2="${((o[0]+o2[0])/2).toFixed(2)}" y2="${((o[1]+o2[1])/2).toFixed(2)}"/>` }).join('')}</g>
+        <polygon points="${P(cx,cy,6.6,0)}" fill="#10151E"/>
+        ${outer.map(([x,y,a])=>`<polygon points="${P(x,y,6.6,a+Math.PI)}" fill="#10151E"/>`).join('')}
+      </g>
+      <circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#10151E" stroke-opacity=".25" stroke-width="1"/>
+      <ellipse cx="33" cy="23" rx="7" ry="4" fill="#fff" opacity=".6" transform="rotate(-30 33 23)"/>${plinth}` })()
   };
   return `<svg class="cab-art" viewBox="0 0 80 80" aria-hidden="true">${a[kind]||a.cup}</svg>`;
 }
@@ -16776,7 +16930,7 @@ function trophiesFor(pid){
   if(glove&&glove.id===pid)out.push({e:'🧤',t:'Golden Defence',s:`${(me.GA/Math.max(me.P,1)).toFixed(1)} conceded a game`,k:'silver'});
   // player of the month wins
   const poms=potmHistory().filter(x=>x.id===pid);
-  poms.forEach(x=>out.push({e:'⭐',t:'Player of the Month',s:ymLabel(x.ym)+` · ${x.avg} avg`,k:'gold'}));
+  poms.forEach(x=>out.push({e:'⭐',t:'Player of the Month',s:ymLabel(x.ym)+` · ${x.score}/100`,k:'gold'}));
   // appearance milestones
   const life=lifetime().find(x=>x.name===(player(pid)||{}).name);
   const totalP=life?life.P:me.P;
@@ -16801,23 +16955,47 @@ function trophyBlock(pid){
   const aw=awardTilesFor(pid).filter(a=>!(a.key==='champion'&&a.sid!==CUR)&&!(a.sid===CUR&&t.some(x=>x.t===a.t)));
   t.push(...aw.map(a=>({e:'\ud83c\udfc6',t:a.t,s:a.s,k:'gold'})));
   if(!t.length&&!balls.length)return '';
-  /* more than six and the cabinet turns into a wall of balls: show the five
-     newest and put the rest behind one tile. */
-  const shown=balls.length>6?balls.slice(0,5):balls, rest=balls.length-shown.length;
+  /* Round 11 (b): a cabinet that can grow for years.
+     - The same award won again stacks on one shelf spot with a ×n badge
+       (four Player of the Month wins are one trophy, "×4").
+     - Match balls stack the same way: one ball, ×n.
+     - At most six spots show (two shelves); anything more is behind
+       "The whole cabinet", which lists every piece. */
   const n=t.length+balls.length;
+  const groups=[]; t.forEach(x=>{ const g=groups.find(y=>y.t===x.t&&y.k===x.k); if(g){ g.n++; g.all.push(x) } else groups.push({...x,n:1,all:[x]}) });
+  const spots=groups.map(g=>({kind:'t',g}));
+  /* the match balls always keep a spot on the front shelf */
+  if(balls.length)spots.splice(Math.min(spots.length,4),0,{kind:'b'});
+  const MAX=6, shown=spots.length>MAX?spots.slice(0,MAX-1):spots, more=spots.length-shown.length;
+  const spot=x=>x.kind==='b'
+    ?(balls.length===1?mbTile(balls[0]):`<div class="cab-i cab-ball tap" onclick="mbSheet('${pid}')">
+        <div class="cab-e">${cabArt('ball','gold')}<i class="cab-x">\u00d7${balls.length}</i></div>
+        <div class="cab-t">Match balls</div><div class="cab-s">Latest: ${esc(mbGoals(balls[0]))} \u00b7 ${esc(mbWhen(balls[0]))}</div></div>`)
+    :`<div class="cab-i ${x.g.k}${x.g.n>1?' tap':''}"${x.g.n>1?` onclick="cabSheet('${pid}')"`:''}>
+        <div class="cab-e">${cabArt(CAB_KIND[x.g.e]||'cup',x.g.k)}${x.g.n>1?`<i class="cab-x">\u00d7${x.g.n}</i>`:''}</div>
+        <div class="cab-t">${esc(x.g.t)}</div>
+        <div class="cab-s">${esc(x.g.n>1?`Latest: ${x.g.all[x.g.all.length-1].s}`:x.g.s)}</div></div>`;
   return `<div class="sechead">Trophy cabinet</div>
     <div class="cab2"><div class="cab2-top"><span>${n} piece${n===1?'':'s'} of silverware</span>${balls.length?`<b aria-label="${balls.length} match ball${balls.length===1?'':'s'}">${ss2Svg('ball',15)}\u00d7${balls.length}</b>`:''}</div>
-    <div class="cab">${t.map(x=>`
-      <div class="cab-i ${x.k}">
-        <div class="cab-e">${cabArt(CAB_KIND[x.e]||'cup',x.k)}</div>
-        <div class="cab-t">${esc(x.t)}</div>
-        <div class="cab-s">${esc(x.s)}</div>
-      </div>`).join('')}${shown.map(mbTile).join('')}${rest>0?`
-      <div class="cab-i cab-ball cab-more tap" onclick="mbSheet('${pid}')">
-        <div class="cab-e">${cabArt('ball','gold')}</div>
-        <div class="cab-t">+${rest} more</div>
-        <div class="cab-s">Match balls</div>
+    <div class="cab">${shown.map(spot).join('')}${more>0?`
+      <div class="cab-i cab-more tap" onclick="cabSheet('${pid}')">
+        <div class="cab-e"><span class="cab-plus">+${more}</span></div>
+        <div class="cab-t">The whole cabinet</div>
+        <div class="cab-s">Every piece, ${n} in all</div>
       </div>`:''}</div></div>`;
+}
+/* every piece, in one list */
+function cabSheet(pid){
+  const p=player(pid); if(!p)return;
+  const t=trophiesFor(pid), balls=matchBalls(pid);
+  const aw=awardTilesFor(pid).filter(a=>!(a.key==='champion'&&a.sid!==CUR)&&!(a.sid===CUR&&t.some(x=>x.t===a.t)));
+  t.push(...aw.map(a=>({e:'\ud83c\udfc6',t:a.t,s:a.s,k:'gold'})));
+  openSheet(p.name+"'s cabinet",`<div class="card adm-c cab-list">${t.map(x=>`<div class="row adm-r">
+      <span class="cab-li">${cabArt(CAB_KIND[x.e]||'cup',x.k)}</span>
+      <span class="rt"><span class="r1">${esc(x.t)}</span><span class="r2">${esc(x.s)}</span></span></div>`).join('')}
+    ${balls.map(b=>`<div class="row adm-r${mbCanOpen(b)?' tap':''}"${mbCanOpen(b)?` onclick="closeSheet();openMatch('${b.gid}')"`:''}>
+      <span class="cab-li">${cabArt('ball','gold')}</span>
+      <span class="rt"><span class="r1">Match ball \u00b7 ${esc(mbGoals(b))}</span><span class="r2">${esc(mbScore(b))} \u00b7 ${esc(mbWhen(b))}</span></span></div>`).join('')}</div>`);
 }
 
 /* ============ PRESS ROOM ============
@@ -17084,7 +17262,7 @@ function skyRacesCard(){
    The same rating as everywhere else (statsAll().index), shown with its working:
    each bar is split into the four parts that make the number, so anyone can
    see why they are where they are. The weights are the formula's own. */
-const SKYR_PARTS=[['_att','Attacking',0.34,'#E4002B'],['_win','Winning',0.28,'#D4AF37'],['_def','Defending',0.24,'#2F6BF6'],['_app','Turning up',0.14,'#22A25E']];
+const SKYR_PARTS=[['_gl','Goals',0.25,'#E4002B'],['_as','Assists',0.20,'#7A5AF8'],['_def','Defending',0.30,'#2F6BF6'],['_win','Winning',0.15,'#D4AF37'],['_app','Turning up',0.10,'#22A25E']];
 let SKYRPOS='ALL', SKYR_ALL=false;
 const SKYR_COLS=['#D4AF37','#2F6BF6','#E4002B','#22A25E','#7A5AF8'];
 /* each player's rating after every gameweek, from the same statsFor the table uses */
@@ -17127,7 +17305,7 @@ function skyPotsRace(){
         <span class="skr-n">${esc(x.name)}<i>${esc(posOf(x.id))} · ${x.P} game${x.P===1?'':'s'}</i></span>
         <b class="skr-v">${x.index||0}</b></div>`).join('')}
       ${all.length>5?`<button class="lvltoggle sk-more" onclick="SKYR_ALL=!SKYR_ALL;render()">${SKYR_ALL?'Show top 5 ▴':`All ${all.length} ▾`}</button>`:''}
-      <div class="skr-f">The rating out of 100: attacking 34% (goals and assists a game, against your own position), winning 28% (points a game and win rate), defending 24% (goals let in a game, against your own position), turning up 14% (games played).</div>
+      <div class="skr-f">The rating out of 100: goals 25% and assists 20% a game, defending 30% (goals let in against each game's level) — all three against your own position — then winning 15% and turning up 10%.</div>
     </div>
     <div class="chips race-chips skr-chips">${[['ALL','Overall'],['ATT','ATT'],['MID','MID'],['DEF','DEF']].map(([k,l])=>`<button class="${SKYRPOS===k?'on':''}" onclick="SKYRPOS='${k}';SKYR_ALL=false;render()">${l}</button>`).join('')}</div>`;
 }
@@ -17524,7 +17702,7 @@ function totwCardSVG(){
     const badge=c?crest(c,104).replace(/^<svg/,`<svg x="${cx-52}" y="${cy-52}"`)
       :`<text x="${cx}" y="${cy+18}" text-anchor="middle" font-family="${F}" font-size="52" font-weight="700" fill="#0B1B33">${e(initials(p.name))}</text>`;
     return `<circle cx="${cx}" cy="${cy}" r="60" fill="#fff" stroke="${star?'#C9A227':'#FFFFFF'}" stroke-width="${star?8:0}"/>${badge}
-      <polygon points="${cx-44},${cy+62} ${cx+52},${cy+62} ${cx+44},${cy+104} ${cx-52},${cy+104}" fill="${star?'#C9A227':sfFill(+avg(p.id))}"/>
+      <polygon points="${cx-44},${cy+62} ${cx+52},${cy+62} ${cx+44},${cy+104} ${cx-52},${cy+104}" fill="${star?'#C9A227':sfFill(+avg(p.id))}" stroke="#FFFFFF" stroke-width="${star?0:3}" stroke-linejoin="round"/>
       <text x="${cx}" y="${cy+96}" text-anchor="middle" font-family="${F}" font-size="34" font-weight="700" fill="${star?'#0B1B33':sfInk(+avg(p.id))}">${e(avg(p.id))}${star?' \u2605':''}</text>
       <rect x="${cx-104}" y="${cy+110}" width="208" height="44" fill="#0B1B33"/>
       <text x="${cx}" y="${cy+142}" text-anchor="middle" font-family="${F}" font-size="${fs}" font-weight="700" letter-spacing="1" fill="#FFFFFF">${e(nm)}</text>`;
@@ -17952,7 +18130,7 @@ function skyHeadlines(last){
   return `${ssSec('sky-sports','Headlines',canShare?`<button class="act ss-act pm-share" onclick="sharePotm('${esc(w.ym)}')" aria-label="Share Player of the Month">${ssTile('share-gameweek',18)}Share</button>`:'')}
   <div class="hl-grid">
     ${skyTile('motm','Man of the match',m?who(m.id,m.name,`<i class="hl-s">${m.goals?`${m.goals} goal${m.goals===1?'':'s'} · `:''}${m.w?'winner':m.d?'draw':'defeat'}</i>`):'<i class="hl-s">After the next game</i>',m?`openMatch('${last.id}')`:'')}
-    ${skyTile('potm','Player of the month',w?who(w.id,w.name,`<i class="hl-s">${w.avg} avg · ${esc(ymLabel(w.ym).split(' ')[0])}</i>`):'<i class="hl-s">At the end of the month</i>',w?`openPlayer('${w.id}')`:'')}
+    ${skyTile('potm','Player of the month',w?who(w.id,w.name,`<i class="hl-s">${w.score}/100 · ${esc(ymLabel(w.ym).split(' ')[0])}</i>`):'<i class="hl-s">At the end of the month</i>',w?`openPlayer('${w.id}')`:'')}
     ${skyTile('form','In form',hot?who(hot.id,hot.name,`<span class="hl-w">${wdlChips(hot.seq)}</span>`):'<i class="hl-s">After two games each</i>',hot?`openPlayer('${hot.id}')`:'')}
     ${skyTile('story','Story of the season',s?`<b class="hl-st">${esc(s.t)}</b><i class="hl-s">${esc(s.s)}</i>`:'<i class="hl-s">After the first game</i>',s&&s.id?`openPlayer('${s.id}')`:'')}
   </div>`;
@@ -18051,7 +18229,7 @@ function mirRows(r){
   const nm=x=>x?(x.name||(player(x.id)||{}).name||'—'):'—';
   const bigTxt=r.big?`${r.big.scoreA??0}–${r.big.scoreB??0}`:'—';
   return [
-    ['player-of-the-month','Player of the Month',r.potm?r.potm.name:'Not yet',r.potm&&r.potm.avg!=='—'?`${r.potm.avg} avg`:'',r.potm&&r.potm.id],
+    ['player-of-the-month','Player of the Month',r.potm?r.potm.name:'Not yet',r.potm?`${r.potm.score}/100`:'',r.potm&&r.potm.id],
     ['top-scorers','Top scorer',r.scorer?nm(r.scorer.x):'—',r.scorer?`${r.scorer.v} goal${r.scorer.v===1?'':'s'}`:'',r.scorer&&r.scorer.x.id],
     ['most-assists','Most assists',r.maker?nm(r.maker.x):'—',r.maker?`${r.maker.v} assist${r.maker.v===1?'':'s'}`:'',r.maker&&r.maker.x.id],
     ['match-rating','Best rating',r.rated?nm(r.rated.x):'—',r.rated?`${r.rated.v.toFixed(1)} avg`:'',r.rated&&r.rated.x.id],
@@ -21828,7 +22006,7 @@ const STAT_VIEWS={
 };
 const STAT_HELP={
   P:'Games played', G:'Goals scored', A:'Assists', GA_:'Goals and assists added together',
-  pts:'League points — 3 for a win, 1 for a draw', index:'Player rating out of 100. Attacking counts for 34% and is scored against your own position, winning 28%, defending 24%, turning up 14%.',
+  pts:'League points — 3 for a win, 1 for a draw', index:'Player rating out of 100. Goals 25%, assists 20% and defending 30%, each scored against your own position; winning 15%; turning up 10%.',
   gpg:'Goals divided by games', apg:'Assists divided by games',
   GA:'Goals your team let in while you were on the pitch', cpg:'Those goals divided by games — lower is better',
   cs:'Games where your team conceded nothing', GF:'Goals your team scored while you were on',
@@ -21850,7 +22028,7 @@ function ratingPill(r){
 /* colour a match rating badge — green for a big score, red for a poor one */
 function ratingClass(r){
   /* round 11: SofaScore bands — the colour is the number, never gold.
-     9+ blue · 8 teal · 7 green · 6.5 yellow · 6 orange · below 6 red */
+     9+ blue · 8 green · 7 lime · 6.5 yellow · 6 orange · below 6 red */
   return r>=9?'sf-9' : r>=8?'sf-8' : r>=7?'sf-7' : r>=6.5?'sf-65' : r>=6?'sf-6' : 'sf-5';
 }
 /* the 0-100 season rating (RTG) on the same colours: the old 70 and 45 lines hold */
@@ -22083,7 +22261,7 @@ function statLeaders(st){
     <div>${leadBlock('Points per game','📈',top('ppg'),i2,'Minimum 1 game')}
       ${leadBlock('Goals per game','🎯',top('gpg'),i2)}
       ${leadBlock('Win rate','💪',top('wr'),pc)}
-      ${leadBlock('Player rating','💎',top('index'),i0,'Out of 100. Attacking 34% (scored against your own position), winning 28%, defending 24%, appearances 14% — so a defender competes with defenders, not with the top scorer.')}
+      ${leadBlock('Player rating','💎',top('index'),i0,'Out of 100. Goals 25%, assists 20%, defending 30% (each against your own position), winning 15%, appearances 10% — so a defender competes with defenders, not with the top scorer.')}
       ${leadBlock('Assists per game',ssNamed('Assists',22),top('apg'),i2)}
       ${leadBlock('Fewest conceded per game','🛡️',low('cpg'),i1,'Minimum 2 games')}</div>
   </div>`;
@@ -23638,10 +23816,49 @@ async function deleteGame(){if(!requireAdmin())return;
 
 /* ============ PLAYER EDITOR ============ */
 let PE=null;
+/* ============ ROUND 11 (b) · FC 26 PLAYER ROLES ============
+   One role per player, set by the admin in Edit player (no + or ++). The
+   names are FC 26's; the four new in FC 26 are marked. Shown under PlayStyle+
+   on the profile. p.role = id. */
+const FC_ROLES=[
+  {id:'gk',  pos:'GK', n:'Goalkeeper',            ab:'GK',  d:'Stays on the line and keeps it simple.'},
+  {id:'sk',  pos:'GK', n:'Sweeper Keeper',        ab:'SK',  d:'Comes off the line to clean up behind the defence.'},
+  {id:'bpk', pos:'GK', n:'Ball-Playing Keeper',   ab:'BPK', d:'Starts attacks with his feet.', nw:true},
+  {id:'dfr', pos:'DEF',n:'Defender',              ab:'DF',  d:'Holds the line and wins his duels.'},
+  {id:'stp', pos:'DEF',n:'Stopper',               ab:'STP', d:'Steps out to meet the striker early.'},
+  {id:'bpd', pos:'DEF',n:'Ball-Playing Defender', ab:'BPD', d:'Carries it out and breaks lines with passes.'},
+  {id:'wbk', pos:'DEF',n:'Wide Back',             ab:'WB',  d:'A centre-back who covers the channel.', nw:true},
+  {id:'fb',  pos:'DEF',n:'Fullback',              ab:'FB',  d:'Defends the flank first, overlaps when it is on.'},
+  {id:'flb', pos:'DEF',n:'Falseback',             ab:'FLB', d:'Tucks inside into midfield with the ball.'},
+  {id:'wgb', pos:'DEF',n:'Wingback',              ab:'WGB', d:'Up and down the whole flank.'},
+  {id:'awb', pos:'DEF',n:'Attacking Wingback',    ab:'AWB', d:'Lives in the final third, crosses and cutbacks.'},
+  {id:'iwb', pos:'DEF',n:'Inverted Wingback',     ab:'IWB', d:'Drifts inside to make an extra midfielder.', nw:true},
+  {id:'hld', pos:'MID',n:'Holding',               ab:'HLD', d:'Sits in front of the defence and screens.'},
+  {id:'chf', pos:'MID',n:'Centre-Half',           ab:'CH',  d:'Drops between the centre-backs to build.'},
+  {id:'dlp', pos:'MID',n:'Deep-Lying Playmaker',  ab:'DLP', d:'Dictates the tempo from deep.'},
+  {id:'whf', pos:'MID',n:'Wide Half',             ab:'WH',  d:'A holding midfielder who covers the flanks.'},
+  {id:'bxc', pos:'MID',n:'Box Crasher',           ab:'BC',  d:'Arrives late in the box from deep.', nw:true},
+  {id:'b2b', pos:'MID',n:'Box-to-Box',            ab:'B2B', d:'Defends one box, attacks the other.'},
+  {id:'pmk', pos:'MID',n:'Playmaker',             ab:'PM',  d:'Finds the pockets and plays the last pass.'},
+  {id:'hwg', pos:'MID',n:'Half-Winger',           ab:'HW',  d:'Works the half-space between the wing and the middle.'},
+  {id:'c10', pos:'MID',n:'Classic 10',            ab:'10',  d:'Free to roam behind the striker.'},
+  {id:'wmd', pos:'MID',n:'Wide Midfielder',       ab:'WM',  d:'Holds the width and tracks back.'},
+  {id:'shs', pos:'ATT',n:'Shadow Striker',        ab:'SS',  d:'Runs beyond the striker from midfield.'},
+  {id:'wng', pos:'ATT',n:'Winger',                ab:'W',   d:'Takes his man on and crosses.'},
+  {id:'ifw', pos:'ATT',n:'Inside Forward',        ab:'IF',  d:'Cuts in from the flank to shoot.'},
+  {id:'wpm', pos:'ATT',n:'Wide Playmaker',        ab:'WP',  d:'Creates from the flank.'},
+  {id:'adf', pos:'ATT',n:'Advanced Forward',      ab:'AF',  d:'Plays on the last defender’s shoulder.'},
+  {id:'pch', pos:'ATT',n:'Poacher',               ab:'P',   d:'Lives in the box and finishes chances.'},
+  {id:'f9',  pos:'ATT',n:'False 9',               ab:'F9',  d:'Drops deep to link the play.'},
+  {id:'tgt', pos:'ATT',n:'Target Forward',        ab:'TF',  d:'Holds it up and wins it in the air.'},
+];
+const FC_ROLE_BY=Object.fromEntries(FC_ROLES.map(r=>[r.id,r]));
+const FC_ROLE_COL={GK:'#B07A0C',DEF:'#0A5BBF',MID:'#0E7A46',ATT:'#C2183C'};
+function roleBadge(r,s){ return `<span class="rl-b" style="--rc:${FC_ROLE_COL[r.pos]};width:${s}px;height:${s}px;font-size:${Math.round(s*(r.ab.length>2?.3:.38))}px">${esc(r.ab)}</span>` }
 function editPlayer(pid){if(!requireAdmin())return;const p=pid?player(pid):null;
   PE={id:pid,name:p?p.name:'',pos:p?p.pos:null,nation:p?p.nation||'':'',club:p?p.club:null,star:p?p.star:null,
       num:p?p.num||null:null,
-      ps:p?p.ps||null:null,avail:p?p.avail||'ok':'ok',active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
+      ps:p?p.ps||null:null,role:p?p.role||null:null,roleTab:(p&&p.pos)||'MID',avail:p?p.avail||'ok':'ok',active:p?p.active!==false:true,comp:'PL',psCat:'SCO'};
   if(PE.club&&CLUB_BY[PE.club])PE.comp=CLUB_BY[PE.club].comp;
   openSheet(pid?'Edit player':'New player','<div id="peb"></div>','Save');$('#_sact').onclick=savePlayer;paintPE()}
 function paintPE(){ return keepFocus(()=>_paintPE()); }
@@ -23671,6 +23888,14 @@ function _paintPE(){
     <div class="chips" style="margin-bottom:10px">${Object.keys(PS_CAT).map(c=>`<button class="${PE.psCat===c?'on':''}" onclick="PE.psCat='${c}';paintPE()">${PS_CAT[c].icon} ${PS_CAT[c].name}</button>`).join('')}</div>
     <div class="psgrid">${PLAYSTYLES.filter(x=>x.cat===PE.psCat).map(x=>`<button class="psopt ${PE.ps===x.id?'on':''}" onclick="PE.ps='${x.id}';paintPE()" style="--pc:${PS_CAT[x.cat].col}">
       ${psDiamond(x.id,34)}<span>${esc(x.name)}</span></button>`).join('')}</div>
+    <div class="lbl">Role <span style="text-transform:none;font-weight:400">(optional · FC 26)</span></div>
+    ${PE.role&&FC_ROLE_BY[PE.role]?(r=>`<div class="rl-card" style="margin-bottom:10px">${roleBadge(r,48)}
+      <div style="flex:1;min-width:0"><div class="rl-n">${esc(r.n)}${r.nw?'<i class="rl-new">FC 26</i>':''}</div><div class="rl-d">${esc(r.d)}</div></div>
+      <button class="btn plain sm" onclick="PE.role=null;paintPE()">Clear</button></div>`)(FC_ROLE_BY[PE.role])
+      :`<div class="note" style="padding:0 0 8px">One role, the way they actually play.</div>`}
+    <div class="seg rl-seg" style="margin-bottom:10px">${['GK','DEF','MID','ATT'].map(x=>`<button class="${PE.roleTab===x?'on':''}" onclick="PE.roleTab='${x}';paintPE()">${x}</button>`).join('')}</div>
+    <div class="rl-grid">${FC_ROLES.filter(r=>r.pos===PE.roleTab).map(r=>`<button class="rl-opt ${PE.role===r.id?'on':''}" onclick="PE.role='${r.id}';paintPE()">
+      ${roleBadge(r,34)}<span>${esc(r.n)}</span></button>`).join('')}</div>
     <div class="lbl">Club</div>
     ${club?`<div class="card pad" style="display:flex;align-items:center;gap:13px;margin-bottom:12px">${crest(club,44)}
       <div style="flex:1;min-width:0"><div style="font-weight:700;font-size:16px">${esc(club.name)}</div>
@@ -23718,15 +23943,20 @@ async function savePlayer(){if(!requireAdmin())return;const n=(PE.name||'').trim
   /* A position change no longer breaks anyone's FPL team — squads that are
      already confirmed simply carry on with their new shape. */
   PE.num=PE.num||null;
-  if(PE.id)Object.assign(player(PE.id),{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:PE.active});
-  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:true});
+  const was=PE.id?JSON.stringify(player(PE.id)):null, role=PE.role&&FC_ROLE_BY[PE.role]?PE.role:null;
+  if(PE.id){ const pp=player(PE.id); Object.assign(pp,{name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:PE.active}); if(role)pp.role=role; else delete pp.role }
+  else season().players.push({id:uid(),name:n,pos:PE.pos,nation:PE.nation.trim(),club:PE.club,star:PE.star,ps:PE.ps,num:PE.num,avail:PE.avail,active:true,...(role?{role}:{})});
   logEntry(PE.id?'edit':'add',`${PE.id?'Edited':'Added'} player ${n}`);
   /* Wire the newcomer up BEFORE saving. syncManagers() runs inside fpl(), and
      previously nothing called it between pushing the player and saving — so
      their manager slot, private code and wallet were created locally but never
      written to the cloud, and nobody else ever saw them. */
   try{ joinSquad() }catch(e){}
-  await save();closeSheet();render();toast(PE.id?'Saved':'Player added')}
+  const r=await save();
+  if(!r.ok){ if(PE.id&&was){ const i=season().players.findIndex(x=>x.id===PE.id); if(i>=0)season().players[i]=JSON.parse(was) }
+    else if(!PE.id)season().players.pop();
+    toast('⚠️ Not saved — '+(r.detail||'try again')); render(); return }
+  closeSheet();render();toast(PE.id?'Saved':'Player added')}
 
 /* Make sure every active player has a manager slot, a code, a wallet and a
    price. Safe to call any time — it only fills in what is missing. */
