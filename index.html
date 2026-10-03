@@ -7245,12 +7245,14 @@ const Store={
         /* concurrency guard: if someone else saved after we loaded, don't clobber it */
         if(REMOTE_STAMP){
           const chk=await supa.from('tracker_kv').select('updated_at').eq('key',k).maybeSingle();
-          if(!chk.error&&chk.data&&chk.data.updated_at&&chk.data.updated_at>REMOTE_STAMP){
+          /* GW5 hardening: stamps come from different phones' clocks, so "newer" is meaningless —
+             any stamp other than the one we loaded means someone else saved */
+          if(!chk.error&&chk.data&&chk.data.updated_at&&Date.parse(chk.data.updated_at)!==Date.parse(REMOTE_STAMP)&&!OWN_STAMPS.has(Date.parse(chk.data.updated_at))){
             CONFLICT=chk.data.updated_at;
             return {ok:false,reason:'conflict',detail:'Someone else saved while this was open'};
           }
         }
-        const stamp=new Date().toISOString(); OWN_STAMPS.add(Date.parse(stamp));
+        const stamp=new Date(nowMs()).toISOString(); OWN_STAMPS.add(Date.parse(stamp));
         const {error}=await supa.from('tracker_kv').upsert({key:k,value:v,updated_at:stamp});
         if(!error){ REMOTE_STAMP=stamp; CONFLICT=null; saveMirror(v); markSync(); return {ok:true}; }
         return {ok:false,reason:'cloud',detail:error.message||'The database refused the write'};
@@ -12306,15 +12308,21 @@ function fplResync(){
    for the gameweek, and teams open again for the week after. */
 /* Teams freeze at the Sunday lock and open again the moment that week's game
    is logged — the same window the bets use, so nobody can react to a result. */
-function fplLocked(){
-  const now=Date.now(), cut=sundayLockBefore(now);
+function fplLocked(){ return lockWindow() }
+/* closed from the last deadline until this week's game is logged. "Logged" is
+   a game dated in that week OR a game logged (created) after the deadline with
+   a date within a few days of it — so a game typed in with the wrong date still
+   reopens everything, but back-filling an old game does not. */
+function lockWindow(){
+  const now=nowMs(), cut=sundayLockBefore(now);
   const sunday=new Date(cut+DUBAI_OFF).toISOString().slice(0,10);
   const weekEnd=new Date(cut+DUBAI_OFF+6*86400e3).toISOString().slice(0,10);
-  const logged=allGames().some(g=>{const d=String(g.date||'').slice(0,10); return d>=sunday&&d<=weekEnd});
+  const near=new Date(cut+DUBAI_OFF-3*86400e3).toISOString().slice(0,10);   /* a date a few days out still counts; a back-filled old game does not */
+  const logged=allGames().some(g=>{const d=String(g.date||'').slice(0,10); return (d>=sunday&&d<=weekEnd)||((+g.created||0)>=cut&&d>=near)});
   return now>=cut&&!logged;
 }
 function fplLockNote(){
-  return `Teams locked at the deadline, ${dlText(sundayLockBefore(Date.now()))} (Dubai time). They open again once this week's game is logged.`;
+  return `Teams locked at the deadline, ${dlText(sundayLockBefore(nowMs()))} (Dubai time). They open again once this week's game is logged.`;
 }
 function fplNextGw(){
   const played=playedGws();
@@ -16811,7 +16819,7 @@ function dlInputs(ms){
   return {date:d.toISOString().slice(0,10),time:d.toISOString().slice(11,16)};
 }
 function deadlineBlock(){
-  const c=dlCfg(), next=sundayLockAfter(Date.now()), late=lateSettledBets();
+  const c=dlCfg(), next=sundayLockAfter(nowMs()), late=lateSettledBets();
   const tv=String(c.h).padStart(2,'0')+':'+String(c.m).padStart(2,'0');
   const one=c.once&&c.once>Date.now()-7*864e5?dlInputs(c.once):null;
   const def=dlInputs(next);
@@ -19753,6 +19761,39 @@ async function equipItem(id,cat){
    DST) and the admin can move it in Admin → Deadline: the weekly day and time,
    plus a one-off date and time that replaces that week's deadline. Every guard,
    settlement and line of copy reads it from here. */
+/* ---- a clock people can't wind back (GW5 hardening) ----
+   Every deadline check used the phone's own clock, so setting a phone back an
+   hour let someone bet or change their team after the lock — and the late-bet
+   check trusted the same clock. Now:
+   - at start-up (and whenever the app comes back to the front) the time is
+     read from the server the app is served from (the Date header of a HEAD
+     request to this same page);
+   - between reads it runs on performance.now(), which ignores changes to the
+     phone's clock;
+   - nowMs() takes the later of that and the phone's clock, so winding the
+     clock back gains nothing, and a phone that slept never runs slow.
+   With no server answer yet (offline, local file) it is simply the phone's clock. */
+let CLK={base:Date.now(),perf:(typeof performance!=='undefined'?performance.now():0),srv:false};
+function nowMs(){
+  if(!CLK.srv)return Date.now();
+  const p=(typeof performance!=='undefined')?performance.now():0;
+  return Math.max(Date.now(), CLK.base+(p-CLK.perf));
+}
+async function syncClock(){
+  try{
+    if(!/^https?:/.test(location.protocol))return false;
+    const t0=performance.now();
+    const r=await fetch(location.pathname+'?clock='+Date.now(),{method:'HEAD',cache:'no-store'});
+    const d=r.headers.get('date'); if(!d)return false;
+    const age=Math.max(0,+(r.headers.get('age')||0))||0;   /* a cached copy: Date is when it was made, Age is how long ago */
+    const t1=performance.now(), srv=Date.parse(d)+age*1000; if(!isFinite(srv))return false;
+    /* the header is whole seconds: take the middle of that second and of the round trip */
+    CLK={base:srv+500,perf:(t0+t1)/2,srv:true};
+    return true;
+  }catch(e){ return false }
+}
+let CLOCK_READY=Promise.resolve(false);
+try{ CLOCK_READY=syncClock(); document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible')syncClock() }) }catch(e){}
 const DUBAI_OFF=4*3600e3, DL_DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 function dlCfg(){
   let d={}; try{ d=(typeof DB!=='undefined'&&DB&&DB.deadline)||{} }catch(_){}
@@ -19787,7 +19828,7 @@ function dlClock(ms){
 }
 /* "4pm Sunday 4 Oct" — the next deadline, Dubai time */
 function dlText(ms){
-  const t=ms==null?sundayLockAfter(Date.now()):ms, d=new Date(t+DUBAI_OFF);
+  const t=ms==null?sundayLockAfter(nowMs()):ms, d=new Date(t+DUBAI_OFF);
   const mon=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][d.getUTCMonth()];
   return `${dlClock(t)} ${DL_DAYS[d.getUTCDay()]} ${d.getUTCDate()} ${mon}`;
 }
@@ -19800,7 +19841,10 @@ const SUNDAY_LOCK_HOUR=16;
 function gameDeadline(g){
   const ds=String((g&&g.date)||'').slice(0,10); if(!/^\d{4}-\d\d-\d\d$/.test(ds))return null;
   const [y,mo,da]=ds.split('-').map(Number);
-  return sundayLockBefore(Date.UTC(y,mo-1,da,23,59,59)-DUBAI_OFF);
+  const byDate=sundayLockBefore(Date.UTC(y,mo-1,da,23,59,59)-DUBAI_OFF);
+  /* a game typed in with the wrong date: the deadline before it was logged is the
+     real one (the later of the two, so a wrong date never voids a whole week) */
+  return g.created?Math.max(byDate,sundayLockBefore(+g.created)):byDate;
 }
 /* closed from the deadline until that week's game is logged */
 function betsClosed(){ return marketClosed() }
@@ -20070,14 +20114,14 @@ async function placeBet(){
   if(amt>BET_RULES.max){toast(`Maximum stake is ${usd(BET_RULES.max)}`);return}
   if(amt>bal){toast('Not enough in your balance');return}
   const legs=BSLIP.map(x=>({pid:x.pid,k:x.k,odds:x.odds}));
-  const gw=fplNextGw(), t0=Date.now();
+  const gw=fplNextGw(), t0=nowMs();
   if(BSMODE==='singles'&&legs.length>1){
     /* one bet per leg, each staked separately — the total has to clear first */
     const outlay=amt*legs.length;
     if(outlay>bal){toast(`That is ${usd(outlay)} across ${legs.length} bets — more than your balance`);return}
     b.wallets[me.pid]=bal-outlay;
     legs.forEach(l=>b.open.push({id:uid(),by:me.pid,legs:[l],odds:Math.round(l.odds*100)/100,
-      stake:amt,gw,at:Date.now(),pid:l.pid,k:l.k}));
+      stake:amt,gw,at:nowMs(),pid:l.pid,k:l.k}));
     const keep=[...BSLIP];
     BSLIP=[]; BSOPEN=false;
     const r=await betSave();
@@ -20090,7 +20134,7 @@ async function placeBet(){
      promises one return and the settlement pays another */
   const combined=Math.round(legs.reduce((t,x)=>t*x.odds,1)*accaBonus(legs.length)*100)/100;
   b.wallets[me.pid]=bal-amt;
-  const nb={id:uid(),by:me.pid,legs,odds:combined,stake:amt,gw,at:Date.now(),
+  const nb={id:uid(),by:me.pid,legs,odds:combined,stake:amt,gw,at:nowMs(),
                pid:legs[0].pid,k:legs[0].k};
   b.open.push(nb);
   const keep=[...BSLIP];
@@ -20111,7 +20155,7 @@ async function betSave(){
 function betCutoff(bet){
   return sundayLockAfter(bet.at||0);
 }
-const betLocked=bet=>Date.now()>=betCutoff(bet);
+const betLocked=bet=>nowMs()>=betCutoff(bet);
 async function cancelBet(id){
   const b=bets(), i=b.open.findIndex(x=>x.id===id);
   if(i<0)return;
@@ -20173,14 +20217,7 @@ function stockDividendsPaid(by){
   return t;
 }
 /* closed from the Sunday lock (Dubai) until a game dated that Sunday (or later) is logged */
-function marketClosed(){
-  const OFF=DUBAI_OFF, now=Date.now();
-  const lastCut=sundayLockBefore(now);
-  const sunday=new Date(lastCut+OFF).toISOString().slice(0,10);
-  const weekEnd=new Date(lastCut+OFF+6*86400e3).toISOString().slice(0,10);
-  const logged=allGames().some(g=>{const d=String(g.date||'').slice(0,10); return d>=sunday&&d<=weekEnd});
-  return now>=lastCut&&!logged;
-}
+function marketClosed(){ return lockWindow() }
 function stockAvail(){ return marketClosed()?'Market closed until the game is logged':'' }
 let STSORT='movers', STPICK=null, STQTY=1;
 async function tradeShares(pid,side,n){
@@ -20193,14 +20230,14 @@ async function tradeShares(pid,side,n){
     const fee=Math.round(n*price*STOCK_RULES.fee), cost=n*price+fee;
     if(wallet(me.pid)<cost){toast('⚠️ Not enough in your wallet');return}
     bets().wallets[me.pid]=wallet(me.pid)-cost;
-    stocks().trades.push({id:uid(),by:me.pid,pid,side:'buy',n,price,fee,gw:fplNextGw(),at:Date.now()});
+    stocks().trades.push({id:uid(),by:me.pid,pid,side:'buy',n,price,fee,gw:fplNextGw(),at:nowMs()});
     toast(`Bought ${n} × ${esc((player(pid)||{}).name||'')}`);
   } else {
     if(n>held){toast('⚠️ You do not hold that many');return}
     const avg=avgCost(me.pid,pid);
     const fee=Math.round(n*price*STOCK_RULES.fee), ret=n*price-fee;
     bets().wallets[me.pid]=wallet(me.pid)+ret;
-    stocks().trades.push({id:uid(),by:me.pid,pid,side:'sell',n,price,fee,avg,gw:fplNextGw(),at:Date.now()});
+    stocks().trades.push({id:uid(),by:me.pid,pid,side:'sell',n,price,fee,avg,gw:fplNextGw(),at:nowMs()});
     toast(`Sold ${n} × ${esc((player(pid)||{}).name||'')}`);
   }
   try{ if(!CLOUD_FAIL)await save() }catch(e){}
@@ -24550,6 +24587,9 @@ function bootUI(){
   if(fast)bootUI();
   await supaReady();
   await loadDB();
+  /* GW5: the server time is normally back long before the data, but never let a
+     write through on the phone's clock if it is still on its way (at most 2s) */
+  try{ await Promise.race([CLOCK_READY,new Promise(r=>setTimeout(r,2000))]) }catch(e){}
   BOOT_STALE=false;
   if(supa){ await initSupa(); } else { applyAdminClass(); }
   if(!fast)bootUI(); else { try{ if(!$('#sbg').classList.contains('open'))render() }catch(e){} }
