@@ -7812,7 +7812,25 @@ function statsFor_(games,upto){
     pl.forEach(x=>{
       x._win=(x._win1+x._win2)/2;
       x._att=(x._gl*0.25+x._as*0.20)/0.45;    /* kept for anything that reads the attacking part */
-      x.index=Math.round((x._gl*0.25 + x._as*0.20 + x._def*0.30 + x._win*0.15 + x._app*0.10)*100);
+    });
+    /* Round 13 (b): RATING now uses the SAME numbers as the attribute card —
+       each is your place in the squad (percentile, ties count half, floor 3),
+       exactly as playerAxes_ works them out — with the same weights: Finishing
+       25%, Creating 20%, Defending 30%, Winning 15%, Availability 10%. The old
+       min-max version let one standout squash everyone (5 goals in 4 games
+       could read 27) and put the squad average near 45, so it read low and
+       never matched the card. Then shown FC-style: 50 + half of it, so about
+       57 at the bottom, 75 for a mid-table player, 90+ for the best. Order is
+       unchanged by the scale. */
+    const pctl=(f,x)=>{ const vals=pl.map(f), v=f(x);
+      const below=vals.filter(y=>y<v).length, ties=vals.filter(y=>y===v).length;
+      return Math.max(3,Math.round((below+ties/2)/vals.length*100)) };
+    const RF={fin:x=>x.G/Math.max(1,x.P), cre:x=>(x.A||0)/Math.max(1,x.P), win:x=>x.pts/Math.max(1,x.P),
+      def:x=>-(x.GA/Math.max(1,x.P)), app:x=>x.P};
+    pl.forEach(x=>{
+      x._rp={fin:pctl(RF.fin,x),cre:pctl(RF.cre,x),def:pctl(RF.def,x),win:pctl(RF.win,x),app:pctl(RF.app,x)};
+      const raw=x._rp.fin*0.25+x._rp.cre*0.20+x._rp.def*0.30+x._rp.win*0.15+x._rp.app*0.10;
+      x.index=Math.min(99,Math.round(50+raw/2));
     });
   }
   arr.forEach(x=>{if(x.index===undefined)x.index=0});
@@ -8504,13 +8522,33 @@ function matchDayKicker(){
   return [nm?(/season$/i.test(nm)?nm:nm+' Season').toUpperCase():null,'GAMEWEEK '+fplNextGw()].filter(Boolean).join(' \u00b7 ');
 }
 const ordLow=n=>n+(n%100>=11&&n%100<=13?'th':({1:'st',2:'nd',3:'rd'}[n%10]||'th'));
-function matchDayLine(ranked){
-  const me=fplMine(), i=me&&ranked?ranked.findIndex(x=>x.id===me.pid):-1;
+/* Round 13: the line used to assume nobody else wins. In this league your six
+   teammates win with you, so anyone level with you or up to three behind could
+   finish level or above. Now:
+   - best  = you win and nobody you're level with or chasing is on your team
+             (ties go your way);
+   - worst = everyone who could catch you is on your team (ties go against you).
+   It only states a place when best and worst agree; otherwise it says "could". */
+function matchDayLine(ranked,asPid){
+  const me=asPid?{pid:asPid}:fplMine(), i=me&&ranked?ranked.findIndex(x=>x.id===me.pid):-1;
   if(i<0)return 'Next up \u00b7 '+nextSundayLabel();
-  const mine=(ranked[i].pts||0)+3;
-  const better=ranked.filter((x,j)=>j!==i&&(x.pts||0)>mine).length, to=better+1;
-  if(to===1)return i===0?'Win and you stay top':'Win and you go top';
-  return to<i+1?`Win and you go ${ordLow(to)}`:`Win to stay ${ordLow(i+1)}`;
+  const cur=i+1, mine=(ranked[i].pts||0)+3, others=ranked.filter((x,j)=>j!==i);
+  /* teammates who also get the three points: the usual side size, less you */
+  const last=allGames().slice(-1)[0];
+  const side=last?Math.max((last.teamA||[]).length,(last.teamB||[]).length):7;
+  const mates=Math.max(0,(side||7)-1);
+  const above=others.filter(x=>(x.pts||0)>mine).length;            /* out of reach even if they lose */
+  const level=others.filter(x=>(x.pts||0)===mine).length;          /* level now, stay level if they lose */
+  const catchers=others.filter(x=>(x.pts||0)<mine&&(x.pts||0)+3>=mine).length; /* reach you only by winning too */
+  const best=above+1;
+  const worst=Math.min(ranked.length,above+level+Math.min(mates,catchers)+1);
+  const top=n=>n===1?'top':ordLow(n);
+  if(best===worst){
+    if(best===1)return cur===1?'Win and you stay top':'Win and you go top';
+    return best<cur?`Win and you go ${ordLow(best)}`:`Win and you stay ${ordLow(best)}`;
+  }
+  if(best<cur)return worst<cur?`Win and you go ${ordLow(best)}\u2013${ordLow(worst)}`:`A win could take you ${top(best)}`;
+  return `A win could keep you ${top(cur)}`;
 }
 function vHomeBody(){
   const S=season(),lc=lgComp(),st=lgStats(),g=compGames(lc.id),ag=allGames(),m=movement(lc.id);
@@ -9902,7 +9940,7 @@ function vPlayer(pid){
               </div>`:''}
             </div>
           </div>
-          <div class="idxbar"><i style="width:${Math.max(3,m.index)}%"></i></div>
+          <div class="idxbar"><i style="width:${Math.max(3,Math.min(100,(m.index-50)*2))}%"></i></div>
         </div>`;
       })()}
 
@@ -17407,7 +17445,7 @@ function skyPotsRace(){
         <span class="skr-n">${esc(x.name)}<i>${esc(posOf(x.id))} · ${x.P} game${x.P===1?'':'s'}</i></span>
         <b class="skr-v">${x.index||0}</b></div>`).join('')}
       ${all.length>5?`<button class="lvltoggle sk-more" onclick="SKYR_ALL=!SKYR_ALL;render()">${SKYR_ALL?'Show top 5 ▴':`All ${all.length} ▾`}</button>`:''}
-      <div class="skr-f">The rating out of 100: goals 25% and assists 20% a game, defending 30% (goals let in against each game's level) — all three against your own position — then winning 15% and turning up 10%.</div>
+      <div class="skr-f">The rating, FC-style: your place in the squad for goals a game 25%, assists 20%, goals let in 30%, points a game 15% and games played 10% — the same numbers as the attribute card — shown from about 55 up to 99.</div>
     </div>
     <div class="chips race-chips skr-chips">${[['ALL','Overall'],['ATT','ATT'],['MID','MID'],['DEF','DEF']].map(([k,l])=>`<button class="${SKYRPOS===k?'on':''}" onclick="SKYRPOS='${k}';SKYR_ALL=false;render()">${l}</button>`).join('')}</div>`;
 }
@@ -22157,7 +22195,7 @@ const STAT_VIEWS={
 };
 const STAT_HELP={
   P:'Games played', G:'Goals scored', A:'Assists', GA_:'Goals and assists added together',
-  pts:'League points — 3 for a win, 1 for a draw', index:'Player rating out of 100. Goals 25%, assists 20% and defending 30%, each scored against your own position; winning 15%; turning up 10%.',
+  pts:'League points — 3 for a win, 1 for a draw', index:'Player rating, FC-style (about 55 to 99). Built from the attribute card: Finishing 25%, Creating 20%, Defending 30%, Winning 15%, Availability 10%.',
   gpg:'Goals divided by games', apg:'Assists divided by games',
   GA:'Goals your team let in while you were on the pitch', cpg:'Those goals divided by games — lower is better',
   cs:'Games where your team conceded nothing', GF:'Goals your team scored while you were on',
@@ -22412,7 +22450,7 @@ function statLeaders(st){
     <div>${leadBlock('Points per game','📈',top('ppg'),i2,'Minimum 1 game')}
       ${leadBlock('Goals per game','🎯',top('gpg'),i2)}
       ${leadBlock('Win rate','💪',top('wr'),pc)}
-      ${leadBlock('Player rating','💎',top('index'),i0,'Out of 100. Goals 25%, assists 20%, defending 30% (each against your own position), winning 15%, appearances 10% — so a defender competes with defenders, not with the top scorer.')}
+      ${leadBlock('Player rating','💎',top('index'),i0,'FC-style, about 55 to 99. The attribute card numbers — Finishing 25%, Creating 20%, Defending 30%, Winning 15%, Availability 10% — so defending counts as much as scoring.')}
       ${leadBlock('Assists per game',ssNamed('Assists',22),top('apg'),i2)}
       ${leadBlock('Fewest conceded per game','🛡️',low('cpg'),i1,'Minimum 2 games')}</div>
   </div>`;
@@ -23460,7 +23498,7 @@ function vLeague(){
                 Otherwise it is skipped entirely</div></div></div>
           <div class="row"><div style="flex:0 0 24px;font-weight:800;color:var(--label3)">3</div>
             <div class="rt"><div class="r1">Player rating</div>
-              <div class="r2">Out of 100 — attacking against your own position, winning, defending and turning up</div></div></div>
+              <div class="r2">FC-style — the attribute card: finishing, creating, defending, winning and turning up</div></div></div>
           <div class="row"><div style="flex:0 0 24px;font-weight:800;color:var(--label3)">4</div>
             <div class="rt"><div class="r1">Goals scored</div>
               <div class="r2">Your own goals</div></div></div>
