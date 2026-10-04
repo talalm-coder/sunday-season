@@ -19823,8 +19823,10 @@ async function syncClock(){
     const t0=performance.now();
     const r=await fetch(location.pathname+'?clock='+Date.now(),{method:'HEAD',cache:'no-store'});
     const d=r.headers.get('date'); if(!d)return false;
-    const age=Math.max(0,+(r.headers.get('age')||0))||0;   /* a cached copy: Date is when it was made, Age is how long ago */
-    const t1=performance.now(), srv=Date.parse(d)+age*1000; if(!isFinite(srv))return false;
+    /* GW5 bug: the Age header was added on, but Vercel's Date is already "now" and
+       Age is how long its CDN has held the file — hours — so the clock jumped
+       ahead and locked bets and fantasy at 1pm. Date alone is the server time. */
+    const t1=performance.now(), srv=Date.parse(d); if(!isFinite(srv))return false;
     /* the header is whole seconds: take the middle of that second and of the round trip */
     CLK={base:srv+500,perf:(t0+t1)/2,srv:true};
     return true;
