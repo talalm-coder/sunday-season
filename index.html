@@ -6661,13 +6661,19 @@ html[data-theme="dark"] .bk-chips.bk-book{background:#1C1C1E}
 .pm-per span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pm-per:after{content:"";position:absolute;right:12px;top:50%;width:6px;height:6px;margin-top:-5px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg)}
 .pm-per select{position:absolute;inset:0;opacity:0;width:100%;font-size:16px}
+.pm-pills{display:flex;flex-wrap:wrap;gap:8px;margin:-2px 2px 10px}
+.pm-pills .pm-per{max-width:100%}
+.pm-per.pm-st{background:var(--ss-soft);color:var(--ss-ink)}
+.pm-per.pm-st:after{border-color:var(--ss-ink)}
+html[data-theme="dark"] .pm-per.pm-st{background:#2A2A2D;color:#fff}
+html[data-theme="dark"] .pm-per.pm-st:after{border-color:#fff}
 .pm-list{padding:2px 0}
 .pmr{display:flex;align-items:center;gap:8px;padding:8px 12px;min-height:56px}
 .pmr+.pmr{border-top:1px solid var(--hair)}
 .pmr-who{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;text-align:left;min-height:44px}
 .pmr-who>span{min-width:0}
 .pmr-who b{display:block;font-size:14.5px;font-weight:700;color:var(--ss-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pmr-who i{display:block;font-style:normal;font-size:11px;color:var(--ss-muted);white-space:nowrap}
+.pmr-who i{display:block;font-style:normal;font-size:11px;color:var(--ss-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pmr-pc{flex:0 0 44px;text-align:right;font-size:17px;font-weight:900;color:var(--ss-ink);letter-spacing:-.02em}
 .pmr-bt{flex:0 0 auto;display:flex;gap:5px}
 .pmy,.pmn{min-height:40px;min-width:58px;padding:0 8px;border-radius:10px;font-size:12.5px;font-weight:800;white-space:nowrap}
@@ -8019,7 +8025,11 @@ function potm(){
           e.def=(e.def||0)+Math.max(-1,Math.min(1,(par-(ga??0))/par));
         })});
     });
-    const arr=Object.values(m).filter(x=>x.P>=2&&ranksInTable(x.id));
+    /* two games to qualify — but early in a month nobody may have two yet
+       (one game on the first Sunday), so the bar is never above the most
+       anyone has played. The live month shows from its first game. */
+    const mxP=Math.max(0,...Object.values(m).filter(x=>ranksInTable(x.id)).map(x=>x.P));
+    const arr=Object.values(m).filter(x=>x.P>=Math.min(2,mxP)&&x.P>0&&ranksInTable(x.id));
     if(!arr.length)return;
     /* Round 11 (b): an individual award. The result of the game plays no part,
        so a player who loses but performs can win it. Three things per game —
@@ -8060,7 +8070,7 @@ function potmBlock(){
       ? `<button class="act ss-act pm-share" onclick="sharePotm()">${ssTile("share-gameweek",18)}Share</button>`
       : `<span style="text-transform:none;font-weight:500;color:var(--label3)">${MONTHNAME(cur.month)}</span>`)}
     <div class="pm-card pop">
-      <div class="pm-eyebrow">${esc(String(MONTHNAME(cur.month)).toUpperCase())} · ${cur.games} GAME${cur.games===1?'':'S'}</div>
+      <div class="pm-eyebrow">${esc(String(MONTHNAME(cur.month)).toUpperCase())}${cur.month===new Date(nowMs()+DUBAI_OFF).toISOString().slice(0,7)?' SO FAR':''} · ${cur.games} GAME${cur.games===1?'':'S'}</div>
       <div class="pm-win" onclick="openPlayer('${w.id}')">
         <div class="pm-av">${avatar(p,56)}<span class="pm-medal">🏅</span></div>
         <div class="pm-name">${esc(String(w.name).toUpperCase())}</div>
@@ -22157,11 +22167,31 @@ function prSeasonEnd(){
 }
 function prRng(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296 } }
 function prPois(l,r){ const L=Math.exp(-l); let k=0,p=1; do{ k++; p*=r() }while(p>L&&k<30); return k-1 }
-const PM_STATS={goals:{t:'Top scorer',s:'Scorer'},assists:{t:'Most assists',s:'Assists'},table:{t:'Top of the table',s:'Table'},top3:{t:'Top 3 finish',s:'Top 3'}};
+/* ---- Round 15 (e): one simulation of the rest of the season prices every market ----
+   Every price comes from the same 2,000 simulated rest-of-seasons, run from the
+   league as it stands today. So the markets agree with each other (Top 3 is never
+   below 1st, Top 5 never below Top 3, Christmas and the season come from the same
+   paths) and with the app (league games only, the table's own order, the Best
+   defence rule). It reruns after every logged game; trades move the price on top.
+   Each simulated Sunday: who turns up (from how often each player has come,
+   recent weeks counting double), that Sunday's games with fresh teams, goals and
+   assists from each player's own rate (with the uncertainty a few games leave),
+   and the score from both sides' scoring and conceding. */
+const PM_STATS={
+  goals:{t:'Top scorer',g:'pl',s:'Goals'},
+  assists:{t:'Most assists',g:'pl',s:'Assists'},
+  gc:{t:'Fewest conceded',g:'pl',s:'Fewest conceded'},
+  table:{t:'Top of the table',g:'tb',s:'1st',n:1},
+  top3:{t:'Top 3 finish',g:'tb',s:'Top 3',n:3},
+  top5:{t:'Top 5 finish',g:'tb',s:'Top 5',n:5},
+  top7:{t:'Top 7 finish',g:'tb',s:'Top 7',n:7},
+  top10:{t:'Top 10 finish',g:'tb',s:'Top 10',n:10}};
+const PM_TOPN=['table','top3','top5','top7','top10'];
 const PM_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const PM_MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
-let PMC='goals', PMP=null, PMK=null, PMSIDE='Y', PMAMT=500;
-/* the periods you can pick, soonest first */
+const PM_SIMS=1200;
+let PMC='pl', PMPL='goals', PMTB='table', PMP=null, PMK=null, PMSIDE='Y', PMAMT=500;
+/* the periods you can pick, soonest first. December is just "By Christmas". */
 function pmPeriods(){
   const out=[], now=nowMs(), gw=fplNextGw(), seasonEnd=prSeasonEnd();
   if(!playedGws().includes(gw))out.push({id:'gw'+gw,kind:'gw',gw,lab:`This Sunday (GW${gw})`,sh:`This Sunday (GW${gw})`,close:betsClosed()?sundayLockBefore(now):sundayLockAfter(now),end:null});
@@ -22169,9 +22199,8 @@ function pmPeriods(){
   for(let i=0;i<12;i++){
     const end=Date.UTC(y,mo+1,1)-DUBAI_OFF-60e3;
     if(end>seasonEnd-864e5)break;
-    const close=sundayLockBefore(end);
-    if(close>now)out.push({id:`m${y}-${mo+1}`,kind:'month',lab:`By the end of ${PM_MONL[mo]}`,sh:PM_MON[mo],close,end});
-    if(mo===11){ const xe=Date.UTC(y,11,25,23,59)-DUBAI_OFF, xc=sundayLockBefore(xe); if(xc>now)out.splice(out.length-(close>now?1:0),0,{id:`x${y}`,kind:'xmas',lab:'By Christmas',sh:'Christmas',close:xc,end:xe}) }
+    if(mo===11){ const xe=Date.UTC(y,11,25,23,59)-DUBAI_OFF, xc=sundayLockBefore(xe); if(xc>now)out.push({id:`x${y}`,kind:'xmas',lab:'By Christmas',sh:'Christmas',close:xc,end:xe}) }
+    else { const close=sundayLockBefore(end); if(close>now)out.push({id:`m${y}-${mo+1}`,kind:'month',lab:`By the end of ${PM_MONL[mo]}`,sh:PM_MON[mo],close,end}) }
     mo++; if(mo>11){mo=0;y++}
   }
   const sc=sundayLockBefore(seasonEnd); if(sc>now)out.push({id:'season',kind:'season',lab:'End of the season',sh:'Season',close:sc,end:seasonEnd});
@@ -22179,102 +22208,169 @@ function pmPeriods(){
 }
 function pmPeriod(id){ return pmPeriods().find(p=>p.id===id)||null }
 function pmPool(){ return season().players.filter(p=>p.active!==false&&ranksInTable(p.id)) }
-/* games that count for a period, and the standings from them */
+/* the league games (cups and friendlies don't count), scored */
+function pmLeague(){ return compGames(lgComp().id).filter(g=>g.scoreA!=null&&g.scoreB!=null) }
 function pmGamesTo(per){
-  const gs=allGames().filter(g=>g.scoreA!=null&&g.scoreB!=null);
+  const gs=pmLeague();
   if(per.kind==='gw')return gs.filter(g=>(gwOf(g)||0)<=per.gw);
   const day=new Date(per.end+DUBAI_OFF).toISOString().slice(0,10);
   return gs.filter(g=>String(g.date||'').slice(0,10)<=day);
 }
 function pmStand(games,ids){
-  const T={}; ids.forEach(id=>T[id]={G:0,A:0,pts:0,W:0,P:0});
-  games.forEach(g=>[['A',g.teamA],['B',g.teamB]].forEach(([sd,team])=>(team||[]).forEach(id=>{ const t=T[id]; if(!t)return;
-    t.P++; t.G+=(g.goals&&g.goals[id])||0; t.A+=(g.assists&&g.assists[id])||0; if(g.result==='D')t.pts++; else if(g.result===sd){t.pts+=3;t.W++} })));
+  const T={}; ids.forEach(id=>T[id]={G:0,A:0,GA:0,GF:0,pts:0,W:0,P:0});
+  games.forEach(g=>[['A',g.teamA,g.scoreB,g.scoreA],['B',g.teamB,g.scoreA,g.scoreB]].forEach(([sd,team,ga,gf])=>(team||[]).forEach(id=>{ const t=T[id]; if(!t)return;
+    t.P++; t.GF+=gf||0; t.G+=(g.goals&&g.goals[id])||0; t.A+=(g.assists&&g.assists[id])||0; t.GA+=ga||0; if(g.result==='D')t.pts++; else if(g.result===sd){t.pts+=3;t.W++} })));
   return T;
 }
-/* how many games are left in a period */
-function pmGamesLeft(per){
-  const gs=allGames(), perGw=gs.length/Math.max(1,playedGws().length)||1;
-  if(per.kind==='gw')return Math.max(1,gamesInGw(per.gw).filter(g=>g.scoreA==null).length||Math.round(perGw));
-  let n=0, t=sundayLockAfter(nowMs()-1); const lastDay=new Date(per.end+DUBAI_OFF).toISOString().slice(0,10);
-  while(new Date(t+DUBAI_OFF).toISOString().slice(0,10)<=lastDay&&n<60){ n++; t=sundayLockAfter(t+60e3) }
-  if(betsClosed())n++;   /* this Sunday has been played but not logged yet */
-  return Math.round(n*perGw);
+/* the Sundays left: this one first (even after the deadline, until it's logged) */
+function pmSundays(){
+  const now=nowMs(), end=prSeasonEnd(), out=[]; let t=betsClosed()?sundayLockBefore(now):sundayLockAfter(now);
+  while(t<=end&&out.length<60){ out.push(t); t=sundayLockAfter(t+60e3) }
+  return out;
+}
+/* random numbers for the model */
+function pmNorm(r){ const u=r()||1e-12, v=r(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v) }
+function pmGamma(k,r){
+  if(k<1){ const u=r()||1e-12; return pmGamma(k+1,r)*Math.pow(u,1/k) }
+  const d=k-1/3, c=1/Math.sqrt(9*d);
+  for(let it=0;it<50;it++){ let x,v; do{ x=pmNorm(r); v=1+c*x }while(v<=0); v=v*v*v; const u=r()||1e-12;
+    if(u<1-.0331*x*x*x*x||Math.log(u)<.5*x*x+d*(1-v+Math.log(v)))return d*v }
+  return k;
+}
+function pmBeta(a,b,r){ const x=pmGamma(a,r), y=pmGamma(b,r); return x/Math.max(1e-12,x+y) }
+/* the periods to price: the ones on offer, plus any older one still holding money */
+function pmSnapList(){
+  const L=pmPeriods().map(p=>({id:p.id,kind:p.kind,gw:p.gw,end:p.end}));
+  Object.values(pmStore()).forEach(m=>{ if(m.status==='open'&&m.per&&!L.some(x=>x.id===m.per))L.push({id:m.per,kind:m.kind,gw:m.gw,end:m.end}) });
+  return L;
 }
 let PM_MEMO={};
-function pmModel(per){
-  const sig=[allGames().length,allGames().reduce((t,g)=>t+(g.scoreA||0)*7+(g.scoreB||0),0),season().players.length,per.id,Math.floor(nowMs()/864e5)].join('|');
-  if(PM_MEMO[sig])return PM_MEMO[sig];
-  const pool=pmPool(), ids=pool.map(p=>p.id), all=allGames().filter(g=>g.scoreA!=null);
-  const NG=Math.max(1,all.length), st=pmStand(all,ids);
-  /* priors by position */
-  const posAvg={}; ['GK','DEF','MID','ATT'].forEach(pos=>{ const L=pool.filter(p=>(p.pos||'MID')===pos); const P=L.reduce((t,p)=>t+st[p.id].P,0);
-    posAvg[pos]={g:P?L.reduce((t,p)=>t+st[p.id].G,0)/P:null,a:P?L.reduce((t,p)=>t+st[p.id].A,0)/P:null} });
+function pmPois(l,r){ if(l<=0)return 0; if(l>20)return Math.max(0,Math.round(l+Math.sqrt(l)*pmNorm(r))); const L=Math.exp(-l); let k=0,p=1; do{ k++; p*=r() }while(p>L&&k<80); return k-1 }
+function pmSim(){
+  const L=pmLeague(), pool=pmPool(), ids=pool.map(p=>p.id), n=ids.length, sund=pmSundays(), snaps=pmSnapList();
+  const sig=[L.length,L.reduce((t,g)=>t+(g.scoreA||0)*7+(g.scoreB||0)*3+Object.values(g.goals||{}).reduce((a,b)=>a+(+b||0),0)+Object.values(g.assists||{}).reduce((a,b)=>a+(+b||0),0)*5,0),ids.join(','),sund[0]||0,sund.length,snaps.map(s=>s.id).join(',')].join('|');
+  if(PM_MEMO.sig===sig)return PM_MEMO.out;
+  try{ const c=JSON.parse(localStorage.getItem('ss_pm_sim')||'null'); if(c&&c.sig===sig&&c.v===1){ PM_MEMO={sig,out:c.out}; return c.out } }catch(e){}
+  const st=pmStand(L,ids), K=3, KS=8;
+  /* scoring priors by position */
+  const posAvg={}; ['GK','DEF','MID','ATT'].forEach(pos=>{ const Lp=pool.filter(p=>(p.pos||'MID')===pos); const P=Lp.reduce((t,p)=>t+st[p.id].P,0);
+    posAvg[pos]={g:P?Lp.reduce((t,p)=>t+st[p.id].G,0)/P:null,a:P?Lp.reduce((t,p)=>t+st[p.id].A,0)/P:null} });
   const totP=ids.reduce((t,id)=>t+st[id].P,0)||1, avgG=ids.reduce((t,id)=>t+st[id].G,0)/totP, avgA=ids.reduce((t,id)=>t+st[id].A,0)/totP;
-  const draws=all.filter(g=>g.result==='D').length/NG;
-  const recent=all.slice().sort((a,b)=>(a.created||0)-(b.created||0)).slice(-8);
-  const K=3;
+  /* the league's own numbers: goals a side, side size, goals nobody was credited with, assists per goal, spread of results */
+  let slots=0, sc=0, cred=0, ast=0, gd2=0; L.forEach(g=>{ slots+=(g.teamA||[]).length+(g.teamB||[]).length; sc+=(g.scoreA||0)+(g.scoreB||0);
+    cred+=Object.values(g.goals||{}).reduce((a,b)=>a+(+b||0),0); ast+=Object.values(g.assists||{}).reduce((a,b)=>a+(+b||0),0); gd2+=Math.pow((g.scoreA||0)-(g.scoreB||0),2) });
+  const NG=Math.max(1,L.length), mu=sc/(2*NG)||3, side=slots/(2*NG)||7, uShare=sc?Math.max(0,(sc-cred)/sc):0, pAst=cred?Math.min(1,ast/cred):.5, sdGD=Math.max(1,Math.sqrt(gd2/NG));
+  /* attendance by week, the last four weeks counting double */
+  const gws=[...new Set(L.map(g=>gwOf(g)).filter(x=>x!=null))].sort((a,b)=>a-b), NW=gws.length, rec=new Set(gws.slice(-4));
+  const gpw=NW?L.length/NW:1;
   const M=pool.map(p=>{ const s=st[p.id], pa=posAvg[p.pos||'MID']||{};
-    const rec=recent.length?recent.filter(g=>h2hSide(g,p.id)).length/recent.length:0;
-    const att=Math.min(.97,Math.max(.02,.5*((s.P+.5)/(NG+1))+.5*((rec*recent.length+.5)/(recent.length+1))));
-    const ppg=(s.pts+K*1.4)/(s.P+K);
-    return {id:p.id,att,g:(s.G+K*(pa.g??avgG))/(s.P+K),a:(s.A+K*(pa.a??avgA))/(s.P+K),sk:ppg-1.4} });
-  const inGw=per.kind==='gw', base=inGw?pmStand(all.filter(g=>gwOf(g)===per.gw),ids):pmStand(pmGamesTo(per),ids);
-  const tableBase=inGw?pmStand(all,ids):base;
-  const R=pmGamesLeft(per), N=3000, r=prRng(9001+NG*131+ids.length*7+per.id.split('').reduce((t,c)=>t+c.charCodeAt(0)*31,0));
-  const C={goals:{},assists:{},table:{},top3:{}}; ids.forEach(id=>{ for(const k in C)C[k][id]=0 });
-  const n=M.length;
+    const wk=new Set(L.filter(g=>h2hSide(g,p.id)).map(g=>gwOf(g)).filter(x=>x!=null)), w=wk.size, wr=[...wk].filter(x=>rec.has(x)).length;
+    return {id:p.id,
+      ga:s.G+K*(pa.g??avgG)+.01, gb:s.P+K, aa:s.A+K*(pa.a??avgA)+.01, ab:s.P+K,
+      ta:.5+w+wr, tb:.5+(NW-w)+(rec.size-wr),
+      /* strength: goal difference a game while on the pitch, pulled hard towards
+         zero (teams are reshuffled every game, so most of it is luck) */
+      sm:(s.GF-s.GA)/(s.P+KS), ss:sdGD/Math.sqrt(s.P+KS)} });
+  /* how many simulated Sundays each period covers */
+  const SN=snaps.map(s=>({...s,n:s.kind==='gw'?Math.min(1,sund.length):sund.filter(t=>t<=s.end).length}));
+  const xmas=SN.find(s=>s.kind==='xmas'), nX=xmas?xmas.n:0, maxN=Math.max(0,...SN.map(s=>s.n));
+  const hash=sig.split('').reduce((t,ch)=>(t*31+ch.charCodeAt(0))>>>0,7), r=prRng(hash);
+  const C={}; SN.forEach(s=>{ C[s.id]={}; Object.keys(PM_STATS).forEach(k=>C[s.id][k]=new Float64Array(n)) });
+  /* what has already happened this season, for the specials */
+  let pastHaul=0, pastTot=0; L.forEach(g=>{ pastTot=Math.max(pastTot,(g.scoreA||0)+(g.scoreB||0)); Object.values(g.goals||{}).forEach(v=>pastHaul=Math.max(pastHaul,+v||0)) });
+  const SP={tot:[],marg:[],hat:0,draw:0,haul:[],xtot:[],reach:[],pastHaul,pastTot};
+  const N=n>=2&&L.length?PM_SIMS:0;
+  const gr=new Float64Array(n), ar=new Float64Array(n), at=new Float64Array(n), sk=new Float64Array(n), tie=new Float64Array(n), gg=new Float64Array(n);
+  const P=new Float64Array(n), G=new Float64Array(n), A=new Float64Array(n), GA=new Float64Array(n), T=new Float64Array(n), W=new Float64Array(n);
+  const wP=new Float64Array(n), wG=new Float64Array(n), wA=new Float64Array(n), wGA=new Float64Array(n);
+  const here=new Int32Array(n), key=new Float64Array(n), used=new Uint8Array(n);
+  const snapAt=(s,played)=>{
+    const c=C[s.id], gwOnly=s.kind==='gw';
+    const g_=gwOnly?wG:G, a_=gwOnly?wA:A, p_=gwOnly?wP:P, ga_=gwOnly?wGA:GA;
+    let mx=0; for(let i=0;i<n;i++)if(g_[i]>mx)mx=g_[i]; if(mx>0)for(let i=0;i<n;i++)if(g_[i]===mx)c.goals[i]++;
+    mx=0; for(let i=0;i<n;i++)if(a_[i]>mx)mx=a_[i]; if(mx>0)for(let i=0;i<n;i++)if(a_[i]===mx)c.assists[i]++;
+    const minP=gwOnly?1:2; let mn=Infinity; for(let i=0;i<n;i++)if(p_[i]>=minP){ const v=ga_[i]/p_[i]; if(v<mn)mn=v }
+    if(mn<Infinity)for(let i=0;i<n;i++)if(p_[i]>=minP&&Math.abs(ga_[i]/p_[i]-mn)<1e-9)c.gc[i]++;
+    /* the table's own order: points, then win rate once played enough, goals, fewest conceded.
+       Only the top ten matter, so pick them out rather than sort everyone. */
+    const thr=Math.max(3,Math.ceil(played*.5));
+    for(let i=0;i<n;i++)key[i]=P[i]>0?T[i]*1e9+(P[i]>=thr?Math.round(W[i]/P[i]*999)*1e6:0)+G[i]*1e3-GA[i]+tie[i]:-Infinity;
+    used.fill(0);
+    for(let j=0;j<Math.min(10,n);j++){ let bi=-1, bv=-Infinity; for(let i=0;i<n;i++)if(!used[i]&&key[i]>bv){bv=key[i];bi=i}
+      if(bi<0)break; used[bi]=1; for(const k of PM_TOPN)if(j<PM_STATS[k].n)c[k][bi]++ }
+  };
+  /* one side's goals: total from both sides' strength, then shared out by scoring rate */
+  const score=(lo,hi,lam,w0)=>{
+    const tot=pmPois(lam,r); let wsum=0; for(let k=lo;k<hi;k++)wsum+=gr[here[k]]; const wu=wsum*uShare/Math.max(.01,1-uShare);
+    for(let gl=0;gl<tot;gl++){ let x=r()*(wsum+wu); if(x>=wsum)continue;
+      let sc=lo; for(;sc<hi-1;sc++){ x-=gr[here[sc]]; if(x<0)break } const who=here[sc]; gg[who]++;
+      if(r()<pAst&&hi-lo>1){ let as=0; for(let k=lo;k<hi;k++)if(here[k]!==who)as+=ar[here[k]];
+        if(as>0){ let y=r()*as, aw=-1; for(let k=lo;k<hi;k++){ const j=here[k]; if(j===who)continue; aw=j; y-=ar[j]; if(y<0)break } if(aw>=0){ A[aw]++; if(w0)wA[aw]++ } } } }
+    return tot };
   for(let s=0;s<N;s++){
-    const G=M.map(m=>base[m.id].G), A=M.map(m=>base[m.id].A), T=M.map(m=>tableBase[m.id].pts), W=M.map(m=>tableBase[m.id].W), GT=M.map(m=>tableBase[m.id].G);
-    for(let g=0;g<R;g++){
-      const here=[]; for(let i=0;i<n;i++)if(r()<M[i].att)here.push(i);
-      if(here.length<2)continue;
-      for(let i=here.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [here[i],here[j]]=[here[j],here[i]] }
-      const h=here.length>>1, sa=here.slice(0,h), sb=here.slice(h);
-      const str=x=>x.reduce((t,i)=>t+M[i].sk,0)/Math.max(1,x.length);
-      const pa=(1-draws)/(1+Math.exp(-2.2*(str(sa)-str(sb)))), u=r();
-      const res=u<pa?'A':u<pa+draws?'D':'B';
-      here.forEach((i,k)=>{ const gl=prPois(M[i].g,r), as=prPois(M[i].a,r); G[i]+=gl; A[i]+=as; GT[i]+=gl;
-        const sd=k<h?'A':'B'; if(res==='D')T[i]+=1; else if(res===sd){T[i]+=3;W[i]++} });
+    for(let i=0;i<n;i++){ const m=M[i], b=st[m.id];
+      gr[i]=pmGamma(m.ga,r)/m.gb; ar[i]=pmGamma(m.aa,r)/m.ab; at[i]=pmBeta(m.ta,m.tb,r); sk[i]=m.sm+m.ss*pmNorm(r); tie[i]=r();
+      P[i]=b.P; G[i]=b.G; A[i]=b.A; GA[i]=b.GA; T[i]=b.pts; W[i]=b.W; wP[i]=wG[i]=wA[i]=wGA[i]=0 }
+    let played=L.length, haul=pastHaul, xt=pastTot, wTot=0, wMarg=0, wHat=0, wDraw=0;
+    for(let w=0;w<maxN;w++){
+      let h0=0; for(let i=0;i<n;i++)if(r()<at[i])here[h0++]=i;
+      if(h0>=4){
+        const ng=Math.max(1,Math.floor(gpw)+(r()<gpw%1?1:0));
+        for(let gi=0;gi<ng;gi++){
+          for(let i=h0-1;i>0;i--){ const j=Math.floor(r()*(i+1)); const t=here[i]; here[i]=here[j]; here[j]=t }
+          const h=h0>>1; let sA=0,sB=0; for(let k=0;k<h;k++)sA+=sk[here[k]]; for(let k=h;k<h0;k++)sB+=sk[here[k]];
+          const d=sA/h-sB/(h0-h), base=mu*(h0/2)/side;
+          for(let k=0;k<h0;k++)gg[here[k]]=0;
+          const gA=score(0,h,Math.max(.2,base+d/2),w===0), gB=score(h,h0,Math.max(.2,base-d/2),w===0);
+          const res=gA>gB?'A':gA<gB?'B':'D'; let top=0;
+          for(let k=0;k<h0;k++){ const i=here[k], sd=k<h?'A':'B', ga=sd==='A'?gB:gA; P[i]++; GA[i]+=ga; G[i]+=gg[i]; if(gg[i]>top)top=gg[i];
+            if(res==='D')T[i]+=1; else if(res===sd){T[i]+=3;W[i]++}
+            if(w===0){ wP[i]++; wGA[i]+=ga; wG[i]+=gg[i] } }
+          if(w===0){ wTot=Math.max(wTot,gA+gB); wMarg=Math.max(wMarg,Math.abs(gA-gB)); if(top>=3)wHat=1; if(res==='D')wDraw=1 }
+          if(w<nX){ haul=Math.max(haul,top); xt=Math.max(xt,gA+gB) }
+          played++;
+        }
+      }
+      for(const q of SN)if(q.n===w+1)snapAt(q,played);
+      if(w===0){ SP.tot.push(wTot); SP.marg.push(wMarg); SP.hat+=wHat; SP.draw+=wDraw }
+      if(w+1===nX){ SP.haul.push(haul); SP.xtot.push(xt); let mg=0; for(let i=0;i<n;i++)if(G[i]>mg)mg=G[i]; SP.reach.push(mg) }
     }
-    const top=(arr,k)=>{ const mx=Math.max(...arr); if(mx<=0)return; for(let i=0;i<n;i++)if(arr[i]===mx)C[k][M[i].id]++ };
-    top(G,'goals'); top(A,'assists');
-    const ord=M.map((m,i)=>({i,v:T[i]*1e6+W[i]*1e3+GT[i]+r()*.5})).sort((x,y)=>y.v-x.v);
-    C.table[M[ord[0].i].id]++; ord.slice(0,3).forEach(o=>C.top3[M[o.i].id]++);
+    for(const q of SN)if(q.n===0)snapAt(q,played);
   }
-  const out={R,N}; for(const k in C){ out[k]={}; ids.forEach(id=>out[k][id]=C[k][id]/N) }
-  PM_MEMO={[sig]:out}; return out;
+  const out={N,sig,per:{},SP,R:maxN,ids};
+  SN.forEach(q=>{ const o={}; Object.keys(PM_STATS).forEach(k=>{ o[k]={}; ids.forEach((id,i)=>o[k][id]=N?C[q.id][k][i]/N:0) }); out.per[q.id]=o });
+  PM_MEMO={sig,out}; try{ localStorage.setItem('ss_pm_sim',JSON.stringify({v:1,sig,out})) }catch(e){}
+  return out;
 }
-/* specials: this Sunday's goals line and a hat-trick, and the two Christmas one-offs */
+function pmModel(per){
+  const S=pmSim(); if(S.per[per.id])return S.per[per.id];
+  const o={}; Object.keys(PM_STATS).forEach(k=>o[k]={}); return o;
+}
+/* specials, priced from the same simulation. Lines sit near even money. */
 function pmSpecials(){
-  const gs=allGames().filter(g=>g.scoreA!=null), NG=Math.max(1,gs.length), stl=lgStats().filter(x=>x.P>0);
-  const avgG=stl.reduce((t,x)=>t+x.G,0)/Math.max(1,stl.reduce((t,x)=>t+x.P,0));
-  const tail=(l,k)=>{ let c=0,t=Math.exp(-l); for(let i=0;i<k;i++){ c+=t; t*=l/(i+1) } return Math.max(0,1-c) };
-  const haul=k=>1-stl.reduce((q,x)=>q*(1-Math.min(1,x.P/NG)*tail((x.G+3*avgG)/(x.P+3),k)),1);
-  const tots=gs.map(g=>(g.scoreA||0)+(g.scoreB||0)), mu=tots.reduce((t,v)=>t+v,0)/NG, sd=Math.max(3,Math.sqrt(tots.reduce((t,v)=>t+(v-mu)*(v-mu),0)/NG));
-  const phi=z=>{ const t=1/(1+.2316419*Math.abs(z)), d=.3989423*Math.exp(-z*z/2), p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return z>0?1-p:p };
-  const over=t=>1-phi((t-.5-mu)/sd);
-  const out=[];
-  const P=pmPeriods(), w=P.find(p=>p.kind==='gw'), x=P.find(p=>p.kind==='xmas')||{kind:'xmas',id:'x'+new Date(nowMs()+DUBAI_OFF).getUTCFullYear(),end:Date.UTC(new Date(nowMs()+DUBAI_OFF).getUTCFullYear(),11,25,23,59)-DUBAI_OFF};
-  if(gs.length>=3&&w){
-    const line=Math.max(4,Math.round(mu)), games=pmGamesLeft(w);
-    out.push({k:`sp|over|${w.id}|${line}`,per:w,q:`${line}+ goals this Sunday (GW${w.gw})?`,model:1-Math.pow(1-over(line),games),note:`Yes if the GW${w.gw} game has ${line} or more goals in total.`});
-    out.push({k:`sp|hat|${w.id}`,per:w,q:`A hat-trick this Sunday (GW${w.gw})?`,model:1-Math.pow(1-haul(3),games),note:`Yes if anyone scores three or more in a GW${w.gw} game.`});
+  const S=pmSim(), N=S.N, out=[]; if(!N||pmLeague().length<3)return out;
+  const P=pmPeriods(), w=P.find(p=>p.kind==='gw'), x=P.find(p=>p.kind==='xmas');
+  const atLeast=(arr,v)=>arr.filter(a=>a>=v).length/Math.max(1,arr.length);
+  const line=(arr,lo)=>{ let best=lo, bd=9; for(let v=lo;v<lo+80;v++){ const p=atLeast(arr,v), d=Math.abs(p-.5); if(d<bd){bd=d;best=v} if(p<.2)break } return best };
+  if(w&&S.SP.tot.length){
+    const t=line(S.SP.tot,4), mg=line(S.SP.marg,2);
+    out.push({k:`sp|over|${w.id}|${t}`,per:w,q:`A ${t}+ goal game this Sunday?`,model:atLeast(S.SP.tot,t),note:`Yes if any GW${w.gw} league game has ${t} or more goals in total.`});
+    out.push({k:`sp|hat|${w.id}`,per:w,q:`A hat-trick this Sunday?`,model:S.SP.hat/N,note:`Yes if anyone scores three or more in a GW${w.gw} league game.`});
+    out.push({k:`sp|draw|${w.id}`,per:w,q:`A draw this Sunday?`,model:S.SP.draw/N,note:`Yes if any GW${w.gw} league game ends level.`});
+    out.push({k:`sp|margin|${w.id}|${mg}`,per:w,q:`A win by ${mg}+ goals this Sunday?`,model:atLeast(S.SP.marg,mg),note:`Yes if any GW${w.gw} league game is won by ${mg} or more.`});
   }
-  if(gs.length>=3&&x.end>nowMs()){
-    const xc=sundayLockBefore(x.end); if(xc>nowMs()){
-      const per={...x,close:xc,lab:'By Christmas'}, left=Math.max(1,pmGamesLeft(per)), pAny=r=>1-Math.pow(1-r,left);
-      let k=4; while(k<15&&pAny(haul(k))>.7)k++;
-      let t=Math.max(10,Math.ceil(mu)); while(t<mu+40&&pAny(over(t))>.7)t++;
-      out.push({k:`sp|haul|${x.id}|${k}`,per,q:`Someone scores ${k}+ in one game before Christmas?`,model:pAny(haul(k)),note:`Yes if any player scores ${k} or more in a single game logged before 25 December. Settles Yes the moment it happens.`});
-      out.push({k:`sp|total|${x.id}|${t}`,per,q:`A ${t}+ goal game before Christmas?`,model:pAny(over(t)),note:`Yes if any game logged before 25 December has ${t} or more goals. Settles Yes the moment it happens.`});
-    }
+  if(x&&S.SP.haul.length){
+    /* the season's records so far are already decided, so these ask whether they're beaten */
+    const k=Math.max(3,S.SP.pastHaul+1), t=Math.max(6,S.SP.pastTot+1), rc=line(S.SP.reach,1), pk=atLeast(S.SP.haul,k), pt=atLeast(S.SP.xtot,t);
+    out.push({k:`sp|reach|${x.id}|${rc}`,per:x,q:`Anyone on ${rc}+ league goals at Christmas?`,model:atLeast(S.SP.reach,rc),note:`Yes if the top scorer has ${rc} or more league goals by 25 December. Settles Yes the moment it happens.`});
+    if(pk>=.03&&pk<=.97)out.push({k:`sp|haul|${x.id}|${k}`,per:x,q:S.SP.pastHaul>=3?`Someone beats the record of ${S.SP.pastHaul} goals in a game by Christmas?`:`Someone scores ${k}+ in one game by Christmas?`,model:pk,note:`Yes if any player scores ${k} or more in a single league game by 25 December. Settles Yes the moment it happens.`});
+    if(pt>=.03&&pt<=.97)out.push({k:`sp|total|${x.id}|${t}`,per:x,q:S.SP.pastTot>=6?`A game beats the record of ${S.SP.pastTot} goals by Christmas?`:`A ${t}+ goal game by Christmas?`,model:pt,note:`Yes if any league game by 25 December has ${t} or more goals in total. Settles Yes the moment it happens.`});
   }
   return out;
 }
 /* market state: only created on the first trade */
 function pmStore(){ const b=bets(); if(!b.pm)b.pm={}; return b.pm }
-function pmClamp(p){ return Math.max(.005,Math.min(.995,p||0)) }
+function pmClamp(p){ return Math.max(.001,Math.min(.999,p||0)) }
 function pmLogit(p){ p=pmClamp(p); return Math.log(p/(1-p)) }
 function pmEff(m,model){ return {qy:(m?m.qy:0)+LM_B*pmLogit(model),qn:m?m.qn:0} }
 function pmPrice(m,model){ if(m&&m.status!=='open')return m.status==='yes'?1:0; const e=pmEff(m,model); return lmPrice(e.qy,e.qn) }
@@ -22325,29 +22421,31 @@ async function pmSell(k,side){
   walletAdd(me.pid,back,'polymarket',k,`Sell ${side==='Y'?'Yes':'No'}`);
   if(await betCommit(snap,`Sold for ${usd(back)}`))pmSheet(k);
 }
-/* automatic settlement, from the games; returns the holders to tell */
+/* automatic settlement, from the league games; returns the holders to tell.
+   The table markets use the league table's own order (tableSort). */
 function pmSettleAll(){
-  const hold=new Set(), S=pmStore(), now=nowMs(), ids=pmPool().map(p=>p.id);
+  const hold=new Set(), S=pmStore(), now=nowMs(), ids=pmPool().map(p=>p.id), L=pmLeague();
+  const inGw=gw=>L.filter(g=>gwOf(g)===gw);
   Object.values(S).filter(m=>m.status==='open').forEach(m=>{
     let res=null;
     if(m.stat==='sp'){
-      const kind=m.k.split('|')[1];
-      if(kind==='over'||kind==='hat'){ if(!playedGws().includes(m.gw))return; const gs=gamesInGw(m.gw).filter(g=>g.scoreA!=null); if(!gs.length)return;
-        res=kind==='over'?(gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=+m.k.split('|')[3])?'yes':'no'):(gs.some(g=>Object.values(g.goals||{}).some(v=>v>=3))?'yes':'no') }
-      else { const line=+m.k.split('|')[3], gs=pmGamesTo({kind:'xmas',end:m.end});
-        const hit=kind==='haul'?gs.some(g=>Object.values(g.goals||{}).some(v=>v>=line)):gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=line);
+      const kind=m.k.split('|')[1], line=+m.k.split('|')[3];
+      if(['over','hat','draw','margin'].includes(kind)){ if(!playedGws().includes(m.gw))return; const gs=inGw(m.gw); if(!gs.length)return;
+        const hit=kind==='over'?gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=line):kind==='hat'?gs.some(g=>Object.values(g.goals||{}).some(v=>v>=3))
+          :kind==='draw'?gs.some(g=>(g.scoreA||0)===(g.scoreB||0)):gs.some(g=>Math.abs((g.scoreA||0)-(g.scoreB||0))>=line);
+        res=hit?'yes':'no' }
+      else { const gs=pmGamesTo({kind:'xmas',end:m.end});
+        const hit=kind==='haul'?gs.some(g=>Object.values(g.goals||{}).some(v=>v>=line)):kind==='total'?gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=line)
+          :Math.max(0,...Object.values(pmStand(gs,ids)).map(t=>t.G))>=line;
         res=hit?'yes':now>=m.end+2*864e5?'no':null }
     } else {
-      let games;
-      if(m.kind==='gw'){ if(!playedGws().includes(m.gw))return; games=allGames().filter(g=>g.scoreA!=null) }
-      else { if(now<m.end+2*864e5)return; games=pmGamesTo({kind:m.kind,end:m.end}) }
-      const T=pmStand(m.kind==='gw'&&(m.stat==='goals'||m.stat==='assists')?games.filter(g=>gwOf(g)===m.gw):games.filter(g=>m.kind!=='gw'||(gwOf(g)||0)<=m.gw),ids);
-      const key=m.stat==='goals'?'G':m.stat==='assists'?'A':null;
-      let win;
-      if(key){ const mx=Math.max(0,...ids.map(id=>T[id][key])); win=mx>0?ids.filter(id=>T[id][key]===mx):[] }
-      else { const v=id=>[T[id].pts,T[id].W,T[id].G], cmp=(a,b)=>{ const x=v(a),y=v(b); return y[0]-x[0]||y[1]-x[1]||y[2]-x[2] };
-        const ord=ids.filter(id=>T[id].P>0).sort(cmp), cut=m.stat==='table'?ord[0]:ord[2];
-        win=cut?ord.filter(id=>cmp(id,cut)<=0):[] }
+      if(m.kind==='gw'){ if(!playedGws().includes(m.gw))return } else if(now<m.end+2*864e5)return;
+      const games=m.kind==='gw'?L.filter(g=>(gwOf(g)||0)<=m.gw):pmGamesTo({kind:m.kind,end:m.end});
+      const only=m.kind==='gw'?inGw(m.gw):games, T=pmStand(only,ids);
+      let win=[];
+      if(m.stat==='goals'||m.stat==='assists'){ const key=m.stat==='goals'?'G':'A', mx=Math.max(0,...ids.map(id=>T[id][key])); win=mx>0?ids.filter(id=>T[id][key]===mx):[] }
+      else if(m.stat==='gc'){ const minP=m.kind==='gw'?1:2, el=ids.filter(id=>T[id].P>=minP), v=id=>T[id].GA/T[id].P, mn=Math.min(...el.map(v)); win=el.filter(id=>Math.abs(v(id)-mn)<1e-9) }
+      else { const n=(PM_STATS[m.stat]||{}).n||1, ord=statsFor(games).filter(x=>x.P>0&&ranksInTable(x.id)).sort(tableSort).map(x=>x.id); win=ord.slice(0,n) }
       res=win.includes(m.pid)?'yes':'no';
     }
     if(res)prSettleCore(m,res).forEach(h=>hold.add(h));
@@ -22362,47 +22460,81 @@ async function prEnsure(){
   if((ch||hold.length)&&await betCommit(snap,null)&&hold.length)pushSend('Polymarket settled','Your markets have paid out','predict',{url:'/',pids:hold});
 }
 /* ---- the screens ---- */
-function pmPctTxt(p){ return p<.005?'<1%':p>.995?'>99%':Math.round(p*100)+'%' }
-function pmRow(o){
+function pmPctTxt(p){ return p>=.995?'>99%':p<.001?'<0.1%':p<.0095?(p*100).toFixed(1)+'%':Math.round(p*100)+'%' }
+/* where each player stands today, so the price reads against something you can see */
+function pmNow(){
+  const L=pmLeague(), ids=pmPool().map(p=>p.id), T=pmStand(L,ids);
+  const ord=statsFor(L).filter(x=>x.P>0&&ranksInTable(x.id)).sort(tableSort).map(x=>x.id);
+  return {T,pos:id=>{ const i=ord.indexOf(id); return i<0?null:i+1 }};
+}
+function pmSub(o,now){
+  const t=now.T[o.pid]||{P:0,G:0,A:0,GA:0,pts:0}, gw=o.per.kind==='gw', pl=(n,w)=>`${n} ${w}${n===1?'':'s'}`;
+  if(!t.P)return 'No games yet';
+  if(o.stat==='goals')return gw?`${(t.G/t.P).toFixed(1)} a game`:pl(t.G,'goal');
+  if(o.stat==='assists')return gw?`${(t.A/t.P).toFixed(1)} a game`:pl(t.A,'assist');
+  if(o.stat==='gc')return `${(t.GA/t.P).toFixed(1)} a game · ${t.P} gm`;
+  const r=now.pos(o.pid); return `${r?ordinal(r):'—'} · ${t.pts} pts`;
+}
+function pmRow(o,now){
   const p=pmPrice(o.m,o.model), pc=pmC(p), pl=player(o.pid)||{name:'?'}, open=pmOpen(o), vol=pmVol(o.m);
   const done=o.m&&o.m.status!=='open';
   return `<div class="pmr">
-    <button class="pmr-who" onclick="pmSheet('${o.k}')">${avatar(pl,34)}<span><b>${esc(pl.name)}</b><i>${esc(pl.pos||'')}${vol?` · ${usd(vol)} vol`:''}</i></span></button>
+    <button class="pmr-who" onclick="pmSheet('${o.k}')">${avatar(pl,34)}<span><b>${esc(pl.name)}</b><i>${esc(pmSub(o,now))}${vol?` · ${usd(vol)} vol`:''}</i></span></button>
     <b class="pmr-pc">${done?(o.m.status==='yes'?'Won':'—'):pmPctTxt(p)}</b>
     ${open?`<span class="pmr-bt"><button class="pmy" onclick="PMSIDE='Y';pmSheet('${o.k}')">Yes ${pc}¢</button><button class="pmn" onclick="PMSIDE='N';pmSheet('${o.k}')">No ${100-pc}¢</button></span>`:''}
   </div>`;
 }
+function pmPerTag(per){ return per.kind==='gw'?`This Sunday (GW${per.gw})`:per.lab }
 function pmSpecialCard(s){
   const o=pmOutcome(s.k), p=pmPrice(o.m,o.model), pc=pmC(p), open=pmOpen(o);
-  return `<div class="pms"><button class="pms-q" onclick="pmSheet('${s.k}')"><span><i>${esc(s.per.kind==='gw'?`This Sunday (GW${s.per.gw})`:'By Christmas')}</i><b>${esc(s.q)}</b></span><em>${pmPctTxt(p)}</em></button>
+  return `<div class="pms"><button class="pms-q" onclick="pmSheet('${s.k}')"><span><i>${esc(pmPerTag(s.per))}</i><b>${esc(s.q)}</b></span><em>${pmPctTxt(p)}</em></button>
     <div class="pms-bar"><i style="width:${(p*100).toFixed(1)}%"></i></div>
     ${open?`<div class="pms-bt"><button class="pmy" onclick="PMSIDE='Y';pmSheet('${s.k}')">Yes ${pc}¢</button><button class="pmn" onclick="PMSIDE='N';pmSheet('${s.k}')">No ${100-pc}¢</button></div>`:''}
     <div class="pms-m">${usd(pmVol(o.m))} vol · closes ${esc(dlText(o.per.close))}</div></div>`;
 }
+/* the title for a market list */
+function pmTitle(stat,per){
+  const gw=per.kind==='gw', when=gw?'this Sunday':per.kind==='season'?'end of season':per.kind==='xmas'?'Christmas':PM_MONL[new Date(per.end+DUBAI_OFF).getUTCMonth()];
+  if(gw)return stat==='goals'?'Top scorer this Sunday':stat==='assists'?'Most assists this Sunday':stat==='gc'?'Fewest conceded this Sunday':`${PM_STATS[stat].t} after this Sunday`;
+  return `${PM_STATS[stat].t} · ${when}`;
+}
+function pmNoteFor(stat,per){
+  const gw=per.kind==='gw', upto=gw?`GW${per.gw}`:esc(per.lab.replace(/^By /,'').replace(/^the /,''));
+  const what=stat==='gc'?(gw?`Goals conceded a game in GW${per.gw}, among everyone who plays.`:`Goals conceded a game, at least two games, the Best defence rule.`)
+    :PM_TOPN.includes(stat)?`The league table's own order (points, then win rate, then the rest) after ${upto}.`
+    :gw?`Only GW${per.gw} counts. Ties: everyone tied wins.`:`League goals from GW1 to ${upto}. Ties: everyone tied wins.`;
+  return `${what} Settles itself ${gw?'when the game is logged':'two days after it ends'}. Prices come from ${PM_SIMS.toLocaleString()} simulations of the rest of the season from every league game so far, rerun after each game; trades move them from there. A share pays $100.`;
+}
 function prView(){
   const P=pmPeriods();
-  const cats=[...Object.keys(PM_STATS).map(k=>[k,PM_STATS[k].s]),['sp','Specials']];
+  const cats=[['pl','Players'],['tb','Table'],['sp','Specials']];
+  if(!cats.some(c=>c[0]===PMC))PMC='pl';
   const seg=`<div class="seg pp-seg pm-cat">${cats.map(([k,l])=>`<button class="${PMC===k?'on':''}" onclick="PMC='${k}';render()">${l}</button>`).join('')}</div>`;
   if(PMC==='sp'){
     const L=pmSpecials();
     return `${seg}${L.length?L.map(pmSpecialCard).join(''):`<div class="pr-empty">${ssTileC('betting',44)}<b>No specials open right now</b><i>This Sunday's open once last week's game is logged.</i></div>`}
-      <div class="note pm-note">A share pays $100. Prices start from the games so far and move as people trade.</div>`;
+      <div class="note pm-note">A share pays $100. Prices come from the same simulation as the other markets and move as people trade.</div>`;
   }
   if(!P.length)return `${seg}<div class="pr-empty">${ssTileC('betting',44)}<b>Nothing open</b><i>The season is over.</i></div>`;
   let per=P.find(p=>p.id===PMP)||P[0]; PMP=per.id;
-  const pool=pmPool(); if(pool.length<2)return `${seg}<div class="pr-empty">${ssTileC('betting',44)}<b>Markets open after a few games</b><i>It needs players with games to price them.</i></div>`;
-  const mod=pmModel(per), S=pmStore();
-  const rows=pool.map(p=>({k:`${PMC}|${per.id}|${p.id}`})).map(x=>pmOutcome(x.k)).filter(Boolean)
-    .sort((a,b)=>pmPrice(b.m,b.model)-pmPrice(a.m,a.model)||(player(a.pid)||{name:''}).name.localeCompare((player(b.pid)||{name:''}).name));
+  const pool=pmPool(); if(pool.length<2||!pmLeague().length)return `${seg}<div class="pr-empty">${ssTileC('betting',44)}<b>Markets open after a few games</b><i>It needs players with games to price them.</i></div>`;
+  const opts=PMC==='pl'?(per.kind==='gw'?['goals','assists']:['goals','assists','gc']):PM_TOPN.filter(k=>PM_STATS[k].n===1||PM_STATS[k].n<pool.length);
+  let stat=PMC==='pl'?PMPL:PMTB; if(!opts.includes(stat))stat=opts[0];
+  const now=pmNow();
+  const rows=pool.map(p=>pmOutcome(`${stat}|${per.id}|${p.id}`)).filter(Boolean)
+    .sort((a,b)=>pmPrice(b.m,b.model)-pmPrice(a.m,a.model)||(PM_TOPN.includes(stat)?((now.pos(a.pid)||99)-(now.pos(b.pid)||99)):0)||(player(a.pid)||{name:''}).name.localeCompare((player(b.pid)||{name:''}).name));
   const vol=rows.reduce((t,o)=>t+pmVol(o.m),0);
-  const title=per.kind==='gw'?(PMC==='goals'?'Top scorer this Sunday':PMC==='assists'?'Most assists this Sunday':PMC==='table'?'Top of the table after this Sunday':'Top 3 after this Sunday'):`${PM_STATS[PMC].t} · ${per.kind==='season'?'end of season':per.kind==='xmas'?'Christmas':PM_MONL[new Date(per.end+DUBAI_OFF).getUTCMonth()]}`;
+  const pill=(cls,lab,html,on)=>`<label class="pm-per ${cls}"><span>${esc(lab)}</span><select aria-label="${cls==='pm-st'?'Market':'Period'}" onchange="${on}=this.value;render()">${html}</select></label>`;
   return `${seg}
     <div class="pm-hd">
-      <div class="pm-ht"><b>${esc(title)}</b><i>Closes ${esc(dlText(per.close))}${vol?` · ${usd(vol)} vol`:''}</i></div>
-      <label class="pm-per"><span>${esc(per.sh)}</span><select aria-label="Period" onchange="PMP=this.value;render()">${P.map(p=>`<option value="${p.id}" ${p.id===per.id?'selected':''}>${esc(p.lab)}</option>`).join('')}</select></label>
+      <div class="pm-ht"><b>${esc(pmTitle(stat,per))}</b><i>Closes ${esc(dlText(per.close))}${vol?` · ${usd(vol)} vol`:''}</i></div>
     </div>
-    <div class="card pm-list">${rows.map(pmRow).join('')}</div>
-    <div class="note pm-note">${per.kind==='gw'&&(PMC==='goals'||PMC==='assists')?`Only GW${per.gw} counts.`:`Counts everything from GW1 to ${per.kind==='gw'?`GW${per.gw}`:esc(per.lab.replace(/^By /,'').replace(/^the /,''))}.`} Ties: everyone tied wins. Settles itself ${per.kind==='gw'?'when the game is logged':'two days after it ends'}. A share pays $100.</div>`;
+    <div class="pm-pills">
+      ${pill('pm-st',PM_STATS[stat].s,opts.map(k=>`<option value="${k}" ${k===stat?'selected':''}>${esc(PM_STATS[k].s)}</option>`).join(''),PMC==='pl'?'PMPL':'PMTB')}
+      ${pill('pm-pd',per.sh,P.map(p=>`<option value="${p.id}" ${p.id===per.id?'selected':''}>${esc(p.lab)}</option>`).join(''),'PMP')}
+    </div>
+    <div class="card pm-list">${rows.map(o=>pmRow(o,now)).join('')}</div>
+    <div class="note pm-note">${pmNoteFor(stat,per)}</div>`;
 }
 function pmChart(m,model){
   const H=(m&&m.hist&&m.hist.length?m.hist:[{t:nowMs(),p:pmPrice(null,model)}]).slice();
@@ -22424,7 +22556,7 @@ function pmSheet(k){
   const maxAmt=me?Math.max(0,Math.min(bal,PR_MAX-(pos?pos.net:0))):0;
   const sh=open?lmSharesFor(e,side,Math.max(PR_MIN,amt)):0;
   const pl=o.pid?player(o.pid):null;
-  const sub=o.special?(o.per.kind==='gw'?`This Sunday (GW${o.per.gw})`:'By Christmas'):`${PM_STATS[o.stat].t} · ${o.per.lab}`;
+  const sub=o.special?pmPerTag(o.per):`${PM_STATS[o.stat].t} · ${pmPerTag(o.per)}`;
   const html=`<div class="pmt">
     <div class="pmt-hd">${pl?avatar(pl,44):ssTileC('betting',44)}<div class="pmt-ht"><i>${esc(sub)}</i><b>${esc(pl?pl.name:o.q)}</b></div><em>${pmPctTxt(p)}</em></div>
     <div class="pmt-ch">${pmChart(m,o.model)}</div>
@@ -22436,7 +22568,7 @@ function pmSheet(k){
       ${self?`<div class="note" style="padding:6px 0 0">You can only buy Yes on yourself.</div>`:''}`
       :`<div class="pr-closed"><b>${m&&m.status!=='open'?(m.status==='yes'?'Settled Yes':m.status==='no'?'Settled No':'Void'):'Closed — settles itself'}</b></div>`}
     ${pos&&(pos.Y>1e-9||pos.N>1e-9)?`<div class="pmt-pos">${['Y','N'].filter(x=>pos[x]>1e-9).map(x=>`<div><span><b>${pos[x].toFixed(1)} ${x==='Y'?'Yes':'No'}</b><i>pays ${usd(pos[x]*LM_PAY)}${open?` · worth ${usd(lmProceeds(e,x,pos[x]))}`:''}</i></span>${open?`<button class="btn sec" onclick="pmSell('${k}','${x}')">Sell</button>`:''}</div>`).join('')}</div>`:''}
-    <div class="note pmt-n">${esc(o.note||'')}${o.special?'':` Ties: everyone tied wins.`} Closes ${esc(dlText(o.per.close))}.</div>
+    <div class="note pmt-n">${o.special?esc(o.note||''):pmNoteFor(o.stat,o.per)} Closes ${esc(dlText(o.per.close))}.</div>
   </div>`;
   if($('#sbg')&&$('#sbg').classList.contains('open')&&document.querySelector('.pmt')){ document.querySelector('.pmt').outerHTML=html; return }
   openSheet('Polymarket',html);
@@ -22480,6 +22612,7 @@ function mateSheet(){
     <div class="chf-h">STAKE · EACH</div>
     <div class="chf-st"><b>${usd(f.stake)}</b><span>winner takes ${usd(f.stake*2)}</span></div>
     <input class="chf-rng" type="range" min="${MATE_MIN}" max="${MATE_MAX}" step="10" value="${f.stake}" aria-label="Stake" oninput="MATEF.stake=+this.value;this.previousElementSibling.querySelector('b').textContent=usd(+this.value)" onchange="mateSheet()">
+    ${f.kind==='win'?`<div class="note" style="padding:6px 0 0">If you end up on the same team, it’s void and you both get your stake back.</div>`:''}
     ${f.to?`<div class="mt-say">“${esc(mateClaim({...f,from:me.pid}))} in the next game” · ${usd(f.stake)}</div>`:''}
     <button class="btn pri full" style="margin-top:12px" ${f.to?'':'disabled'} onclick="mateSend()">${f.to?`Send to ${esc((player(f.to)||{}).name)}`:'Pick someone'}</button>
     <div class="note" style="padding:8px 0 0">They can say yes or no. If they haven't answered by the deadline (${esc(dlText())}), your stake comes back.</div>
@@ -22517,6 +22650,8 @@ function mateOutcome(x){
   if(!g)return null;
   const side=id=>(g.teamA||[]).includes(id)?'A':(g.teamB||[]).includes(id)?'B':null;
   if(!side(x.from)||(x.kind==='outscore'&&!side(x.to)))return 'void';
+  /* Round 15 (e): "my team wins" means nothing if you're on the same team: void, both stakes back */
+  if(x.kind==='win'&&side(x.to)&&side(x.to)===side(x.from))return 'void';
   const G=id=>(g.goals&&g.goals[id])||0, A=id=>(g.assists&&g.assists[id])||0;
   if(x.kind==='goals')return G(x.from)>=x.n?'from':'to';
   if(x.kind==='assists')return A(x.from)>=x.n?'from':'to';
