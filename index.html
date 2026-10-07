@@ -6606,6 +6606,108 @@ b.up{color:var(--green-ink)}b.dn{color:#C02A1B}
 .h2x-g b{font-size:15px;font-weight:800;color:var(--ss-ink)}
 .h2x-none{text-align:center;font-size:13px;color:var(--ss-muted);margin:12px 0}
 [data-theme="dark"] .h2x-rec b.l{color:#FF7A6B}
+
+/* =================== ROUND 15 (d) · SQUAD TOOLBAR AND GRID =================== */
+.seg.pp-seg.sq-pos{margin-bottom:10px}
+.seg.pp-seg.sq-pos button{font-size:13.5px;padding:9px 4px}
+.sq-tools{display:flex;align-items:stretch;gap:7px;margin-bottom:12px}
+.sq-tools .findbox{flex:1 1 auto;min-width:104px;margin:0}
+.tg.sq-pos>button,.tg.sq-pos.tg-fit>button,.tg.sq-pos.tg-scroll>button{flex:1 1 0!important;min-width:0!important;padding:0 2px!important}
+@media (max-width:380px){.sq-tools .sq-sel select{max-width:86px}}
+.sq-sel{position:relative;flex:0 0 auto;display:flex;align-items:center;min-height:44px;border-radius:11px;background:var(--ss-soft);color:var(--ss-ink);padding:0 10px 0 34px}
+.sq-sel-i{position:absolute;left:9px;top:50%;transform:translateY(-50%);width:18px;height:18px;pointer-events:none;display:flex}
+.sq-sel-i svg{width:18px;height:18px}
+.sq-sel select{appearance:none;-webkit-appearance:none;border:0;background:transparent;font:inherit;font-size:13.5px;font-weight:700;color:inherit;padding:0 14px 0 0;min-height:44px;max-width:118px;
+  background-image:linear-gradient(45deg,transparent 50%,currentColor 50%),linear-gradient(135deg,currentColor 50%,transparent 50%);background-position:calc(100% - 6px) 50%,calc(100% - 2px) 50%;background-size:4px 4px;background-repeat:no-repeat}
+html[data-theme="dark"] .sq-sel{background:#1C1C1E}
+.sq-gh2{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--ss-muted);margin:2px 2px 8px}
+.sq-grid.sq-g3{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sqc.sqc3{min-height:0;padding:0 6px;border-radius:12px;aspect-ratio:auto}
+.sqc3 .sqc-tl{left:7px;top:6px}.sqc3 .sqc-tl b{font-size:15px}.sqc3 .sqc-tl i{font-size:8.5px;margin-top:1px}
+.sqc3 .sqc-tr{right:7px;top:6px}.sqc3 .sqc-tr i{font-size:9px}
+.sqc3 .sqc-av{margin-top:20px}
+.sqc3 .sqc-ini{width:38px;height:38px;font-size:14px}
+.sqc3 .sqc-nm{margin-top:5px;font-size:10.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sqc3 .sqc-ft{margin-top:6px;width:calc(100% + 12px);margin-left:0;font-size:9.5px;padding:4px 2px;text-align:center;white-space:nowrap}
+
+/* =================== ROUND 15 (d) · BETS TAB =================== */
+.fg3{display:grid;grid-template-columns:1fr 1fr;margin:0 0 12px;border-radius:14px;overflow:hidden;background:var(--ss-navy);border-bottom:3px solid var(--ss-gold)}
+html[data-theme="dark"] .fg3{background:#12213A}
+.fg3-b{display:flex;align-items:center;gap:9px;padding:10px 12px;min-height:50px;text-align:left;color:#fff;min-width:0}
+.fg3-b+.fg3-b{border-left:1px solid rgba(255,255,255,.14)}
+.fg3-i{flex:0 0 28px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFE9A6,#D4AF37);color:#3A2A05}
+.fg3-i.pk{background:#fff;color:#C8102E}
+.fg3-t{min-width:0}
+.fg3-t b{display:block;font-size:13.5px;font-weight:800;white-space:nowrap}
+.fg3-t i{display:block;font-style:normal;font-size:11px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bk-chips.bk-book{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;overflow:visible;background:var(--ss-soft);padding:3px;border-radius:12px}
+html[data-theme="dark"] .bk-chips.bk-book{background:#1C1C1E}
+.bk-chips.bk-book button{min-width:0;padding:0 2px;min-height:40px;border-radius:9px;font-size:13px;background:transparent;box-shadow:none}
+.bk-chips.bk-book button.on{background:var(--ss-navy);color:#fff}
+[data-theme="dark"] .bk-chips.bk-book button.on{background:var(--ss-blue)}
+
+/* =================== ROUND 15 (d) · POLYMARKET =================== */
+.seg.pp-seg.pm-cat{margin-bottom:12px}
+.tg.pm-cat>button,.tg.pm-cat.tg-fit>button,.tg.pm-cat.tg-scroll>button{flex:1 1 0!important;min-width:0!important;padding:0 2px!important;font-size:13px!important}
+@media (max-width:380px){.tg.pm-cat>button,.tg.pm-cat.tg-fit>button,.tg.pm-cat.tg-scroll>button{font-size:12px!important}}
+.seg.pp-seg.pm-cat button{font-size:12.5px;padding:10px 2px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:380px){.seg.pp-seg.pm-cat button{font-size:11.5px;padding:10px 0}.pm-hd{flex-direction:column;gap:8px}.pm-hd .pm-per{max-width:100%;align-self:flex-start}}
+.pm-hd{display:flex;align-items:flex-start;gap:10px;margin:0 2px 10px}
+.pm-ht{flex:1;min-width:0}
+.pm-ht b{display:block;font-size:19px;font-weight:900;letter-spacing:-.02em;color:var(--ss-ink);line-height:1.2}
+.pm-ht i{display:block;font-style:normal;font-size:12px;color:var(--ss-muted);margin-top:3px}
+.pm-per{position:relative;flex:0 0 auto;display:flex;align-items:center;min-height:40px;padding:0 28px 0 12px;border-radius:20px;background:var(--ss-navy);color:#fff;font-size:13px;font-weight:800;max-width:52%}
+[data-theme="dark"] .pm-per{background:var(--ss-blue)}
+.pm-per span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm-per:after{content:"";position:absolute;right:12px;top:50%;width:6px;height:6px;margin-top:-5px;border-right:2px solid #fff;border-bottom:2px solid #fff;transform:rotate(45deg)}
+.pm-per select{position:absolute;inset:0;opacity:0;width:100%;font-size:16px}
+.pm-list{padding:2px 0}
+.pmr{display:flex;align-items:center;gap:8px;padding:8px 12px;min-height:56px}
+.pmr+.pmr{border-top:1px solid var(--hair)}
+.pmr-who{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:9px;text-align:left;min-height:44px}
+.pmr-who>span{min-width:0}
+.pmr-who b{display:block;font-size:14.5px;font-weight:700;color:var(--ss-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pmr-who i{display:block;font-style:normal;font-size:11px;color:var(--ss-muted);white-space:nowrap}
+.pmr-pc{flex:0 0 44px;text-align:right;font-size:17px;font-weight:900;color:var(--ss-ink);letter-spacing:-.02em}
+.pmr-bt{flex:0 0 auto;display:flex;gap:5px}
+.pmy,.pmn{min-height:40px;min-width:58px;padding:0 8px;border-radius:10px;font-size:12.5px;font-weight:800;white-space:nowrap}
+.pmy{background:color-mix(in srgb,#17A35C 14%,transparent);color:var(--green-ink)}
+.pmn{background:color-mix(in srgb,#E0301F 11%,transparent);color:#C02A1B}
+[data-theme="dark"] .pmn{color:#FF7A6B}
+@media(max-width:375px){.pmy,.pmn{min-width:50px;padding:0 5px;font-size:12px}.pmr{padding:8px 10px;gap:6px}.pmr-pc{flex-basis:40px;font-size:15.5px}}
+.pm-note{padding:8px 4px 12px}
+.pms{background:var(--bg-el);border-radius:16px;padding:12px 14px;margin-bottom:10px;box-shadow:var(--sh1,0 1px 2px rgba(0,0,0,.06))}
+.pms-q{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:left;min-height:44px}
+.pms-q>span{flex:1;min-width:0}
+.pms-q i{display:block;font-style:normal;font-size:10px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ss-blue)}
+.pms-q b{display:block;font-size:15px;font-weight:800;color:var(--ss-ink);line-height:1.3;margin-top:2px}
+.pms-q em{font-style:normal;font-size:22px;font-weight:900;color:var(--ss-ink)}
+.pms-bar{height:5px;border-radius:3px;background:color-mix(in srgb,#E0301F 16%,transparent);overflow:hidden;margin:8px 0 10px}
+.pms-bar i{display:block;height:100%;background:#17A35C}
+.pms-bt{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pms-bt .pmy,.pms-bt .pmn{min-height:44px;font-size:15px}
+.pms-m{font-size:11px;color:var(--ss-muted);margin-top:8px}
+.pmt-hd{display:flex;align-items:center;gap:11px;margin-bottom:8px}
+.pmt-hd>.pmt-ht{flex:1;min-width:0}
+.pmt-hd i{display:block;font-style:normal;font-size:11.5px;color:var(--ss-muted);font-weight:600}
+.pmt-hd b{display:block;font-size:18px;font-weight:900;color:var(--ss-ink)}
+.pmt-hd em{font-style:normal;font-size:28px;font-weight:900;color:var(--ss-ink);letter-spacing:-.03em}
+.pmt-ch{margin:0 -4px 10px}
+.pmt-sd{margin-bottom:10px}
+.pmt-sd button.on.y{background:#17A35C!important;color:#fff}
+.pmt-sd button.on.n{background:#D0172E!important;color:#fff}
+.pmt-sd button:disabled{opacity:.4}
+.pmt-amt{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.pmt-amt span{flex:1;font-size:13px;color:var(--ss-muted);font-weight:600}
+.pmt-amt input{width:120px;min-height:44px;border-radius:10px;border:1px solid var(--sep);background:var(--bg-el);color:var(--ss-ink);font-size:18px;font-weight:800;text-align:right;padding:0 10px}
+.pmt-max{min-height:44px;padding:0 14px;border-radius:10px;background:var(--fill2);font-weight:800;color:var(--ss-ink)}
+.pmt-buy.Y{background:#17A35C!important}.pmt-buy.N{background:#D0172E!important}
+.pmt-pos{margin-top:12px;border-top:1px solid var(--hair)}
+.pmt-pos>div{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--hair)}
+.pmt-pos span{flex:1}.pmt-pos b{display:block;font-size:14px;color:var(--ss-ink)}.pmt-pos i{display:block;font-style:normal;font-size:12px;color:var(--ss-muted)}
+.pmt-pos .btn{min-height:40px;padding:0 16px}
+.pmt-n{padding:10px 0 0}
+.pr-ach{grid-template-columns:repeat(4,1fr)}
 </style>
 </head>
 <body>
@@ -9646,19 +9748,17 @@ function sqFinish(pid,m){
   return {sty:SQ_STEEL, light:false};
 }
 function sqCard(p,m){
-  const f=sqFinish(p.id,m), c=clubOf(p), r=rtg(p), no=shirtOf(p);
+  /* Round 15 (d): small, three to a row */
+  const f=sqFinish(p.id,m), c=clubOf(p), no=shirtOf(p);
   const o=m&&m.P?m.index:'—', P=m?m.P:0;
-  const ps=p.ps&&PS_BY[p.ps]&&SS_ICONS.playstyles[p.ps];
-  return `<button class="sqc ${f.light?'lite':''}" onclick="openPlayer('${p.id}')"
-    aria-label="${esc(p.name)}"
-    style="background-image:${f.sty.g};background-size:cover;background-position:${f.sty===STYLE_BY.skyline?'50% 70%':'50% 50%'};box-shadow:0 0 0 2px ${f.sty.rim},0 6px 18px rgba(0,0,0,.16)">
+  return `<button class="sqc sqc3 ${f.light?'lite':''}" onclick="openPlayer('${p.id}')" aria-label="${esc(p.name)}"
+    style="background-image:${f.sty.g};background-size:cover;background-position:${f.sty===STYLE_BY.skyline?'50% 70%':'50% 50%'};box-shadow:0 0 0 1.5px ${f.sty.rim},0 4px 12px rgba(0,0,0,.14);${p.active===false?'opacity:.5;':''}">
     ${f.light?'':'<i class="sqc-scrim" aria-hidden="true"></i>'}
     <span class="sqc-tl"><b>${o}</b><i>${esc(p.pos||'--')}</i></span>
-    <span class="sqc-tr">${ps?SS_ICONS.diamond(SS_ICONS.playstyles[p.ps],24,f.light):''}${no?`<i>#${no}</i>`:''}</span>
-    <span class="sqc-av">${c?crest(c,56):`<span class="sqc-ini">${esc(initials(p.name))}</span>`}</span>
+    ${no?`<span class="sqc-tr"><i>#${no}</i></span>`:''}
+    <span class="sqc-av">${c?crest(c,38):`<span class="sqc-ini">${esc(initials(p.name))}</span>`}</span>
     <span class="sqc-nm">${esc(p.name)}</span>
-    ${r?`<span class="sqc-like">${esc(r)}</span>`:''}
-    <span class="sqc-ft">${P} game${P===1?'':'s'} · ${m?m.pts:0} pts</span>
+    <span class="sqc-ft">${SQSORT==='goals'?`${m?m.G:0} goal${m&&m.G===1?'':'s'} · ${P} gm`:SQSORT==='played'?`${P} game${P===1?'':'s'}`:SQSORT==='form'?`form ${m&&m.P?(m.form||0).toFixed(1):'–'}`:`${P} gm · ${m?m.pts:0} pts`}</span>
   </button>`;
 }
 function sqSortSheet(){
@@ -9722,21 +9822,21 @@ function vSquad(){
         <div id="tacBody" class="tb">${tacBoard()}</div>
       `:`
       <button class="btn pri full" data-admin style="margin-bottom:16px" onclick="editPlayer(null)">Add player</button>
-      <div class="chips sq-pos-chips">${['All','DEF','MID','ATT','GK'].map(k=>
+      <!-- Round 15 (d): one simple toolbar. Position, then search · sort · view. -->
+      <div class="seg pp-seg sq-pos">${['All','GK','DEF','MID','ATT'].map(k=>
         `<button class="${SQPOS===k?'on':''}" onclick="SQPOS='${k}';render()">${k}</button>`).join('')}</div>
       <div class="sq-tools">
-        ${all.length>8?`<input class="findbox" id="sqfind" placeholder="Search by name or position…" value="${esc(SQQ)}"
-          oninput="SQQ=this.value;render();const e=$('#sqfind');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length)}" autocomplete="off">`:'<span style="flex:1"></span>'}
-        <button class="sq-tb ${SQSORTOPEN?'on':''}" aria-label="Sort" title="Sort"
-          onclick="SQSORTOPEN=!SQSORTOPEN;render()">${SQ_SORT_GL}</button>
+        <input class="findbox" id="sqfind" placeholder="Search" value="${esc(SQQ)}" aria-label="Search the squad"
+          oninput="SQQ=this.value;render();const e=$('#sqfind');if(e){e.focus();e.setSelectionRange(e.value.length,e.value.length)}" autocomplete="off">
+        <label class="sq-sel"><span class="sq-sel-i">${SQ_SORT_GL}</span><select aria-label="Sort by" onchange="SQSORT=this.value;render()">
+          ${SQ_SORTS.map(([k,l])=>`<option value="${k}" ${SQSORT===k?'selected':''}>${l}</option>`).join('')}</select></label>
         <button class="sq-tb pri" aria-label="${SQVIEW==='grid'?'List view':'Grid view'}"
           title="${SQVIEW==='grid'?'List view':'Grid view'}"
           onclick="SQVIEW='${SQVIEW==='grid'?'list':'grid'}';render()">${SQVIEW==='grid'?SQ_LIST_GL:SQ_GRID_GL}</button>
       </div>
-      ${sqSortSheet()}
       ${q&&!list.length?`<div class="findnone">Nobody matches “${esc(SQQ)}”</div>`:''}
-      ${list.length&&SQVIEW==='grid'?`<div class="sechead sq-gh"><span class="ss-sl"><span>Grid view</span></span><span class="ss-note">Sorted by ${sqSortLabel()}</span></div>
-        <div class="sq-grid">${list.map(p=>sqCard(p,st.find(x=>x.id===p.id))).join('')}</div>`:''}
+      ${list.length&&SQVIEW==='grid'?`<div class="sq-gh2">${list.length} player${list.length===1?'':'s'} · sorted by ${sqSortLabel()}</div>
+        <div class="sq-grid sq-g3">${list.map(p=>sqCard(p,st.find(x=>x.id===p.id))).join('')}</div>`:''}
       ${list.length&&SQVIEW!=='grid'?`<div class="card sq-list">${list.map(p=>{const m=st.find(x=>x.id===p.id)||{P:0,pts:0,G:0};const r=rtg(p);const n=shirtOf(p);
         return `<div class="row tap sq-row" onclick="openPlayer('${p.id}')" style="${p.active===false?'opacity:.5':''}">
         ${avatar(p,44)}<div class="rt"><div class="r1">${n?`<span class="sq-no">${n}</span>`:''}<span class="sq-name">${esc(p.name)}</span>${p.nation?' '+p.nation:''}${p.pos?` <span class="pill sq-pos ${p.pos}">${p.pos}</span>`:''}${availPill(p)}</div>
@@ -21825,10 +21925,10 @@ function vBets(){
 <div class="empty"><div class="ee">🎰</div><h3>No markets yet</h3>
     <p>Add the squad and the book opens.</p></div></div></div>`;return}
 
-  const tabs=[['markets','Bets'],['slips','My bets'],['week','Week'],['board','Leaders']];   /* Round 15: Book's views, as chips */
+  const tabs=[['markets','Odds'],['slips','My bets'],['week','Week'],['board','Leaders']];   /* Round 15: Book's views, as chips */
   if(BMAIN!=='poly')BMAIN='book';
-  const mains=[['book','Book'],['poly','Polymarket']];
-  tabs.push(['mates','Mates']);
+  const mains=[['book','Bets'],['poly','Polymarket']];
+  tabs.push(['mates','1v1']);
   if(BMAIN==='poly'&&!PR_ENS){ PR_ENS=true; setTimeout(()=>prEnsure(),0) }
   if(BMAIN==='book'&&!bets().r15gone&&isAdmin()){ const snap=betSnap(); retireR15(); setTimeout(()=>betCommit(snap,null),0) }
   let body='';
@@ -22005,11 +22105,25 @@ function retireR15(){
   b.r15gone=true; return true;
 }
 
-/* ---------------- POLYMARKET · LMSR automatic market maker ----------------
-   Every market is a Yes/No pair. A share pays $100 if its side wins. B = 15
-   shares of liquidity: at an even start the house can lose at most
-   100 × 15 × ln 2 ≈ $1,040; a long shot that opens at 3% can lose more. */
-const LM_B=15, LM_PAY=100, PR_MIN=10, PR_MAX=10000, PR_SET='r15b';   /* Oct 2026: max $10,000 a market */
+/* ---------------- POLYMARKET (Round 15 d) ----------------
+   Kalshi / Polymarket style. Pick a market (Top scorer, Most assists, Top of
+   the table, Top 3, Specials) and a period (This Sunday, the end of any month
+   to May, Christmas, the end of the season). Every player in the league is an
+   outcome with a Yes and a No price.
+
+   Prices. The fair chance comes from the model: everything logged so far,
+   then the rest of the period simulated 3,000 times (who turns up, at each
+   player's own rate; goals and assists from each player's own rate pulled
+   towards his position's average while he has few games; results from two
+   random sides of that day's players, the stronger side more likely to win).
+   Trading moves the price away from the model like a market maker would:
+   price = logistic( logit(model) + (Yes shares − No shares) / 15 ). So the
+   odds follow the games, and the crowd moves them between games.
+   A share pays $100. $10 to $10,000 per player per market.
+   Settlement is automatic: This Sunday when that gameweek is logged; a month,
+   Christmas or the season two days after it ends, from games dated up to then.
+   Ties: everyone tied wins. Markets nobody traded need no settling. */
+const LM_B=15, LM_PAY=100, PR_MIN=10, PR_MAX=10000;
 function lse(a,b){ const m=Math.max(a,b); return m+Math.log(Math.exp(a-m)+Math.exp(b-m)) }
 function lmCost(qy,qn){ return LM_PAY*LM_B*lse(qy/LM_B,qn/LM_B) }
 function lmPrice(qy,qn){ return 1/(1+Math.exp((qn-qy)/LM_B)) }
@@ -22019,335 +22133,319 @@ function lmSharesFor(m,side,amt){
   return LM_B*(T+Math.log(1-Math.exp(other-T)))-mine;
 }
 function lmProceeds(m,side,sh){ const qy=m.qy, qn=m.qn; return side==='Y'?lmCost(qy,qn)-lmCost(qy-sh,qn):lmCost(qy,qn)-lmCost(qy,qn-sh) }
+/* the Round 15 markets (b.mk) are retired; their trades were refunded */
 function prMarkets(){ const b=bets(); if(!b.mk)b.mk=[]; return b.mk }
-function prPrice(m){ return lmPrice(m.qy,m.qn) }
-function prOpen(m){ return m.status==='open'&&nowMs()<m.close }
 function prPos(m,pid){ const t=(m.trades||[]).filter(x=>x.by===pid);
   return {Y:t.reduce((s,x)=>s+(x.side==='Y'?x.sh:0),0), N:t.reduce((s,x)=>s+(x.side==='N'?x.sh:0),0), net:t.reduce((s,x)=>s+x.cost,0)} }
-function prVolume(m){ return (m.trades||[]).reduce((s,x)=>s+Math.abs(x.cost),0) }
-function prNewMarket(o){
-  const p0=Math.max(.03,Math.min(.97,o.p0||.5));
-  return {id:o.id||uid(),q:o.q,grp:o.grp||null,opt:o.opt||null,close:o.close,note:o.note||'',subject:o.subject||null,
-    status:o.status||'open',p0,qy:LM_B*Math.log(p0/(1-p0)),qn:0,at:nowMs(),trades:[],hist:[{t:nowMs(),p:p0}],
-    ...Object.fromEntries(['hz','auto','gw','kind','line','gt','gn'].filter(k=>o[k]!=null).map(k=>[k,o[k]]))};
+function prSettleCore(m,res){
+  const holders=[...new Set((m.trades||[]).map(x=>x.by))];
+  holders.forEach(pid=>{ const p=prPos(m,pid);
+    if(res==='void'){ if(Math.abs(p.net)>1e-9)walletAdd(pid,p.net,m.k?'polymarket':'predict',m.k||m.id,'Void refund') }
+    else { const sh=res==='yes'?p.Y:p.N; if(sh>1e-9)walletAdd(pid,Math.round(sh*LM_PAY*100)/100,m.k?'polymarket':'predict',m.k||m.id,'Paid out') } });
+  m.status=res; m.resolved=nowMs();
+  return holders;
 }
-function prClosesText(m){ return m.status!=='open'?({yes:'Resolved Yes',no:'Resolved No',void:'Void'}[m.status]||m.status):nowMs()>=m.close?'Closed':'closes '+dlText(m.close) }
-/* the season's groups, and how each settles */
-const PR_GROUPS={
-  boot:  {t:'Golden Boot',     q:'wins the Golden Boot?',      note:'Yes if he ends the season with the most league goals. A tie: everyone tied wins.', n:1},
-  assist:{t:'Most assists',    q:'finishes with the most assists?', note:'Yes if he ends the season with the most league assists. A tie: everyone tied wins.', n:1},
-  champ: {t:'League champion', q:'finishes first?',            note:'Yes if he tops the league table at the end of the season.', n:1},
-  top3:  {t:'Top 3 finish',    q:'finishes in the top 3?',     note:'Yes if he is in the top three of the league table at the end of the season.', n:3},
-};
+function pmRetireOld(){
+  const b=bets(); if(b.mkGone)return false;
+  (b.mk||[]).forEach(m=>{ if(m.status==='open'&&(m.trades||[]).length)prSettleCore(m,'void'); else if(m.status==='open')m.status='void' });
+  b.mkGone=true; return true;
+}
 function prSeasonEnd(){
   const nm=String(season().name||''), m=nm.match(/(\d{4})\s*[\/–-]\s*(\d{2,4})/);
   const d=new Date(nowMs()+DUBAI_OFF), y=m?(m[2].length===2?2000+(+m[2]):+m[2]):(d.getUTCMonth()>=6?d.getUTCFullYear()+1:d.getUTCFullYear());
   return Date.UTC(y,4,31,23,59)-DUBAI_OFF;
 }
-/* a seeded random stream, so every phone that builds the set gets the same prices */
 function prRng(seed){ let a=seed>>>0; return ()=>{ a=(a+0x6D2B79F5)>>>0; let t=a; t=Math.imul(t^(t>>>15),t|1); t^=t+Math.imul(t^(t>>>7),t|61); return ((t^(t>>>14))>>>0)/4294967296 } }
 function prPois(l,r){ const L=Math.exp(-l); let k=0,p=1; do{ k++; p*=r() }while(p>L&&k<30); return k-1 }
-/* GW1 to now, then the rest of the season played 4,000 times: each player
-   turns up at his own rate and scores / assists / wins at his own rate,
-   pulled towards the league average while he has few games. */
-function prSimulate(end){
-  end=end||prSeasonEnd();
-  const st=lgStats().filter(x=>x.P>0&&ranksInTable(x.id));
-  const gs=allGames(), gws=Math.max(1,playedGws().length), perGw=Math.max(1,gs.length/gws);
-  const weeks=Math.max(0,Math.round((end-nowMs())/(7*864e5)));
-  const R=Math.round(weeks*perGw);
-  const tot=st.reduce((a,x)=>({P:a.P+x.P,G:a.G+x.G,A:a.A+(x.A||0),W:a.W+x.W,D:a.D+x.D}),{P:0,G:0,A:0,W:0,D:0});
-  const avgG=tot.G/Math.max(1,tot.P), avgA=tot.A/Math.max(1,tot.P), dr=tot.D/Math.max(1,tot.P);
-  const K=3, NG=gs.length||1;
-  const P=st.map(x=>({id:x.id,G:x.G,A:x.A||0,pts:x.pts,
-    att:(x.P+1)/(NG+2), g:(x.G+K*avgG)/(x.P+K), a:((x.A||0)+K*avgA)/(x.P+K), w:Math.min(.9,(x.W+K*.45)/(x.P+K))}));
-  const N=4000, r=prRng(20261007+st.length*31+gs.length+Math.round(end/864e5)), C={boot:{},assist:{},champ:{},top3:{}};
-  P.forEach(p=>{ Object.keys(C).forEach(k=>C[k][p.id]=0) });
-  for(let s=0;s<N;s++){
-    const G=P.map(p=>p.G), A=P.map(p=>p.A), T=P.map(p=>p.pts);
-    for(let g=0;g<R;g++)P.forEach((p,i)=>{ if(r()>p.att)return;
-      G[i]+=prPois(p.g,r); A[i]+=prPois(p.a,r); const u=r(); T[i]+=u<p.w?3:u<p.w+dr?1:0 });
-    const credit=(arr,k)=>{ const mx=Math.max(...arr), w=P.filter((_,i)=>arr[i]===mx); w.forEach(p=>C[k][p.id]+=1) };
-    credit(G,'boot'); credit(A,'assist');
-    const ord=P.map((p,i)=>({id:p.id,t:T[i]+r()*.01})).sort((x,y)=>y.t-x.t);
-    C.champ[ord[0].id]++; ord.slice(0,3).forEach(o=>C.top3[o.id]++);
+const PM_STATS={goals:{t:'Top scorer',s:'Scorer'},assists:{t:'Most assists',s:'Assists'},table:{t:'Top of the table',s:'Table'},top3:{t:'Top 3 finish',s:'Top 3'}};
+const PM_MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const PM_MONL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let PMC='goals', PMP=null, PMK=null, PMSIDE='Y', PMAMT=500;
+/* the periods you can pick, soonest first */
+function pmPeriods(){
+  const out=[], now=nowMs(), gw=fplNextGw(), seasonEnd=prSeasonEnd();
+  if(!playedGws().includes(gw))out.push({id:'gw'+gw,kind:'gw',gw,lab:`This Sunday (GW${gw})`,sh:`This Sunday (GW${gw})`,close:betsClosed()?sundayLockBefore(now):sundayLockAfter(now),end:null});
+  const d=new Date(now+DUBAI_OFF); let y=d.getUTCFullYear(), mo=d.getUTCMonth();
+  for(let i=0;i<12;i++){
+    const end=Date.UTC(y,mo+1,1)-DUBAI_OFF-60e3;
+    if(end>seasonEnd-864e5)break;
+    const close=sundayLockBefore(end);
+    if(close>now)out.push({id:`m${y}-${mo+1}`,kind:'month',lab:`By the end of ${PM_MONL[mo]}`,sh:PM_MON[mo],close,end});
+    if(mo===11){ const xe=Date.UTC(y,11,25,23,59)-DUBAI_OFF, xc=sundayLockBefore(xe); if(xc>now)out.splice(out.length-(close>now?1:0),0,{id:`x${y}`,kind:'xmas',lab:'By Christmas',sh:'Christmas',close:xc,end:xe}) }
+    mo++; if(mo>11){mo=0;y++}
   }
-  const out={}; Object.keys(C).forEach(k=>{ out[k]=Object.entries(C[k]).map(([id,n])=>({id,p:n/N})).sort((a,b)=>b.p-a.p) });
-  out.R=R; out.weeks=weeks;
+  const sc=sundayLockBefore(seasonEnd); if(sc>now)out.push({id:'season',kind:'season',lab:'End of the season',sh:'Season',close:sc,end:seasonEnd});
   return out;
 }
-/* ---- three horizons, so there is always something about to settle ----
-   gw:     this gameweek (top scorer, goals over a line, a hat-trick). Closes at
-           the deadline; settles itself once that gameweek's game is logged.
-   xmas:   by Christmas (top scorer, top of the table, and the two one-offs).
-           Settles itself two days after 25 December (a one-off settles Yes the
-           moment it happens).
-   season: the four season groups, settled by the admin at the end.
-   Every set is built once, the same on every phone (seeded random). */
-function prXmas(){ const d=new Date(nowMs()+DUBAI_OFF); return Date.UTC(d.getUTCFullYear(),11,25,23,59)-DUBAI_OFF }
-function prHz(m){ return m.hz||(['m_haul','m_goals'].includes(m.id)?'xmas':m.grp?'season':'xmas') }
-function prMeta(grp){
-  const m=prMarkets().find(x=>x.grp===grp)||{}, G=PR_GROUPS[grp]||{};
-  return {t:m.gt||G.t||grp, n:m.gn||G.n||1, note:m.note||G.note||'', hz:prHz(m), auto:!!m.auto};
+function pmPeriod(id){ return pmPeriods().find(p=>p.id===id)||null }
+function pmPool(){ return season().players.filter(p=>p.active!==false&&ranksInTable(p.id)) }
+/* games that count for a period, and the standings from them */
+function pmGamesTo(per){
+  const gs=allGames().filter(g=>g.scoreA!=null&&g.scoreB!=null);
+  if(per.kind==='gw')return gs.filter(g=>(gwOf(g)||0)<=per.gw);
+  const day=new Date(per.end+DUBAI_OFF).toISOString().slice(0,10);
+  return gs.filter(g=>String(g.date||'').slice(0,10)<=day);
 }
-const PR_HZ_LAB={gw:'THIS GAMEWEEK',xmas:'BY CHRISTMAS',season:'SEASON'};
-function prGroupPush(k,meta,list,close,extra){
-  list.filter(x=>x.p>=.01).slice(0,10).forEach(x=>{ const p=player(x.id); if(!p)return;
-    prMarkets().push(prNewMarket({id:'m_'+k+'_'+x.id,q:`${p.name} ${meta.q}`,grp:k,opt:x.id,subject:x.id,close,p0:x.p,note:meta.note,...extra,gt:meta.t,gn:meta.n})) });
+function pmStand(games,ids){
+  const T={}; ids.forEach(id=>T[id]={G:0,A:0,pts:0,W:0,P:0});
+  games.forEach(g=>[['A',g.teamA],['B',g.teamB]].forEach(([sd,team])=>(team||[]).forEach(id=>{ const t=T[id]; if(!t)return;
+    t.P++; t.G+=(g.goals&&g.goals[id])||0; t.A+=(g.assists&&g.assists[id])||0; if(g.result==='D')t.pts++; else if(g.result===sd){t.pts+=3;t.W++} })));
+  return T;
 }
-/* per-game helpers for the one-offs and the gameweek markets */
-function prGameModel(){
-  const gs=allGames(), stl=lgStats().filter(x=>x.P>0), NG=Math.max(1,gs.length);
+/* how many games are left in a period */
+function pmGamesLeft(per){
+  const gs=allGames(), perGw=gs.length/Math.max(1,playedGws().length)||1;
+  if(per.kind==='gw')return Math.max(1,gamesInGw(per.gw).filter(g=>g.scoreA==null).length||Math.round(perGw));
+  let n=0, t=sundayLockAfter(nowMs()-1); const lastDay=new Date(per.end+DUBAI_OFF).toISOString().slice(0,10);
+  while(new Date(t+DUBAI_OFF).toISOString().slice(0,10)<=lastDay&&n<60){ n++; t=sundayLockAfter(t+60e3) }
+  if(betsClosed())n++;   /* this Sunday has been played but not logged yet */
+  return Math.round(n*perGw);
+}
+let PM_MEMO={};
+function pmModel(per){
+  const sig=[allGames().length,allGames().reduce((t,g)=>t+(g.scoreA||0)*7+(g.scoreB||0),0),season().players.length,per.id,Math.floor(nowMs()/864e5)].join('|');
+  if(PM_MEMO[sig])return PM_MEMO[sig];
+  const pool=pmPool(), ids=pool.map(p=>p.id), all=allGames().filter(g=>g.scoreA!=null);
+  const NG=Math.max(1,all.length), st=pmStand(all,ids);
+  /* priors by position */
+  const posAvg={}; ['GK','DEF','MID','ATT'].forEach(pos=>{ const L=pool.filter(p=>(p.pos||'MID')===pos); const P=L.reduce((t,p)=>t+st[p.id].P,0);
+    posAvg[pos]={g:P?L.reduce((t,p)=>t+st[p.id].G,0)/P:null,a:P?L.reduce((t,p)=>t+st[p.id].A,0)/P:null} });
+  const totP=ids.reduce((t,id)=>t+st[id].P,0)||1, avgG=ids.reduce((t,id)=>t+st[id].G,0)/totP, avgA=ids.reduce((t,id)=>t+st[id].A,0)/totP;
+  const draws=all.filter(g=>g.result==='D').length/NG;
+  const recent=all.slice().sort((a,b)=>(a.created||0)-(b.created||0)).slice(-8);
+  const K=3;
+  const M=pool.map(p=>{ const s=st[p.id], pa=posAvg[p.pos||'MID']||{};
+    const rec=recent.length?recent.filter(g=>h2hSide(g,p.id)).length/recent.length:0;
+    const att=Math.min(.97,Math.max(.02,.5*((s.P+.5)/(NG+1))+.5*((rec*recent.length+.5)/(recent.length+1))));
+    const ppg=(s.pts+K*1.4)/(s.P+K);
+    return {id:p.id,att,g:(s.G+K*(pa.g??avgG))/(s.P+K),a:(s.A+K*(pa.a??avgA))/(s.P+K),sk:ppg-1.4} });
+  const inGw=per.kind==='gw', base=inGw?pmStand(all.filter(g=>gwOf(g)===per.gw),ids):pmStand(pmGamesTo(per),ids);
+  const tableBase=inGw?pmStand(all,ids):base;
+  const R=pmGamesLeft(per), N=3000, r=prRng(9001+NG*131+ids.length*7+per.id.split('').reduce((t,c)=>t+c.charCodeAt(0)*31,0));
+  const C={goals:{},assists:{},table:{},top3:{}}; ids.forEach(id=>{ for(const k in C)C[k][id]=0 });
+  const n=M.length;
+  for(let s=0;s<N;s++){
+    const G=M.map(m=>base[m.id].G), A=M.map(m=>base[m.id].A), T=M.map(m=>tableBase[m.id].pts), W=M.map(m=>tableBase[m.id].W), GT=M.map(m=>tableBase[m.id].G);
+    for(let g=0;g<R;g++){
+      const here=[]; for(let i=0;i<n;i++)if(r()<M[i].att)here.push(i);
+      if(here.length<2)continue;
+      for(let i=here.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [here[i],here[j]]=[here[j],here[i]] }
+      const h=here.length>>1, sa=here.slice(0,h), sb=here.slice(h);
+      const str=x=>x.reduce((t,i)=>t+M[i].sk,0)/Math.max(1,x.length);
+      const pa=(1-draws)/(1+Math.exp(-2.2*(str(sa)-str(sb)))), u=r();
+      const res=u<pa?'A':u<pa+draws?'D':'B';
+      here.forEach((i,k)=>{ const gl=prPois(M[i].g,r), as=prPois(M[i].a,r); G[i]+=gl; A[i]+=as; GT[i]+=gl;
+        const sd=k<h?'A':'B'; if(res==='D')T[i]+=1; else if(res===sd){T[i]+=3;W[i]++} });
+    }
+    const top=(arr,k)=>{ const mx=Math.max(...arr); if(mx<=0)return; for(let i=0;i<n;i++)if(arr[i]===mx)C[k][M[i].id]++ };
+    top(G,'goals'); top(A,'assists');
+    const ord=M.map((m,i)=>({i,v:T[i]*1e6+W[i]*1e3+GT[i]+r()*.5})).sort((x,y)=>y.v-x.v);
+    C.table[M[ord[0].i].id]++; ord.slice(0,3).forEach(o=>C.top3[M[o.i].id]++);
+  }
+  const out={R,N}; for(const k in C){ out[k]={}; ids.forEach(id=>out[k][id]=C[k][id]/N) }
+  PM_MEMO={[sig]:out}; return out;
+}
+/* specials: this Sunday's goals line and a hat-trick, and the two Christmas one-offs */
+function pmSpecials(){
+  const gs=allGames().filter(g=>g.scoreA!=null), NG=Math.max(1,gs.length), stl=lgStats().filter(x=>x.P>0);
   const avgG=stl.reduce((t,x)=>t+x.G,0)/Math.max(1,stl.reduce((t,x)=>t+x.P,0));
   const tail=(l,k)=>{ let c=0,t=Math.exp(-l); for(let i=0;i<k;i++){ c+=t; t*=l/(i+1) } return Math.max(0,1-c) };
   const haul=k=>1-stl.reduce((q,x)=>q*(1-Math.min(1,x.P/NG)*tail((x.G+3*avgG)/(x.P+3),k)),1);
   const tots=gs.map(g=>(g.scoreA||0)+(g.scoreB||0)), mu=tots.reduce((t,v)=>t+v,0)/NG, sd=Math.max(3,Math.sqrt(tots.reduce((t,v)=>t+(v-mu)*(v-mu),0)/NG));
   const phi=z=>{ const t=1/(1+.2316419*Math.abs(z)), d=.3989423*Math.exp(-z*z/2), p=d*t*(.3193815+t*(-.3565638+t*(1.781478+t*(-1.821256+t*1.330274)))); return z>0?1-p:p };
   const over=t=>1-phi((t-.5-mu)/sd);
-  return {gs,stl,NG,avgG,haul,over,mu,perGw:Math.max(1,gs.length/Math.max(1,playedGws().length))};
-}
-function prSeedSeason(){
-  const b=bets(); if(b.mkSet===PR_SET)return false;
-  const sim=prSimulate(), close=prSeasonEnd();
-  Object.keys(PR_GROUPS).forEach(k=>prGroupPush(k,PR_GROUPS[k],sim[k],close,{hz:'season'}));
-  b.mkSet=PR_SET; return true;
-}
-function prSeedXmas(){
-  const b=bets(), xmas=prXmas(); if(b.mkX===xmas||xmas<=nowMs())return false;
-  const sim=prSimulate(xmas);
-  prGroupPush('x_boot',{t:'Top scorer at Christmas',q:'is top scorer at Christmas?',note:'Yes if he has the most league goals in games logged up to 25 December. A tie: everyone tied wins. Settles itself after Christmas.',n:1},sim.boot,xmas,{hz:'xmas',auto:true});
-  prGroupPush('x_champ',{t:'Top of the table at Christmas',q:'is top of the table at Christmas?',note:'Yes if he tops the league on points from games logged up to 25 December (ties: the most wins, then goals). Settles itself after Christmas.',n:1},sim.champ,xmas,{hz:'xmas',auto:true});
-  if(!prMarkets().some(m=>m.id==='m_haul')){
-    const M=prGameModel(), left=Math.max(1,Math.round((xmas-nowMs())/(7*864e5)*M.perGw)), pAny=r=>1-Math.pow(1-r,left);
-    let k=4; while(k<15&&pAny(M.haul(k))>.7)k++;
-    let t=Math.max(10,Math.ceil(M.mu)); while(t<M.mu+40&&pAny(M.over(t))>.7)t++;
-    prMarkets().push(prNewMarket({id:'m_haul',q:`Someone scores ${k} or more in one game before Christmas?`,close:xmas,p0:pAny(M.haul(k)),hz:'xmas',auto:true,line:k,kind:'haul',note:`Yes if any player scores ${k} or more in a single league game logged before 25 December. Settles Yes the moment it happens.`}));
-    prMarkets().push(prNewMarket({id:'m_goals',q:`A game with ${t}+ goals before Christmas?`,close:xmas,p0:pAny(M.over(t)),hz:'xmas',auto:true,line:t,kind:'total',note:`Yes if any league game logged before 25 December has ${t} or more goals in total. Settles Yes the moment it happens.`}));
+  const out=[];
+  const P=pmPeriods(), w=P.find(p=>p.kind==='gw'), x=P.find(p=>p.kind==='xmas')||{kind:'xmas',id:'x'+new Date(nowMs()+DUBAI_OFF).getUTCFullYear(),end:Date.UTC(new Date(nowMs()+DUBAI_OFF).getUTCFullYear(),11,25,23,59)-DUBAI_OFF};
+  if(gs.length>=3&&w){
+    const line=Math.max(4,Math.round(mu)), games=pmGamesLeft(w);
+    out.push({k:`sp|over|${w.id}|${line}`,per:w,q:`${line}+ goals this Sunday (GW${w.gw})?`,model:1-Math.pow(1-over(line),games),note:`Yes if the GW${w.gw} game has ${line} or more goals in total.`});
+    out.push({k:`sp|hat|${w.id}`,per:w,q:`A hat-trick this Sunday (GW${w.gw})?`,model:1-Math.pow(1-haul(3),games),note:`Yes if anyone scores three or more in a GW${w.gw} game.`});
   }
-  b.mkX=xmas; return true;
+  if(gs.length>=3&&x.end>nowMs()){
+    const xc=sundayLockBefore(x.end); if(xc>nowMs()){
+      const per={...x,close:xc,lab:'By Christmas'}, left=Math.max(1,pmGamesLeft(per)), pAny=r=>1-Math.pow(1-r,left);
+      let k=4; while(k<15&&pAny(haul(k))>.7)k++;
+      let t=Math.max(10,Math.ceil(mu)); while(t<mu+40&&pAny(over(t))>.7)t++;
+      out.push({k:`sp|haul|${x.id}|${k}`,per,q:`Someone scores ${k}+ in one game before Christmas?`,model:pAny(haul(k)),note:`Yes if any player scores ${k} or more in a single game logged before 25 December. Settles Yes the moment it happens.`});
+      out.push({k:`sp|total|${x.id}|${t}`,per,q:`A ${t}+ goal game before Christmas?`,model:pAny(over(t)),note:`Yes if any game logged before 25 December has ${t} or more goals. Settles Yes the moment it happens.`});
+    }
+  }
+  return out;
 }
-/* this gameweek: built while the market is open, closes at the deadline */
-function prSeedWeek(){
-  const b=bets(), gw=fplNextGw(); if(!b.mkW)b.mkW={};
-  if(b.mkW[gw]||betsClosed()||playedGws().includes(gw))return false;
-  const M=prGameModel(); if(M.stl.length<3)return false;
-  const close=sundayLockAfter(nowMs()), K=3, NG=M.NG, games=Math.max(1,Math.round(M.perGw));
-  const P=M.stl.filter(x=>ranksInTable(x.id)).map(x=>({id:x.id,att:(x.P+1)/(NG+2),g:(x.G+K*M.avgG)/(x.P+K)}));
-  const r=prRng(7000+gw*131+NG), N=4000, C={}; P.forEach(p=>C[p.id]=0);
-  for(let s=0;s<N;s++){ const G=P.map(p=>{ let t=0; for(let k=0;k<games;k++)if(r()<p.att)t+=prPois(p.g,r); return t });
-    const mx=Math.max(...G); if(mx>0)P.forEach((p,i)=>{ if(G[i]===mx)C[p.id]++ }) }
-  prGroupPush('w'+gw+'_top',{t:`Top scorer in GW${gw}`,q:`is top scorer in GW${gw}?`,note:`Yes if he scores the most goals in GW${gw} (a tie: everyone tied wins; nobody scores: all No). Settles itself when the game is logged.`,n:1},
-    Object.entries(C).map(([id,n])=>({id,p:n/N})).sort((a,b)=>b.p-a.p),close,{hz:'gw',auto:true,gw});
-  const line=Math.max(4,Math.round(M.mu)), pOver=1-Math.pow(1-M.over(line),games);
-  prMarkets().push(prNewMarket({id:'m_w'+gw+'_over',q:`${line}+ goals in the GW${gw} game?`,close,p0:pOver,hz:'gw',auto:true,gw,line,kind:'gwtotal',note:`Yes if the GW${gw} game has ${line} or more goals in total (two games: either one). Settles itself when it is logged.`}));
-  prMarkets().push(prNewMarket({id:'m_w'+gw+'_hat',q:`A hat-trick in GW${gw}?`,close,p0:1-Math.pow(1-M.haul(3),games),hz:'gw',auto:true,gw,kind:'gwhat',note:`Yes if anyone scores three or more in a GW${gw} game. Settles itself when it is logged.`}));
-  b.mkW[gw]=true; return true;
+/* market state: only created on the first trade */
+function pmStore(){ const b=bets(); if(!b.pm)b.pm={}; return b.pm }
+function pmClamp(p){ return Math.max(.005,Math.min(.995,p||0)) }
+function pmLogit(p){ p=pmClamp(p); return Math.log(p/(1-p)) }
+function pmEff(m,model){ return {qy:(m?m.qy:0)+LM_B*pmLogit(model),qn:m?m.qn:0} }
+function pmPrice(m,model){ if(m&&m.status!=='open')return m.status==='yes'?1:0; const e=pmEff(m,model); return lmPrice(e.qy,e.qn) }
+const pmC=p=>Math.max(1,Math.min(99,Math.round(p*100)));
+function pmVol(m){ return m?(m.trades||[]).reduce((s,x)=>s+Math.abs(x.cost),0):0 }
+/* the live description of one outcome */
+function pmOutcome(k){
+  const [stat,per,pid]=k.split('|');
+  if(stat==='sp'){ const s=pmSpecials().find(x=>x.k===k); const m=pmStore()[k]; if(!s&&!m)return null;
+    const pr=s?s.per:pmPeriod(m.per)||{id:m.per,close:m.close,end:m.end,lab:m.lab};
+    return {k,special:true,q:s?s.q:m.q,note:s?s.note:m.note,per:pr,model:s?s.model:(m.model||.5),m}; }
+  const P=pmPeriod(per)||(pmStore()[k]?{id:per,close:pmStore()[k].close,end:pmStore()[k].end,lab:pmStore()[k].lab,kind:pmStore()[k].kind,gw:pmStore()[k].gw}:null); if(!P)return null;
+  const mod=pmModel(P), p=player(pid)||{name:'?'};
+  return {k,stat,per:P,pid,q:`${p.name} · ${PM_STATS[stat].t}`,model:(mod[stat]||{})[pid]||0,m:pmStore()[k]};
 }
-function prSeed(){ let ch=false; const st=lgStats().filter(x=>x.P>0&&ranksInTable(x.id)); if(st.length<3)return false;
-  ch=prSeedSeason()||ch; ch=prSeedXmas()||ch; ch=prSeedWeek()||ch; return ch }
-/* the markets that settle themselves; returns the holders to tell */
-function prAutoSettle(){
-  const hold=new Set(), done=(m,res)=>prSettleCore(m,res).forEach(h=>hold.add(h));
-  const open=prMarkets().filter(m=>m.status==='open'&&m.auto);
-  const xmas=open.length?Math.max(...open.filter(m=>prHz(m)==='xmas').map(m=>m.close),0):0;
-  const beforeX=c=>allGames().filter(g=>g.scoreA!=null&&String(g.date||'').slice(0,10)<=new Date(c+DUBAI_OFF).toISOString().slice(0,10));
-  /* gameweek */
-  const gws=new Set(open.filter(m=>m.gw!=null).map(m=>m.gw));
-  gws.forEach(gw=>{ if(!playedGws().includes(gw))return; const gs=gamesInGw(gw).filter(g=>g.scoreA!=null); if(!gs.length)return;
-    const goals={}; gs.forEach(g=>Object.entries(g.goals||{}).forEach(([id,v])=>goals[id]=(goals[id]||0)+v));
-    const mx=Math.max(0,...Object.values(goals));
-    open.filter(m=>m.gw===gw).forEach(m=>{
-      if(m.grp)done(m,mx>0&&(goals[m.opt]||0)===mx?'yes':'no');
-      else if(m.kind==='gwtotal')done(m,gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=m.line)?'yes':'no');
-      else if(m.kind==='gwhat')done(m,gs.some(g=>Object.values(g.goals||{}).some(v=>v>=3))?'yes':'no');
-    }) });
-  /* by Christmas: one-offs the moment they happen; everything two days after */
-  open.filter(m=>m.kind==='haul'||m.kind==='total').forEach(m=>{ const gs=beforeX(m.close);
-    const hit=m.kind==='haul'?gs.some(g=>Object.values(g.goals||{}).some(v=>v>=m.line)):gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=m.line);
-    if(hit)done(m,'yes'); else if(nowMs()>=m.close+2*864e5)done(m,'no') });
-  ['x_boot','x_champ'].forEach(k=>{ const L=open.filter(m=>m.grp===k); if(!L.length||nowMs()<L[0].close+2*864e5)return;
-    const gs=beforeX(L[0].close), T={};
-    gs.forEach(g=>[['A',g.teamA],['B',g.teamB]].forEach(([sd,team])=>(team||[]).forEach(id=>{ const t=T[id]=T[id]||{G:0,pts:0,W:0};
-      t.G+=(g.goals&&g.goals[id])||0; if(g.result==='D')t.pts++; else if(g.result===sd){t.pts+=3;t.W++} })));
-    const ids=Object.keys(T).filter(id=>ranksInTable(id));
-    let win;
-    if(k==='x_boot'){ const mx=Math.max(0,...ids.map(id=>T[id].G)); win=new Set(ids.filter(id=>T[id].G===mx&&mx>0)) }
-    else { const best=ids.sort((a,b)=>T[b].pts-T[a].pts||T[b].W-T[a].W||T[b].G-T[a].G)[0]; win=new Set(best?[best]:[]) }
-    L.forEach(m=>done(m,win.has(m.opt)?'yes':'no')) });
-  return [...hold];
-}
-async function prEnsure(){
-  const snap=betSnap(); let ch=false, hold=[];
-  try{ hold=prAutoSettle(); ch=prSeed()||hold.length>0||ch }catch(e){}
-  if(ch&&await betCommit(snap,null)&&hold.length)pushSend('Polymarket settled','Your markets have paid out','predict',{url:'/',pids:hold});
-}
-async function prTrade(id,side,amt){
+function pmOpen(o){ return (!o.m||o.m.status==='open')&&nowMs()<o.per.close&&!betsClosed() }
+async function pmTrade(k,side,amt){
   const me=fplMine(); if(!me){toast('Enter your code first');return}
-  const m=prMarkets().find(x=>x.id===id); if(!m)return;
-  if(!prOpen(m)){toast('This market is closed');return}
-  if(m.subject===me.pid&&side==='N'){toast('You can only buy Yes on a market about yourself');return}
+  const o=pmOutcome(k); if(!o)return;
+  if(!pmOpen(o)){toast('This market is closed');return}
+  if(o.pid===me.pid&&side==='N'){toast('You can only buy Yes on yourself');return}
   amt=Math.round(+amt||0);
   if(amt<PR_MIN){toast(`Minimum is ${usd(PR_MIN)}`);return}
-  const pos=prPos(m,me.pid);
-  if(pos.net+amt>PR_MAX){toast(`Max ${usd(PR_MAX)} on one market — you have ${usd(Math.max(0,PR_MAX-pos.net))} left`);return}
+  const pos=o.m?prPos(o.m,me.pid):{net:0};
+  if(pos.net+amt>PR_MAX){toast(`Max ${usd(PR_MAX)} on one market — ${usd(Math.max(0,PR_MAX-pos.net))} left`);return}
   if(amt>wallet(me.pid)){toast('Not enough in your wallet');return}
-  const snap=betSnap(), sh=lmSharesFor(m,side,amt);
+  const snap=betSnap(), S=pmStore();
+  if(!S[k])S[k]={k,stat:o.stat||'sp',per:o.per.id,pid:o.pid||null,q:o.q,note:o.note||'',kind:o.per.kind,gw:o.per.gw||null,close:o.per.close,end:o.per.end,lab:o.per.lab,qy:0,qn:0,trades:[],hist:[{t:nowMs(),p:pmPrice(null,o.model)}],status:'open',at:nowMs()};
+  const m=S[k]; if(o.special)m.model=o.model;
+  const e=pmEff(m,o.model), sh=lmSharesFor(e,side,amt);
   if(!(sh>0)){toast('Could not price that');return}
   if(side==='Y')m.qy+=sh; else m.qn+=sh;
-  m.trades.push({id:uid(),by:me.pid,side,sh,cost:amt,at:nowMs()});
-  m.hist.push({t:nowMs(),p:prPrice(m)});
-  walletAdd(me.pid,-amt,'predict',m.id,`Buy ${side==='Y'?'Yes':'No'}`);
-  await betCommit(snap,`${sh.toFixed(1)} ${side==='Y'?'Yes':'No'} shares · ${usd(amt)}`);
+  m.trades.push({id:uid(),by:me.pid,side,sh,cost:amt,at:nowMs(),model:o.model});
+  m.hist.push({t:nowMs(),p:pmPrice(m,o.model)});
+  walletAdd(me.pid,-amt,'polymarket',k,`Buy ${side==='Y'?'Yes':'No'}`);
+  if(await betCommit(snap,`${sh.toFixed(1)} ${side==='Y'?'Yes':'No'} shares · ${usd(amt)}`))pmSheet(k);
 }
-async function prSell(id,side){
-  const me=fplMine(); if(!me)return;
-  const m=prMarkets().find(x=>x.id===id); if(!m)return;
-  if(!prOpen(m)){toast('This market is closed');return}
-  const pos=prPos(m,me.pid), sh=side==='Y'?pos.Y:pos.N; if(!(sh>1e-9)){toast('Nothing to sell');return}
-  const back=Math.floor(lmProceeds(m,side,sh)*100)/100;
+async function pmSell(k,side){
+  const me=fplMine(); if(!me)return; const o=pmOutcome(k); if(!o||!o.m)return;
+  if(!pmOpen(o)){toast('This market is closed');return}
+  const m=o.m, pos=prPos(m,me.pid), sh=side==='Y'?pos.Y:pos.N; if(!(sh>1e-9)){toast('Nothing to sell');return}
+  const back=Math.floor(lmProceeds(pmEff(m,o.model),side,sh)*100)/100;
   if(!await askConfirm(`Sell ${sh.toFixed(1)} ${side==='Y'?'Yes':'No'} shares?`,`You get ${usd(back)} back now.`,'Sell'))return;
   const snap=betSnap();
   if(side==='Y')m.qy-=sh; else m.qn-=sh;
-  m.trades.push({id:uid(),by:me.pid,side,sh:-sh,cost:-back,at:nowMs()});
-  m.hist.push({t:nowMs(),p:prPrice(m)});
-  walletAdd(me.pid,back,'predict',m.id,`Sell ${side==='Y'?'Yes':'No'}`);
-  await betCommit(snap,`Sold for ${usd(back)}`);
+  m.trades.push({id:uid(),by:me.pid,side,sh:-sh,cost:-back,at:nowMs(),model:o.model});
+  m.hist.push({t:nowMs(),p:pmPrice(m,o.model)});
+  walletAdd(me.pid,back,'polymarket',k,`Sell ${side==='Y'?'Yes':'No'}`);
+  if(await betCommit(snap,`Sold for ${usd(back)}`))pmSheet(k);
 }
-/* Yes / No pays $100 a winning share; Void refunds each player's net cost */
-function prSettleCore(m,res){
-  const holders=[...new Set((m.trades||[]).map(x=>x.by))];
-  holders.forEach(pid=>{ const p=prPos(m,pid);
-    if(res==='void'){ if(Math.abs(p.net)>1e-9)walletAdd(pid,p.net,'predict',m.id,'Void refund') }
-    else { const sh=res==='yes'?p.Y:p.N; if(sh>1e-9)walletAdd(pid,Math.round(sh*LM_PAY*100)/100,'predict',m.id,'Paid out') } });
-  m.status=res; m.resolved=nowMs();
-  return holders;
+/* automatic settlement, from the games; returns the holders to tell */
+function pmSettleAll(){
+  const hold=new Set(), S=pmStore(), now=nowMs(), ids=pmPool().map(p=>p.id);
+  Object.values(S).filter(m=>m.status==='open').forEach(m=>{
+    let res=null;
+    if(m.stat==='sp'){
+      const kind=m.k.split('|')[1];
+      if(kind==='over'||kind==='hat'){ if(!playedGws().includes(m.gw))return; const gs=gamesInGw(m.gw).filter(g=>g.scoreA!=null); if(!gs.length)return;
+        res=kind==='over'?(gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=+m.k.split('|')[3])?'yes':'no'):(gs.some(g=>Object.values(g.goals||{}).some(v=>v>=3))?'yes':'no') }
+      else { const line=+m.k.split('|')[3], gs=pmGamesTo({kind:'xmas',end:m.end});
+        const hit=kind==='haul'?gs.some(g=>Object.values(g.goals||{}).some(v=>v>=line)):gs.some(g=>(g.scoreA||0)+(g.scoreB||0)>=line);
+        res=hit?'yes':now>=m.end+2*864e5?'no':null }
+    } else {
+      let games;
+      if(m.kind==='gw'){ if(!playedGws().includes(m.gw))return; games=allGames().filter(g=>g.scoreA!=null) }
+      else { if(now<m.end+2*864e5)return; games=pmGamesTo({kind:m.kind,end:m.end}) }
+      const T=pmStand(m.kind==='gw'&&(m.stat==='goals'||m.stat==='assists')?games.filter(g=>gwOf(g)===m.gw):games.filter(g=>m.kind!=='gw'||(gwOf(g)||0)<=m.gw),ids);
+      const key=m.stat==='goals'?'G':m.stat==='assists'?'A':null;
+      let win;
+      if(key){ const mx=Math.max(0,...ids.map(id=>T[id][key])); win=mx>0?ids.filter(id=>T[id][key]===mx):[] }
+      else { const v=id=>[T[id].pts,T[id].W,T[id].G], cmp=(a,b)=>{ const x=v(a),y=v(b); return y[0]-x[0]||y[1]-x[1]||y[2]-x[2] };
+        const ord=ids.filter(id=>T[id].P>0).sort(cmp), cut=m.stat==='table'?ord[0]:ord[2];
+        win=cut?ord.filter(id=>cmp(id,cut)<=0):[] }
+      res=win.includes(m.pid)?'yes':'no';
+    }
+    if(res)prSettleCore(m,res).forEach(h=>hold.add(h));
+  });
+  return [...hold];
 }
-async function prResolve(id,res){
-  if(!requireAdmin())return;
-  const m=prMarkets().find(x=>x.id===id); if(!m)return;
-  const lab={yes:'Yes',no:'No',void:'Void'}[res];
-  if(!await askConfirm(`Resolve ${lab}?`,res==='void'?'Everyone gets back what they put in, less what they sold.':`Every ${lab} share pays ${usd(LM_PAY)}.`,'Resolve'))return;
-  const snap=betSnap(); const holders=prSettleCore(m,res);
-  if(await betCommit(snap,`Resolved ${lab}`)&&holders.length)pushSend('Polymarket settled',`${m.q} — ${lab}`,'predict',{url:'/',pids:holders});
+function prAutoSettle(){ return pmSettleAll() }
+function prSeed(){ return false }
+async function prEnsure(){
+  const snap=betSnap(); let hold=[], ch=false;
+  try{ ch=pmRetireOld(); hold=pmSettleAll() }catch(e){}
+  if((ch||hold.length)&&await betCommit(snap,null)&&hold.length)pushSend('Polymarket settled','Your markets have paid out','predict',{url:'/',pids:hold});
 }
-/* a whole group at once: pick the winner(s); everyone else resolves No */
-async function prResolveGroup(k){
-  if(!requireAdmin())return;
-  const G=prMeta(k), L=prMarkets().filter(m=>m.grp===k&&m.status==='open'); if(!L.length)return;
-  const won=new Set();
-  for(let i=0;i<G.n;i++){
-    const v=await askChoice(`${G.t}${G.n>1?` · pick ${i+1} of ${G.n}`:''}`,'Who won it? (a tie: settle each player on his own)',L.filter(m=>!won.has(m.id)).map(m=>({label:(player(m.opt)||{}).name||m.q,value:m.id})));
-    if(!v)return; won.add(v);
-  }
-  if(!await askConfirm(`Settle ${G.t}?`,`${[...won].map(id=>(player(prMarkets().find(m=>m.id===id).opt)||{}).name).join(', ')} Yes; everyone else No.`,'Settle'))return;
-  const snap=betSnap(), hold=new Set();
-  L.forEach(m=>prSettleCore(m,won.has(m.id)?'yes':'no').forEach(h=>hold.add(h)));
-  if(await betCommit(snap,`${G.t} settled`)&&hold.size)pushSend('Polymarket settled',`${G.t}: ${[...won].map(id=>(player(prMarkets().find(m=>m.id===id).opt)||{}).name).join(', ')}`,'predict',{url:'/',pids:[...hold]});
-}
-function prSpark(m,w,h){
-  const H=(m.hist||[]).map(x=>x.p); if(H.length<2)H.unshift(m.p0);
-  const pts=H.map((p,i)=>[(i/(H.length-1))*w,h-2-(p*(h-4))]);
-  return `<svg class="pr-sp ${H[H.length-1]>=H[0]?'up':'dn'}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><polyline points="${pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join(' ')}" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="${pts[pts.length-1][0].toFixed(1)}" cy="${pts[pts.length-1][1].toFixed(1)}" r="3"/></svg>`;
-}
-const prPc=m=>Math.max(1,Math.min(99,Math.round(prPrice(m)*100)));
-function prOpenM(id,side){ return `PRM='${id}';PRSIDE='${side||'Y'}';render();window.scrollTo(0,0)` }
-function prGroupCard(k){
-  const G=prMeta(k), L=prMarkets().filter(m=>m.grp===k).sort((a,b)=>prPrice(b)-prPrice(a)); if(!L.length)return '';
-  const vol=L.reduce((t,m)=>t+prVolume(m),0), done=L.every(m=>m.status!=='open');
-  return `<div class="pr-c pr-g">
-    <button class="pr-top" onclick="PRG='${k}';render();window.scrollTo(0,0)"><span class="prm-t"><span class="pr-cat">${PR_HZ_LAB[G.hz]}</span><b>${esc(G.t)}</b></span><span class="pr-more">${L.length} players ${chev}</span></button>
-    ${L.slice(0,4).map(m=>{ const p=player(m.opt)||{name:'?'};
-      return `<div class="pr-gr">${avatar(p,30)}<button class="pr-gn" onclick="${prOpenM(m.id)}">${esc(p.name)}</button><b>${m.status==='yes'?'Won':m.status==='no'?'—':prPc(m)+'%'}</b>
-        ${prOpen(m)?`<button class="pr-y sm" onclick="${prOpenM(m.id,'Y')}">Yes</button>`:''}</div>` }).join('')}
-    <div class="pr-mid"><span>${usd(vol)} traded · ${done?'Settled':esc(prClosesText(L[0]))}</span></div>
+/* ---- the screens ---- */
+function pmPctTxt(p){ return p<.005?'<1%':p>.995?'>99%':Math.round(p*100)+'%' }
+function pmRow(o){
+  const p=pmPrice(o.m,o.model), pc=pmC(p), pl=player(o.pid)||{name:'?'}, open=pmOpen(o), vol=pmVol(o.m);
+  const done=o.m&&o.m.status!=='open';
+  return `<div class="pmr">
+    <button class="pmr-who" onclick="pmSheet('${o.k}')">${avatar(pl,34)}<span><b>${esc(pl.name)}</b><i>${esc(pl.pos||'')}${vol?` · ${usd(vol)} vol`:''}</i></span></button>
+    <b class="pmr-pc">${done?(o.m.status==='yes'?'Won':'—'):pmPctTxt(p)}</b>
+    ${open?`<span class="pmr-bt"><button class="pmy" onclick="PMSIDE='Y';pmSheet('${o.k}')">Yes ${pc}¢</button><button class="pmn" onclick="PMSIDE='N';pmSheet('${o.k}')">No ${100-pc}¢</button></span>`:''}
   </div>`;
 }
-function prCard(m){
-  const pc=prPc(m), open=prOpen(m);
-  return `<div class="pr-c">
-    <button class="pr-top" onclick="${prOpenM(m.id)}"><span class="prm-t"><span class="pr-cat">${PR_HZ_LAB[prHz(m)]}</span><b>${esc(m.q)}</b></span>
-      <span class="pr-pc"><b>${m.status==='yes'?'Yes':m.status==='no'?'No':pc+'%'}</b><i>${m.status==='open'?'chance':'settled'}</i></span></button>
-    <div class="pr-mid">${prSpark(m,150,30)}<span>${usd(prVolume(m))} traded · ${esc(prClosesText(m))}</span></div>
-    ${open?`<div class="pr-yn"><button class="pr-y" onclick="${prOpenM(m.id,'Y')}">Yes $${pc}</button><button class="pr-n" onclick="${prOpenM(m.id,'N')}">No $${100-pc}</button></div>`:''}
-  </div>`;
-}
-let PRHZ='all';
-function prList(){
-  const L=prMarkets();
-  if(!L.length)return `<div class="pr-empty">${ssTileC('betting',44)}<b>Markets open after a few games</b><i>The prices come from the league table, so it needs at least three players with games.</i></div>`;
-  /* what to show: open markets, plus anything settled in the last week */
-  const live=m=>m.status==='open'||(m.resolved&&nowMs()-m.resolved<7*864e5);
-  const sec=hz=>{ const M=L.filter(m=>prHz(m)===hz&&live(m)); if(!M.length)return '';
-    const groups=[...new Set(M.filter(m=>m.grp).map(m=>m.grp))];
-    const lab={gw:`This gameweek · GW${fplNextGw()}`,xmas:'By Christmas',season:'Season'}[hz];
-    return `${PRHZ==='all'?`<div class="cx-sk pr-sk">${lab.toUpperCase()}</div>`:''}${groups.map(prGroupCard).join('')}${M.filter(m=>!m.grp).map(prCard).join('')}` };
-  const hzs=['gw','xmas','season'].filter(h=>PRHZ==='all'||PRHZ===h);
-  const body=hzs.map(sec).join('');
-  return `<div class="bk-chips">${[['all','All'],['gw','This GW'],['xmas','Christmas'],['season','Season']].map(([k,l])=>`<button class="${PRHZ===k?'on':''}" onclick="PRHZ='${k}';render()">${l}</button>`).join('')}</div>
-    ${body||`<div class="pr-empty">${ssTileC('betting',44)}<b>Nothing open here right now</b><i>${PRHZ==='gw'?'This gameweek’s markets open once last week’s game is logged.':'Check the other tabs.'}</i></div>`}
-    <div class="note" style="padding:4px 4px 10px">Prices opened from the games so far. A winning share pays $100; sell any time before it closes. Gameweek and Christmas markets settle themselves.</div>`;
-}
-function prGroupView(k){
-  const G=prMeta(k), L=prMarkets().filter(m=>m.grp===k).sort((a,b)=>prPrice(b)-prPrice(a));
-  return `<button class="pr-back" onclick="PRG=null;render()">‹ Polymarket</button>
-    <div class="pr-hd">${ssTileC('betting',44)}<div><span class="pr-cat">${PR_HZ_LAB[G.hz]}</span><b>${esc(G.t)}</b></div></div>
-    <div class="card">${L.map(m=>{ const p=player(m.opt)||{name:'?'}, pc=prPc(m), open=prOpen(m);
-      return `<div class="row pr-grow">${avatar(p,34)}<button class="rt pr-gn" onclick="${prOpenM(m.id)}"><span class="r1">${esc(p.name)}</span>${prVolume(m)?`<span class="r2">${usd(prVolume(m))} traded</span>`:''}</button>
-        <b class="pr-gp">${m.status==='yes'?'Won':m.status==='no'?'—':pc+'%'}</b>
-        ${open?`<span class="pr-gb"><button class="pr-y sm" onclick="${prOpenM(m.id,'Y')}">Yes</button><button class="pr-n sm" onclick="${prOpenM(m.id,'N')}">No</button></span>`:''}</div>` }).join('')}</div>
-    <div class="note pr-rules">${esc(G.note)} Closes ${esc(dlText(L[0]?L[0].close:prSeasonEnd()))}${G.auto?'':'; the admin settles it'}.</div>`;
-}
-function prChart(m){
-  const H=(m.hist||[]); const W=320, Hh=130, PL=30, PB=18;
-  const ps=H.map(x=>x.p), lo=Math.max(0,Math.floor((Math.min(...ps)-.05)*10)/10), hi=Math.min(1,Math.ceil((Math.max(...ps)+.05)*10)/10);
-  const y=v=>4+(Hh-PB-4)*(1-(v-lo)/Math.max(.01,hi-lo)), x=i=>PL+(W-PL-6)*(H.length>1?i/(H.length-1):1);
-  const grid=[]; for(let v=lo;v<=hi+1e-9;v+=.1)grid.push(+v.toFixed(1));
-  return `<svg class="pr-ch" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Chance over time">
-    ${grid.map(v=>`<line x1="${PL}" x2="${W-6}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" class="pr-gl"/><text x="${PL-5}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end" class="pr-gt">${Math.round(v*100)}%</text>`).join('')}
-    <polygon points="${PL},${Hh-PB} ${H.map((h,i)=>`${x(i).toFixed(1)},${y(h.p).toFixed(1)}`).join(' ')} ${x(H.length-1).toFixed(1)},${Hh-PB}" class="pr-ar"/>
-    <polyline points="${H.map((h,i)=>`${x(i).toFixed(1)},${y(h.p).toFixed(1)}`).join(' ')}" class="pr-ln"/>
-    <circle cx="${x(H.length-1).toFixed(1)}" cy="${y(H[H.length-1].p).toFixed(1)}" r="4" class="pr-dt"/>
-    <text x="${PL}" y="${Hh-4}" class="pr-gt">Opened</text><text x="${W-6}" y="${Hh-4}" text-anchor="end" class="pr-gt">Now</text>
-  </svg>`;
-}
-function prMarketView(m){
-  const me=fplMine(), p=prPrice(m), pc=prPc(m), d=Math.round(p*100)-Math.round(m.p0*100), open=prOpen(m);
-  const side=m.subject&&me&&m.subject===me.pid?'Y':PRSIDE;
-  const amt=PRAMT, bal=me?wallet(me.pid):0;
-  const sh=open?lmSharesFor(m,side,Math.max(PR_MIN,amt)):0;
-  const pos=me?prPos(m,me.pid):null;
-  const maxAmt=me?Math.max(0,Math.min(bal,PR_MAX-(pos?pos.net:0))):0;
-  const sub=m.subject?player(m.subject):null;
-  return `<button class="pr-back" onclick="PRM=null;render()">‹ ${m.grp?esc(prMeta(m.grp).t):'Polymarket'}</button>
-    <div class="pr-hd">${sub?avatar(sub,44):ssTileC('betting',44)}<div><span class="pr-cat">${PR_HZ_LAB[prHz(m)]}</span><b>${esc(m.q)}</b></div></div>
-    <div class="pr-big"><b>${pc}%</b><span>chance</span>${d?`<em class="${d>0?'up':'dn'}">${d>0?'▲':'▼'} ${Math.abs(d)} since it opened</em>`:''}</div>
-    <div class="card pad pr-chc">${prChart(m)}</div>
-    ${open?`<div class="card pad pr-tk">
-      <div class="seg pp-seg pr-sd"><button class="${side==='Y'?'on':''}" onclick="PRSIDE='Y';render()">Buy Yes ${pc}¢</button><button class="${side==='N'?'on':''}" ${m.subject&&me&&m.subject===me.pid?'disabled':''} onclick="PRSIDE='N';render()">Buy No ${100-pc}¢</button></div>
-      <div class="pr-amt"><span>Amount</span><b>${usd(amt)}</b></div>
-      <div class="pr-ach">${[100,500,1000].map(v=>`<button class="${amt===v?'on':''}" onclick="PRAMT=${v};render()">${v>=1000?'$'+v/1000+'k':'$'+v}</button>`).join('')}<button class="${amt===Math.floor(maxAmt)&&maxAmt>0?'on':''}" onclick="PRAMT=${Math.floor(maxAmt)};render()">Max</button></div>
-      <div class="pr-get"><span>You get</span><b>${sh.toFixed(1)} ${side==='Y'?'Yes':'No'} shares</b><span>Pays if ${side==='Y'?'Yes':'No'}</span><b class="g">${usd(sh*LM_PAY)}</b></div>
-      <button class="btn pri full pr-buy ${side}" ${me?'':'disabled'} onclick="prTrade('${m.id}','${side}',${amt})">${me?`Buy ${side==='Y'?'Yes':'No'} · ${usd(amt)}`:'Enter your code to trade'}</button>
-      ${m.subject?`<div class="note" style="padding:8px 0 0">${esc(sub?sub.name:'The player')} can only buy Yes on this one.</div>`:''}
-    </div>`:`<div class="card pad pr-closed"><b>${esc(prClosesText(m))}</b>${m.status==='open'?'<i>Waiting for the admin to settle it.</i>':''}</div>`}
-    ${pos&&(pos.Y>1e-9||pos.N>1e-9)?`${ssSec('betting','My position')}<div class="card">
-      ${['Y','N'].filter(k=>pos[k]>1e-9).map(k=>`<div class="row"><div class="rt"><div class="r1">${pos[k].toFixed(1)} ${k==='Y'?'Yes':'No'} shares</div>
-        <div class="r2">Pays ${usd(pos[k]*LM_PAY)} if ${k==='Y'?'Yes':'No'}${open?` · worth ${usd(lmProceeds(m,k,pos[k]))} now`:''}</div></div>
-        ${open?`<button class="btn sec pr-sell" onclick="prSell('${m.id}','${k}')">Sell</button>`:''}</div>`).join('')}</div>`:''}
-    ${(m.trades||[]).length?`${ssSec('betting','Latest')}<div class="card">${m.trades.slice(-8).reverse().map(t=>{ const q=player(t.by)||{name:'—'};
-      return `<div class="row pr-tr">${avatar(q,30)}<div class="rt"><div class="r1">${esc(q.name)}</div></div><b class="${t.side==='Y'?'y':'n'}">${t.sh<0?'Sold ':''}${t.side==='Y'?'Yes':'No'} ${usd(Math.abs(t.cost))}</b></div>` }).join('')}</div>`:''}
-    <div class="note pr-rules">${esc(m.note||'')} Closes ${esc(dlText(m.close))}${m.auto?'':'; the admin settles it after that'}. You can sell your shares any time before then.</div>`;
+function pmSpecialCard(s){
+  const o=pmOutcome(s.k), p=pmPrice(o.m,o.model), pc=pmC(p), open=pmOpen(o);
+  return `<div class="pms"><button class="pms-q" onclick="pmSheet('${s.k}')"><span><i>${esc(s.per.kind==='gw'?`This Sunday (GW${s.per.gw})`:'By Christmas')}</i><b>${esc(s.q)}</b></span><em>${pmPctTxt(p)}</em></button>
+    <div class="pms-bar"><i style="width:${(p*100).toFixed(1)}%"></i></div>
+    ${open?`<div class="pms-bt"><button class="pmy" onclick="PMSIDE='Y';pmSheet('${s.k}')">Yes ${pc}¢</button><button class="pmn" onclick="PMSIDE='N';pmSheet('${s.k}')">No ${100-pc}¢</button></div>`:''}
+    <div class="pms-m">${usd(pmVol(o.m))} vol · closes ${esc(dlText(o.per.close))}</div></div>`;
 }
 function prView(){
-  if(PRM){ const m=prMarkets().find(x=>x.id===PRM); if(m)return prMarketView(m); PRM=null }
-  if(PRG&&prMarkets().some(m=>m.grp===PRG))return prGroupView(PRG);
-  return prList();
+  const P=pmPeriods();
+  const cats=[...Object.keys(PM_STATS).map(k=>[k,PM_STATS[k].s]),['sp','Specials']];
+  const seg=`<div class="seg pp-seg pm-cat">${cats.map(([k,l])=>`<button class="${PMC===k?'on':''}" onclick="PMC='${k}';render()">${l}</button>`).join('')}</div>`;
+  if(PMC==='sp'){
+    const L=pmSpecials();
+    return `${seg}${L.length?L.map(pmSpecialCard).join(''):`<div class="pr-empty">${ssTileC('betting',44)}<b>No specials open right now</b><i>This Sunday's open once last week's game is logged.</i></div>`}
+      <div class="note pm-note">A share pays $100. Prices start from the games so far and move as people trade.</div>`;
+  }
+  if(!P.length)return `${seg}<div class="pr-empty">${ssTileC('betting',44)}<b>Nothing open</b><i>The season is over.</i></div>`;
+  let per=P.find(p=>p.id===PMP)||P[0]; PMP=per.id;
+  const pool=pmPool(); if(pool.length<2)return `${seg}<div class="pr-empty">${ssTileC('betting',44)}<b>Markets open after a few games</b><i>It needs players with games to price them.</i></div>`;
+  const mod=pmModel(per), S=pmStore();
+  const rows=pool.map(p=>({k:`${PMC}|${per.id}|${p.id}`})).map(x=>pmOutcome(x.k)).filter(Boolean)
+    .sort((a,b)=>pmPrice(b.m,b.model)-pmPrice(a.m,a.model)||(player(a.pid)||{name:''}).name.localeCompare((player(b.pid)||{name:''}).name));
+  const vol=rows.reduce((t,o)=>t+pmVol(o.m),0);
+  const title=per.kind==='gw'?(PMC==='goals'?'Top scorer this Sunday':PMC==='assists'?'Most assists this Sunday':PMC==='table'?'Top of the table after this Sunday':'Top 3 after this Sunday'):`${PM_STATS[PMC].t} · ${per.kind==='season'?'end of season':per.kind==='xmas'?'Christmas':PM_MONL[new Date(per.end+DUBAI_OFF).getUTCMonth()]}`;
+  return `${seg}
+    <div class="pm-hd">
+      <div class="pm-ht"><b>${esc(title)}</b><i>Closes ${esc(dlText(per.close))}${vol?` · ${usd(vol)} vol`:''}</i></div>
+      <label class="pm-per"><span>${esc(per.sh)}</span><select aria-label="Period" onchange="PMP=this.value;render()">${P.map(p=>`<option value="${p.id}" ${p.id===per.id?'selected':''}>${esc(p.lab)}</option>`).join('')}</select></label>
+    </div>
+    <div class="card pm-list">${rows.map(pmRow).join('')}</div>
+    <div class="note pm-note">${per.kind==='gw'&&(PMC==='goals'||PMC==='assists')?`Only GW${per.gw} counts.`:`Counts everything from GW1 to ${per.kind==='gw'?`GW${per.gw}`:esc(per.lab.replace(/^By /,'').replace(/^the /,''))}.`} Ties: everyone tied wins. Settles itself ${per.kind==='gw'?'when the game is logged':'two days after it ends'}. A share pays $100.</div>`;
+}
+function pmChart(m,model){
+  const H=(m&&m.hist&&m.hist.length?m.hist:[{t:nowMs(),p:pmPrice(null,model)}]).slice();
+  H.push({t:nowMs(),p:pmPrice(m,model)});
+  const W=320, Hh=110, PL=30, PB=16, ps=H.map(x=>x.p);
+  const lo=Math.max(0,Math.floor((Math.min(...ps)-.05)*10)/10), hi=Math.min(1,Math.ceil((Math.max(...ps)+.05)*10)/10);
+  const y=v=>4+(Hh-PB-4)*(1-(v-lo)/Math.max(.01,hi-lo)), x=i=>PL+(W-PL-6)*(H.length>1?i/(H.length-1):1);
+  const grid=[]; for(let v=lo;v<=hi+1e-9;v+=hi-lo>.5?.2:.1)grid.push(+v.toFixed(1));
+  return `<svg class="pr-ch" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Chance over time">
+    ${grid.map(v=>`<line x1="${PL}" x2="${W-6}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}" class="pr-gl"/><text x="${PL-5}" y="${(y(v)+3.5).toFixed(1)}" text-anchor="end" class="pr-gt">${Math.round(v*100)}%</text>`).join('')}
+    <polyline points="${H.map((h,i)=>`${x(i).toFixed(1)},${y(h.p).toFixed(1)}`).join(' ')}" class="pr-ln"/>
+    <circle cx="${x(H.length-1).toFixed(1)}" cy="${y(H[H.length-1].p).toFixed(1)}" r="4" class="pr-dt"/></svg>`;
+}
+function pmSheet(k){
+  const o=pmOutcome(k); if(!o){toast('That market has closed');return}
+  const me=fplMine(), m=o.m, p=pmPrice(m,o.model), pc=pmC(p), open=pmOpen(o);
+  const self=o.pid&&me&&o.pid===me.pid, side=self?'Y':PMSIDE;
+  const e=pmEff(m,o.model), amt=PMAMT, bal=me?wallet(me.pid):0, pos=me&&m?prPos(m,me.pid):null;
+  const maxAmt=me?Math.max(0,Math.min(bal,PR_MAX-(pos?pos.net:0))):0;
+  const sh=open?lmSharesFor(e,side,Math.max(PR_MIN,amt)):0;
+  const pl=o.pid?player(o.pid):null;
+  const sub=o.special?(o.per.kind==='gw'?`This Sunday (GW${o.per.gw})`:'By Christmas'):`${PM_STATS[o.stat].t} · ${o.per.lab}`;
+  const html=`<div class="pmt">
+    <div class="pmt-hd">${pl?avatar(pl,44):ssTileC('betting',44)}<div class="pmt-ht"><i>${esc(sub)}</i><b>${esc(pl?pl.name:o.q)}</b></div><em>${pmPctTxt(p)}</em></div>
+    <div class="pmt-ch">${pmChart(m,o.model)}</div>
+    ${open?`<div class="seg pp-seg pmt-sd"><button class="${side==='Y'?'on y':''}" onclick="PMSIDE='Y';pmSheet('${k}')">Yes ${pc}¢</button><button class="${side==='N'?'on n':''}" ${self?'disabled':''} onclick="PMSIDE='N';pmSheet('${k}')">No ${100-pc}¢</button></div>
+      <div class="pr-ach">${[100,500,1000,5000].map(v=>`<button class="${amt===v?'on':''}" onclick="PMAMT=${v};pmSheet('${k}')">${v>=1000?'$'+v/1000+'k':'$'+v}</button>`).join('')}</div>
+      <div class="pmt-amt"><span>Amount</span><input type="number" inputmode="numeric" min="${PR_MIN}" max="${PR_MAX}" step="10" value="${amt}" aria-label="Amount" onchange="PMAMT=Math.max(${PR_MIN},Math.min(${Math.max(PR_MIN,Math.floor(maxAmt))},Math.round(+this.value||0)));pmSheet('${k}')"><button class="pmt-max" onclick="PMAMT=${Math.floor(maxAmt)};pmSheet('${k}')">Max</button></div>
+      <div class="pr-get"><span>Shares</span><b>${sh.toFixed(1)} ${side==='Y'?'Yes':'No'}</b><span>Average price</span><b>${sh>0?Math.round(amt/sh)+'¢':'—'}</b><span>Pays if ${side==='Y'?'Yes':'No'}</span><b class="g">${usd(sh*LM_PAY)}</b></div>
+      <button class="btn pri full pmt-buy ${side}" ${me?'':'disabled'} onclick="pmTrade('${k}','${side}',${amt})">${me?`Buy ${side==='Y'?'Yes':'No'} · ${usd(amt)}`:'Enter your code to trade'}</button>
+      ${self?`<div class="note" style="padding:6px 0 0">You can only buy Yes on yourself.</div>`:''}`
+      :`<div class="pr-closed"><b>${m&&m.status!=='open'?(m.status==='yes'?'Settled Yes':m.status==='no'?'Settled No':'Void'):'Closed — settles itself'}</b></div>`}
+    ${pos&&(pos.Y>1e-9||pos.N>1e-9)?`<div class="pmt-pos">${['Y','N'].filter(x=>pos[x]>1e-9).map(x=>`<div><span><b>${pos[x].toFixed(1)} ${x==='Y'?'Yes':'No'}</b><i>pays ${usd(pos[x]*LM_PAY)}${open?` · worth ${usd(lmProceeds(e,x,pos[x]))}`:''}</i></span>${open?`<button class="btn sec" onclick="pmSell('${k}','${x}')">Sell</button>`:''}</div>`).join('')}</div>`:''}
+    <div class="note pmt-n">${esc(o.note||'')}${o.special?'':` Ties: everyone tied wins.`} Closes ${esc(dlText(o.per.close))}.</div>
+  </div>`;
+  if($('#sbg')&&$('#sbg').classList.contains('open')&&document.querySelector('.pmt')){ document.querySelector('.pmt').outerHTML=html; return }
+  openSheet('Polymarket',html);
 }
 function prMyGroup(pid){
-  const L=prMarkets().filter(m=>m.status==='open').map(m=>({m,p:prPos(m,pid)})).filter(x=>x.p.Y>1e-9||x.p.N>1e-9);
+  const L=Object.values(pmStore()).filter(m=>m.status==='open').map(m=>({m,p:prPos(m,pid)})).filter(x=>x.p.Y>1e-9||x.p.N>1e-9);
   if(!L.length)return '';
-  return `${ssSec('betting','Polymarket',`<span class="ss-note">${L.length} open</span>`)}<div class="card">${L.map(({m,p})=>`<div class="row tap" onclick="BMAIN='poly';${prOpenM(m.id)}">
-    <div class="rt"><div class="r1">${esc(m.q)}</div><div class="r2">${p.Y>1e-9?`${p.Y.toFixed(1)} Yes`:''}${p.Y>1e-9&&p.N>1e-9?' · ':''}${p.N>1e-9?`${p.N.toFixed(1)} No`:''} · ${prPc(m)}% now</div></div>${chev}</div>`).join('')}</div>`;
+  return `${ssSec('betting','Polymarket',`<span class="ss-note">${L.length} open</span>`)}<div class="card">${L.map(({m,p})=>`<div class="row tap" onclick="pmSheet('${m.k}')">
+    <div class="rt"><div class="r1">${esc(m.q)}</div><div class="r2">${esc(m.lab||'')} · ${p.Y>1e-9?`${p.Y.toFixed(1)} Yes`:''}${p.Y>1e-9&&p.N>1e-9?' · ':''}${p.N>1e-9?`${p.N.toFixed(1)} No`:''}</div></div>${chev}</div>`).join('')}</div>`;
 }
 
 /* ---------------- BET A MATE · one on one, even money ----------------
@@ -22540,7 +22638,7 @@ async function pkShoot(){
 }
 function pkView(){
   const V=CASV, z=V.zone, ks=[0,1,2,3,4].map(i=>i<V.res.length?(V.res[i]?'g':'m'):i===V.res.length&&V.live?'cur':''), kp=V.keeper==null?1:V.keeper;
-  return `<button class="pr-back" onclick="FGV=null;CASV=null;render()" ${V.live?'disabled':''}>‹ Bets</button>
+  return `<button class="pr-back" onclick="FGV=null;CASV=null;render()" ${V.live?'disabled':''}>‹ Odds</button>
   <div class="pk"><div class="pk-hd"><b>Penalty shootout</b><span>Free · once a day</span></div>
     <div class="pk-goal">${PK_ZN.map((n,i)=>`<button class="pk-z${z===i?' on':''}" aria-label="Aim ${n}" onclick="pkAim(${i})" ${V.live?'':'disabled'}></button>`).join('')}
       <span class="pk-kp k${kp}" aria-hidden="true"><svg viewBox="0 0 60 60" width="52" height="52"><circle cx="30" cy="12" r="7" fill="#F4C048"/><path d="M30 20v18M30 26 8 16M30 26l22-10M30 38l-9 16M30 38l9 16" stroke="#F4C048" stroke-width="6" stroke-linecap="round" fill="none"/></svg></span></div>
@@ -22556,7 +22654,7 @@ function pkView(){
 }
 function spinView(){
   const me=fplMine(), done=me&&cas().spin[me.pid]===casDay();
-  return `<button class="pr-back" onclick="FGV=null;render()">‹ Bets</button>
+  return `<button class="pr-back" onclick="FGV=null;render()">‹ Odds</button>
     <div class="spn"><div class="spn-k">DAILY SPIN · FREE</div>${spinWheel()}
       ${done?`<button class="btn full spn-b" disabled>Next free spin tomorrow at 8am</button>`:`<button class="btn full spn-b" id="spBtn" onclick="casSpin()">Spin</button>`}
       <div class="spn-n">Free once a day · resets at 8am</div></div>
@@ -22564,11 +22662,12 @@ function spinView(){
 }
 /* the two cards beside the Score predictor */
 function freeGamesCards(){
+  /* Round 15 (d): one slim strip, the same weight as the Score predictor */
   if(!casOn())return '';
   const me=fplMine(), d=casDay(), spun=me&&cas().spin[me.pid]===d, shot=me&&cas().pk[me.pid]===d;
-  return `<div class="fg2">
-    <button class="fg" onclick="FGV='spin';render();window.scrollTo(0,0)"><span class="fg-i sp">${ss2Svg('ball',20)}</span><b>Daily spin</b><i>${spun?'Done · back at 8am':'Free · up to $5,000'}</i></button>
-    <button class="fg" onclick="${shot?"toast('One shootout a day — back at 8am')":'pkStart()'}"><span class="fg-i pk2">${ss2Svg('ball',20)}</span><b>Penalty shootout</b><i>${shot?'Done · back at 8am':'Free · 5/5 wins $1,000'}</i></button>
+  return `<div class="fg3">
+    <button class="fg3-b" onclick="FGV='spin';render();window.scrollTo(0,0)"><span class="fg3-i">${ss2Svg('ball',16)}</span><span class="fg3-t"><b>Daily spin</b><i>${spun?'Done · 8am':'Free · up to $5k'}</i></span></button>
+    <button class="fg3-b" onclick="${shot?"toast('One shootout a day — back at 8am')":'pkStart()'}"><span class="fg3-i pk">${ss2Svg('ball',16)}</span><span class="fg3-t"><b>Penalties</b><i>${shot?'Done · 8am':'Free · 5/5 wins $1k'}</i></span></button>
   </div>`;
 }
 async function casToggle(){ if(!requireAdmin())return; const snap=betSnap(); cas().on=!casOn(); await betCommit(snap,casOn()?'Free games on':'Free games off') }
@@ -22576,19 +22675,20 @@ async function casToggle(){ if(!requireAdmin())return; const snap=betSnap(); cas
 /* ---------------- Admin: Polymarket and the free games ---------------- */
 let ADM_BX=false;
 function adminBetExtras(){
-  const open=prMarkets().filter(m=>m.status==='open'), due=open.filter(m=>nowMs()>=m.close);
-  const sub=open.length?`${open.length} open${due.length?` · ${due.length} to settle`:''}`:'Season markets and the free games';
+  const open=Object.values(pmStore()).filter(m=>m.status==='open');
+  const sub=open.length?`${open.length} market${open.length===1?'':'s'} with money in · settle themselves`:'Polymarket settles itself · free games';
   return `<div class="card adm-c">${admRow('betting','#D4AF37','Polymarket and free games',sub,'ADM_BX=!ADM_BX;render()',`<i class="adm-chev${ADM_BX?' open':''}">${chev}</i>`)}</div>
   ${ADM_BX?admDisc('ADM_BX',`<div class="bx">
-    <div class="bx-h">Open groups</div>
-    ${[...new Set(prMarkets().filter(m=>m.grp&&m.status==='open').map(m=>m.grp))].map(k=>{ const L=prMarkets().filter(m=>m.grp===k), G=prMeta(k);
-      return `<div class="bx-r"><div><b>${esc(G.t)}</b><i>${L.length} players · ${usd(L.reduce((t,m)=>t+prVolume(m),0))} traded${G.auto?' · settles itself':''}</i></div><button class="btn sec bx-b" onclick="prResolveGroup('${k}')">Settle</button></div>` }).join('')||'<div class="note">No open groups.</div>'}
-    <div class="bx-h">One-offs</div>
-    ${prMarkets().filter(m=>!m.grp&&m.status==='open').map(m=>`<div class="bx-r"><div><b>${esc(m.q)}</b><i>${prPc(m)}% · ${usd(prVolume(m))} traded · ${esc(prClosesText(m))}</i></div>${m.status==='open'?`<button class="btn sec bx-b" onclick="prResolve('${m.id}','yes')">Yes</button><button class="btn sec bx-b" onclick="prResolve('${m.id}','no')">No</button><button class="btn sec bx-b" onclick="prResolve('${m.id}','void')">Void</button>`:''}</div>`).join('')||'<div class="note">None.</div>'}
-    <div class="note" style="padding:8px 0 0">Gameweek and Christmas markets settle themselves; Settle here only to correct one. New kinds of market come with an app update.</div>
+    <div class="bx-h">Markets with money in</div>
+    ${open.length?open.map(m=>`<div class="bx-r"><div><b>${esc(m.q)}</b><i>${esc(m.lab||'')} · ${usd(pmVol(m))} vol</i></div><button class="btn sec bx-b" onclick="pmAdminVoid('${m.k}')">Void</button></div>`).join(''):'<div class="note">None yet. Everything settles itself from the games; Void refunds a market if something went wrong.</div>'}
     <div class="bx-h">Free games</div>
     <div class="bx-r"><div><b>Daily spin and Penalty shootout ${casOn()?'on':'off'}</b><i>Free, once a day each, beside the Score predictor</i></div><button class="btn sec bx-b" onclick="casToggle()">${casOn()?'Turn off':'Turn on'}</button></div>
   </div>`):''}`;
+}
+async function pmAdminVoid(k){
+  if(!requireAdmin())return; const m=pmStore()[k]; if(!m||m.status!=='open')return;
+  if(!await askConfirm('Void this market?','Everyone gets back what they put in, less what they sold.','Void'))return;
+  const snap=betSnap(); const h=prSettleCore(m,'void'); if(await betCommit(snap,'Voided')&&h.length)pushSend('Polymarket','A market was voided and refunded','predict',{url:'/',pids:h});
 }
 
 function vGames(){
