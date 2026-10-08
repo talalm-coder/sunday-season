@@ -13023,6 +13023,7 @@ function gwTeamsSheet(gw){
         ${same?'':`<button class="btn sec sm" onclick="useCurrentTeamFor('${m.pid}')">Use their team as it is now</button>`}
         ${ins.length?`<button class="btn sec sm" onclick="useLastWeekFor('${m.pid}',${prevGw})">Use their GW${prevGw} team</button>`:''}
         ${prev&&ins.length&&[...(m.squad||[])].sort().join('|')===[...(squad||[])].sort().join('|')?`<button class="btn sec sm" onclick="restoreTeamFrom('${m.pid}',${prevGw})">Give them their GW${prevGw} team back</button>`:''}
+        ${!same&&snap&&GWTSEL===Math.max(...gws)?`<button class="btn pri sm" onclick="restoreTeamFrom('${m.pid}',${GWTSEL})">Make this their team for GW${GWTSEL+1}</button>`:''}
         <button class="btn sec sm" onclick="gwTeamEdit('${m.pid}')">Choose the team by hand</button>
       </div>
     </div>`;
@@ -13182,14 +13183,14 @@ async function restoreTeamFrom(pid,gw){
   if(!requireAdmin())return;
   const f=fpl(), m=(f.managers||[]).find(x=>x.pid===pid); if(!m)return;
   const p=squadInGw(m,gw); if(!(p.squad||[]).length)return;
-  if(!await askConfirm(`Give ${esc(m.name)} his GW${gw} team back?`,`His team from now on: ${(p.squad||[]).map(x=>(player(x)||{}).name||'—').join(', ')}. No transfers are used.`,'Give it back'))return;
+  if(!await askConfirm(`Make ${esc(m.name)}'s GW${gw} team his team for GW${gw+1}?`,`His team from now on: ${(p.squad||[]).map(x=>(player(x)||{}).name||'—').join(', ')}. No transfers are used.`,'Give it back'))return;
   snapshot('restoring a fantasy team');
   if(!m.bought)m.bought={}; const nb={}; p.squad.forEach(x=>nb[x]=m.bought[x]!=null?m.bought[x]:fplPrice(x)); m.bought=nb;
   m.squad=[...p.squad]; m.captain=p.captain&&p.squad.includes(p.captain)?p.captain:p.squad[0]; m.needsReview=false; FDRAFT=null;
   (m.autoLog=m.autoLog||[]).push({at:nowMs(),gw:fplNextGw(),out:[],inn:[],why:'restored to GW'+gw+' by the admin'});
   const r=await save();
   if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
-  gwTeamsSheet(GWTSEL); render(); toast(`${m.name} has his GW${gw} team back`);
+  gwTeamsSheet(GWTSEL); render(); toast(`${m.name}: his GW${gw} team is now his team for GW${gw+1}`);
 }
 /* transfers recorded between two gameweeks' games (weeks are Monday–Sunday) */
 function fplTransfersBetween(m,gwA,gwB){
