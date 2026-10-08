@@ -2052,6 +2052,8 @@ body[data-shop="mono"]{--bg:#F5F5F5;--card:#fff;--label:#000;--label2:#333;--lab
 .revbar{display:flex;align-items:center;gap:10px;background:linear-gradient(120deg,#FF9500,#FF6B00);
   border-radius:14px;padding:11px 12.5px;margin-bottom:12.5px;color:#fff}
 .rev-e{font-size:20px}
+.revbar2 button{min-height:40px;padding:0 16px}
+.revbar2 .rev-e{display:flex}
 .rev-t{flex:1;min-width:0}
 .rev-t b{display:block;font-size:13px;font-weight:800}
 .rev-t span{display:block;font-size:11px;opacity:.9;margin-top:2px;line-height:1.4}
@@ -4343,6 +4345,8 @@ html[data-theme="dark"] .gwt{background:#1C1C1E;border-color:#2C2C2E} html[data-
 .gwt-p.cap{background:var(--ss-navy);color:#fff}
 html[data-theme="dark"] .gwt-p{background:#2A2A2D}
 .gwt-s{font-size:11px;color:var(--ss-muted);margin-bottom:7px}
+.gwt-s.gwt-bad{color:#C02A1B;font-weight:700}
+html[data-theme="dark"] .gwt-s.gwt-bad{color:#FF7A6B}
 /* players the table does not rank */
 .lg4-also{margin-top:9px}
 .lg4-also>span{display:block;font-size:10.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--ss-muted);margin-bottom:7px}
@@ -12999,13 +13003,24 @@ function gwTeamsSheet(gw){
     const squad=snap?snap.squad:m.squad, cap=snap?snap.captain:m.captain;
     const now=[...(m.squad||[])].sort().join('|'), then=[...(squad||[])].sort().join('|');
     const same=now===then&&(snap?snap.captain:m.captain)===m.captain;
+    /* Round 15 (f): against last week — a team that changed with no transfer
+       recorded is how the old automatic re-pick showed up */
+    const prevGw=Math.max(0,...gws.filter(g=>g<GWTSEL)), prev=prevGw?squadInGw(m,prevGw):null;
+    const outs=prev?(prev.squad||[]).filter(x=>!(squad||[]).includes(x)):[], ins=prev?(squad||[]).filter(x=>!(prev.squad||[]).includes(x)):[];
+    const tr=prev&&inGw(m,prevGw)?fplTransfersBetween(m,prevGw,GWTSEL):null;
+    const auto=(m.autoLog||[]).some(a=>a.gw===GWTSEL);
+    const susp=ins.length&&(auto||tr===0);
+    const nm=x=>esc((player(x)||{}).name||'—');
     return `<div class="gwt">
       <div class="gwt-h"><b>${esc(m.teamName)}</b><i>${esc(m.name)}</i>
         <span class="gwt-tag ${same?'ok':'diff'}">${same?'matches now':'differs from now'}</span></div>
+      ${prev&&inGw(m,prevGw)?`<div class="gwt-s${susp?' gwt-bad':''}">${ins.length?`Since GW${prevGw}: ${outs.map(nm).join(', ')} out · ${ins.map(nm).join(', ')} in · ${tr==null?'transfers not known':tr===0?`no transfers recorded${(m.wildcards||0)>0&&!(m.wcAt||[]).length?' (a wildcard before Oct 2026 would not show)':''}`:tr>=99?'wildcard played':`${tr} transfer${tr===1?'':'s'} made`}${auto?' · changed by the app':''}`:`Same five as GW${prevGw}`}</div>`:''}
       <div class="gwt-n">${(squad||[]).map(pid=>`<span class="gwt-p${pid===cap?' cap':''}">${esc((player(pid)||{}).name||'—')}${pid===cap?' (C)':''}</span>`).join('')}</div>
       <div class="gwt-s">${snap?(snap.byHand?`Set by hand ${snap.at?fmtWhen(snap.at):''}`:`Frozen ${snap.at?fmtWhen(snap.at):'when the game was logged'}`):'Not frozen — scoring with their team as it stands'}</div>
       <div class="btnrow">
         ${same?'':`<button class="btn sec sm" onclick="useCurrentTeamFor('${m.pid}')">Use their team as it is now</button>`}
+        ${ins.length?`<button class="btn sec sm" onclick="useLastWeekFor('${m.pid}',${prevGw})">Use their GW${prevGw} team</button>`:''}
+        ${prev&&ins.length&&[...(m.squad||[])].sort().join('|')===[...(squad||[])].sort().join('|')?`<button class="btn sec sm" onclick="restoreTeamFrom('${m.pid}',${prevGw})">Give them their GW${prevGw} team back</button>`:''}
         <button class="btn sec sm" onclick="gwTeamEdit('${m.pid}')">Choose the team by hand</button>
       </div>
     </div>`;
@@ -13084,6 +13099,57 @@ async function useCurrentTeamFor(pid){
   const r=await save();
   if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
   gwTeamsSheet(GWTSEL); render(); toast(`${m.name}: GW${GWTSEL} now counts their current team`);
+}
+/* teams that changed from one gameweek to the next with no transfer recorded */
+function fplSuspicious(){
+  try{
+    const gws=playedGws(), out=[];
+    (fpl().managers||[]).filter(m=>m.teamName&&(m.history||[]).length).forEach(m=>{
+      for(let i=1;i<gws.length;i++){ const a=gws[i-1], b=gws[i]; if(!inGw(m,a))continue;
+        const A=squadInGw(m,a).squad||[], B=squadInGw(m,b).squad||[];
+        if(!B.some(x=>!A.includes(x)))continue;
+        const hb=(m.history||[]).find(h=>h.gw===b); if(hb&&hb.byHand)continue;
+        const tr=fplTransfersBetween(m,a,b); if(tr===0||(m.autoLog||[]).some(x=>x.gw===b))out.push({m,gw:b}) }
+    });
+    return out;
+  }catch(e){ return [] }
+}
+/* score this gameweek with exactly last week's five and captain */
+async function useLastWeekFor(pid,prevGw){
+  if(!requireAdmin())return;
+  const f=fpl(), m=(f.managers||[]).find(x=>x.pid===pid); if(!m)return;
+  const p=squadInGw(m,prevGw); if(!(p.squad||[]).length){toast(`No GW${prevGw} team to copy`);return}
+  if(!await askConfirm(`Score ${esc(m.name)}'s GW${GWTSEL} with his GW${prevGw} team?`,(p.squad||[]).map(x=>(player(x)||{}).name||'—').join(', ')+((p.captain&&player(p.captain))?` · captain ${player(p.captain).name}`:''),'Use it'))return;
+  snapshot('GW'+GWTSEL+' from last week');
+  m.history=(m.history||[]).filter(h=>h.gw!==GWTSEL);
+  m.history.push({gw:GWTSEL,squad:[...p.squad],captain:p.captain||null,at:Date.now(),byHand:true});
+  m.history.sort((a,b)=>a.gw-b.gw);
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  gwTeamsSheet(GWTSEL); render(); toast(`${m.name}: GW${GWTSEL} now counts his GW${prevGw} team`);
+}
+/* put a team the app changed back the way the manager had it */
+async function restoreTeamFrom(pid,gw){
+  if(!requireAdmin())return;
+  const f=fpl(), m=(f.managers||[]).find(x=>x.pid===pid); if(!m)return;
+  const p=squadInGw(m,gw); if(!(p.squad||[]).length)return;
+  if(!await askConfirm(`Give ${esc(m.name)} his GW${gw} team back?`,`His team from now on: ${(p.squad||[]).map(x=>(player(x)||{}).name||'—').join(', ')}. No transfers are used.`,'Give it back'))return;
+  snapshot('restoring a fantasy team');
+  if(!m.bought)m.bought={}; const nb={}; p.squad.forEach(x=>nb[x]=m.bought[x]!=null?m.bought[x]:fplPrice(x)); m.bought=nb;
+  m.squad=[...p.squad]; m.captain=p.captain&&p.squad.includes(p.captain)?p.captain:p.squad[0]; m.needsReview=false; FDRAFT=null;
+  (m.autoLog=m.autoLog||[]).push({at:nowMs(),gw:fplNextGw(),out:[],inn:[],why:'restored to GW'+gw+' by the admin'});
+  const r=await save();
+  if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
+  gwTeamsSheet(GWTSEL); render(); toast(`${m.name} has his GW${gw} team back`);
+}
+/* transfers recorded between two gameweeks' games (weeks are Monday–Sunday) */
+function fplTransfersBetween(m,gwA,gwB){
+  if(!m.transfers)return null;
+  const d=gw=>{ const g=gamesInGw(gw).map(x=>String(x.date||'').slice(0,10)).sort(); return g[0]||null };
+  const a=d(gwA), b=d(gwB); if(!a||!b)return null;
+  const keys=new Set(); for(let t=Date.parse(a+'T12:00:00Z');t<=Date.parse(b+'T12:00:00Z');t+=864e5)keys.add(weekKey(t));
+  const wc=(m.wcAt||[]).filter(t=>keys.has(weekKey(t))).length;
+  return [...keys].reduce((n,k)=>n+(m.transfers[k]||0),0)+wc*99;
 }
 async function recountGw(){
   if(!requireAdmin())return;
@@ -13544,11 +13610,11 @@ function fplMyTeam(m,locked){
     ${locked?`<div class="fpl-lock"><span class="fpl-lock-i">${ssTileC('admin',30)}</span>
         <div><b>Teams are locked</b><i>${esc(fplLockNote())}</i></div></div>`:''}
     ${(!locked&&dirty)?`<div class="fpl-confirm">
-        <div class="fpl-c-t">${confirmed?`${ch.count} change${ch.count===1?'':'s'} not saved`:'Team not saved yet'}</div>
+        <div class="fpl-c-t">${confirmed?`${Math.max(1,ch.count+ch.free)} change${Math.max(1,ch.count+ch.free)===1?'':'s'} not saved`:'Team not saved yet'}</div>
         <div class="btnrow">
           <button class="btn sec" onclick="discardDraft()">Discard</button>
           <button class="btn pri" ${probs.length?'style="opacity:.5"':''} onclick="confirmDraft()">
-            ${confirmed?(m.wildcardActive?'Confirm wildcard':`Confirm ${ch.count} transfer${ch.count===1?'':'s'}`):'Confirm my team'}</button>
+            ${confirmed?(m.wildcardActive?'Confirm wildcard':(ch.count?`Confirm ${ch.count} transfer${ch.count===1?'':'s'}`:ch.free?`Confirm ${ch.free} free swap${ch.free===1?'':'s'}`:'Confirm changes')):'Confirm my team'}</button>
         </div></div>`
       :confirmed?`<div class="fpl-saved">✅ Saved and entered in the mini league</div>`:''}
 
@@ -13671,7 +13737,9 @@ function squadValue(m){ return (m.squad||[]).reduce((t,x)=>t+fplPrice(x),0) }
 function draftChanges(m){
   const d=draftOf(m), out=(m.squad||[]).filter(x=>!d.squad.includes(x));
   const inn=d.squad.filter(x=>!(m.squad||[]).includes(x));
-  return {out,inn,count:Math.max(out.length,inn.length)};
+  /* swapping out someone who can't be picked any more (inactive, now a keeper) is free */
+  const free=out.filter(x=>!fplAlive(x)).length;
+  return {out,inn,free,count:Math.max(0,Math.max(out.length,inn.length)-free)};
 }
 /* everything wrong with the current draft, in plain English */
 function squadShape(squad){
@@ -13806,7 +13874,7 @@ async function confirmDraft(){
   }
   m.squad=[...d.squad]; m.captain=d.captain;
   m.needsReview=false;                       /* migration prompt clears once they confirm */
-  if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; }
+  if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; (m.wcAt=m.wcAt||[]).push(nowMs()); }
   FDRAFT=null;
   const r=await fplSave();
   if(r&&r.ok===false){
@@ -21540,10 +21608,31 @@ function autoFill(keep){
    stamp it and lock the real fix out. Costs nothing once everyone is legal. */
 async function repairOverBudget(){
   const f=fpl(); let fixed=0;
-  const alive=pid=>{ const p=player(pid); return !!p && p.active!==false && FPL_RULES.eligible.includes(p.pos||'MID') };
+  const alive=pid=>fplAlive(pid);
+  /* Round 15 (f): once the season has started the app never re-picks anyone's
+     team. It used to — on every load, on every phone — whenever a squad held
+     someone set inactive, moved to GK or another position, or had gone "over
+     budget" at today's prices, keeping the two dearest and filling the rest
+     with the cheapest players. That silently changed teams between gameweeks
+     (Yousef's GW5). Now the team stays exactly as picked; a player who is no
+     longer eligible just scores what he scores and can be swapped out for free.
+     The only exception is a player deleted from the squad list altogether, who
+     is replaced one for one so the team still has five. Every automatic change
+     is written to m.autoLog. */
+  const started=playedGws().length>0;
   (f.managers||[]).forEach(m=>{
     if(!m.teamName||!(m.squad||[]).length)return;
-    /* drop anyone who has left the squad list entirely */
+    if(started){
+      const gone=(m.squad||[]).filter(x=>!player(x));
+      if(!gone.length)return;
+      const keep=(m.squad||[]).filter(x=>!!player(x)), next=autoFill(keep), inn=next.filter(x=>!keep.includes(x));
+      m.squad=next; if(!next.includes(m.captain))m.captain=keep[0]||next[0]||null;
+      if(!m.bought)m.bought={}; gone.forEach(x=>delete m.bought[x]); inn.forEach(x=>m.bought[x]=fplPrice(x));
+      (m.autoLog=m.autoLog||[]).push({at:nowMs(),gw:fplNextGw(),out:gone,inn,why:'player deleted from the squad list'});
+      (m.history||[]).forEach(h=>{ h.squad=(h.squad||[]).filter(x=>!!player(x)); if(h.captain&&!player(h.captain))h.captain=h.squad[0]||null });
+      fixed++; return;
+    }
+    /* pre-season only: drop anyone who has left, fix size, shape and budget */
     const before=(m.squad||[]).length;
     let sq=(m.squad||[]).filter(alive);
     const lostSomeone = sq.length!==before;
@@ -21552,18 +21641,15 @@ async function repairOverBudget(){
     const missing=FPL_RULES.slots.some(pos=>!shape[pos]);
     const wrongSize=sq.length!==FPL_RULES.squadSize;
     if(!lostSomeone && !missing && !wrongSize && cost<=FPL_RULES.budget)return;
-    /* keep as much of their team as we can, cheapest-fill the rest */
     const keep=[...sq].sort((a,b)=>fplPrice(b)-fplPrice(a))
       .slice(0, cost>FPL_RULES.budget ? 2 : FPL_RULES.squadSize-1);
     let next=autoFill(keep);
-    /* if that is still over budget, fall back to the two dearest and refill */
     if(next.reduce((t,x)=>t+fplPrice(x),0)>FPL_RULES.budget)
       next=autoFill([...sq].sort((a,b)=>fplPrice(b)-fplPrice(a)).slice(0,2));
+    (m.autoLog=m.autoLog||[]).push({at:nowMs(),gw:1,out:(m.squad||[]).filter(x=>!next.includes(x)),inn:next.filter(x=>!(m.squad||[]).includes(x)),why:'pre-season repair'});
     m.squad=next;
     if(!next.includes(m.captain))m.captain=next[0]||null;
     m.bought={}; next.forEach(pid=>m.bought[pid]=fplPrice(pid));
-    /* past gameweeks keep whoever actually played, but drop ghosts so the
-       history views can never hit a missing player */
     (m.history||[]).forEach(h=>{
       h.squad=(h.squad||[]).filter(x=>!!player(x));
       if(h.captain&&!player(h.captain))h.captain=h.squad[0]||null;
@@ -21574,6 +21660,8 @@ async function repairOverBudget(){
   if(fixed){ FDRAFT=null; try{ if(!CLOUD_FAIL)await save() }catch(e){} }
   return fixed;
 }
+/* still a fantasy player: in the squad list, active, and in an outfield position */
+function fplAlive(pid){ const p=player(pid); return !!p && p.active!==false && FPL_RULES.eligible.includes(p.pos||'MID') }
 async function migratePrices(){
   const f=fpl();
   if(f.migrated===MIGRATION_KEY){
@@ -21604,6 +21692,11 @@ async function migratePrices(){
 }
 function reviewBanner(){
   const me=fplMine();
+  /* in season: someone in your team can't be picked any more — swap him for free */
+  if(me&&playedGws().length){ const bad=(me.squad||[]).filter(x=>player(x)&&!fplAlive(x));
+    if(bad.length)return `<div class="revbar revbar2"><div class="rev-e">${ssTile('sunday-fpl',22)}</div><div class="rev-t"><b>${esc(bad.map(x=>player(x).name).join(' and '))} can't be picked any more</b>
+      <span>Your team stays as it is and ${bad.length===1?'he':'they'} still score${bad.length===1?'s':''} if ${bad.length===1?'he plays':'they play'}. Swapping ${bad.length===1?'him':'them'} out doesn't use a transfer.</span></div>
+      <button onclick="go('fpl');FTAB='team';render()">Swap</button></div>` }
   if(!me||!me.needsReview)return '';
   if(playedGws().length)return '';        /* once the season starts it is moot */
   return `<div class="revbar">
@@ -24078,6 +24171,9 @@ function vAdmin(){
       ${admSec('stats','#0B1B33','Checks and history')}
       <div class="card adm-c">
         ${admRow('best-defence','#0B1B33','Rating check','Who played but has no rating, and why','ratingAudit()','',{attr:' data-admin'})}
+        ${(()=>{ const sus=fplSuspicious(); return admRow('sunday-fpl',sus.length?'#C02A1B':'#0B1B33','Fantasy teams per gameweek',
+          sus.length?`${sus.length} changed with no transfer: ${esc(sus.slice(0,3).map(x=>x.m.name+' GW'+x.gw).join(', '))}${sus.length>3?'…':''}`:'Which team counted each week, and fixes',
+          `gwTeamsSheet(${sus.length?sus[0].gw:'null'})`,'',{attr:' data-admin',c:sus.length?'#C02A1B':''}) })()}
         ${admRow('fixtures','#0B1B33','Backdate a late joiner',"Count someone's team from the first gameweek",'fixJoinGw()','',{attr:' data-admin'})}
         ${finalePreviewRow()}
         ${ONE_OFFS.filter(oneOffNeeded).map(o=>admRow('sunday-fpl','#2F6BF6',
