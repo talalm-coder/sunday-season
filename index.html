@@ -12895,7 +12895,9 @@ async function fplAfterGame(){
   const played=playedGws();
   if(!played.length)return;
   const latest=Math.max(...played);
-  /* freeze each manager's team for the gameweek that was just logged */
+  /* freeze each manager's team for the gameweek that was just logged —
+     after putting back any team the manager didn't change (see fplCarryCatchUp) */
+  { const prev=playedGws().filter(g=>g<latest); if(prev.length)fplCarryCatchUp(Math.max(...prev)) }
   f.managers.forEach(m=>{
     if(!m.squad||m.squad.length!==FPL_RULES.squadSize)return;
     if(!m.history)m.history=[];
@@ -13081,13 +13083,15 @@ async function gwTeamEditSave(){
   if(GWTEDIT.squad.length!==FPL_RULES.squadSize){toast(`Pick ${FPL_RULES.squadSize}`);return}
   const f=fpl(), m=(f.managers||[]).find(x=>x.pid===GWTEDIT.pid); if(!m)return;
   snapshot('setting a fantasy gameweek by hand');
+  const was=squadInGw(m,GWTSEL);
   m.history=(m.history||[]).filter(h=>h.gw!==GWTSEL);
-  m.history.push({gw:GWTSEL,squad:[...GWTEDIT.squad],captain:GWTEDIT.captain,at:Date.now(),byHand:true});
+  m.history.push({gw:GWTSEL,squad:[...GWTEDIT.squad],captain:GWTEDIT.captain,at:Date.now(),byHand:true,carried:true,replaced:[...(was.squad||[])]});
+  const carried=GWTSEL===Math.max(...playedGws())&&fplCarryForward(m,GWTSEL,was.squad,was.captain,GWTEDIT.squad,GWTEDIT.captain);
   m.history.sort((a,b)=>a.gw-b.gw);
   const r=await save();
   if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
   const nm=m.name; GWTEDIT=null;
-  gwTeamsSheet(GWTSEL); render(); toast(`${nm}: GW${GWTSEL} set`);
+  gwTeamsSheet(GWTSEL); render(); toast(`${nm}: GW${GWTSEL} set${carried?` · also his team for GW${GWTSEL+1}`:''}`);
 }
 async function useCurrentTeamFor(pid){
   if(!requireAdmin())return;
@@ -13099,6 +13103,49 @@ async function useCurrentTeamFor(pid){
   const r=await save();
   if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
   gwTeamsSheet(GWTSEL); render(); toast(`${m.name}: GW${GWTSEL} now counts their current team`);
+}
+/* Round 15 (g): a correction to the latest gameweek is also the team going
+   forward. "Next week's team is last week's team unless the manager changes
+   it" — so when the admin fixes GW5, GW6 must start from the fixed GW5, not
+   from whatever was in the team before the fix. If the manager has made
+   transfers since, the same swap is applied on top of them. */
+function fplCarryForward(m,gw,oldSq,oldCap,newSq,newCap){
+  const key=a=>[...(a||[])].sort().join('|'), cur=m.squad||[];
+  let next;
+  if(key(cur)===key(oldSq))next=[...newSq];
+  else { const outs=(oldSq||[]).filter(x=>!newSq.includes(x)), ins=newSq.filter(x=>!(oldSq||[]).includes(x)).filter(x=>!cur.includes(x));
+    next=cur.map(x=>outs.includes(x)&&ins.length?ins.shift():x) }
+  if(next.length!==FPL_RULES.squadSize||new Set(next).size!==next.length||key(next)===key(cur))return false;
+  const cap=(m.captain===oldCap&&next.includes(newCap))?newCap:(next.includes(m.captain)?m.captain:(next.includes(newCap)?newCap:next[0]));
+  if(!m.bought)m.bought={}; const nb={}; next.forEach(x=>nb[x]=m.bought[x]!=null?m.bought[x]:fplPrice(x)); m.bought=nb;
+  (m.autoLog=m.autoLog||[]).push({at:nowMs(),gw:gw+1,out:cur.filter(x=>!next.includes(x)),inn:next.filter(x=>!cur.includes(x)),why:`GW${gw} corrected by the admin — carried into GW${gw+1}`});
+  m.squad=next; m.captain=cap; m.needsReview=false; FDRAFT=null;
+  return true;
+}
+/* Next week's team is last week's team unless the manager changed it. On every
+   load (and just before a gameweek is frozen) any team that differs from its
+   latest frozen gameweek, with no change made by the manager since that freeze
+   (no transfer, no wildcard, no confirmed change), is put back. This undoes an
+   admin correction that never reached the current team, and any re-pick still
+   made by an old copy of the app on someone's phone. */
+function fplCarryCatchUp(gw){
+  try{
+    const played=playedGws(); if(!played.length)return 0;
+    const L=gw||Math.max(...played), key=a=>[...(a||[])].sort().join('|'); let n=0;
+    (fpl().managers||[]).forEach(m=>{
+      if(!m.teamName||!(m.squad||[]).length||!inGw(m,L))return;
+      const h=(m.history||[]).find(x=>x.gw===L); if(!h||!h.at||(h.squad||[]).length!==FPL_RULES.squadSize)return;
+      if(key(h.squad)===key(m.squad))return;
+      if(!(h.squad||[]).every(x=>!!player(x)))return;
+      if((m.changedAt||0)>=h.at)return;                         /* the manager changed it since */
+      if((m.wildcards||0)>(m.wcAt||[]).length&&!(m.changedAt))return;   /* a wildcard from before Oct 2026 has no date — leave it to the admin screen */
+      const since=new Set(); for(let t=h.at;t<=nowMs()+864e5;t+=864e5)since.add(weekKey(t));
+      const tr=[...since].reduce((a,k)=>a+((m.transfers||{})[k]||0),0)+(m.wcAt||[]).filter(t=>t>=h.at).length;
+      if(tr>0)return;
+      if(fplCarryForward(m,L,m.squad,m.captain,h.squad,h.captain))n++;
+    });
+    return n;
+  }catch(e){ return 0 }
 }
 /* teams that changed from one gameweek to the next with no transfer recorded */
 function fplSuspicious(){
@@ -13121,8 +13168,10 @@ async function useLastWeekFor(pid,prevGw){
   const p=squadInGw(m,prevGw); if(!(p.squad||[]).length){toast(`No GW${prevGw} team to copy`);return}
   if(!await askConfirm(`Score ${esc(m.name)}'s GW${GWTSEL} with his GW${prevGw} team?`,(p.squad||[]).map(x=>(player(x)||{}).name||'—').join(', ')+((p.captain&&player(p.captain))?` · captain ${player(p.captain).name}`:''),'Use it'))return;
   snapshot('GW'+GWTSEL+' from last week');
+  const was=squadInGw(m,GWTSEL);
   m.history=(m.history||[]).filter(h=>h.gw!==GWTSEL);
-  m.history.push({gw:GWTSEL,squad:[...p.squad],captain:p.captain||null,at:Date.now(),byHand:true});
+  m.history.push({gw:GWTSEL,squad:[...p.squad],captain:p.captain||null,at:Date.now(),byHand:true,carried:true,replaced:[...(was.squad||[])]});
+  if(GWTSEL===Math.max(...playedGws()))fplCarryForward(m,GWTSEL,was.squad,was.captain,p.squad,p.captain||null);
   m.history.sort((a,b)=>a.gw-b.gw);
   const r=await save();
   if(!r.ok){toast('⚠️ Not saved — '+(r.detail||'try again'));return}
@@ -13872,6 +13921,7 @@ async function confirmDraft(){
     const played=playedGws();
     m.firstGw = played.length ? Math.max(...played)+1 : 1;
   }
+  if([...(m.squad||[])].sort().join('|')!==[...d.squad].sort().join('|'))m.changedAt=nowMs();
   m.squad=[...d.squad]; m.captain=d.captain;
   m.needsReview=false;                       /* migration prompt clears once they confirm */
   if(m.wildcardActive){ m.wildcardActive=false; m.wildcards=(m.wildcards||0)+1; (m.wcAt=m.wcAt||[]).push(nowMs()); }
@@ -26033,6 +26083,7 @@ function bootUI(){
     }
   }catch(e){}
   /* one-off: move everyone onto the bespoke price list */
+  try{ if(fplCarryCatchUp()&&!CLOUD_FAIL)save().then(()=>render()) }catch(e){}
   try{ migratePrices().then(n=>{ if(n){ render();
         toast(`⚠️ ${n} team${n===1?' was':'s were'} auto-filled after the price update`) } }) }catch(e){}
   try{ render() }catch(e){}
